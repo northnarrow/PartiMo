@@ -1,0 +1,75 @@
+package com.partimo.data.demo
+
+import com.partimo.data.network.Fetched
+import com.partimo.data.source.FlightOffersDataSource
+import com.partimo.data.source.PoiDataSource
+import com.partimo.data.source.RestaurantDataSource
+import com.partimo.data.source.StayOffersDataSource
+import com.partimo.data.source.TransitDataSource
+import com.partimo.domain.common.DataOrigin
+import com.partimo.domain.model.dining.Restaurant
+import com.partimo.domain.model.dining.RestaurantSearchQuery
+import com.partimo.domain.model.flight.FlightOffer
+import com.partimo.domain.model.flight.FlightSearchQuery
+import com.partimo.domain.model.poi.PoiQuery
+import com.partimo.domain.model.poi.PointOfInterest
+import com.partimo.domain.model.stay.AccommodationOffer
+import com.partimo.domain.model.stay.AccommodationSearchQuery
+import com.partimo.domain.model.transit.TransitRoute
+import com.partimo.domain.model.transit.TransitRouteQuery
+import kotlinx.coroutines.delay
+
+// Sorgenti demo: stessa interfaccia delle sorgenti reali, dati dal DemoCatalog e origine DEMO.
+// Una piccola latenza simulata rende visibili gli stati di caricamento della UI.
+
+private const val DEFAULT_DEMO_LATENCY_MILLIS = 600L
+
+internal class DemoFlightDataSource(
+    private val catalog: DemoCatalog,
+    private val latencyMillis: Long = DEFAULT_DEMO_LATENCY_MILLIS,
+) : FlightOffersDataSource {
+    override suspend fun searchOffers(query: FlightSearchQuery, forceRefresh: Boolean): Fetched<List<FlightOffer>> {
+        delay(latencyMillis)
+        return Fetched(catalog.flights(query), DataOrigin.DEMO)
+    }
+}
+
+internal class DemoStayDataSource(
+    private val catalog: DemoCatalog,
+    private val latencyMillis: Long = DEFAULT_DEMO_LATENCY_MILLIS,
+) : StayOffersDataSource {
+    override suspend fun searchStays(query: AccommodationSearchQuery, forceRefresh: Boolean): Fetched<List<AccommodationOffer>> {
+        delay(latencyMillis)
+        return Fetched(catalog.stays(query), DataOrigin.DEMO)
+    }
+}
+
+internal class DemoPoiDataSource(
+    private val catalog: DemoCatalog,
+    private val latencyMillis: Long = DEFAULT_DEMO_LATENCY_MILLIS,
+) : PoiDataSource {
+    override suspend fun pointsOfInterest(query: PoiQuery, forceRefresh: Boolean): Fetched<List<PointOfInterest>> {
+        delay(latencyMillis)
+        return Fetched(catalog.pointsOfInterest(query), DataOrigin.DEMO)
+    }
+}
+
+internal class DemoRestaurantDataSource(
+    private val catalog: DemoCatalog,
+    private val latencyMillis: Long = DEFAULT_DEMO_LATENCY_MILLIS,
+) : RestaurantDataSource {
+    override suspend fun searchRestaurants(query: RestaurantSearchQuery, forceRefresh: Boolean): Fetched<List<Restaurant>> {
+        delay(latencyMillis)
+        return Fetched(catalog.restaurants(query), DataOrigin.DEMO)
+    }
+}
+
+internal class DemoTransitDataSource(
+    private val catalog: DemoCatalog,
+    private val latencyMillis: Long = DEFAULT_DEMO_LATENCY_MILLIS,
+) : TransitDataSource {
+    override suspend fun routes(query: TransitRouteQuery, forceRefresh: Boolean): Fetched<List<TransitRoute>> {
+        delay(latencyMillis)
+        return Fetched(catalog.transitRoutes(query), DataOrigin.DEMO)
+    }
+}

@@ -1,0 +1,280 @@
+package com.partimo.app.ui.dashboard
+
+import com.partimo.app.ui.common.UiState
+import com.partimo.app.ui.departure.DeparturePickerUiState
+import com.partimo.app.ui.search.SearchUiState
+import com.partimo.domain.common.DataError
+import com.partimo.domain.common.DataOrigin
+import com.partimo.domain.model.GeoPoint
+import com.partimo.domain.model.Money
+import com.partimo.domain.model.ScoredOffer
+import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.TripContext
+import com.partimo.domain.model.dining.PriceLevel
+import com.partimo.domain.model.dining.Restaurant
+import com.partimo.domain.model.flight.FlightOffer
+import com.partimo.domain.model.flight.FlightSlice
+import com.partimo.domain.model.place.Airport
+import com.partimo.domain.model.place.AirportOption
+import com.partimo.domain.model.place.AirportSize
+import com.partimo.domain.model.place.CatalogDestination
+import com.partimo.domain.model.place.CityPlace
+import com.partimo.domain.model.place.DestinationSuggestion
+import com.partimo.domain.model.place.TravelExperience
+import com.partimo.domain.model.place.TravelTheme
+import com.partimo.domain.model.poi.PoiCategory
+import com.partimo.domain.model.poi.PoiTag
+import com.partimo.domain.model.poi.PointOfInterest
+import com.partimo.domain.model.poi.RecommendationReason
+import com.partimo.domain.model.poi.Season
+import com.partimo.domain.model.poi.SeasonalHighlights
+import com.partimo.domain.model.poi.SeasonalRecommendation
+import com.partimo.domain.model.stay.AccommodationOffer
+import com.partimo.domain.model.transit.TransitLeg
+import com.partimo.domain.model.transit.TransitLine
+import com.partimo.domain.model.transit.TransitMode
+import com.partimo.domain.model.transit.TransitRoute
+import com.partimo.domain.model.transit.TransitStop
+import com.partimo.domain.model.weather.WeatherCondition
+import com.partimo.domain.model.weather.WeatherSnapshot
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.Month
+import java.time.YearMonth
+import java.time.ZoneId
+
+/** Dati statici per le @Preview di Compose e i test UI (nessuna dipendenza dal data layer). */
+internal object PreviewData {
+
+    val TODAY: LocalDate = LocalDate.of(2026, Month.SEPTEMBER, 30)
+    private val DECEMBER: TravelPeriod = TravelPeriod.InMonth(YearMonth.of(2026, Month.DECEMBER))
+
+    private val trip = TripContext(
+        destination = SampleDestinations.VIENNA,
+        departureDate = LocalDate.of(2026, Month.DECEMBER, 10),
+        returnDate = LocalDate.of(2026, Month.DECEMBER, 14),
+        departure = SampleDestinations.MILAN_DEPARTURE,
+    )
+
+    private fun slice(from: String, to: String, departure: LocalDateTime, minutes: Long, stops: Int) = FlightSlice(
+        originIata = from,
+        destinationIata = to,
+        departureTime = departure,
+        arrivalTime = departure.plusMinutes(minutes),
+        duration = Duration.ofMinutes(minutes),
+        stops = stops,
+    )
+
+    private val flights = listOf(
+        ScoredOffer(
+            FlightOffer(
+                id = "os",
+                carrierName = "Austrian Airlines",
+                totalPrice = Money.of(168, "EUR"),
+                slices = listOf(
+                    slice("MXP", "VIE", LocalDateTime.of(2026, 12, 10, 8, 5), 90, 0),
+                    slice("VIE", "MXP", LocalDateTime.of(2026, 12, 14, 18, 40), 90, 0),
+                ),
+                refundable = true,
+            ),
+            valueScore = 0.91,
+        ),
+        ScoredOffer(
+            FlightOffer(
+                id = "az",
+                carrierName = "ITA Airways",
+                totalPrice = Money.of("142.50", "EUR"),
+                slices = listOf(slice("MXP", "VIE", LocalDateTime.of(2026, 12, 10, 10, 40), 245, 1)),
+            ),
+            valueScore = 0.64,
+        ),
+    )
+
+    private val stays = listOf(
+        ScoredOffer(
+            AccommodationOffer(
+                id = "mozart",
+                name = "Pension Mozartgasse",
+                totalPrice = Money.of(384, "EUR"),
+                nights = 4,
+                starRating = 3,
+                reviewScore = 9.1,
+                reviewCount = 410,
+                freeCancellation = true,
+            ),
+            valueScore = 0.88,
+        ),
+        ScoredOffer(
+            AccommodationOffer(
+                id = "ring",
+                name = "Hotel Ringstraße Classic",
+                totalPrice = Money.of(568, "EUR"),
+                nights = 4,
+                starRating = 4,
+                reviewScore = 8.7,
+                reviewCount = 1_240,
+            ),
+            valueScore = 0.73,
+        ),
+    )
+
+    private val highlights = SeasonalHighlights(
+        season = Season.WINTER,
+        travelMonth = Month.DECEMBER,
+        currentWeather = WeatherSnapshot(temperatureCelsius = 7.0, condition = WeatherCondition.PARTLY_CLOUDY),
+        weatherConsidered = false,
+        recommendations = listOf(
+            SeasonalRecommendation(
+                poi = PointOfInterest(
+                    id = "xmas",
+                    name = "Wiener Christkindlmarkt al Rathausplatz",
+                    category = PoiCategory.SEASONAL_EVENT,
+                    location = GeoPoint(48.2108, 16.3573),
+                    rating = 4.5,
+                    reviewCount = 48_000,
+                    tags = setOf(PoiTag.SEASONAL_HIGHLIGHT, PoiTag.INSTAGRAMMABLE),
+                ),
+                score = 0.85,
+                reasons = setOf(RecommendationReason.IN_SEASON, RecommendationReason.PHOTO_SPOT),
+            ),
+            SeasonalRecommendation(
+                poi = PointOfInterest(
+                    id = "kahlenberg",
+                    name = "Kahlenberg",
+                    category = PoiCategory.VIEWPOINT,
+                    location = GeoPoint(48.2767, 16.3339),
+                    rating = 4.6,
+                    reviewCount = 9_800,
+                    tags = setOf(PoiTag.PANORAMIC, PoiTag.INSTAGRAMMABLE, PoiTag.SUNSET_SPOT),
+                ),
+                score = 0.61,
+                reasons = setOf(RecommendationReason.PHOTO_SPOT),
+            ),
+        ),
+    )
+
+    private val transit: List<TransitRoute> = run {
+        val start = Instant.parse("2026-12-12T09:00:00Z")
+        val walk = TransitLeg(TransitMode.WALK, start, start.plusSeconds(240))
+        val metro = TransitLeg(
+            mode = TransitMode.METRO,
+            departureTime = start.plusSeconds(360),
+            arrivalTime = start.plusSeconds(780),
+            departureStop = TransitStop("Hauptbahnhof"),
+            arrivalStop = TransitStop("Stephansplatz"),
+            line = TransitLine(name = "U1", shortName = "U1", colorHex = "#E3000F"),
+            stopCount = 4,
+        )
+        listOf(TransitRoute(listOf(walk, metro, TransitLeg(TransitMode.WALK, metro.arrivalTime, metro.arrivalTime.plusSeconds(120)))))
+    }
+
+    private val restaurants = listOf(
+        Restaurant("1", "Beisl zum Goldenen Hirschen", PriceLevel.MODERATE, 4.6, 1_830, "Cucina viennese", isOpenNow = true),
+        Restaurant("2", "Naschmarkt Falafel Corner", PriceLevel.INEXPENSIVE, 4.7, 640, "Mediorientale"),
+    )
+
+    fun loadedState() = TripDashboardUiState(
+        trip = trip,
+        period = DECEMBER,
+        periods = TravelPeriod.selectable(TODAY),
+        today = TODAY,
+        flights = UiState.Success(flights, DataOrigin.DEMO),
+        stays = UiState.Success(stays, DataOrigin.CACHE),
+        highlights = UiState.Success(highlights),
+        transit = UiState.Success(transit),
+        restaurants = UiState.Success(restaurants),
+        isDemoMode = true,
+        alertEnabled = true,
+        pricesUpdatedAt = Instant.parse("2026-09-30T19:15:00Z"),
+    )
+
+    fun noDepartureState() = loadedState().copy(trip = trip.copy(departure = null), flights = UiState.Empty, alertEnabled = false)
+
+    fun mixedStates() = loadedState().copy(
+        highlights = UiState.Loading,
+        flights = UiState.Error(DataError.NoConnection),
+        stays = UiState.Success(stays, DataOrigin.STALE_CACHE),
+        transit = UiState.Empty,
+        restaurants = UiState.Error(DataError.Unauthorized),
+    )
+
+    // ---- Schermata di ricerca -----------------------------------------------------------------
+
+    private fun city(id: String, name: String, country: String, countryCode: String, lat: Double, lon: Double, zone: String, region: String? = null, population: Int? = null) =
+        CityPlace(
+            id = id,
+            name = name,
+            countryCode = countryCode,
+            location = GeoPoint(lat, lon),
+            timeZone = ZoneId.of(zone),
+            country = country,
+            region = region,
+            population = population,
+        )
+
+    private val searchResults = listOf(
+        city("geonames:2988507", "Parigi", "Francia", "FR", 48.8534, 2.3488, "Europe/Paris", "Île-de-France", 2_138_551),
+        city("geonames:4717560", "Paris", "Stati Uniti", "US", 33.6609, -95.5555, "America/Chicago", "Texas", 24_782),
+        city("geonames:2988506", "Parma", "Italia", "IT", 44.8015, 10.3279, "Europe/Rome", "Emilia-Romagna", 175_895),
+    )
+
+    private val suggestions = listOf(
+        DestinationSuggestion(
+            destination = CatalogDestination(
+                city = city("catalog:tokyo", "Tokyo", "Giappone", "JP", 35.6762, 139.6503, "Asia/Tokyo"),
+                pleasantMonths = setOf(Month.OCTOBER, Month.NOVEMBER),
+                experiences = listOf(TravelExperience(TravelTheme.FOLIAGE, setOf(Month.NOVEMBER)), TravelExperience(TravelTheme.FOOD)),
+                tagline = "Templi, quartieri futuristici, ciliegi in fiore in primavera e aceri rossi in autunno.",
+            ),
+            score = 0.65,
+            seasonalHighlights = listOf(TravelTheme.FOLIAGE),
+            yearRoundHighlights = listOf(TravelTheme.FOOD, TravelTheme.CULTURE),
+            pleasantClimate = true,
+            currentWeather = WeatherSnapshot(temperatureCelsius = 21.0, condition = WeatherCondition.CLEAR),
+        ),
+        DestinationSuggestion(
+            destination = CatalogDestination(
+                city = city("catalog:lisbona", "Lisbona", "Portogallo", "PT", 38.7223, -9.1393, "Europe/Lisbon"),
+                pleasantMonths = setOf(Month.OCTOBER),
+                experiences = listOf(TravelExperience(TravelTheme.FOOD)),
+                tagline = "Tram gialli, belvederi sul Tago e pastéis de nata appena sfornati.",
+            ),
+            score = 0.4,
+            seasonalHighlights = emptyList(),
+            yearRoundHighlights = listOf(TravelTheme.FOOD, TravelTheme.CULTURE),
+            pleasantClimate = true,
+        ),
+    )
+
+    fun searchIdleState() = SearchUiState(today = TODAY, departure = SampleDestinations.MILAN_DEPARTURE)
+
+    fun searchResultsState() = SearchUiState(today = TODAY, results = UiState.Success(searchResults))
+
+    fun searchIdeasState() = SearchUiState(
+        today = TODAY,
+        departure = SampleDestinations.MILAN_DEPARTURE,
+        recommendations = UiState.Success(suggestions),
+    )
+
+    // ---- Scelta della partenza ------------------------------------------------------------------
+
+    fun departureAirportsState(): DeparturePickerUiState {
+        val milan = city("geonames:3173435", "Milano", "Italia", "IT", 45.4643, 9.1895, "Europe/Rome", "Lombardia", 1_371_498)
+        val malpensa = SampleDestinations.MILAN_DEPARTURE.airport
+        val linate = Airport("LIN", "Milano Linate Airport", "Segrate (MI)", "IT", GeoPoint(45.4451, 9.2767), AirportSize.LARGE)
+        val bergamo = Airport("BGY", "Il Caravaggio International Airport", "Orio al Serio (BG)", "IT", GeoPoint(45.6694, 9.7089), AirportSize.LARGE)
+        return DeparturePickerUiState(
+            current = SampleDestinations.MILAN_DEPARTURE,
+            selectedCity = milan,
+            airports = UiState.Success(
+                listOf(
+                    AirportOption(malpensa, distanceKm = 40, recommended = true),
+                    AirportOption(linate, distanceKm = 7, recommended = false),
+                    AirportOption(bergamo, distanceKm = 46, recommended = false),
+                ),
+            ),
+        )
+    }
+}

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="it">
+    <string name="app_name">PartiMo</string>
+
+    <!-- Barra superiore -->
+    <string name="trip_summary">%1$s → %2$s · %3$s</string>
+    <string name="trip_summary_no_departure">Partenza da scegliere → %1$s · %2$s</string>
+    <string name="action_refresh">Aggiorna</string>
+    <string name="action_retry">Riprova</string>
+    <string name="action_alert_enable">Avvisami quando i prezzi scendono</string>
+    <string name="action_alert_disable">Disattiva l\'avviso sui prezzi</string>
+    <string name="loading">Caricamento in corso</string>
+
+    <!-- Periodo del viaggio -->
+    <string name="period_next_days">Prossimi giorni</string>
+    <string name="period_phrase_next_days">i prossimi giorni</string>
+
+    <!-- Pulsanti delle sezioni della dashboard -->
+    <string name="nav_flights">Voli</string>
+    <string name="nav_stays">Alloggi</string>
+    <string name="nav_highlights">Da vedere</string>
+    <string name="nav_transit">Trasporti</string>
+    <string name="nav_restaurants">Ristoranti</string>
+
+    <!-- Aggiornamento delle offerte -->
+    <string name="prices_updated_at">Prezzi aggiornati alle %1$s · tocca «Aggiorna» per le offerte last minute</string>
+    <string name="refresh_done">Prezzi aggiornati</string>
+    <string name="refresh_no_changes">Prezzi aggiornati: nessuna variazione</string>
+    <string name="refresh_flight_drop">🔥 Volo sceso a %1$s (−%2$s)</string>
+    <string name="refresh_flight_rise">Volo a %1$s (+%2$s)</string>
+    <string name="refresh_stay_drop">🔥 Alloggio sceso a %1$s a notte (−%2$s)</string>
+    <string name="refresh_stay_rise">Alloggio a %1$s a notte (+%2$s)</string>
+
+    <!-- Avvisi sulle offerte convenienti -->
+    <string name="alert_enabled">🔔 Ti avviseremo quando voli o alloggi per %1$s costeranno almeno il 15%% in meno del solito.</string>
+    <string name="alert_enabled_without_notifications">Avviso salvato, ma le notifiche di PartiMo sono disattivate: abilitale nelle impostazioni del telefono.</string>
+    <string name="alert_disabled">Avviso sui prezzi disattivato.</string>
+    <string name="alert_open_settings">Impostazioni</string>
+    <string name="alert_needs_departure">Scegli prima da dove parti: senza partenza non possiamo controllare i voli.</string>
+    <string name="notification_channel_deals">Offerte convenienti</string>
+    <string name="notification_channel_deals_description">Avvisi quando voli e alloggi dei viaggi seguiti costano molto meno del solito.</string>
+    <string name="notification_title_month">🔥 %1$s a %2$s: offerta davvero conveniente</string>
+    <string name="notification_title_next_days">🔥 %1$s nei prossimi giorni: offerta davvero conveniente</string>
+    <string name="notification_flight">✈️ Volo %1$s → %2$s a %3$s (−%4$d%% rispetto al solito)</string>
+    <string name="notification_stay">🏨 %1$s a %2$s a notte (−%3$d%% rispetto al solito)</string>
+
+    <!-- Punto di partenza -->
+    <string name="departure_label">Parti da</string>
+    <string name="departure_value">%1$s · %2$s</string>
+    <string name="departure_missing_title">Da dove parti?</string>
+    <string name="departure_missing_hint">Scegli la tua città: la useremo per cercare i voli.</string>
+    <string name="departure_change">Cambia</string>
+    <string name="departure_choose">Scegli</string>
+    <string name="departure_title">Da dove parti?</string>
+    <string name="departure_placeholder">Cerca la tua città, es. Milano</string>
+    <string name="departure_current">Partenza attuale: %1$s</string>
+    <string name="departure_airports_title">Aeroporti vicino a %1$s</string>
+    <string name="departure_airport_distance">%1$d km dal centro</string>
+    <string name="departure_recommended">Consigliato</string>
+    <string name="departure_other_city">Scegli un\'altra città</string>
+    <string name="flights_need_departure">Per vedere i voli dicci da quale città parti.</string>
+    <string name="flights_choose_departure">📍 Scegli la partenza</string>
+    <string name="flights_change_departure">Cambia partenza</string>
+
+    <!-- Banner demo -->
+    <string name="demo_banner">Modalità demo: alcune sezioni usano dati di esempio. Aggiungi le chiavi API in local.properties per i dati reali (il meteo è sempre reale).</string>
+
+    <!-- Provenienza dei dati -->
+    <string name="origin_cache">Dalla cache</string>
+    <string name="origin_stale">Offline · dati salvati</string>
+    <string name="origin_demo">Demo</string>
+
+    <!-- Sezioni -->
+    <string name="section_highlights">Stagione e spot da non perdere</string>
+    <string name="section_flights">Voli · miglior rapporto qualità/prezzo</string>
+    <string name="section_flights_subtitle">%1$s → %2$s, andata e ritorno</string>
+    <string name="section_stays">Alloggi consigliati</string>
+    <string name="section_stays_subtitle">Ordinati per rapporto qualità/prezzo</string>
+    <string name="section_transit">Trasporti pubblici in tempo reale</string>
+    <string name="section_transit_subtitle">Da %1$s al centro · partenza adesso</string>
+    <string name="section_restaurants">Ristoranti economici di qualità</string>
+    <string name="section_restaurants_subtitle">Fascia €–€€ · valutazione da %1$s in su</string>
+
+    <!-- Stati vuoti -->
+    <string name="empty_flights">Nessun volo disponibile per queste date.</string>
+    <string name="empty_stays">Nessun alloggio disponibile per queste date.</string>
+    <string name="empty_highlights">Nessun luogo adatto al periodo selezionato.</string>
+    <string name="empty_highlights_photo">Nessuno spot fotografico per il periodo selezionato.</string>
+    <string name="empty_transit">Nessun percorso disponibile in questo momento.</string>
+    <string name="empty_restaurants">Nessun locale rispetta i criteri di prezzo e qualità.</string>
+
+    <!-- Errori -->
+    <string name="error_no_connection">Sei offline. Controlla la connessione e riprova.</string>
+    <string name="error_timeout">Il servizio non ha risposto in tempo.</string>
+    <string name="error_unauthorized">Chiave API mancante o non valida: controlla local.properties.</string>
+    <string name="error_rate_limited">Limite di richieste raggiunto, riprova tra poco.</string>
+    <string name="error_server">Servizio momentaneamente non disponibile (errore %1$d).</string>
+    <string name="error_client">Richiesta rifiutata dal servizio (errore %1$d).</string>
+    <string name="error_invalid_response">Risposta del servizio non valida.</string>
+    <string name="error_unknown">Si è verificato un errore imprevisto.</string>
+    <string name="error_query_airport">Codice aeroporto non valido.</string>
+    <string name="error_query_same_place">Partenza e destinazione coincidono.</string>
+    <string name="error_query_past_date">La data selezionata è già passata.</string>
+    <string name="error_query_return_before_departure">Il ritorno precede la partenza.</string>
+    <string name="error_query_travellers">Numero di viaggiatori non valido.</string>
+    <string name="error_query_stay_dates">Date del soggiorno non valide.</string>
+    <string name="error_query_stay_too_long">Il soggiorno supera la durata massima consentita.</string>
+
+    <!-- Voli -->
+    <string name="flight_direct">Diretto</string>
+    <plurals name="flight_stops">
+        <item quantity="one">%d scalo</item>
+        <item quantity="many">%d scali</item>
+        <item quantity="other">%d scali</item>
+    </plurals>
+    <string name="flight_leg">%1$s %2$s → %3$s %4$s · %5$s · %6$s</string>
+    <string name="flight_refundable">Rimborsabile</string>
+    <string name="best_value_badge">Miglior rapporto qualità/prezzo</string>
+    <string name="value_score">Qualità/prezzo %1$d%%</string>
+    <plurals name="more_offers">
+        <item quantity="one">+ %d altra offerta</item>
+        <item quantity="many">+ altre %d offerte</item>
+        <item quantity="other">+ altre %d offerte</item>
+    </plurals>
+
+    <!-- Alloggi -->
+    <string name="price_per_night">%1$s a notte</string>
+    <string name="price_total">%1$s in totale</string>
+    <string name="review_score">%1$s/10</string>
+    <plurals name="review_count">
+        <item quantity="one">%s recensione</item>
+        <item quantity="many">%s recensioni</item>
+        <item quantity="other">%s recensioni</item>
+    </plurals>
+    <string name="free_cancellation">Cancellazione gratuita</string>
+
+    <!-- Stagione e meteo -->
+    <string name="season_winter">Inverno</string>
+    <string name="season_spring">Primavera</string>
+    <string name="season_summer">Estate</string>
+    <string name="season_autumn">Autunno</string>
+    <string name="season_title">%1$s · viaggio a %2$s</string>
+    <string name="weather_now">Adesso a %1$s: %2$s, %3$s</string>
+    <string name="weather_unavailable">Meteo attuale non disponibile.</string>
+    <string name="weather_considered">I suggerimenti tengono conto del meteo attuale.</string>
+    <string name="weather_not_considered">Il meteo attuale non influisce: la partenza è tra più di due giorni.</string>
+    <string name="weather_clear">sereno</string>
+    <string name="weather_partly_cloudy">parzialmente nuvoloso</string>
+    <string name="weather_overcast">coperto</string>
+    <string name="weather_fog">nebbia</string>
+    <string name="weather_drizzle">pioviggine</string>
+    <string name="weather_rain">pioggia</string>
+    <string name="weather_snow">neve</string>
+    <string name="weather_thunderstorm">temporale</string>
+    <string name="weather_unknown">condizioni variabili</string>
+    <string name="photo_spots_only">Solo spot fotografici</string>
+
+    <!-- Etichette dei luoghi -->
+    <string name="tag_instagrammable">Instagrammabile</string>
+    <string name="tag_panoramic">Panoramico</string>
+    <string name="tag_sunset">Tramonto</string>
+    <string name="tag_hidden_gem">Chicca nascosta</string>
+    <string name="tag_seasonal">Solo in questo periodo</string>
+    <string name="reason_in_season">Evento di stagione</string>
+    <string name="reason_great_weather">Ideale con questo meteo</string>
+    <string name="reason_indoor">Al coperto</string>
+    <string name="reason_snow">Atmosfera invernale</string>
+    <string name="reason_weather_risk">Meteo incerto</string>
+    <string name="reason_photo_spot">Spot fotografico</string>
+
+    <!-- Trasporti -->
+    <string name="transit_times">%1$s → %2$s</string>
+    <string name="transit_no_transfers">Nessun cambio</string>
+    <plurals name="transit_transfers">
+        <item quantity="one">%d cambio</item>
+        <item quantity="many">%d cambi</item>
+        <item quantity="other">%d cambi</item>
+    </plurals>
+    <string name="transit_connection">Cambio a %1$s: %2$d min</string>
+    <string name="transit_tight_connection">coincidenza stretta</string>
+
+    <!-- Ristoranti -->
+    <string name="restaurant_open_now">Aperto ora</string>
+
+    <!-- Navigazione -->
+    <string name="action_back">Indietro</string>
+
+    <!-- Schermata di ricerca -->
+    <string name="search_title">Dove vuoi andare?</string>
+    <string name="search_subtitle">Scegli una città in qualunque parte del mondo: voli, alloggi, cosa vedere e come muoverti, tutto a portata di tocco.</string>
+    <string name="search_placeholder">Cerca una città, es. Lisbona</string>
+    <string name="search_clear">Cancella ricerca</string>
+    <string name="search_when">Quando vuoi partire?</string>
+    <string name="search_recommend">Consigliami</string>
+    <string name="search_recommend_hint">Non sai ancora dove andare? Ti proponiamo le mete più adatte al periodo scelto.</string>
+    <string name="search_results_title">Città trovate</string>
+    <string name="search_no_results">Nessuna città trovata per «%1$s».</string>
+    <string name="search_ideas_title">Idee per %1$s</string>
+    <string name="search_ideas_empty">Nessuna meta consigliata per questo periodo.</string>
+    <string name="search_more_ideas">Altre idee</string>
+    <string name="search_preparation_error">Non riesco a preparare il viaggio per %1$s: %2$s</string>
+    <string name="search_dismiss">Chiudi</string>
+    <string name="search_weather_now">Adesso %1$s · %2$s</string>
+    <string name="search_pleasant_climate">Clima ideale</string>
+    <string name="population_millions">%1$s mln abitanti</string>
+    <string name="population_thousands">%1$s mila abitanti</string>
+
+    <!-- Temi di viaggio -->
+    <string name="theme_christmas_markets">Mercatini di Natale</string>
+    <string name="theme_northern_lights">Aurora boreale</string>
+    <string name="theme_winter_sports">Sport invernali</string>
+    <string name="theme_beach">Mare</string>
+    <string name="theme_foliage">Foliage</string>
+    <string name="theme_blossom">Fioritura</string>
+    <string name="theme_festival">Festival</string>
+    <string name="theme_warm_escape">Caldo d\'inverno</string>
+    <string name="theme_culture">Cultura</string>
+    <string name="theme_food">Cucina</string>
+    <string name="theme_nature">Natura</string>
+    <string name="theme_nightlife">Vita notturna</string>
+
+    <!-- Errori di ricerca -->
+    <string name="error_query_too_short">Scrivi almeno due lettere.</string>
+    <string name="error_query_no_airport">nessun aeroporto con voli di linea entro 300 km.</string>
+</resources>

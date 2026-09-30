@@ -1,0 +1,6 @@
+# Fine riga coerenti su Windows, macOS e Linux.
+* text=auto
+gradlew text eol=lf
+*.bat text eol=crlf
+*.jar binary
+*.png binary

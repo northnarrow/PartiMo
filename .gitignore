@@ -1,0 +1,17 @@
+# Gradle / build
+.gradle/
+.kotlin/
+build/
+/captures
+.externalNativeBuild
+.cxx
+
+# IDE
+*.iml
+.idea/
+.DS_Store
+
+# Configurazione locale e segreti (chiavi API): mai nel VCS
+local.properties
+*.keystore
+*.jks
