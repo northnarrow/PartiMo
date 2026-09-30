@@ -63,7 +63,7 @@
     <string name="flights_change_departure">Cambia partenza</string>
 
     <!-- Banner demo -->
-    <string name="demo_banner">Modalità demo: voli, alloggi, trasporti e ristoranti usano dati di esempio. Aggiungi le chiavi API in local.properties per i dati reali (meteo e luoghi da vedere sono sempre reali).</string>
+    <string name="demo_banner">Le sezioni con l\'etichetta «Demo» mostrano stime, perché manca la chiave API del servizio: per prezzi e orari reali usa i pulsanti verso Google Voli, Skyscanner e Google Maps. Alloggi, ristoranti, luoghi da vedere e meteo sono sempre dati reali.</string>
 
     <!-- Provenienza dei dati -->
     <string name="origin_cache">Dalla cache</string>
@@ -79,7 +79,11 @@
     <string name="section_transit">Trasporti pubblici in tempo reale</string>
     <string name="section_transit_subtitle">Da %1$s al centro · partenza adesso</string>
     <string name="section_restaurants">Ristoranti economici di qualità</string>
-    <string name="section_restaurants_subtitle">Fascia €–€€ · valutazione da %1$s in su</string>
+    <string name="section_restaurants_subtitle">Fascia €–€€ · valutazione da %1$s in su · tocca per recensioni e foto</string>
+    <string name="section_restaurants_nearby">Ristoranti vicino al centro</string>
+    <string name="section_restaurants_nearby_subtitle">Locali reali da OpenStreetMap · tocca per recensioni, foto e orari su Google Maps</string>
+    <string name="section_lodgings">Alloggi vicino al centro</string>
+    <string name="section_lodgings_subtitle">Strutture reali da OpenStreetMap · prezzi e disponibilità sui siti di prenotazione</string>
 
     <!-- Stati vuoti -->
     <string name="empty_flights">Nessun volo disponibile per queste date.</string>
@@ -88,6 +92,8 @@
     <string name="empty_highlights_photo">Nessuno spot fotografico per il periodo selezionato.</string>
     <string name="empty_transit">Nessun percorso disponibile in questo momento.</string>
     <string name="empty_restaurants">Nessun locale rispetta i criteri di prezzo e qualità.</string>
+    <string name="empty_restaurants_nearby">Nessun locale trovato vicino al centro.</string>
+    <string name="empty_lodgings">Nessuna struttura trovata vicino al centro: cerca direttamente sui siti di prenotazione.</string>
 
     <!-- Errori -->
     <string name="error_no_connection">Sei offline. Controlla la connessione e riprova.</string>
@@ -133,6 +139,30 @@
         <item quantity="other">%s recensioni</item>
     </plurals>
     <string name="free_cancellation">Cancellazione gratuita</string>
+    <string name="lodging_type_hotel">Hotel</string>
+    <string name="lodging_type_hostel">Ostello</string>
+    <string name="lodging_type_guest_house">B&amp;B / pensione</string>
+    <string name="lodging_type_apartment">Appartamento</string>
+    <string name="lodging_type_motel">Motel</string>
+    <string name="lodging_prices">Vedi prezzi</string>
+    <string name="lodging_map">Mappa</string>
+    <string name="lodging_website">Sito web</string>
+    <string name="distance_from_center">%1$s dal centro</string>
+
+    <!-- Collegamenti ai siti con prezzi e orari reali -->
+    <string name="links_title">🔎 Prezzi reali per le tue date</string>
+    <string name="flights_links_estimates">Le tariffe qui sotto sono stime: apri la stessa ricerca per i prezzi aggiornati e per prenotare.</string>
+    <string name="flights_links_compare">Confronta la stessa ricerca anche su altri siti.</string>
+    <string name="stays_links_text">Tutte le strutture di %1$s, con prezzi e disponibilità aggiornati:</string>
+    <string name="transit_links_title">🗺️ Percorso reale con i mezzi</string>
+    <string name="transit_links_text">Su Google Maps trovi lo stesso percorso con la navigazione passo passo.</string>
+    <string name="transit_links_estimates">I percorsi qui sotto sono indicativi: su Google Maps trovi linee, orari e cambi aggiornati.</string>
+    <string name="transit_open_maps">Apri in Google Maps</string>
+    <string name="link_google_flights">Google Voli</string>
+    <string name="link_skyscanner">Skyscanner</string>
+    <string name="link_booking">Booking.com</string>
+    <string name="link_airbnb">Airbnb</string>
+    <string name="osm_attribution">Dati © OpenStreetMap contributors (ODbL)</string>
 
     <!-- Stagione e meteo -->
     <string name="season_winter">Inverno</string>

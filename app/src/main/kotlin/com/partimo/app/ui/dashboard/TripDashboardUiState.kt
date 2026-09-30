@@ -9,6 +9,7 @@ import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.poi.SeasonalHighlights
 import com.partimo.domain.model.stay.AccommodationOffer
+import com.partimo.domain.model.stay.Lodging
 import com.partimo.domain.model.transit.TransitRoute
 import java.time.Instant
 import java.time.LocalDate
@@ -32,10 +33,17 @@ data class TripDashboardUiState(
     val selectedSection: DashboardSection = DashboardSection.FLIGHTS,
     val photoSpotsOnly: Boolean = false,
     val flights: UiState<List<ScoredOffer<FlightOffer>>> = UiState.Loading,
+    /** Offerte con prezzo, se è configurato un provider di prenotazione (vedi [stayOffersAvailable]). */
     val stays: UiState<List<ScoredOffer<AccommodationOffer>>> = UiState.Loading,
+    /** Strutture reali senza prezzo, mostrate con i collegamenti ai siti di prenotazione. */
+    val lodgings: UiState<List<Lodging>> = UiState.Loading,
+    /** `false` senza provider di prenotazione: la sezione alloggi mostra [lodgings] invece di [stays]. */
+    val stayOffersAvailable: Boolean = true,
     val highlights: UiState<SeasonalHighlights> = UiState.Loading,
     val transit: UiState<List<TransitRoute>> = UiState.Loading,
     val restaurants: UiState<List<Restaurant>> = UiState.Loading,
+    /** `false` se il provider dei ristoranti non ha valutazioni (OpenStreetMap): niente filtri di qualità. */
+    val restaurantRatingsAvailable: Boolean = true,
     /** `true` durante un aggiornamento forzato ("Aggiorna" o pull-to-refresh). */
     val isRefreshing: Boolean = false,
     val isDemoMode: Boolean = false,

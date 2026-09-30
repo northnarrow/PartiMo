@@ -39,6 +39,22 @@ class FindBudgetRestaurantsUseCaseTest {
     }
 
     @Test
+    fun `senza valutazioni dal provider tiene i locali reali nell'ordine del provider`() = runTest {
+        repository.providesRatings = false
+        repository.result = DataResult.Success(
+            listOf(
+                restaurant("vicino", priceLevel = null, rating = null),
+                restaurant("lontano", priceLevel = null, rating = null),
+            ),
+        )
+
+        val restaurants = useCase(TestData.VIENNA_CENTER).successData()
+
+        assertEquals(listOf("vicino", "lontano"), restaurants.map { it.id })
+        assertEquals(false, useCase.ratingsAvailable)
+    }
+
+    @Test
     fun `passa i criteri al provider come pre-filtro`() = runTest {
         useCase(TestData.VIENNA_CENTER)
 

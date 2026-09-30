@@ -1,6 +1,7 @@
 package com.partimo.app.ui.dashboard.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -35,6 +36,8 @@ import com.partimo.app.ui.common.DashboardSection
 import com.partimo.app.ui.common.Formatters
 import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.common.emoji
+import com.partimo.domain.common.DataOrigin
+import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.dining.BudgetDiningCriteria
 import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.transit.TransferConnection
@@ -44,10 +47,14 @@ import java.time.ZoneId
 
 // Ogni sezione ha una schermata dedicata: si mostrano più risultati che nella vecchia pagina unica.
 private const val MAX_VISIBLE_ROUTES = 5
-private const val MAX_VISIBLE_RESTAURANTS = 12
+private const val MAX_VISIBLE_RESTAURANTS = 20
 
 // ---- Trasporti pubblici ----------------------------------------------------------------------
 
+/**
+ * Percorsi con i mezzi dal nodo di arrivo al centro. In alto il collegamento allo stesso percorso su
+ * Google Maps: linee e orari reali anche senza chiave API (in quel caso i percorsi mostrati sono stime).
+ */
 @Composable
 fun TransitSection(
     state: UiState<List<TransitRoute>>,
@@ -55,7 +62,10 @@ fun TransitSection(
     timeZone: ZoneId,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
+    mapsUrl: String? = null,
+    onOpenLink: (String) -> Unit = {},
 ) {
+    val estimated = (state as? UiState.Success)?.origin == DataOrigin.DEMO
     DashboardSection(
         title = stringResource(R.string.section_transit),
         subtitle = stringResource(R.string.section_transit_subtitle, hubName),
@@ -63,6 +73,17 @@ fun TransitSection(
         emptyMessage = stringResource(R.string.empty_transit),
         onRetry = onRetry,
         modifier = modifier,
+        headerContent = mapsUrl?.let { url ->
+            {
+                ExternalLinksCard(
+                    title = stringResource(R.string.transit_links_title),
+                    lines = listOf(stringResource(if (estimated) R.string.transit_links_estimates else R.string.transit_links_text)),
+                    links = listOf(ExternalLink(stringResource(R.string.transit_open_maps), url)),
+                    onOpenLink = onOpenLink,
+                    modifier = Modifier.padding(top = 8.dp),
+                )
+            }
+        },
     ) { routes ->
         Column(modifier = Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             routes.take(MAX_VISIBLE_ROUTES).forEach { route -> TransitRouteCard(route, timeZone) }
@@ -170,49 +191,81 @@ private fun String.toComposeColor(): Color? = runCatching { Color(toColorInt()) 
 
 // ---- Ristoranti ------------------------------------------------------------------------------
 
+/**
+ * Ristoranti: con Google Places quelli economici e ben recensiti; senza chiave i locali reali di
+ * OpenStreetMap vicino al centro, senza valutazioni. Il tocco apre il locale su Google Maps
+ * (recensioni, foto, orari e indicazioni).
+ */
 @Composable
 fun RestaurantsSection(
     state: UiState<List<Restaurant>>,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
+    ratingsAvailable: Boolean = true,
+    center: GeoPoint? = null,
+    onOpenLink: (String) -> Unit = {},
 ) {
     DashboardSection(
-        title = stringResource(R.string.section_restaurants),
-        subtitle = stringResource(
-            R.string.section_restaurants_subtitle,
-            Formatters.rating(BudgetDiningCriteria.DEFAULT_MIN_RATING),
-        ),
+        title = stringResource(if (ratingsAvailable) R.string.section_restaurants else R.string.section_restaurants_nearby),
+        subtitle = if (ratingsAvailable) {
+            stringResource(R.string.section_restaurants_subtitle, Formatters.rating(BudgetDiningCriteria.DEFAULT_MIN_RATING))
+        } else {
+            stringResource(R.string.section_restaurants_nearby_subtitle)
+        },
         state = state,
-        emptyMessage = stringResource(R.string.empty_restaurants),
+        emptyMessage = stringResource(if (ratingsAvailable) R.string.empty_restaurants else R.string.empty_restaurants_nearby),
         onRetry = onRetry,
         modifier = modifier,
     ) { restaurants ->
         Column(modifier = Modifier.padding(horizontal = 8.dp)) {
             restaurants.take(MAX_VISIBLE_RESTAURANTS).forEachIndexed { index, restaurant ->
                 if (index > 0) HorizontalDivider(modifier = Modifier.padding(horizontal = 8.dp))
-                RestaurantRow(restaurant)
+                RestaurantRow(
+                    restaurant = restaurant,
+                    distanceMeters = center?.let { restaurant.location?.distanceTo(it) },
+                    onClick = restaurant.mapsUrl?.let { url -> { onOpenLink(url) } },
+                )
             }
+            if (!ratingsAvailable) OsmAttribution(onOpenLink = onOpenLink, modifier = Modifier.padding(horizontal = 16.dp))
         }
     }
 }
 
 @Composable
-fun RestaurantRow(restaurant: Restaurant, modifier: Modifier = Modifier) {
-    val details = listOfNotNull(restaurant.cuisine, restaurant.priceLevel?.let(Formatters::priceLevel)).joinToString(" · ")
+fun RestaurantRow(
+    restaurant: Restaurant,
+    modifier: Modifier = Modifier,
+    distanceMeters: Double? = null,
+    onClick: (() -> Unit)? = null,
+) {
+    val details = listOfNotNull(
+        restaurant.cuisine,
+        restaurant.priceLevel?.let(Formatters::priceLevel),
+        distanceMeters?.let { stringResource(R.string.distance_from_center, Formatters.distance(it)) },
+    ).joinToString(" · ")
     ListItem(
-        modifier = modifier,
+        modifier = if (onClick != null) modifier.clickable(onClick = onClick) else modifier,
         headlineContent = { Text(restaurant.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-        supportingContent = { Text(details) },
+        supportingContent = {
+            Column {
+                if (details.isNotEmpty()) Text(details)
+                restaurant.address?.let { Text(it, maxLines = 1, overflow = TextOverflow.Ellipsis) }
+            }
+        },
         leadingContent = {
-            AsyncImage(
-                model = restaurant.photoUrl,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(56.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
-            )
+            if (restaurant.photoUrl == null) {
+                EmojiBox(emoji = "🍽️", size = 56.dp)
+            } else {
+                AsyncImage(
+                    model = restaurant.photoUrl,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(56.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                )
+            }
         },
         trailingContent = {
             Column(horizontalAlignment = Alignment.End) {

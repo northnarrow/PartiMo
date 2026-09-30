@@ -19,6 +19,7 @@ import com.partimo.domain.model.poi.PoiTag
 import com.partimo.domain.model.stay.AccommodationSearchQuery
 import com.partimo.domain.model.transit.TransitRouteQuery
 import com.partimo.domain.usecase.FindBudgetRestaurantsUseCase
+import com.partimo.domain.usecase.FindLodgingsUseCase
 import com.partimo.domain.usecase.GetSeasonalHighlightsUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObservePriceAlertUseCase
@@ -54,6 +55,7 @@ import java.time.LocalDate
 class TripDashboardViewModel(
     private val searchFlights: SearchFlightsUseCase,
     private val searchAccommodations: SearchAccommodationsUseCase,
+    private val findLodgings: FindLodgingsUseCase,
     private val getSeasonalHighlights: GetSeasonalHighlightsUseCase,
     private val planTransitRoute: PlanTransitRouteUseCase,
     private val findBudgetRestaurants: FindBudgetRestaurantsUseCase,
@@ -207,7 +209,16 @@ class TripDashboardViewModel(
         _uiState.update { it.copy(flights = state) }
     }
 
+    /**
+     * Offerte con prezzo dal provider di prenotazione; senza provider, le strutture reali attorno al
+     * centro, che la UI collega ai siti di prenotazione con le date del viaggio.
+     */
     private suspend fun loadStays(trip: TripContext, forceRefresh: Boolean) {
+        if (!_uiState.value.stayOffersAvailable) {
+            val state = findLodgings(trip.destination.center, forceRefresh).toListUiState()
+            _uiState.update { it.copy(lodgings = state) }
+            return
+        }
         val query = AccommodationSearchQuery(
             location = trip.destination.center,
             checkIn = trip.departureDate,
@@ -254,7 +265,8 @@ class TripDashboardViewModel(
         _uiState.update { current ->
             when (section) {
                 DashboardSection.FLIGHTS -> current.copy(flights = UiState.Loading)
-                DashboardSection.STAYS -> current.copy(stays = UiState.Loading)
+                DashboardSection.STAYS ->
+                    if (current.stayOffersAvailable) current.copy(stays = UiState.Loading) else current.copy(lodgings = UiState.Loading)
                 DashboardSection.HIGHLIGHTS -> current.copy(highlights = UiState.Loading)
                 DashboardSection.TRANSIT -> current.copy(transit = UiState.Loading)
                 DashboardSection.RESTAURANTS -> current.copy(restaurants = UiState.Loading)
@@ -284,7 +296,19 @@ class TripDashboardViewModel(
             departureDate = period.departureDate(today),
             returnDate = period.returnDate(today),
         )
-        return TripDashboardUiState(trip = trip, period = period, periods = periods, today = today, isDemoMode = isDemoMode)
+        val offersAvailable = searchAccommodations.offersAvailable
+        return TripDashboardUiState(
+            trip = trip,
+            period = period,
+            periods = periods,
+            today = today,
+            // La sezione alloggi usa una sola delle due liste: l'altra resta vuota.
+            stays = if (offersAvailable) UiState.Loading else UiState.Empty,
+            lodgings = if (offersAvailable) UiState.Empty else UiState.Loading,
+            stayOffersAvailable = offersAvailable,
+            restaurantRatingsAvailable = findBudgetRestaurants.ratingsAvailable,
+            isDemoMode = isDemoMode,
+        )
     }
 
     private fun tripFor(period: TravelPeriod, current: TripContext): TripContext {
@@ -302,6 +326,7 @@ class TripDashboardViewModel(
                 TripDashboardViewModel(
                     searchFlights = container.searchFlights,
                     searchAccommodations = container.searchAccommodations,
+                    findLodgings = container.findLodgings,
                     getSeasonalHighlights = container.getSeasonalHighlights,
                     planTransitRoute = container.planTransitRoute,
                     findBudgetRestaurants = container.findBudgetRestaurants,

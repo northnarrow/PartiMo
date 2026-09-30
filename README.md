@@ -15,7 +15,14 @@ Wikipedia). Toccando un luogo si apre la sua **scheda**: foto, breve descrizione
 divisa in capitoli e, sempre visibile in basso, il pulsante **Naviga** che apre Google Maps con il
 percorso dalla posizione attuale fino al luogo.
 
-<img src="docs/search_ideas.png" alt="Schermata iniziale con partenza, mesi e consigli" width="240" /> <img src="docs/departure_picker.png" alt="Scelta dell'aeroporto di partenza" width="240" /> <img src="docs/trip_dashboard.png" alt="Dashboard: sezione Voli" width="240" /> <img src="docs/trip_dashboard_explore.png" alt="Dashboard: sezione Da vedere" width="240" /> <img src="docs/place_detail.png" alt="Scheda di un luogo con descrizione, storia e pulsante Naviga" width="240" />
+Anche **alloggi** e **ristoranti** sono reali senza chiavi: le strutture ricettive e i locali attorno
+al centro arrivano da **OpenStreetMap**. Ogni struttura ha **Vedi prezzi**, che apre Booking.com con
+nome e date del viaggio già compilati; ogni ristorante si apre su Google Maps con recensioni, foto e
+orari. Per **voli** e **trasporti** i prezzi e gli orari reali richiedono una chiave: senza chiave
+l'app mostra delle stime e i pulsanti verso **Google Voli**, **Skyscanner** e **Google Maps** (percorso
+con i mezzi), che si aprono con tratta e date del viaggio.
+
+<img src="docs/search_ideas.png" alt="Schermata iniziale con partenza, mesi e consigli" width="240" /> <img src="docs/departure_picker.png" alt="Scelta dell'aeroporto di partenza" width="240" /> <img src="docs/trip_dashboard.png" alt="Dashboard: sezione Voli con i collegamenti a Google Voli e Skyscanner" width="240" /> <img src="docs/trip_dashboard_stays.png" alt="Dashboard: alloggi reali da OpenStreetMap con Booking.com e Airbnb" width="240" /> <img src="docs/trip_dashboard_explore.png" alt="Dashboard: sezione Da vedere" width="240" /> <img src="docs/place_detail.png" alt="Scheda di un luogo con descrizione, storia e pulsante Naviga" width="240" /> <img src="docs/trip_dashboard_transit.png" alt="Dashboard: trasporti con il percorso reale su Google Maps" width="240" /> <img src="docs/trip_dashboard_restaurants.png" alt="Dashboard: ristoranti reali da OpenStreetMap" width="240" />
 
 Negli screenshot (generati dai test, senza rete) le foto sono segnaposto grigi: nell'app si caricano
 le foto reali dei luoghi.
@@ -55,7 +62,7 @@ le foto reali dei luoghi.
 ┌───────────────────────────── :data (Android library) ──────────────────────────────┐
 │ DefaultXxxRepository (safeApiCall: eccezioni → DataError, Dispatchers.IO)            │
 │   → DataSource: provider reale (Ktor + ResponseCache/Room) oppure demo               │
-│ Wikipedia (luoghi, storia) · DataStore (preferenze) · DataModule (reale/demo)        │
+│ Wikipedia (luoghi) · OpenStreetMap (alloggi, ristoranti) · DataStore · DataModule    │
 └─────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -77,13 +84,14 @@ le foto reali dei luoghi.
 | Punto di partenza | `FindDepartureAirportsUseCase`, `ObserveDepartureUseCase`, `SaveDepartureUseCase` | Geocoding + aeroporti, salvato con DataStore | L'utente cerca la sua città e sceglie l'aeroporto: il consigliato è in cima, ma può preferirne un altro (es. Linate invece di Malpensa). Cambiandolo, i voli si ricaricano da soli |
 | Periodo del viaggio | `TravelPeriod` | – | "Prossimi giorni" + i dodici mesi successivi: ogni mese dell'anno è selezionabile, sia nella ricerca sia nella dashboard |
 | Consigliami | `RecommendDestinationsUseCase` | Catalogo curato di ~50 mete + meteo attuale | Mete adatte al mese del viaggio: mercatini, aurora boreale, fioriture, foliage, mare, clima ideale |
-| Voli e alloggi | `SearchFlightsUseCase`, `SearchAccommodationsUseCase`, `ValueForMoneyScorer` | [Duffel](https://duffel.com/docs) (offer requests, Stays) | Punteggio qualità/prezzo normalizzato; media bayesiana sulle recensioni; filtri e ordinamenti |
+| Voli | `SearchFlightsUseCase`, `ValueForMoneyScorer` | [Duffel](https://duffel.com/docs) (offer requests) | Punteggio qualità/prezzo normalizzato. Sempre presenti i pulsanti **Google Voli** e **Skyscanner** con tratta e date compilate: senza chiave le tariffe mostrate sono stime e i pulsanti portano ai prezzi reali |
+| Alloggi | `SearchAccommodationsUseCase`, `FindLodgingsUseCase` | Duffel Stays, oppure senza chiave [OpenStreetMap](https://www.openstreetmap.org) ([Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API)) | Con Duffel: offerte con prezzo, media bayesiana sulle recensioni, filtri e ordinamenti. Senza chiave: hotel, B&B, ostelli e appartamenti reali vicino al centro (tipo, stelle, indirizzo, distanza), ognuno con **Vedi prezzi** (Booking.com con nome e date), mappa e sito ufficiale; in alto Booking.com e Airbnb per tutta la città |
 | Aggiorna (last minute) | `TripDashboardViewModel.refresh`, `PriceChange` | – | Ricarica tutto ignorando la cache e riassume la variazione dei prezzi migliori (es. "🔥 Volo sceso a 89 € (−12 €)") |
 | Avvisi sulle offerte | `SetPriceAlertUseCase`, `CheckPriceWatchesUseCase`, `DealDetector` | WorkManager + notifiche | Controllo ogni 6 ore con rete disponibile; notifica se volo o alloggio (ben recensito) costa almeno il 15% in meno del solito; tocco sulla notifica → dashboard del viaggio |
 | Da vedere (esplorazione stagionale) | `GetSeasonalHighlightsUseCase`, `SeasonalPoiFilter`, `SeasonalCalendar`, `PhotoSpotTagger` | [Wikipedia](https://www.mediawiki.org/wiki/API:Main_page) (gratuita, senza chiave) oppure Google Places API (New), + [Open-Meteo](https://open-meteo.com) | Senza chiave: luoghi e foto reali da Wikipedia, dal più noto al meno noto, senza città, enti, stazioni, eventi storici ed edifici scomparsi. Con la chiave Google anche valutazioni e temi del mese (es. mercatini di Natale a dicembre). Stagioni invertite nell'emisfero sud, tag Instagrammabile/Panoramico/Tramonto/Chicca nascosta |
 | Scheda del luogo e "Naviga" | `GetPoiDetailsUseCase`, `Excerpt` | Wikipedia (testo, foto, crediti da Wikimedia Commons) + [Google Maps URLs](https://developers.google.com/maps/documentation/urls/get-started) | Tocco su un luogo: foto in alta risoluzione, breve descrizione, storia in capitoli (es. Costruzione → Medioevo → restauri), fonti e licenze. **Naviga** apre l'app Google Maps (o il browser) con il percorso fino al luogo, senza chiave. Per i luoghi di Google la voce si cerca per nome vicino alle coordinate |
-| Trasporti pubblici | `PlanTransitRouteUseCase`, `TransitRoute` (cambi, coincidenze, tempo a piedi) | Google Routes API (`TRANSIT`) | Percorsi multimodali metro/bus/tram/treni, coincidenze impossibili scartate, preferenze di routing |
-| Ristorazione economica | `FindBudgetRestaurantsUseCase`, `BudgetDiningCriteria` | Google Places API (New) | Vincolo `price_level` 1–2 e valutazione ≥ 4,3, riapplicato sempre dal dominio |
+| Trasporti pubblici | `PlanTransitRouteUseCase`, `TransitRoute` (cambi, coincidenze, tempo a piedi) | Google Routes API (`TRANSIT`) + Google Maps URLs | Percorsi multimodali metro/bus/tram/treni, coincidenze impossibili scartate, preferenze di routing. **Apri in Google Maps** mostra lo stesso percorso con linee e orari reali anche senza chiave |
+| Ristoranti | `FindBudgetRestaurantsUseCase`, `BudgetDiningCriteria` | Google Places API (New), oppure senza chiave OpenStreetMap (Overpass API) | Con Google: vincolo `price_level` 1–2 e valutazione ≥ 4,3, riapplicato sempre dal dominio. Senza chiave: locali reali vicino al centro (cucina, indirizzo, distanza), prima i più completi e vicini, catene in fondo. Il tocco apre il locale su Google Maps (recensioni, foto, orari) |
 
 ### Quando un'offerta è "davvero conveniente"
 Per ogni viaggio seguito PartiMo conserva lo storico dei prezzi migliori: il volo più economico e
@@ -98,7 +106,7 @@ prezzi visti in quel momento diventano il primo riferimento. A ogni controllo:
 ### Cache delle ricerche
 `ResponseCache` salva in Room le risposte (già validate) di ogni ricerca, identificate da una chiave
 SHA-256 dei parametri. Il TTL dipende dal tipo di dato: voli 20 minuti, alloggi 1 ora, ristoranti
-12 ore, POI 24 ore, meteo 15 minuti, trasporti 2 minuti, ricerca città e voci di Wikipedia 7 giorni. Se la rete non è
+12 ore, POI e strutture ricettive 24 ore, meteo 15 minuti, trasporti 2 minuti, ricerca città e voci di Wikipedia 7 giorni. Se la rete non è
 disponibile viene servito il dato scaduto, segnalato in UI con il badge "Offline · dati salvati".
 **Aggiorna**, il pull-to-refresh e i controlli in background ignorano le cache ancora valide.
 
@@ -117,10 +125,13 @@ VCS) oppure da variabili d'ambiente (utile in CI), e le inietta in `BuildConfig`
 | Da vedere: luoghi, foto, descrizione, storia | ✅ Reale (Wikipedia) | ✅ Reale (Google Places + storia da Wikipedia) |
 | Naviga (Google Maps) | ✅ Reale, non serve chiave | ✅ Reale |
 | Ricerca città, aeroporti, Consigliami, meteo | ✅ Reale | ✅ Reale |
-| Voli | Demo | Duffel (`DUFFEL_ACCESS_TOKEN`) |
-| Alloggi | Demo | Duffel Stays (`DUFFEL_ACCESS_TOKEN`) |
-| Trasporti pubblici | Demo | Google Routes API (`GOOGLE_MAPS_API_KEY`) |
-| Ristoranti | Demo | Google Places API (`GOOGLE_MAPS_API_KEY`) |
+| Alloggi | ✅ Strutture reali (OpenStreetMap) + Booking.com e Airbnb con le date del viaggio | Offerte con prezzo di Duffel Stays (`DUFFEL_ACCESS_TOKEN`) |
+| Ristoranti | ✅ Locali reali (OpenStreetMap), tocco → Google Maps | Google Places API (`GOOGLE_MAPS_API_KEY`): valutazioni, fasce di prezzo, foto |
+| Voli | Stime + ✅ Google Voli e Skyscanner con tratta e date (prezzi reali sul sito) | Offerte Duffel nell'app (`DUFFEL_ACCESS_TOKEN`) |
+| Trasporti pubblici | Stime + ✅ percorso reale su Google Maps | Percorsi reali nell'app, Google Routes API (`GOOGLE_MAPS_API_KEY`) |
+
+I dati di OpenStreetMap, Wikipedia e Open-Meteo e i collegamenti ai siti non richiedono chiavi né
+registrazione: per questo quelle funzioni sono reali in qualunque configurazione.
 
 ### 1. Token Duffel (voli e alloggi)
 1. Registrati gratuitamente su [app.duffel.com](https://app.duffel.com).
@@ -132,6 +143,7 @@ VCS) oppure da variabili d'ambiente (utile in CI), e le inietta in `BuildConfig`
 4. Gli alloggi usano **Duffel Stays**, che va
    [richiesto a Duffel](https://duffel.com/docs/guides/getting-started-with-stays): finché non è
    abilitato, la sezione Alloggi mostra "Chiave API mancante o non valida" (i voli funzionano comunque).
+   Senza token la sezione Alloggi mostra le strutture reali di OpenStreetMap.
 
 ### 2. Chiave Google Maps Platform (ristoranti, trasporti e, facoltativo, Da vedere)
 1. Apri la [Google Cloud Console](https://console.cloud.google.com), crea un progetto e collega un
@@ -164,13 +176,13 @@ chiavi non contengono spazi). Poi ricompila l'app: le chiavi vengono lette in fa
 usano variabili d'ambiente con gli stessi nomi (es. i *secrets* di GitHub Actions). Se una chiave finisce per errore in un commit o
 in una chat, revocala e creane una nuova.
 
-- **Modalità demo:** se una chiave è vuota, il modulo corrispondente usa dati dimostrativi generati
-  per la città scelta (voli con durata e prezzo in base alla distanza reale, hotel e ristoranti di
-  fantasia attorno al centro, percorsi generici dall'aeroporto) e la UI mostra il badge "Demo".
-  I prezzi demo seguono un **mercato simulato**: cambiano ogni 10 minuti (±8%) e ogni tanto
-  un'offerta va in promozione last minute (−30%), così "Aggiorna" e gli avvisi si possono provare
-  anche senza chiavi. Ricerca città, aeroporti, consigli, meteo e luoghi da vedere sono sempre
-  reali, perché non richiedono chiavi.
+- **Senza chiavi:** voli e trasporti usano stime generate per la città scelta (voli con durata e
+  prezzo in base alla distanza reale, percorsi generici dall'aeroporto) con il badge "Demo", e i
+  pulsanti verso Google Voli, Skyscanner e Google Maps portano ai prezzi e agli orari reali. I prezzi
+  stimati seguono un **mercato simulato**: cambiano ogni 10 minuti (±8%) e ogni tanto un'offerta va
+  in promozione last minute (−30%), così "Aggiorna" e gli avvisi si possono provare anche senza
+  chiavi. Alloggi, ristoranti, ricerca città, aeroporti, consigli, meteo e luoghi da vedere sono
+  sempre reali.
 - **Sicurezza:** una chiave in `BuildConfig` può essere estratta dall'APK e le intestazioni Android
   si possono imitare: la restrizione riduce gli abusi ma non li impedisce. Il token Duffel è una
   credenziale lato server: in produzione le chiamate a Duffel e Google vanno instradate da un proprio
@@ -188,20 +200,22 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
 ./gradlew :app:assembleDebug        # APK di debug
 ```
 
-272 test unitari:
-- **`:domain` (124):** modelli e validazioni (compresi i dodici mesi di `TravelPeriod`), servizi di
+292 test unitari:
+- **`:domain` (130):** modelli e validazioni (compresi i dodici mesi di `TravelPeriod`), servizi di
   dominio (qualità/prezzo, stagionalità, notorietà dei luoghi, scelta degli aeroporti, rilevamento
-  degli affari, estratti brevi di descrizione e storia) e tutti i casi d'uso, con fake condivisi
-  tramite `testFixtures`.
-- **`:data` (72):** cache e TTL, mappatura degli errori, client HTTP con risposte JSON simulate
-  (Duffel, Places, Routes, Open-Meteo, Wikipedia), classificazione dei luoghi su risposte **reali** di
-  Wikipedia (Roma, Lisbona, Colosseo in `data/src/test/resources/wikipedia`), intestazioni per le
-  chiavi Google con restrizione Android, dataset aeroporti reale (es. Roma → FCO, Parigi → CDG),
-  catalogo delle mete, repository DataStore e formato di salvataggio, mercato simulato della demo.
-- **`:app` (76):** ViewModel (dashboard, ricerca, scelta della partenza, scheda del luogo), rotte di
-  navigazione, collegamento a Google Maps, User-Agent delle foto, notifiche (Robolectric),
-  formattazione e test UI Compose con Robolectric (`app/src/testDebug`), che salvano anche gli
-  screenshot in `app/build/outputs/screenshots/`.
+  degli affari, estratti brevi di descrizione e storia) e tutti i casi d'uso, compresi ristoranti
+  senza valutazioni e strutture ricettive, con fake condivisi tramite `testFixtures`.
+- **`:data` (77):** cache e TTL, mappatura degli errori, client HTTP con risposte JSON simulate
+  (Duffel, Places, Routes, Open-Meteo, Wikipedia, Overpass), classificazione dei luoghi su risposte
+  **reali** di Wikipedia (Roma, Lisbona, Colosseo in `data/src/test/resources/wikipedia`), ristoranti
+  di Vienna e strutture di Matera da risposte **reali** di OpenStreetMap (`data/src/test/resources/osm`),
+  cambio di istanza Overpass se sovraccarica, intestazioni per le chiavi Google con restrizione
+  Android, dataset aeroporti reale (es. Roma → FCO, Parigi → CDG), catalogo delle mete, repository
+  DataStore e formato di salvataggio, mercato simulato della demo.
+- **`:app` (85):** ViewModel (dashboard con e senza chiavi, ricerca, scelta della partenza, scheda del
+  luogo), rotte di navigazione, collegamenti a Google Maps, Google Voli, Skyscanner, Booking.com e
+  Airbnb, User-Agent delle foto, notifiche (Robolectric), formattazione e test UI Compose con
+  Robolectric (`app/src/testDebug`), che salvano anche gli screenshot in `app/build/outputs/screenshots/`.
 
 ## Scelte tecniche
 
@@ -245,7 +259,23 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
   Maps se installata, altrimenti il browser, e lascia a Maps la scelta del mezzo (a piedi, mezzi, auto).
 - **Licenze:** i testi di Wikipedia sono CC BY-SA 4.0 e le foto di Wikimedia Commons hanno licenze
   libere con attribuzione: la scheda mostra fonte, autore e licenza, con i collegamenti alle pagine
-  originali.
+  originali. I dati di OpenStreetMap sono ODbL: sotto alloggi e ristoranti c'è "Dati © OpenStreetMap
+  contributors", che apre la [pagina del copyright](https://www.openstreetmap.org/copyright).
+- **OpenStreetMap (Overpass API):** una sola query per sezione, con gli elementi che hanno un nome
+  attorno al centro (ristoranti entro 1,5 km, strutture entro 2 km, centro delle aree con `out
+  center`). Le istanze pubbliche sono gratuite ma chiedono un uso leggero e uno User-Agent
+  identificabile: le risposte restano in cache (12 ore i ristoranti, 24 ore le strutture) e, se
+  un'istanza risponde 429, 5xx o va in timeout, si prova la successiva; una richiesta rifiutata (4xx)
+  non si ripete altrove. Per un'app pubblicata con molti utenti conviene un'istanza Overpass propria o
+  un backend con cache. OpenStreetMap non ha valutazioni: i locali sono ordinati per completezza
+  della scheda (cucina, orari, sito, voce Wikidata) e vicinanza, con le catene in fondo.
+- **Collegamenti ai siti di viaggio** (`TravelLinks`, `MapsLinks`): URL pubblici con la ricerca già
+  compilata (es. `booking.com/searchresults.it.html?ss=Vienna&checkin=…&checkout=…`), senza chiavi,
+  accordi o codici di affiliazione. Dall'app escono solo tratta, città, date e numero di viaggiatori.
+  I collegamenti a Google Maps si aprono nell'app Maps se installata.
+- **Trasporti senza chiave:** [Transitous](https://transitous.org) offre percorsi reali senza chiave,
+  ma solo per app open source non commerciali e previo contatto con il progetto: per ora non è
+  attivo e senza chiave Google il percorso reale si apre in Google Maps.
 
 ## Struttura
 
@@ -262,7 +292,7 @@ domain/src/testFixtures/   fake dei repository e dati di test condivisi
 data/src/main/kotlin/com/partimo/data/
   cache/       Room + ResponseCache (TTL, fallback offline)
   network/     HttpClientFactory, gestione errori, intestazioni per le chiavi Google Android
-  remote/      duffel, places, routes, weather, geocoding, wikipedia
+  remote/      duffel, places, routes, weather, geocoding, wikipedia, osm (Overpass API)
   local/       dataset aeroporti (asset), catalogo curato delle mete, preferenze (DataStore)
   demo/        catalogo e sorgenti demo (mercato simulato)
   repository/  implementazioni dei repository
@@ -271,14 +301,16 @@ app/src/main/kotlin/com/partimo/app/
   di/             AppContainer, User-Agent e identità dell'app per le API
   navigation/     NavHost e rotte type-safe
   notifications/  DealCheckWorker, DealCheckScheduler, DealNotifier
-  ui/common/      UiState, componenti condivisi, periodi, ricerca città, formattazione, testi
+  ui/common/      UiState, componenti condivisi, periodi, ricerca città, formattazione, testi,
+                  collegamenti ai siti di viaggio (TravelLinks)
   ui/search/      schermata "Dove vuoi andare?" e "Consigliami"
   ui/departure/   scelta del punto di partenza
   ui/dashboard/   ViewModel, dashboard a sezioni, componenti, anteprime
-  ui/place/       scheda del luogo (descrizione, storia, fonti) e collegamento a Google Maps
+  ui/place/       scheda del luogo (descrizione, storia, fonti) e collegamenti a Google Maps
 app/src/test/        test di ViewModel, notifiche, stati UI e formattazione
 app/src/testDebug/   test UI Compose con Robolectric (+ screenshot)
 docs/                screenshot delle schermate
 data/src/test/resources/wikipedia/  risposte reali di Wikipedia usate nei test
+data/src/test/resources/osm/        risposte reali di OpenStreetMap (Overpass) usate nei test
 data/src/main/assets/airports.csv   aeroporti con voli di linea (OurAirports, pubblico dominio)
 ```

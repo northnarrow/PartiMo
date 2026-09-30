@@ -2,14 +2,9 @@ package com.partimo.data.demo
 
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.Money
-import com.partimo.domain.model.dining.PriceLevel
-import com.partimo.domain.model.dining.Restaurant
-import com.partimo.domain.model.dining.RestaurantSearchQuery
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.flight.FlightSlice
-import com.partimo.domain.model.stay.AccommodationOffer
-import com.partimo.domain.model.stay.AccommodationSearchQuery
 import com.partimo.domain.model.transit.TransitLeg
 import com.partimo.domain.model.transit.TransitLine
 import com.partimo.domain.model.transit.TransitMode
@@ -23,20 +18,17 @@ import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
-import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.roundToLong
 
 /**
  * Catalogo dimostrativo usato quando una chiave API non è configurata. Funziona per qualunque città:
  * - voli: durata e prezzo dipendono dalla distanza reale tra gli aeroporti ([airportLocator]);
- * - alloggi e ristoranti: nomi di fantasia, posizionati attorno al centro richiesto;
  * - trasporti: percorsi generici dall'aeroporto al centro, con durate proporzionali alla distanza.
  *
- * I luoghi da vedere non hanno una versione demo: arrivano sempre da Wikipedia, che non richiede chiavi.
- * Il catalogo include anche elementi che i casi d'uso devono scartare (fuori budget), così la demo
- * mostra i filtri di dominio in azione. I prezzi di voli e alloggi seguono un
- * mercato simulato ([marketFactor]): cambiano nel tempo e ogni tanto compare un'offerta last minute.
+ * Luoghi, ristoranti e alloggi non hanno una versione demo: arrivano sempre da fonti reali senza
+ * chiave (Wikipedia e OpenStreetMap). I prezzi dei voli seguono un mercato simulato ([marketFactor]):
+ * cambiano nel tempo e ogni tanto compare un'offerta last minute.
  */
 internal class DemoCatalog(
     private val airportLocator: suspend (String) -> GeoPoint? = { null },
@@ -69,43 +61,6 @@ internal class DemoCatalog(
                 refundable = template.refundable,
             )
         }
-    }
-
-    fun stays(query: AccommodationSearchQuery): List<AccommodationOffer> {
-        val nights = query.nights.coerceAtLeast(1)
-        val area = "%.2f,%.2f".format(Locale.ROOT, query.location.latitude, query.location.longitude)
-        return STAY_TEMPLATES.map { stay ->
-            val nightly = stay.nightlyPrice.multiply(BigDecimal(marketFactor("stay|${stay.id}|$area|${query.checkIn}")))
-                .setScale(0, RoundingMode.HALF_UP)
-            AccommodationOffer(
-                id = "demo-${stay.id}",
-                name = stay.name,
-                totalPrice = Money.of(nightly * BigDecimal(nights * query.rooms), "EUR"),
-                nights = nights,
-                starRating = stay.stars,
-                reviewScore = stay.reviewScore,
-                reviewCount = stay.reviewCount,
-                location = query.location.offset(stay.offsetLat, stay.offsetLon),
-                address = stay.address,
-                photoUrl = demoPhoto(stay.id),
-                freeCancellation = stay.freeCancellation,
-            )
-        }
-    }
-
-    fun restaurants(query: RestaurantSearchQuery): List<Restaurant> = RESTAURANT_TEMPLATES.map { template ->
-        Restaurant(
-            id = "demo-${template.id}",
-            name = template.name,
-            priceLevel = template.priceLevel,
-            rating = template.rating,
-            reviewCount = template.reviewCount,
-            cuisine = template.cuisine,
-            address = template.address,
-            location = query.location.offset(template.offsetLat, template.offsetLon),
-            photoUrl = demoPhoto(template.id),
-            isOpenNow = true,
-        )
     }
 
     /** Percorsi generici dal nodo di arrivo (aeroporto) al centro, con orari a partire da adesso. */
@@ -265,31 +220,6 @@ internal class DemoCatalog(
 
     // ---- Modelli dei dati generici ------------------------------------------------------------------
 
-    private data class StayTemplate(
-        val id: String,
-        val name: String,
-        val stars: Int,
-        val reviewScore: Double,
-        val reviewCount: Int,
-        val nightlyPrice: BigDecimal,
-        val offsetLat: Double,
-        val offsetLon: Double,
-        val address: String,
-        val freeCancellation: Boolean,
-    )
-
-    private data class RestaurantTemplate(
-        val id: String,
-        val name: String,
-        val priceLevel: PriceLevel,
-        val rating: Double,
-        val reviewCount: Int,
-        val cuisine: String,
-        val offsetLat: Double,
-        val offsetLon: Double,
-        val address: String = "Centro città",
-    )
-
     private companion object {
         const val METERS_PER_KM = 1_000.0
         const val DEFAULT_FLIGHT_KM = 1_000.0
@@ -351,35 +281,5 @@ internal class DemoCatalog(
             FlightTemplate("Etihad Airways", "EY", 84, 1, 230.0, 0.054, LocalTime.of(21, 10), LocalTime.of(3, 15), refundable = false),
         )
 
-        val STAY_TEMPLATES = listOf(
-            StayTemplate("hotel-centrale", "Hotel Centrale", 4, 8.7, 1_240, BigDecimal("142"), 0.004, -0.003, "Viale principale 7", freeCancellation = true),
-            StayTemplate("bb-piazza", "B&B La Piazza", 3, 9.1, 410, BigDecimal("96"), -0.006, -0.004, "Piazza del mercato 4", freeCancellation = true),
-            StayTemplate("grand-palazzo", "Grand Hotel Palazzo", 5, 9.3, 2_100, BigDecimal("390"), -0.002, 0.003, "Corso monumentale 16", freeCancellation = false),
-            StayTemplate("design-hostel", "Design Hostel", 2, 8.2, 980, BigDecimal("48"), 0.007, 0.005, "Via dei canali 23", freeCancellation = true),
-            StayTemplate("loft-centro", "Appartamento Loft in Centro", 3, 8.9, 156, BigDecimal("118"), -0.01, -0.012, "Vicolo degli artisti 12", freeCancellation = false),
-            StayTemplate("boutique-giardino", "Boutique Hotel Giardino", 4, 9.0, 640, BigDecimal("168"), -0.015, 0.007, "Viale dei giardini 9", freeCancellation = true),
-        )
-
-        val RESTAURANT_TEMPLATES = listOf(
-            RestaurantTemplate("trattoria-centro", "Trattoria del Centro", PriceLevel.MODERATE, 4.6, 1_830, "Cucina tradizionale", 0.001, -0.004),
-            RestaurantTemplate("street-food-mercato", "Street Food del Mercato", PriceLevel.INEXPENSIVE, 4.4, 920, "Street food", 0.003, 0.001),
-            RestaurantTemplate("bistrot-piazza", "Bistrot della Piazza", PriceLevel.MODERATE, 4.3, 310, "Bistrot", -0.001, -0.007),
-            RestaurantTemplate("caffe-storico", "Caffè Storico", PriceLevel.MODERATE, 4.2, 2_400, "Caffetteria", -0.012, -0.005),
-            RestaurantTemplate("ristorante-panorama", "Ristorante Panorama", PriceLevel.VERY_EXPENSIVE, 4.8, 1_100, "Alta cucina", -0.003, 0.005),
-            RestaurantTemplate("chiosco-quartiere", "Chiosco di Quartiere", PriceLevel.INEXPENSIVE, 4.7, 640, "Cucina di strada", -0.01, -0.01),
-            RestaurantTemplate("osteria-locale", "Osteria Locale", PriceLevel.MODERATE, 4.5, 2_950, "Cucina tipica", 0.008, 0.003),
-            RestaurantTemplate("sapori-di-mare", "Sapori di Mare", PriceLevel.EXPENSIVE, 4.5, 780, "Pesce", 0.012, 0.016),
-            RestaurantTemplate("tavola-calda", "Tavola Calda Express", PriceLevel.INEXPENSIVE, 4.1, 410, "Cucina veloce", -0.015, -0.003),
-            RestaurantTemplate("cucina-di-casa", "Cucina di Casa", PriceLevel.MODERATE, 4.6, 35, "Cucina casalinga", 0.05, -0.026),
-        )
-
-        /** Spostamento in gradi (limitato per restare entro coordinate valide). */
-        fun GeoPoint.offset(deltaLat: Double, deltaLon: Double): GeoPoint = GeoPoint(
-            latitude = (latitude + deltaLat).coerceIn(-89.9, 89.9),
-            longitude = ((longitude + deltaLon + 540.0) % 360.0) - 180.0,
-        )
-
-        /** Immagini segnaposto deterministiche (Lorem Picsum), per mostrare il caricamento con Coil. */
-        fun demoPhoto(seed: String): String = "https://picsum.photos/seed/partimo-$seed/640/400"
     }
 }

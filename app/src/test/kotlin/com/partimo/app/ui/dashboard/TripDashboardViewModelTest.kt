@@ -6,6 +6,7 @@ import com.partimo.app.testing.successData
 import com.partimo.app.ui.common.UiState
 import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataResult
+import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.dining.PriceLevel
@@ -13,6 +14,7 @@ import com.partimo.domain.model.poi.PoiCategory
 import com.partimo.domain.model.place.DeparturePoint
 import com.partimo.domain.testing.FakeAccommodationRepository
 import com.partimo.domain.testing.FakeFlightRepository
+import com.partimo.domain.testing.FakeLodgingRepository
 import com.partimo.domain.testing.FakePoiRepository
 import com.partimo.domain.testing.FakePriceWatchRepository
 import com.partimo.domain.testing.FakeRestaurantRepository
@@ -21,6 +23,7 @@ import com.partimo.domain.testing.FakeUserPreferencesRepository
 import com.partimo.domain.testing.FakeWeatherRepository
 import com.partimo.domain.testing.TestData
 import com.partimo.domain.usecase.FindBudgetRestaurantsUseCase
+import com.partimo.domain.usecase.FindLodgingsUseCase
 import com.partimo.domain.usecase.GetSeasonalHighlightsUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObservePriceAlertUseCase
@@ -59,6 +62,14 @@ class TripDashboardViewModelTest {
         ),
     )
     private val stays = FakeAccommodationRepository(DataResult.Success(listOf(TestData.stayOffer("stay", "400"))))
+    private val lodgings = FakeLodgingRepository(
+        DataResult.Success(
+            listOf(
+                TestData.lodging("far", location = GeoPoint(48.2206, 16.3960)),
+                TestData.lodging("near", location = SampleDestinations.VIENNA.center, stars = 4),
+            ),
+        ),
+    )
     private val pois = FakePoiRepository(
         DataResult.Success(
             listOf(
@@ -83,6 +94,7 @@ class TripDashboardViewModelTest {
     private fun createViewModel(initialPeriod: TravelPeriod = december) = TripDashboardViewModel(
         searchFlights = SearchFlightsUseCase(flights, clock = TestData.FIXED_CLOCK),
         searchAccommodations = SearchAccommodationsUseCase(stays, clock = TestData.FIXED_CLOCK),
+        findLodgings = FindLodgingsUseCase(lodgings),
         getSeasonalHighlights = GetSeasonalHighlightsUseCase(pois, weather, clock = TestData.FIXED_CLOCK),
         planTransitRoute = PlanTransitRouteUseCase(transit, TestData.FIXED_CLOCK),
         findBudgetRestaurants = FindBudgetRestaurantsUseCase(restaurants),
@@ -104,6 +116,9 @@ class TripDashboardViewModelTest {
         assertTrue(state.highlights.successData().recommendations.isNotEmpty())
         assertEquals(1, state.transit.successData().size)
         assertEquals(listOf("budget"), state.restaurants.successData().map { it.id })
+        assertTrue(state.stayOffersAvailable && state.restaurantRatingsAvailable)
+        assertEquals(UiState.Empty, state.lodgings)
+        assertTrue(lodgings.queries.isEmpty(), "Con il provider di prenotazione si mostrano le offerte con prezzo")
         assertFalse(state.isRefreshing)
         assertNotNull(state.pricesUpdatedAt)
 
@@ -111,6 +126,30 @@ class TripDashboardViewModelTest {
         assertEquals("MXP", flightQuery.originIata)
         assertEquals("VIE", flightQuery.destinationIata)
         assertEquals(SampleDestinations.VIENNA.arrivalHub, transit.queries.single().origin)
+    }
+
+    @Test
+    fun `senza chiavi API mostra strutture e ristoranti reali, senza prezzi né valutazioni`() = runTest {
+        stays.providesOffers = false
+        restaurants.providesRatings = false
+
+        val viewModel = createViewModel()
+
+        val state = viewModel.uiState.value
+        assertFalse(state.stayOffersAvailable)
+        assertEquals(UiState.Empty, state.stays)
+        assertTrue(stays.queries.isEmpty(), "Senza provider di prenotazione non si cercano offerte")
+        assertEquals(listOf("near", "far"), state.lodgings.successData().map { it.id })
+        assertEquals(SampleDestinations.VIENNA.center, lodgings.queries.single().location)
+        assertFalse(state.restaurantRatingsAvailable)
+        assertEquals(listOf("budget", "luxury"), state.restaurants.successData().map { it.id }, "Nessun filtro di qualità senza valutazioni")
+
+        viewModel.retry(DashboardSection.STAYS)
+        viewModel.refresh()
+
+        assertEquals(3, lodgings.queries.size)
+        assertIs<UiState.Success<*>>(viewModel.uiState.value.lodgings)
+        assertNull(viewModel.uiState.value.refreshSummary?.stay, "Senza prezzi non c'è variazione da segnalare")
     }
 
     @Test
@@ -128,6 +167,7 @@ class TripDashboardViewModelTest {
         val viewModel = TripDashboardViewModel(
             searchFlights = SearchFlightsUseCase(flights, clock = TestData.FIXED_CLOCK),
             searchAccommodations = SearchAccommodationsUseCase(stays, clock = TestData.FIXED_CLOCK),
+            findLodgings = FindLodgingsUseCase(lodgings),
             getSeasonalHighlights = GetSeasonalHighlightsUseCase(pois, weather, clock = TestData.FIXED_CLOCK),
             planTransitRoute = PlanTransitRouteUseCase(transit, TestData.FIXED_CLOCK),
             findBudgetRestaurants = FindBudgetRestaurantsUseCase(restaurants),
@@ -321,6 +361,7 @@ class TripDashboardViewModelTest {
         val viewModel = TripDashboardViewModel(
             searchFlights = SearchFlightsUseCase(flights, clock = TestData.FIXED_CLOCK),
             searchAccommodations = SearchAccommodationsUseCase(stays, clock = TestData.FIXED_CLOCK),
+            findLodgings = FindLodgingsUseCase(lodgings),
             getSeasonalHighlights = GetSeasonalHighlightsUseCase(pois, weather, clock = TestData.FIXED_CLOCK),
             planTransitRoute = PlanTransitRouteUseCase(transit, TestData.FIXED_CLOCK),
             findBudgetRestaurants = FindBudgetRestaurantsUseCase(restaurants),

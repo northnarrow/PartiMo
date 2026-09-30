@@ -24,6 +24,8 @@ import com.partimo.domain.model.poi.PoiTag
 import com.partimo.domain.model.poi.PointOfInterest
 import com.partimo.domain.model.poi.WikipediaPage
 import com.partimo.domain.model.stay.AccommodationOffer
+import com.partimo.domain.model.stay.Lodging
+import com.partimo.domain.model.stay.LodgingType
 import com.partimo.domain.model.transit.TransitLeg
 import com.partimo.domain.model.transit.TransitLine
 import com.partimo.domain.model.transit.TransitMode
@@ -152,6 +154,13 @@ object TestData {
         imageUrl = imageUrl,
         imageCredit = imageCredit,
     )
+
+    fun lodging(
+        id: String,
+        type: LodgingType = LodgingType.HOTEL,
+        location: GeoPoint = VIENNA_CENTER,
+        stars: Int? = null,
+    ): Lodging = Lodging(id = id, name = "Struttura $id", type = type, location = location, starRating = stars)
 
     fun restaurant(
         id: String,

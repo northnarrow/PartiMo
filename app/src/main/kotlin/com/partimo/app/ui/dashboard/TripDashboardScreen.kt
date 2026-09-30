@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Build
 import android.provider.Settings
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
@@ -70,9 +71,12 @@ import com.partimo.app.ui.common.PeriodChips
 import com.partimo.app.ui.common.flagEmoji
 import com.partimo.app.ui.dashboard.components.FlightsSection
 import com.partimo.app.ui.dashboard.components.HighlightsSection
+import com.partimo.app.ui.dashboard.components.LodgingsSection
 import com.partimo.app.ui.dashboard.components.RestaurantsSection
 import com.partimo.app.ui.dashboard.components.StaysSection
 import com.partimo.app.ui.dashboard.components.TransitSection
+import com.partimo.app.ui.place.ExternalLinks
+import com.partimo.app.ui.place.googleMapsTransitUrl
 import com.partimo.app.ui.theme.PartiMoTheme
 import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.deal.PriceChange
@@ -98,6 +102,8 @@ data class DashboardActions(
     val onOpenNotificationSettings: () -> Unit = {},
     /** Tocco su un luogo da vedere: apre la sua scheda (descrizione, storia, "Naviga"). */
     val onOpenPlace: (PointOfInterest) -> Unit = {},
+    /** Collegamento esterno: siti di prenotazione con le date del viaggio, Google Maps, fonti dei dati. */
+    val onOpenLink: (String) -> Unit = {},
 )
 
 /**
@@ -114,6 +120,7 @@ fun TripDashboardRoute(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val noAppForLink = stringResource(R.string.place_no_browser)
     val notificationPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         viewModel.onAlertToggled(notificationsAllowed = granted)
     }
@@ -139,6 +146,9 @@ fun TripDashboardRoute(
             onMessageShown = viewModel::onMessageShown,
             onOpenNotificationSettings = { context.startActivity(notificationSettingsIntent(context)) },
             onOpenPlace = onOpenPlace,
+            onOpenLink = { url ->
+                if (!ExternalLinks.openLink(context, url)) Toast.makeText(context, noAppForLink, Toast.LENGTH_LONG).show()
+            },
         ),
         modifier = modifier,
     )
@@ -237,14 +247,31 @@ private fun LazyListScope.sectionContent(section: DashboardSection, state: TripD
                         trip = state.trip,
                         onRetry = { actions.onRetry(DashboardSection.FLIGHTS) },
                         onChangeDeparture = actions.onChooseDeparture,
+                        onOpenLink = actions.onOpenLink,
                     )
                 }
             }
             state.pricesUpdatedAt?.let { updatedAt -> item(key = "updated") { PricesUpdatedNote(updatedAt) } }
         }
-        DashboardSection.STAYS -> {
-            item(key = "stays") { StaysSection(state = state.stays, onRetry = { actions.onRetry(DashboardSection.STAYS) }) }
+        DashboardSection.STAYS -> if (state.stayOffersAvailable) {
+            item(key = "stays") {
+                StaysSection(
+                    state = state.stays,
+                    trip = state.trip,
+                    onRetry = { actions.onRetry(DashboardSection.STAYS) },
+                    onOpenLink = actions.onOpenLink,
+                )
+            }
             state.pricesUpdatedAt?.let { updatedAt -> item(key = "updated") { PricesUpdatedNote(updatedAt) } }
+        } else {
+            item(key = "lodgings") {
+                LodgingsSection(
+                    state = state.lodgings,
+                    trip = state.trip,
+                    onRetry = { actions.onRetry(DashboardSection.STAYS) },
+                    onOpenLink = actions.onOpenLink,
+                )
+            }
         }
         DashboardSection.HIGHLIGHTS -> item(key = "highlights") {
             HighlightsSection(
@@ -257,15 +284,24 @@ private fun LazyListScope.sectionContent(section: DashboardSection, state: TripD
             )
         }
         DashboardSection.TRANSIT -> item(key = "transit") {
+            val destination = state.trip.destination
             TransitSection(
                 state = state.transit,
-                hubName = state.trip.destination.arrivalHubName,
-                timeZone = state.trip.destination.timeZone,
+                hubName = destination.arrivalHubName,
+                timeZone = destination.timeZone,
                 onRetry = { actions.onRetry(DashboardSection.TRANSIT) },
+                mapsUrl = googleMapsTransitUrl(origin = destination.arrivalHub, destination = destination.center),
+                onOpenLink = actions.onOpenLink,
             )
         }
         DashboardSection.RESTAURANTS -> item(key = "restaurants") {
-            RestaurantsSection(state = state.restaurants, onRetry = { actions.onRetry(DashboardSection.RESTAURANTS) })
+            RestaurantsSection(
+                state = state.restaurants,
+                onRetry = { actions.onRetry(DashboardSection.RESTAURANTS) },
+                ratingsAvailable = state.restaurantRatingsAvailable,
+                center = state.trip.destination.center,
+                onOpenLink = actions.onOpenLink,
+            )
         }
     }
 }
@@ -458,6 +494,12 @@ private fun TripDashboardDarkPreview() {
     PartiMoTheme(darkTheme = true) {
         TripDashboardScreen(PreviewData.loadedState().copy(selectedSection = DashboardSection.HIGHLIGHTS), DashboardActions())
     }
+}
+
+@Preview(name = "Dashboard · alloggi reali senza chiavi", showBackground = true, heightDp = 900)
+@Composable
+private fun TripDashboardOpenDataPreview() {
+    PartiMoTheme { TripDashboardScreen(PreviewData.openDataState().copy(selectedSection = DashboardSection.STAYS), DashboardActions()) }
 }
 
 @Preview(name = "Dashboard · senza partenza", showBackground = true, heightDp = 900)

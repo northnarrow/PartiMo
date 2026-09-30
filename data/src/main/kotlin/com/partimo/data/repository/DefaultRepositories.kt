@@ -5,6 +5,7 @@ import com.partimo.data.source.AirportDataSource
 import com.partimo.data.source.CitySearchDataSource
 import com.partimo.data.source.DestinationCatalogDataSource
 import com.partimo.data.source.FlightOffersDataSource
+import com.partimo.data.source.LodgingDataSource
 import com.partimo.data.source.PoiArticleDataSource
 import com.partimo.data.source.PoiDataSource
 import com.partimo.data.source.RestaurantDataSource
@@ -25,6 +26,8 @@ import com.partimo.domain.model.poi.PoiQuery
 import com.partimo.domain.model.poi.PointOfInterest
 import com.partimo.domain.model.stay.AccommodationOffer
 import com.partimo.domain.model.stay.AccommodationSearchQuery
+import com.partimo.domain.model.stay.Lodging
+import com.partimo.domain.model.stay.LodgingQuery
 import com.partimo.domain.model.transit.TransitRoute
 import com.partimo.domain.model.transit.TransitRouteQuery
 import com.partimo.domain.model.weather.WeatherSnapshot
@@ -33,6 +36,7 @@ import com.partimo.domain.repository.AirportRepository
 import com.partimo.domain.repository.CitySearchRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
 import com.partimo.domain.repository.FlightRepository
+import com.partimo.domain.repository.LodgingRepository
 import com.partimo.domain.repository.PoiArticleRepository
 import com.partimo.domain.repository.PoiRepository
 import com.partimo.domain.repository.RestaurantRepository
@@ -55,6 +59,7 @@ class DefaultFlightRepository(
 class DefaultAccommodationRepository(
     private val dataSource: StayOffersDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    override val providesOffers: Boolean = true,
 ) : AccommodationRepository {
     override suspend fun searchAccommodations(
         query: AccommodationSearchQuery,
@@ -97,9 +102,18 @@ class DefaultTransitRepository(
 class DefaultRestaurantRepository(
     private val dataSource: RestaurantDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    override val providesRatings: Boolean = true,
 ) : RestaurantRepository {
     override suspend fun searchRestaurants(query: RestaurantSearchQuery, forceRefresh: Boolean): DataResult<List<Restaurant>> =
         safeApiCall(ioDispatcher) { dataSource.searchRestaurants(query, forceRefresh) }
+}
+
+class DefaultLodgingRepository(
+    private val dataSource: LodgingDataSource,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+) : LodgingRepository {
+    override suspend fun findLodgings(query: LodgingQuery, forceRefresh: Boolean): DataResult<List<Lodging>> =
+        safeApiCall(ioDispatcher) { dataSource.findLodgings(query, forceRefresh) }
 }
 
 class DefaultCitySearchRepository(

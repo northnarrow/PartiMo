@@ -20,8 +20,10 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class PlaceDetailViewModelTest {
@@ -121,5 +123,25 @@ class MapsLinksTest {
             googleMapsDirectionsUrl(GeoPoint(-33.856784, 151.215297)),
             "Coordinate negative e punto decimale indipendenti dalla lingua del telefono",
         )
+    }
+
+    @Test
+    fun `i trasporti aprono su Google Maps il percorso con i mezzi dal nodo di arrivo al centro`() {
+        assertEquals(
+            "https://www.google.com/maps/dir/?api=1&origin=48.110300%2C16.569700&destination=48.208500%2C16.373100&travelmode=transit",
+            googleMapsTransitUrl(origin = GeoPoint(48.1103, 16.5697), destination = GeoPoint(48.2085, 16.3731)),
+        )
+    }
+
+    @Test
+    fun `la ricerca per nome apre la scheda del locale e i link di Maps preferiscono l'app`() {
+        assertEquals(
+            "https://www.google.com/maps/search/?api=1&query=Figlm%C3%BCller%2C%20Wollzeile%205%2C%20Vienna",
+            googleMapsSearchUrl("Figlmüller, Wollzeile 5, Vienna"),
+        )
+        assertTrue(isGoogleMapsUrl(googleMapsSearchUrl("Figlmüller")))
+        assertTrue(isGoogleMapsUrl("https://maps.google.com/?cid=123456789"))
+        assertFalse(isGoogleMapsUrl("https://www.google.com/travel/flights?q=Flights"))
+        assertFalse(isGoogleMapsUrl("https://www.booking.com/searchresults.it.html?ss=Vienna"))
     }
 }

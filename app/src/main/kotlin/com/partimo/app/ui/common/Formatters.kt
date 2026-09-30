@@ -87,6 +87,12 @@ object Formatters {
     fun monthYear(month: YearMonth, currentYear: Int): String =
         if (month.year == currentYear) monthName(month.month) else "${monthName(month.month)} ${month.year}"
 
+    /** Distanza a piedi o in città: "350 m" sotto il chilometro, altrimenti "1,2 km". */
+    fun distance(meters: Double): String {
+        val rounded = (meters / 10).roundToInt() * 10
+        return if (rounded < 1_000) "$rounded m" else "${compactNumber(meters / 1_000)} km"
+    }
+
     /** Importo senza segno, per le variazioni di prezzo ("12 €"). */
     fun moneyAmount(amount: BigDecimal, currencyCode: String): String = money(Money.of(amount.abs(), currencyCode))
 }

@@ -72,3 +72,31 @@ data class AccommodationFilter(
 }
 
 enum class AccommodationSortOption { BEST_VALUE, CHEAPEST, TOP_RATED }
+
+/** Tipo di struttura ricettiva. */
+enum class LodgingType { HOTEL, HOSTEL, GUEST_HOUSE, APARTMENT, MOTEL }
+
+/**
+ * Struttura ricettiva reale senza prezzo (es. da OpenStreetMap): tariffe e disponibilità per le date
+ * del viaggio si consultano sul sito di prenotazione.
+ */
+data class Lodging(
+    val id: String,
+    val name: String,
+    val type: LodgingType,
+    val location: GeoPoint,
+    /** Classificazione ufficiale in stelle (1–5), se nota. */
+    val starRating: Int? = null,
+    val address: String? = null,
+    val website: String? = null,
+) {
+    init {
+        require(starRating == null || starRating in 1..5) { "Stelle fuori scala: $starRating" }
+    }
+}
+
+/** Strutture attorno a un punto (di solito il centro città). */
+data class LodgingQuery(
+    val location: GeoPoint,
+    val radiusMeters: Int = 2_000,
+)

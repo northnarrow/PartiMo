@@ -20,6 +20,10 @@ class SearchAccommodationsUseCase(
     private val clock: Clock = Clock.systemDefaultZone(),
 ) {
 
+    /** `false` se non c'è un provider di prenotazione: al posto delle offerte si mostrano le strutture reali. */
+    val offersAvailable: Boolean
+        get() = repository.providesOffers
+
     suspend operator fun invoke(
         query: AccommodationSearchQuery,
         filter: AccommodationFilter = AccommodationFilter(),

@@ -28,7 +28,9 @@ data class Restaurant(
     val location: GeoPoint? = null,
     val photoUrl: String? = null,
     val isOpenNow: Boolean? = null,
+    /** Pagina del locale su Google Maps (recensioni, foto, indicazioni). */
     val mapsUrl: String? = null,
+    val website: String? = null,
 )
 
 /**

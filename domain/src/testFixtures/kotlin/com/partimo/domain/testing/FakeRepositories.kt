@@ -16,6 +16,8 @@ import com.partimo.domain.model.poi.PoiQuery
 import com.partimo.domain.model.poi.PointOfInterest
 import com.partimo.domain.model.stay.AccommodationOffer
 import com.partimo.domain.model.stay.AccommodationSearchQuery
+import com.partimo.domain.model.stay.Lodging
+import com.partimo.domain.model.stay.LodgingQuery
 import com.partimo.domain.model.transit.TransitRoute
 import com.partimo.domain.model.transit.TransitRouteQuery
 import com.partimo.domain.model.weather.WeatherSnapshot
@@ -24,6 +26,7 @@ import com.partimo.domain.repository.AirportRepository
 import com.partimo.domain.repository.CitySearchRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
 import com.partimo.domain.repository.FlightRepository
+import com.partimo.domain.repository.LodgingRepository
 import com.partimo.domain.repository.PoiArticleRepository
 import com.partimo.domain.repository.PoiRepository
 import com.partimo.domain.repository.PriceWatchRepository
@@ -57,6 +60,7 @@ class FakeFlightRepository(
 class FakeAccommodationRepository(
     var result: DataResult<List<AccommodationOffer>> = DataResult.Success(emptyList()),
     var delayMillis: Long = 0,
+    override var providesOffers: Boolean = true,
 ) : AccommodationRepository {
     val queries = mutableListOf<AccommodationSearchQuery>()
     val forceRefreshFlags = mutableListOf<Boolean>()
@@ -129,10 +133,24 @@ class FakeTransitRepository(
 class FakeRestaurantRepository(
     var result: DataResult<List<Restaurant>> = DataResult.Success(emptyList()),
     var delayMillis: Long = 0,
+    override var providesRatings: Boolean = true,
 ) : RestaurantRepository {
     val queries = mutableListOf<RestaurantSearchQuery>()
 
     override suspend fun searchRestaurants(query: RestaurantSearchQuery, forceRefresh: Boolean): DataResult<List<Restaurant>> {
+        queries += query
+        if (delayMillis > 0) delay(delayMillis)
+        return result
+    }
+}
+
+class FakeLodgingRepository(
+    var result: DataResult<List<Lodging>> = DataResult.Success(emptyList()),
+    var delayMillis: Long = 0,
+) : LodgingRepository {
+    val queries = mutableListOf<LodgingQuery>()
+
+    override suspend fun findLodgings(query: LodgingQuery, forceRefresh: Boolean): DataResult<List<Lodging>> {
         queries += query
         if (delayMillis > 0) delay(delayMillis)
         return result

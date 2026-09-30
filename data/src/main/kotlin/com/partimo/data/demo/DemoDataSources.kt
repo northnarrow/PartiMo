@@ -2,16 +2,10 @@ package com.partimo.data.demo
 
 import com.partimo.data.network.Fetched
 import com.partimo.data.source.FlightOffersDataSource
-import com.partimo.data.source.RestaurantDataSource
-import com.partimo.data.source.StayOffersDataSource
 import com.partimo.data.source.TransitDataSource
 import com.partimo.domain.common.DataOrigin
-import com.partimo.domain.model.dining.Restaurant
-import com.partimo.domain.model.dining.RestaurantSearchQuery
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightSearchQuery
-import com.partimo.domain.model.stay.AccommodationOffer
-import com.partimo.domain.model.stay.AccommodationSearchQuery
 import com.partimo.domain.model.transit.TransitRoute
 import com.partimo.domain.model.transit.TransitRouteQuery
 import kotlinx.coroutines.delay
@@ -28,26 +22,6 @@ internal class DemoFlightDataSource(
     override suspend fun searchOffers(query: FlightSearchQuery, forceRefresh: Boolean): Fetched<List<FlightOffer>> {
         delay(latencyMillis)
         return Fetched(catalog.flights(query), DataOrigin.DEMO)
-    }
-}
-
-internal class DemoStayDataSource(
-    private val catalog: DemoCatalog,
-    private val latencyMillis: Long = DEFAULT_DEMO_LATENCY_MILLIS,
-) : StayOffersDataSource {
-    override suspend fun searchStays(query: AccommodationSearchQuery, forceRefresh: Boolean): Fetched<List<AccommodationOffer>> {
-        delay(latencyMillis)
-        return Fetched(catalog.stays(query), DataOrigin.DEMO)
-    }
-}
-
-internal class DemoRestaurantDataSource(
-    private val catalog: DemoCatalog,
-    private val latencyMillis: Long = DEFAULT_DEMO_LATENCY_MILLIS,
-) : RestaurantDataSource {
-    override suspend fun searchRestaurants(query: RestaurantSearchQuery, forceRefresh: Boolean): Fetched<List<Restaurant>> {
-        delay(latencyMillis)
-        return Fetched(catalog.restaurants(query), DataOrigin.DEMO)
     }
 }
 

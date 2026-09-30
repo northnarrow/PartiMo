@@ -88,6 +88,7 @@ internal object CachePolicy {
     /** Testi e crediti delle voci enciclopediche cambiano pochissimo. */
     val ARTICLES: Duration = Duration.ofDays(7)
     val RESTAURANTS: Duration = Duration.ofHours(12)
+    val LODGINGS: Duration = Duration.ofHours(24)
 
     /** Orari in tempo reale: cache minima, solo per evitare richieste duplicate ravvicinate. */
     val TRANSIT: Duration = Duration.ofMinutes(2)

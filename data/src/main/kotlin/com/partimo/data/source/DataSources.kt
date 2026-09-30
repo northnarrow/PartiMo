@@ -1,6 +1,7 @@
 package com.partimo.data.source
 
 import com.partimo.data.network.Fetched
+import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.dining.RestaurantSearchQuery
@@ -14,6 +15,8 @@ import com.partimo.domain.model.poi.PoiQuery
 import com.partimo.domain.model.poi.PointOfInterest
 import com.partimo.domain.model.stay.AccommodationOffer
 import com.partimo.domain.model.stay.AccommodationSearchQuery
+import com.partimo.domain.model.stay.Lodging
+import com.partimo.domain.model.stay.LodgingQuery
 import com.partimo.domain.model.transit.TransitRoute
 import com.partimo.domain.model.transit.TransitRouteQuery
 import com.partimo.domain.model.weather.WeatherSnapshot
@@ -42,6 +45,16 @@ interface PoiArticleDataSource {
 
 interface RestaurantDataSource {
     suspend fun searchRestaurants(query: RestaurantSearchQuery, forceRefresh: Boolean): Fetched<List<Restaurant>>
+}
+
+interface LodgingDataSource {
+    suspend fun findLodgings(query: LodgingQuery, forceRefresh: Boolean): Fetched<List<Lodging>>
+}
+
+/** Nessun provider di prenotazione configurato: nessuna offerta con prezzo, l'app mostra le strutture reali. */
+internal object NoStayOffersDataSource : StayOffersDataSource {
+    override suspend fun searchStays(query: AccommodationSearchQuery, forceRefresh: Boolean): Fetched<List<AccommodationOffer>> =
+        Fetched(emptyList(), DataOrigin.DEMO)
 }
 
 interface TransitDataSource {

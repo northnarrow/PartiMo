@@ -16,6 +16,8 @@ import com.partimo.domain.model.poi.PoiQuery
 import com.partimo.domain.model.poi.PointOfInterest
 import com.partimo.domain.model.stay.AccommodationOffer
 import com.partimo.domain.model.stay.AccommodationSearchQuery
+import com.partimo.domain.model.stay.Lodging
+import com.partimo.domain.model.stay.LodgingQuery
 import com.partimo.domain.model.transit.TransitRoute
 import com.partimo.domain.model.transit.TransitRouteQuery
 import com.partimo.domain.model.weather.WeatherSnapshot
@@ -29,6 +31,13 @@ interface FlightRepository {
 }
 
 interface AccommodationRepository {
+    /**
+     * `false` se nessun provider di prenotazione è configurato: non ci sono offerte con prezzo e
+     * l'app mostra le strutture reali di [LodgingRepository] con i collegamenti ai siti di prenotazione.
+     */
+    val providesOffers: Boolean
+        get() = true
+
     suspend fun searchAccommodations(
         query: AccommodationSearchQuery,
         forceRefresh: Boolean = false,
@@ -54,10 +63,22 @@ interface TransitRepository {
 }
 
 interface RestaurantRepository {
+    /**
+     * `false` se il provider non ha valutazioni né fasce di prezzo (es. OpenStreetMap): i criteri
+     * di qualità non sono verificabili e i locali restano nell'ordine del provider.
+     */
+    val providesRatings: Boolean
+        get() = true
+
     suspend fun searchRestaurants(
         query: RestaurantSearchQuery,
         forceRefresh: Boolean = false,
     ): DataResult<List<Restaurant>>
+}
+
+/** Strutture ricettive reali (senza prezzi) attorno a un punto. */
+interface LodgingRepository {
+    suspend fun findLodgings(query: LodgingQuery, forceRefresh: Boolean = false): DataResult<List<Lodging>>
 }
 
 /** Ricerca di città in tutto il mondo (geocoding). */

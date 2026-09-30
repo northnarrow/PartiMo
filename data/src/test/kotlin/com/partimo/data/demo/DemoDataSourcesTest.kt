@@ -2,22 +2,16 @@ package com.partimo.data.demo
 
 import com.partimo.data.network.Fetched
 import com.partimo.data.repository.DefaultFlightRepository
-import com.partimo.data.repository.DefaultRestaurantRepository
 import com.partimo.data.source.FlightOffersDataSource
 import com.partimo.data.testing.MutableClock
 import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.common.DataResult
-import com.partimo.domain.model.dining.BudgetDiningCriteria
-import com.partimo.domain.model.dining.RestaurantSearchQuery
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.flight.FlightSearchQuery
-import com.partimo.domain.model.stay.AccommodationSearchQuery
 import com.partimo.domain.model.transit.TransitRouteQuery
 import com.partimo.domain.testing.TestData
-import com.partimo.domain.testing.successData
-import com.partimo.domain.usecase.FindBudgetRestaurantsUseCase
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import java.io.IOException
@@ -46,15 +40,6 @@ class DemoDataSourcesTest {
     }
 
     @Test
-    fun `gli alloggi demo calcolano il prezzo sulle notti richieste`() = runTest {
-        val query = AccommodationSearchQuery(TestData.VIENNA_CENTER, departure, departure.plusDays(4))
-
-        val stays = DemoStayDataSource(catalog, latencyMillis = 0).searchStays(query, forceRefresh = false).data
-
-        assertTrue(stays.all { it.nights == 4 })
-    }
-
-    @Test
     fun `i percorsi demo partono all'orario richiesto e hanno coincidenze valide`() = runTest {
         val query = TransitRouteQuery(TestData.VIENNA_HUB, TestData.VIENNA_CENTER, TestData.NOW)
 
@@ -63,18 +48,6 @@ class DemoDataSourcesTest {
         assertEquals(3, routes.size)
         assertTrue(routes.all { it.departureTime == TestData.NOW })
         assertTrue(routes.flatMap { it.connections }.none { it.isMissed })
-    }
-
-    @Test
-    fun `il filtro budget del dominio scarta i ristoranti demo fuori criterio`() = runTest {
-        val dispatcher = StandardTestDispatcher(testScheduler)
-        val repository = DefaultRestaurantRepository(DemoRestaurantDataSource(catalog, latencyMillis = 0), dispatcher)
-        val all = catalog.restaurants(RestaurantSearchQuery(TestData.VIENNA_CENTER))
-
-        val budget = FindBudgetRestaurantsUseCase(repository)(TestData.VIENNA_CENTER).successData()
-
-        assertTrue(budget.size in 1 until all.size)
-        assertTrue(budget.all { BudgetDiningCriteria().matches(it) })
     }
 
     @Test
@@ -113,17 +86,6 @@ class DemoDataSourcesTest {
         val ratios = samples.flatMap { sample -> sample.map { (carrier, price) -> price / first.getValue(carrier) } }
         assertTrue(ratios.any { it < 0.8 }, "Attese offerte last minute")
         assertTrue(ratios.all { it > 0.55 && it < 1.8 }, "Variazioni fuori scala: ${ratios.min()}–${ratios.max()}")
-    }
-
-    @Test
-    fun `alloggi e ristoranti demo si trovano vicino al centro richiesto`() = runTest {
-        val lisbon = GeoPoint(38.7223, -9.1393)
-
-        val stays = catalog.stays(AccommodationSearchQuery(lisbon, departure, departure.plusDays(3)))
-        val restaurants = catalog.restaurants(RestaurantSearchQuery(lisbon))
-
-        assertTrue(stays.all { it.location!!.distanceTo(lisbon) < 5_000 })
-        assertTrue(restaurants.all { it.location!!.distanceTo(lisbon) < 7_000 })
     }
 
     @Test

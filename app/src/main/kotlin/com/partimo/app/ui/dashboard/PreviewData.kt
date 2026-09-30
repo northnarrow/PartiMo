@@ -3,6 +3,7 @@ package com.partimo.app.ui.dashboard
 import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.departure.DeparturePickerUiState
 import com.partimo.app.ui.place.PlaceDetailUiState
+import com.partimo.app.ui.place.googleMapsSearchUrl
 import com.partimo.app.ui.search.SearchUiState
 import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataOrigin
@@ -35,6 +36,8 @@ import com.partimo.domain.model.poi.SeasonalHighlights
 import com.partimo.domain.model.poi.SeasonalRecommendation
 import com.partimo.domain.model.poi.WikipediaPage
 import com.partimo.domain.model.stay.AccommodationOffer
+import com.partimo.domain.model.stay.Lodging
+import com.partimo.domain.model.stay.LodgingType
 import com.partimo.domain.model.transit.TransitLeg
 import com.partimo.domain.model.transit.TransitLine
 import com.partimo.domain.model.transit.TransitMode
@@ -195,6 +198,47 @@ internal object PreviewData {
         isDemoMode = true,
         alertEnabled = true,
         pricesUpdatedAt = Instant.parse("2026-09-30T19:15:00Z"),
+    )
+
+    private val lodgings = listOf(
+        Lodging(
+            id = "osm:way/1",
+            name = "Hotel Sacher Wien",
+            type = LodgingType.HOTEL,
+            location = GeoPoint(48.2039, 16.3694),
+            starRating = 5,
+            address = "Philharmoniker Straße 4",
+            website = "https://www.sacher.com/",
+        ),
+        Lodging("osm:node/2", "Pension Nossek", LodgingType.GUEST_HOUSE, GeoPoint(48.2093, 16.3690), address = "Graben 17"),
+        Lodging("osm:node/3", "Wombat's City Hostel The Naschmarkt", LodgingType.HOSTEL, GeoPoint(48.1975, 16.3601), address = "Rechte Wienzeile 35"),
+    )
+
+    private fun openDataRestaurant(id: String, name: String, cuisine: String, address: String, location: GeoPoint) = Restaurant(
+        id = id,
+        name = name,
+        priceLevel = null,
+        rating = null,
+        cuisine = cuisine,
+        address = address,
+        location = location,
+        mapsUrl = googleMapsSearchUrl("$name, $address, Vienna"),
+    )
+
+    private val openDataRestaurants = listOf(
+        openDataRestaurant("osm:node/11", "Figlmüller", "Austriaca", "Wollzeile 5", GeoPoint(48.2091, 16.3747)),
+        openDataRestaurant("osm:node/12", "Griechenbeisl", "Austriaca", "Fleischmarkt 11", GeoPoint(48.2115, 16.3771)),
+        openDataRestaurant("osm:node/13", "Pizza Bizi", "Pizza", "Rotenturmstraße 4", GeoPoint(48.2094, 16.3736)),
+    )
+
+    /** Senza chiavi API: voli e mezzi stimati con i collegamenti ai siti, alloggi e ristoranti reali (OpenStreetMap). */
+    fun openDataState() = loadedState().copy(
+        stays = UiState.Empty,
+        lodgings = UiState.Success(lodgings),
+        stayOffersAvailable = false,
+        transit = UiState.Success(transit, DataOrigin.DEMO),
+        restaurants = UiState.Success(openDataRestaurants),
+        restaurantRatingsAvailable = false,
     )
 
     fun noDepartureState() = loadedState().copy(trip = trip.copy(departure = null), flights = UiState.Empty, alertEnabled = false)

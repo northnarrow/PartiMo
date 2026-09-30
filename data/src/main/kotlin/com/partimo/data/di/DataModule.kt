@@ -7,8 +7,6 @@ import com.partimo.data.cache.PartiMoDatabase
 import com.partimo.data.config.ApiConfig
 import com.partimo.data.demo.DemoCatalog
 import com.partimo.data.demo.DemoFlightDataSource
-import com.partimo.data.demo.DemoRestaurantDataSource
-import com.partimo.data.demo.DemoStayDataSource
 import com.partimo.data.demo.DemoTransitDataSource
 import com.partimo.data.local.BundledAirportsDataSource
 import com.partimo.data.local.CuratedDestinationCatalog
@@ -20,6 +18,9 @@ import com.partimo.data.remote.duffel.DuffelApi
 import com.partimo.data.remote.duffel.DuffelFlightDataSource
 import com.partimo.data.remote.duffel.DuffelStayDataSource
 import com.partimo.data.remote.geocoding.OpenMeteoGeocodingDataSource
+import com.partimo.data.remote.osm.OsmLodgingDataSource
+import com.partimo.data.remote.osm.OsmRestaurantDataSource
+import com.partimo.data.remote.osm.OverpassApi
 import com.partimo.data.remote.places.GooglePlacesApi
 import com.partimo.data.remote.places.GooglePlacesPoiDataSource
 import com.partimo.data.remote.places.GooglePlacesRestaurantDataSource
@@ -35,16 +36,19 @@ import com.partimo.data.repository.DefaultAirportRepository
 import com.partimo.data.repository.DefaultCitySearchRepository
 import com.partimo.data.repository.DefaultDestinationCatalogRepository
 import com.partimo.data.repository.DefaultFlightRepository
+import com.partimo.data.repository.DefaultLodgingRepository
 import com.partimo.data.repository.DefaultPoiArticleRepository
 import com.partimo.data.repository.DefaultPoiRepository
 import com.partimo.data.repository.DefaultRestaurantRepository
 import com.partimo.data.repository.DefaultTransitRepository
 import com.partimo.data.repository.DefaultWeatherRepository
+import com.partimo.data.source.NoStayOffersDataSource
 import com.partimo.domain.repository.AccommodationRepository
 import com.partimo.domain.repository.AirportRepository
 import com.partimo.domain.repository.CitySearchRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
 import com.partimo.domain.repository.FlightRepository
+import com.partimo.domain.repository.LodgingRepository
 import com.partimo.domain.repository.PoiArticleRepository
 import com.partimo.domain.repository.PoiRepository
 import com.partimo.domain.repository.PriceWatchRepository
@@ -61,10 +65,11 @@ import java.time.Clock
 /**
  * Composition root del data layer (DI manuale).
  *
- * Per ogni modulo sceglie il provider reale se la relativa chiave è configurata, altrimenti la
- * sorgente demo. Client HTTP, database, cache e preferenze sono condivisi e creati in modo lazy:
- * DataModule va istanziato una sola volta per processo (DataStore non ammette istanze duplicate).
- * Meteo (Open-Meteo) e luoghi da vedere (Wikipedia) non richiedono chiavi e sono sempre reali.
+ * Per ogni modulo sceglie il provider con chiave se configurato, altrimenti una fonte reale gratuita
+ * (Wikipedia per i luoghi, OpenStreetMap per ristoranti e strutture ricettive) oppure, per voli e
+ * trasporti, la sorgente demo. Client HTTP, database, cache e preferenze sono condivisi e creati in
+ * modo lazy: DataModule va istanziato una sola volta per processo (DataStore non ammette istanze duplicate).
+ * Meteo (Open-Meteo), luoghi, ristoranti e alloggi non richiedono chiavi e sono sempre reali.
  */
 class DataModule(
     context: Context,
@@ -89,6 +94,7 @@ class DataModule(
     private val placesApi by lazy { GooglePlacesApi(httpClient, config.googleMapsApiKey, androidApp = config.androidApp) }
     private val routesApi by lazy { GoogleRoutesApi(httpClient, config.googleMapsApiKey, androidApp = config.androidApp) }
     private val wikipediaApi by lazy { WikipediaApi(httpClient, config.userAgent) }
+    private val overpassApi by lazy { OverpassApi(httpClient, config.userAgent) }
     private val wikipediaLanguages by lazy { wikipediaLanguages(config.languageCode) }
 
     val flightRepository: FlightRepository by lazy {
@@ -96,9 +102,21 @@ class DataModule(
         DefaultFlightRepository(source, ioDispatcher)
     }
 
+    /**
+     * Offerte di alloggio con prezzo da Duffel Stays. Senza token non ci sono prezzi da mostrare (né
+     * da seguire con gli avvisi): l'app mostra le strutture reali di [lodgingRepository].
+     */
     val accommodationRepository: AccommodationRepository by lazy {
-        val source = if (config.hasDuffelToken) DuffelStayDataSource(duffelApi, responseCache) else DemoStayDataSource(demoCatalog)
-        DefaultAccommodationRepository(source, ioDispatcher)
+        if (config.hasDuffelToken) {
+            DefaultAccommodationRepository(DuffelStayDataSource(duffelApi, responseCache), ioDispatcher)
+        } else {
+            DefaultAccommodationRepository(NoStayOffersDataSource, ioDispatcher, providesOffers = false)
+        }
+    }
+
+    /** Strutture ricettive reali da OpenStreetMap: gratuite e senza chiave, sempre disponibili. */
+    val lodgingRepository: LodgingRepository by lazy {
+        DefaultLodgingRepository(OsmLodgingDataSource(overpassApi, responseCache, config.languageCode), ioDispatcher)
     }
 
     /**
@@ -119,13 +137,20 @@ class DataModule(
         DefaultPoiArticleRepository(WikipediaArticleDataSource(wikipediaApi, responseCache, wikipediaLanguages), ioDispatcher)
     }
 
+    /**
+     * Ristoranti: Google Places se la chiave è configurata (valutazioni, fasce di prezzo, foto),
+     * altrimenti i locali reali di OpenStreetMap, gratuiti e senza chiave ma senza valutazioni.
+     */
     val restaurantRepository: RestaurantRepository by lazy {
-        val source = if (config.hasGoogleMapsKey) {
-            GooglePlacesRestaurantDataSource(placesApi, responseCache, config.languageCode)
+        if (config.hasGoogleMapsKey) {
+            DefaultRestaurantRepository(GooglePlacesRestaurantDataSource(placesApi, responseCache, config.languageCode), ioDispatcher)
         } else {
-            DemoRestaurantDataSource(demoCatalog)
+            DefaultRestaurantRepository(
+                OsmRestaurantDataSource(overpassApi, responseCache, config.languageCode),
+                ioDispatcher,
+                providesRatings = false,
+            )
         }
-        DefaultRestaurantRepository(source, ioDispatcher)
     }
 
     val transitRepository: TransitRepository by lazy {

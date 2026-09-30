@@ -178,11 +178,97 @@ class TripDashboardScreenTest {
     }
 
     @Test
+    fun `i voli stimati portano ai prezzi reali su Google Voli e Skyscanner con tratta e date`() {
+        val opened = mutableListOf<String>()
+        showDashboard(PreviewData.loadedState(), DashboardActions(onOpenLink = { opened += it }))
+
+        composeRule.onNodeWithText(text(R.string.flights_links_estimates)).assertExists()
+        composeRule.onNodeWithText(text(R.string.link_google_flights)).performClick()
+        composeRule.onNodeWithText(text(R.string.link_skyscanner)).performClick()
+
+        assertEquals(
+            listOf(
+                "https://www.google.com/travel/flights?q=Flights%20from%20MXP%20to%20VIE%20on%202026-12-10%20through%202026-12-14&hl=it&curr=EUR",
+                "https://www.skyscanner.it/trasporti/voli/mxp/vie/261210/261214/?adultsv2=1",
+            ),
+            opened,
+        )
+    }
+
+    @Test
+    fun `senza chiavi gli alloggi sono strutture reali collegate a Booking con le date del viaggio`() {
+        val opened = mutableListOf<String>()
+        showDashboard(
+            PreviewData.openDataState().copy(selectedSection = DashboardSection.STAYS),
+            DashboardActions(onOpenLink = { opened += it }),
+        )
+
+        composeRule.onNodeWithText(text(R.string.section_lodgings)).assertExists()
+        composeRule.onNodeWithText("Hotel · ★★★★★ · ", substring = true).assertExists()
+        composeRule.onNodeWithText(text(R.string.link_booking)).performClick()
+        composeRule.onAllNodesWithText(text(R.string.lodging_prices))[0].performClick()
+        composeRule.onNodeWithText(text(R.string.lodging_website)).performClick()
+        composeRule.onNodeWithTag(DASHBOARD_LIST_TAG).performScrollToNode(hasText(text(R.string.osm_attribution)))
+        composeRule.onNodeWithText(text(R.string.osm_attribution)).performClick()
+
+        assertEquals(
+            listOf(
+                "https://www.booking.com/searchresults.it.html?ss=Vienna&checkin=2026-12-10&checkout=2026-12-14&group_adults=1&no_rooms=1&group_children=0",
+                "https://www.booking.com/searchresults.it.html?ss=Hotel%20Sacher%20Wien%2C%20Vienna&checkin=2026-12-10&checkout=2026-12-14&group_adults=1&no_rooms=1&group_children=0",
+                "https://www.sacher.com/",
+                "https://www.openstreetmap.org/copyright",
+            ),
+            opened,
+        )
+    }
+
+    @Test
+    fun `i trasporti aprono il percorso reale con i mezzi su Google Maps`() {
+        var opened: String? = null
+        showDashboard(
+            PreviewData.openDataState().copy(selectedSection = DashboardSection.TRANSIT),
+            DashboardActions(onOpenLink = { opened = it }),
+        )
+
+        composeRule.onNodeWithText(text(R.string.transit_links_estimates)).assertExists()
+        composeRule.onNodeWithText(text(R.string.transit_open_maps)).performClick()
+
+        assertEquals(
+            "https://www.google.com/maps/dir/?api=1&origin=48.110300%2C16.569700&destination=48.208500%2C16.373100&travelmode=transit",
+            opened,
+        )
+    }
+
+    @Test
+    fun `senza chiavi i ristoranti reali si aprono su Google Maps per recensioni e foto`() {
+        var opened: String? = null
+        showDashboard(
+            PreviewData.openDataState().copy(selectedSection = DashboardSection.RESTAURANTS),
+            DashboardActions(onOpenLink = { opened = it }),
+        )
+
+        composeRule.onNodeWithText(text(R.string.section_restaurants_nearby)).assertExists()
+        composeRule.onNodeWithText("Pizza · ", substring = true).assertExists()
+        composeRule.onNodeWithText("Figlmüller").performClick()
+
+        assertEquals("https://www.google.com/maps/search/?api=1&query=Figlm%C3%BCller%2C%20Wollzeile%205%2C%20Vienna", opened)
+    }
+
+    @Test
     fun `salva gli screenshot della dashboard`() {
         val state = showDashboard(PreviewData.loadedState())
         saveScreenshot("trip_dashboard.png")
 
         state.value = state.value.copy(selectedSection = DashboardSection.HIGHLIGHTS)
         saveScreenshot("trip_dashboard_explore.png")
+
+        state.value = PreviewData.openDataState().copy(selectedSection = DashboardSection.STAYS)
+        saveScreenshot("trip_dashboard_stays.png")
+
+        state.value = state.value.copy(selectedSection = DashboardSection.RESTAURANTS)
+        saveScreenshot("trip_dashboard_restaurants.png")
+
+        state.value = state.value.copy(selectedSection = DashboardSection.TRANSIT)
+        saveScreenshot("trip_dashboard_transit.png")
     }
 }
