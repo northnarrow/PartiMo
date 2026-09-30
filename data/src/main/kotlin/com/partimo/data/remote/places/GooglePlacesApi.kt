@@ -1,5 +1,7 @@
 package com.partimo.data.remote.places
 
+import com.partimo.data.config.AndroidAppIdentity
+import com.partimo.data.network.androidAppHeaders
 import io.ktor.client.HttpClient
 import io.ktor.client.request.header
 import io.ktor.client.request.post
@@ -13,11 +15,14 @@ internal class GooglePlacesApi(
     private val client: HttpClient,
     private val apiKey: String,
     private val baseUrl: String = DEFAULT_BASE_URL,
+    /** Package e certificato dell'app, per le chiavi limitate alle app Android. */
+    private val androidApp: AndroidAppIdentity? = null,
 ) {
 
     suspend fun searchText(request: PlacesTextSearchRequest, fieldMask: String): String =
         client.post("${baseUrl}places:searchText") {
             header(API_KEY_HEADER, apiKey)
+            androidAppHeaders(androidApp)
             // Il field mask è obbligatorio e limita i campi (e quindi il costo) della risposta.
             header(FIELD_MASK_HEADER, fieldMask)
             contentType(ContentType.Application.Json)
@@ -26,7 +31,7 @@ internal class GooglePlacesApi(
 
     /**
      * URL della foto servita da Places (redirect all'immagine), caricabile direttamente da Coil.
-     * La chiave va limitata in Google Cloud Console al package e al certificato dell'app.
+     * Con una chiave limitata alle app Android, le intestazioni dell'app le aggiunge il client delle immagini.
      */
     fun photoUrl(photoName: String, maxWidthPx: Int = PHOTO_MAX_WIDTH_PX): String =
         "$baseUrl$photoName/media?maxWidthPx=$maxWidthPx&key=$apiKey"

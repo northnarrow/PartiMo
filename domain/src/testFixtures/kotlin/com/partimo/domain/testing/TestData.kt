@@ -16,9 +16,13 @@ import com.partimo.domain.model.place.CatalogDestination
 import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DeparturePoint
 import com.partimo.domain.model.place.TravelExperience
+import com.partimo.domain.model.poi.ArticleSection
+import com.partimo.domain.model.poi.ImageCredit
+import com.partimo.domain.model.poi.PoiArticle
 import com.partimo.domain.model.poi.PoiCategory
 import com.partimo.domain.model.poi.PoiTag
 import com.partimo.domain.model.poi.PointOfInterest
+import com.partimo.domain.model.poi.WikipediaPage
 import com.partimo.domain.model.stay.AccommodationOffer
 import com.partimo.domain.model.transit.TransitLeg
 import com.partimo.domain.model.transit.TransitLine
@@ -105,6 +109,9 @@ object TestData {
         activeMonths: Set<Month> = emptySet(),
         tags: Set<PoiTag> = emptySet(),
         location: GeoPoint = VIENNA_CENTER,
+        photoUrl: String? = null,
+        popularity: Double? = null,
+        wikipediaPage: WikipediaPage? = null,
     ): PointOfInterest = PointOfInterest(
         id = id,
         name = name,
@@ -113,9 +120,37 @@ object TestData {
         rating = rating,
         reviewCount = reviewCount,
         description = description,
+        photoUrl = photoUrl,
         isIndoor = isIndoor,
         activeMonths = activeMonths,
         tags = tags,
+        popularity = popularity,
+        wikipediaPage = wikipediaPage,
+    )
+
+    /** Voce enciclopedica di esempio, con introduzione e storia divisa in capitoli. */
+    fun article(
+        title: String = "Duomo di Santo Stefano",
+        introduction: List<String> = listOf(
+            "Il duomo di Santo Stefano è la cattedrale di Vienna, capolavoro del gotico austriaco.",
+            "Con la sua torre sud di 136 metri domina il centro storico della città.",
+        ),
+        history: List<ArticleSection> = listOf(
+            ArticleSection(title = "Origini", paragraphs = listOf("La prima chiesa fu consacrata nel 1147 fuori dalle mura della città.")),
+            ArticleSection(title = "Età moderna", paragraphs = listOf("Durante l'assedio del 1683 la torre sud fu il posto di comando della difesa.")),
+        ),
+        imageUrl: String? = "https://upload.test/stephansdom.jpg",
+        imageCredit: ImageCredit? = ImageCredit(author = "Mario Rossi", license = "CC BY-SA 4.0", sourceUrl = "https://commons.test/File:Stephansdom.jpg"),
+        language: String = "it",
+    ): PoiArticle = PoiArticle(
+        title = title,
+        language = language,
+        url = "https://$language.wikipedia.org/wiki/" + title.replace(' ', '_'),
+        shortDescription = "cattedrale di Vienna",
+        introduction = introduction,
+        history = history,
+        imageUrl = imageUrl,
+        imageCredit = imageCredit,
     )
 
     fun restaurant(

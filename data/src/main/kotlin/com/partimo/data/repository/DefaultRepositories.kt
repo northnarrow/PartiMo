@@ -5,6 +5,7 @@ import com.partimo.data.source.AirportDataSource
 import com.partimo.data.source.CitySearchDataSource
 import com.partimo.data.source.DestinationCatalogDataSource
 import com.partimo.data.source.FlightOffersDataSource
+import com.partimo.data.source.PoiArticleDataSource
 import com.partimo.data.source.PoiDataSource
 import com.partimo.data.source.RestaurantDataSource
 import com.partimo.data.source.StayOffersDataSource
@@ -19,6 +20,7 @@ import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.place.Airport
 import com.partimo.domain.model.place.CatalogDestination
 import com.partimo.domain.model.place.CityPlace
+import com.partimo.domain.model.poi.PoiArticle
 import com.partimo.domain.model.poi.PoiQuery
 import com.partimo.domain.model.poi.PointOfInterest
 import com.partimo.domain.model.stay.AccommodationOffer
@@ -31,6 +33,7 @@ import com.partimo.domain.repository.AirportRepository
 import com.partimo.domain.repository.CitySearchRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
 import com.partimo.domain.repository.FlightRepository
+import com.partimo.domain.repository.PoiArticleRepository
 import com.partimo.domain.repository.PoiRepository
 import com.partimo.domain.repository.RestaurantRepository
 import com.partimo.domain.repository.TransitRepository
@@ -65,6 +68,14 @@ class DefaultPoiRepository(
 ) : PoiRepository {
     override suspend fun getPointsOfInterest(query: PoiQuery, forceRefresh: Boolean): DataResult<List<PointOfInterest>> =
         safeApiCall(ioDispatcher) { dataSource.pointsOfInterest(query, forceRefresh) }
+}
+
+class DefaultPoiArticleRepository(
+    private val dataSource: PoiArticleDataSource,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+) : PoiArticleRepository {
+    override suspend fun findArticle(poi: PointOfInterest, forceRefresh: Boolean): DataResult<PoiArticle?> =
+        safeApiCall(ioDispatcher) { dataSource.findArticle(poi, forceRefresh) }
 }
 
 class DefaultWeatherRepository(

@@ -23,6 +23,7 @@ import java.time.temporal.ChronoUnit
  *    Con allerta meteo (temporale, pioggia forte, vento) i luoghi all'aperto vengono esclusi;
  *    con pioggia o neve si privilegiano quelli al chiuso; con bel tempo quelli all'aperto.
  * 3. I luoghi fotogenici (panoramici/instagrammabili) ricevono un piccolo bonus.
+ * 4. La base del punteggio è la valutazione media oppure, senza recensioni, la notorietà del luogo.
  */
 class SeasonalPoiFilter(private val weatherRelevanceDays: Long = DEFAULT_WEATHER_RELEVANCE_DAYS) {
 
@@ -127,8 +128,14 @@ class SeasonalPoiFilter(private val weatherRelevanceDays: Long = DEFAULT_WEATHER
         }
     }
 
-    /** Qualità di base in [0, 0.5] ricavata dalla valutazione media (neutra se assente). */
-    private fun qualityScore(poi: PointOfInterest): Double = ((poi.rating ?: NEUTRAL_RATING) / MAX_RATING) * 0.5
+    /**
+     * Qualità di base in [0, 0.5]: la valutazione media o, se manca (es. luoghi da Wikipedia),
+     * la notorietà stimata dal provider; neutra se non c'è nessuna delle due.
+     */
+    private fun qualityScore(poi: PointOfInterest): Double {
+        val quality = poi.rating?.let { it / MAX_RATING } ?: poi.popularity ?: (NEUTRAL_RATING / MAX_RATING)
+        return quality * 0.5
+    }
 
     private companion object {
         const val DEFAULT_WEATHER_RELEVANCE_DAYS = 2L

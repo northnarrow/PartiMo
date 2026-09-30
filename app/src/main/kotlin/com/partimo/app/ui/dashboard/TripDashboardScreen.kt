@@ -76,6 +76,7 @@ import com.partimo.app.ui.dashboard.components.TransitSection
 import com.partimo.app.ui.theme.PartiMoTheme
 import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.deal.PriceChange
+import com.partimo.domain.model.poi.PointOfInterest
 import java.time.Instant
 import java.time.ZoneId
 
@@ -95,6 +96,8 @@ data class DashboardActions(
     val onRefreshSummaryShown: () -> Unit = {},
     val onMessageShown: () -> Unit = {},
     val onOpenNotificationSettings: () -> Unit = {},
+    /** Tocco su un luogo da vedere: apre la sua scheda (descrizione, storia, "Naviga"). */
+    val onOpenPlace: (PointOfInterest) -> Unit = {},
 )
 
 /**
@@ -106,6 +109,7 @@ fun TripDashboardRoute(
     viewModel: TripDashboardViewModel,
     onBack: () -> Unit,
     onChooseDeparture: () -> Unit,
+    onOpenPlace: (PointOfInterest) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -134,6 +138,7 @@ fun TripDashboardRoute(
             onRefreshSummaryShown = viewModel::onRefreshSummaryShown,
             onMessageShown = viewModel::onMessageShown,
             onOpenNotificationSettings = { context.startActivity(notificationSettingsIntent(context)) },
+            onOpenPlace = onOpenPlace,
         ),
         modifier = modifier,
     )
@@ -248,6 +253,7 @@ private fun LazyListScope.sectionContent(section: DashboardSection, state: TripD
                 photoSpotsOnly = state.photoSpotsOnly,
                 onPhotoSpotsOnlyChanged = actions.onPhotoSpotsOnlyChanged,
                 onRetry = { actions.onRetry(DashboardSection.HIGHLIGHTS) },
+                onPlaceClick = actions.onOpenPlace,
             )
         }
         DashboardSection.TRANSIT -> item(key = "transit") {

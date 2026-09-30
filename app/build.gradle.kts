@@ -15,9 +15,12 @@ val localProperties = Properties().apply {
 }
 
 fun secret(name: String): String {
-    val value = localProperties.getProperty(name) ?: providers.environmentVariable(name).orNull ?: ""
+    val raw = localProperties.getProperty(name) ?: providers.environmentVariable(name).orNull ?: ""
+    // Le chiavi non contengono spazi: un commento scritto dopo il valore ("CHIAVE=abc   # nota"),
+    // che nei file .properties farebbe parte del valore, viene ignorato.
+    val value = raw.trim().split(Regex("\\s+")).first()
     // Escape per poter inserire il valore in modo sicuro in un letterale String Java.
-    return value.trim().replace("\\", "\\\\").replace("\"", "\\\"")
+    return value.replace("\\", "\\\\").replace("\"", "\\\"")
 }
 
 android {
@@ -28,8 +31,8 @@ android {
         applicationId = "com.partimo.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 2
-        versionName = "0.2.0"
+        versionCode = 3
+        versionName = "0.3.0"
 
         buildConfigField("String", "DUFFEL_ACCESS_TOKEN", "\"${secret("DUFFEL_ACCESS_TOKEN")}\"")
         buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${secret("GOOGLE_MAPS_API_KEY")}\"")

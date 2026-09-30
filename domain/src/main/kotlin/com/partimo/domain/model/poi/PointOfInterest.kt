@@ -35,6 +35,9 @@ enum class PoiTag {
     SEASONAL_HIGHLIGHT,
 }
 
+/** Voce di Wikipedia che descrive un luogo: da qui arrivano descrizione, storia e foto della scheda. */
+data class WikipediaPage(val language: String, val title: String)
+
 data class PointOfInterest(
     val id: String,
     val name: String,
@@ -49,7 +52,18 @@ data class PointOfInterest(
     val activeMonths: Set<Month> = emptySet(),
     val tags: Set<PoiTag> = emptySet(),
     val mapsUrl: String? = null,
+    /** Voce di Wikipedia sul luogo, se il provider la conosce già (evita di cercarla per nome). */
+    val wikipediaPage: WikipediaPage? = null,
+    /**
+     * Notorietà relativa in [0, 1] stimata dal provider quando mancano valutazioni e recensioni
+     * (es. l'ordine di rilevanza di Wikipedia): ordina i luoghi e riconosce gli spot più famosi.
+     */
+    val popularity: Double? = null,
 ) {
+    init {
+        require(popularity == null || popularity in 0.0..1.0) { "Notorietà fuori intervallo: $popularity" }
+    }
+
     /** Testo in minuscolo su cui il dominio cerca le parole chiave (nome + descrizione). */
     val searchableText: String
         get() = listOfNotNull(name, description).joinToString(separator = " ").lowercase()

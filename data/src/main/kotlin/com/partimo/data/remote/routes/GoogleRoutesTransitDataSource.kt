@@ -3,8 +3,10 @@ package com.partimo.data.remote.routes
 import com.partimo.data.cache.CacheKey
 import com.partimo.data.cache.CachePolicy
 import com.partimo.data.cache.ResponseCache
+import com.partimo.data.config.AndroidAppIdentity
 import com.partimo.data.network.Fetched
 import com.partimo.data.network.NetworkJson
+import com.partimo.data.network.androidAppHeaders
 import com.partimo.data.network.mapNotNullSafely
 import com.partimo.data.source.TransitDataSource
 import com.partimo.domain.model.transit.TransitRoute
@@ -23,11 +25,14 @@ internal class GoogleRoutesApi(
     private val client: HttpClient,
     private val apiKey: String,
     private val baseUrl: String = DEFAULT_BASE_URL,
+    /** Package e certificato dell'app, per le chiavi limitate alle app Android. */
+    private val androidApp: AndroidAppIdentity? = null,
 ) {
 
     suspend fun computeRoutes(request: ComputeRoutesRequest): String =
         client.post("${baseUrl}directions/v2:computeRoutes") {
             header(API_KEY_HEADER, apiKey)
+            androidAppHeaders(androidApp)
             header(FIELD_MASK_HEADER, FIELD_MASK)
             contentType(ContentType.Application.Json)
             setBody(request)

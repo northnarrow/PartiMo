@@ -8,10 +8,6 @@ import com.partimo.domain.model.dining.RestaurantSearchQuery
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.flight.FlightSlice
-import com.partimo.domain.model.poi.PoiCategory
-import com.partimo.domain.model.poi.PoiQuery
-import com.partimo.domain.model.poi.PointOfInterest
-import com.partimo.domain.model.poi.Season
 import com.partimo.domain.model.stay.AccommodationOffer
 import com.partimo.domain.model.stay.AccommodationSearchQuery
 import com.partimo.domain.model.transit.TransitLeg
@@ -27,7 +23,6 @@ import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
-import java.time.Month
 import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.roundToLong
@@ -36,11 +31,11 @@ import kotlin.math.roundToLong
  * Catalogo dimostrativo usato quando una chiave API non è configurata. Funziona per qualunque città:
  * - voli: durata e prezzo dipendono dalla distanza reale tra gli aeroporti ([airportLocator]);
  * - alloggi e ristoranti: nomi di fantasia, posizionati attorno al centro richiesto;
- * - luoghi: luoghi reali per Vienna, generici (con eventi stagionali) per le altre città;
  * - trasporti: percorsi generici dall'aeroporto al centro, con durate proporzionali alla distanza.
  *
- * Il catalogo include anche elementi che i casi d'uso devono scartare (fuori stagione, fuori
- * budget), così la demo mostra i filtri di dominio in azione. I prezzi di voli e alloggi seguono un
+ * I luoghi da vedere non hanno una versione demo: arrivano sempre da Wikipedia, che non richiede chiavi.
+ * Il catalogo include anche elementi che i casi d'uso devono scartare (fuori budget), così la demo
+ * mostra i filtri di dominio in azione. I prezzi di voli e alloggi seguono un
  * mercato simulato ([marketFactor]): cambiano nel tempo e ogni tanto compare un'offerta last minute.
  */
 internal class DemoCatalog(
@@ -98,14 +93,6 @@ internal class DemoCatalog(
         }
     }
 
-    /** Luoghi reali per Vienna; per le altre città luoghi generici attorno al centro. */
-    fun pointsOfInterest(query: PoiQuery): List<PointOfInterest> =
-        if (query.location.distanceTo(VIENNA_CENTER) <= CURATED_CITY_RADIUS_METERS) {
-            VIENNA_POIS
-        } else {
-            genericPointsOfInterest(query.location)
-        }
-
     fun restaurants(query: RestaurantSearchQuery): List<Restaurant> = RESTAURANT_TEMPLATES.map { template ->
         Restaurant(
             id = "demo-${template.id}",
@@ -150,27 +137,6 @@ internal class DemoCatalog(
                 walk(minutes = 4),
             ),
         )
-    }
-
-    private fun genericPointsOfInterest(center: GeoPoint): List<PointOfInterest> {
-        val hemisphere = center.hemisphere
-        return GENERIC_POIS.map { template ->
-            val activeMonths = when (template.season) {
-                null -> template.activeMonths
-                else -> template.season.months(hemisphere)
-            }
-            PointOfInterest(
-                id = "demo-${template.id}",
-                name = template.name,
-                category = template.category,
-                location = center.offset(template.offsetLat, template.offsetLon),
-                rating = template.rating,
-                reviewCount = template.reviewCount,
-                description = template.description,
-                photoUrl = demoPhoto(template.id),
-                activeMonths = activeMonths,
-            )
-        }
     }
 
     /**
@@ -324,21 +290,6 @@ internal class DemoCatalog(
         val address: String = "Centro città",
     )
 
-    private data class PoiTemplate(
-        val id: String,
-        val name: String,
-        val category: PoiCategory,
-        val rating: Double,
-        val reviewCount: Int,
-        val description: String,
-        val offsetLat: Double,
-        val offsetLon: Double,
-        /** Mesi fissi di calendario (es. Natale), validi in entrambi gli emisferi. */
-        val activeMonths: Set<Month> = emptySet(),
-        /** Stagione astronomica: i mesi dipendono dall'emisfero della città. */
-        val season: Season? = null,
-    )
-
     private companion object {
         const val METERS_PER_KM = 1_000.0
         const val DEFAULT_FLIGHT_KM = 1_000.0
@@ -363,13 +314,10 @@ internal class DemoCatalog(
         const val BUS_MINUTES_PER_KM = 1.8
         const val METRO_BASE_MINUTES = 10.0
         const val METRO_MINUTES_PER_KM = 1.3
-        const val CURATED_CITY_RADIUS_METERS = 40_000.0
 
         const val AIRPORT_STOP = "Aeroporto"
         const val CENTRAL_STATION_STOP = "Stazione Centrale"
         const val CITY_CENTER_STOP = "Centro"
-
-        val VIENNA_CENTER = GeoPoint(48.2082, 16.3738)
 
         val AIRPORT_TRAIN = TransitLine(name = "Treno aeroportuale", shortName = "Airport Express", colorHex = "#0072BC", textColorHex = "#FFFFFF")
         val AIRPORT_BUS = TransitLine(name = "Bus navetta aeroporto", shortName = "Bus 100", colorHex = "#F9A825", textColorHex = "#000000")
@@ -423,95 +371,6 @@ internal class DemoCatalog(
             RestaurantTemplate("sapori-di-mare", "Sapori di Mare", PriceLevel.EXPENSIVE, 4.5, 780, "Pesce", 0.012, 0.016),
             RestaurantTemplate("tavola-calda", "Tavola Calda Express", PriceLevel.INEXPENSIVE, 4.1, 410, "Cucina veloce", -0.015, -0.003),
             RestaurantTemplate("cucina-di-casa", "Cucina di Casa", PriceLevel.MODERATE, 4.6, 35, "Cucina casalinga", 0.05, -0.026),
-        )
-
-        val GENERIC_POIS = listOf(
-            PoiTemplate("centro-storico", "Centro storico", PoiCategory.NEIGHBORHOOD, 4.6, 12_000,
-                "Il cuore della città: piazze, vicoli e palazzi storici da scoprire a piedi.", 0.001, 0.001),
-            PoiTemplate("belvedere", "Belvedere panoramico", PoiCategory.VIEWPOINT, 4.7, 8_500,
-                "Il punto più panoramico sullo skyline, magico al tramonto.", 0.02, -0.03),
-            PoiTemplate("museo", "Museo d'arte e storia", PoiCategory.MUSEUM, 4.6, 15_000,
-                "Le collezioni più importanti della città, ideali anche con il maltempo.", -0.004, -0.012),
-            PoiTemplate("mercato-coperto", "Mercato coperto", PoiCategory.MARKET, 4.4, 9_000,
-                "Prodotti locali e street food: la cucina del posto in un solo luogo.", -0.01, -0.011),
-            PoiTemplate("parco", "Grande parco urbano", PoiCategory.PARK, 4.6, 7_000,
-                "Il polmone verde della città, perfetto per passeggiate e picnic.", 0.001, 0.04),
-            PoiTemplate("cattedrale", "Cattedrale", PoiCategory.RELIGIOUS_SITE, 4.7, 20_000,
-                "Il principale luogo di culto, con interni monumentali e una torre panoramica.", 0.0, -0.001),
-            PoiTemplate("lungofiume", "Passeggiata sull'acqua", PoiCategory.NEIGHBORHOOD, 4.5, 5_000,
-                "Una passeggiata panoramica tra ponti, locali e scorci da fotografare.", 0.009, 0.02),
-            PoiTemplate("mercatino-natale", "Mercatino di Natale", PoiCategory.SEASONAL_EVENT, 4.5, 6_000,
-                "Luci, bancarelle e dolci tipici nella piazza principale.", 0.002, -0.015,
-                activeMonths = setOf(Month.NOVEMBER, Month.DECEMBER)),
-            PoiTemplate("festival-estivo", "Festival estivo all'aperto", PoiCategory.SEASONAL_EVENT, 4.4, 3_000,
-                "Concerti e spettacoli serali nei parchi della città.", -0.02, 0.01, season = Season.SUMMER),
-            PoiTemplate("giardino-fiorito", "Giardino botanico in fiore", PoiCategory.PARK, 4.6, 4_000,
-                "Fioriture spettacolari: il momento migliore per visitarlo.", 0.015, 0.006, season = Season.SPRING),
-        )
-
-        val VIENNA_POIS = listOf(
-            poi("christkindlmarkt", "Wiener Christkindlmarkt al Rathausplatz", PoiCategory.SEASONAL_EVENT, 48.2108, 16.3573, 4.5, 48_000,
-                "Il più celebre mercatino di Natale di Vienna, davanti al municipio illuminato.",
-                activeMonths = setOf(Month.NOVEMBER, Month.DECEMBER)),
-            poi("schoenbrunn-xmas", "Mercatino di Natale di Schönbrunn", PoiCategory.SEASONAL_EVENT, 48.1845, 16.3122, 4.6, 21_000,
-                "Bancarelle artigianali e concerti davanti alla reggia imperiale.",
-                activeMonths = setOf(Month.NOVEMBER, Month.DECEMBER, Month.JANUARY)),
-            poi("eistraum", "Wiener Eistraum: pattinaggio al Rathausplatz", PoiCategory.SEASONAL_EVENT, 48.2106, 16.3580, 4.4, 9_500,
-                "Piste di pattinaggio sul ghiaccio tra gli alberi illuminati del Rathauspark.",
-                activeMonths = setOf(Month.JANUARY, Month.FEBRUARY, Month.MARCH)),
-            poi("donauinsel", "Donauinsel: spiagge sul Danubio", PoiCategory.BEACH, 48.2296, 16.4125, 4.5, 15_000,
-                "Isola di 21 km con spiagge libere, piste ciclabili e tramonti sul fiume."),
-            poi("rosengarten", "Giardino delle rose del Volksgarten", PoiCategory.PARK, 48.2087, 16.3620, 4.6, 8_000,
-                "Oltre 3.000 rose in fiore nel parco di fronte all'Hofburg.",
-                activeMonths = setOf(Month.MAY, Month.JUNE, Month.JULY, Month.AUGUST, Month.SEPTEMBER)),
-            poi("kahlenberg", "Kahlenberg", PoiCategory.VIEWPOINT, 48.2767, 16.3339, 4.6, 9_800,
-                "Belvedere sul Bosco Viennese con vista su tutta la città e sul Danubio."),
-            poi("riesenrad", "Riesenrad, la ruota panoramica del Prater", PoiCategory.ATTRACTION, 48.2166, 16.3958, 4.4, 52_000,
-                "La storica ruota panoramica del 1897, simbolo del Prater."),
-            poi("hundertwasserhaus", "Hundertwasserhaus", PoiCategory.MONUMENT, 48.2071, 16.3942, 4.5, 60_000,
-                "Facciate colorate e forme irregolari: uno degli edifici più fotografati di Vienna."),
-            poi("schoenbrunn", "Reggia di Schönbrunn", PoiCategory.MONUMENT, 48.1845, 16.3122, 4.7, 160_000,
-                "Residenza degli Asburgo: sale imperiali, giardini barocchi e la Gloriette panoramica.",
-                isIndoor = true),
-            poi("khm", "Kunsthistorisches Museum", PoiCategory.MUSEUM, 48.2038, 16.3616, 4.8, 45_000,
-                "Una delle grandi pinacoteche del mondo: Bruegel, Vermeer, Caravaggio."),
-            poi("belvedere", "Belvedere Superiore", PoiCategory.MUSEUM, 48.1915, 16.3809, 4.7, 38_000,
-                "Palazzo barocco che custodisce Il Bacio di Klimt."),
-            poi("stephansdom", "Duomo di Santo Stefano", PoiCategory.RELIGIOUS_SITE, 48.2085, 16.3731, 4.8, 95_000,
-                "Cattedrale gotica nel cuore della città; dalla torre sud si gode un panorama unico."),
-            poi("naschmarkt", "Naschmarkt", PoiCategory.MARKET, 48.1986, 16.3625, 4.3, 40_000,
-                "Mercato all'aperto con street food, spezie e bancarelle da tutto il mondo."),
-            poi("donauturm", "Donauturm", PoiCategory.VIEWPOINT, 48.2402, 16.4103, 4.5, 18_000,
-                "Torre panoramica di 252 metri con ristorante girevole."),
-            poi("karlskirche", "Karlskirche", PoiCategory.RELIGIOUS_SITE, 48.1982, 16.3718, 4.7, 30_000,
-                "Chiesa barocca che si specchia nella vasca di Karlsplatz, splendida al tramonto."),
-            poi("museumsquartier", "MuseumsQuartier", PoiCategory.NEIGHBORHOOD, 48.2033, 16.3584, 4.6, 25_000,
-                "Cortili, musei e locali: il quartiere culturale più vivace della città."),
-        )
-
-        @Suppress("LongParameterList")
-        fun poi(
-            id: String,
-            name: String,
-            category: PoiCategory,
-            latitude: Double,
-            longitude: Double,
-            rating: Double,
-            reviewCount: Int,
-            description: String,
-            activeMonths: Set<Month> = emptySet(),
-            isIndoor: Boolean = category.isIndoorByDefault,
-        ) = PointOfInterest(
-            id = "demo-$id",
-            name = name,
-            category = category,
-            location = GeoPoint(latitude, longitude),
-            rating = rating,
-            reviewCount = reviewCount,
-            description = description,
-            photoUrl = demoPhoto(id),
-            isIndoor = isIndoor,
-            activeMonths = activeMonths,
         )
 
         /** Spostamento in gradi (limitato per restare entro coordinate valide). */

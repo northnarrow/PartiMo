@@ -2,6 +2,7 @@ package com.partimo.app.ui.dashboard
 
 import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.departure.DeparturePickerUiState
+import com.partimo.app.ui.place.PlaceDetailUiState
 import com.partimo.app.ui.search.SearchUiState
 import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataOrigin
@@ -22,13 +23,17 @@ import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DestinationSuggestion
 import com.partimo.domain.model.place.TravelExperience
 import com.partimo.domain.model.place.TravelTheme
+import com.partimo.domain.model.poi.HistoryChapter
+import com.partimo.domain.model.poi.ImageCredit
 import com.partimo.domain.model.poi.PoiCategory
+import com.partimo.domain.model.poi.PoiDetails
 import com.partimo.domain.model.poi.PoiTag
 import com.partimo.domain.model.poi.PointOfInterest
 import com.partimo.domain.model.poi.RecommendationReason
 import com.partimo.domain.model.poi.Season
 import com.partimo.domain.model.poi.SeasonalHighlights
 import com.partimo.domain.model.poi.SeasonalRecommendation
+import com.partimo.domain.model.poi.WikipediaPage
 import com.partimo.domain.model.stay.AccommodationOffer
 import com.partimo.domain.model.transit.TransitLeg
 import com.partimo.domain.model.transit.TransitLine
@@ -134,6 +139,7 @@ internal object PreviewData {
                     location = GeoPoint(48.2108, 16.3573),
                     rating = 4.5,
                     reviewCount = 48_000,
+                    description = "Il più celebre mercatino di Natale di Vienna, davanti al municipio illuminato.",
                     tags = setOf(PoiTag.SEASONAL_HIGHLIGHT, PoiTag.INSTAGRAMMABLE),
                 ),
                 score = 0.85,
@@ -147,6 +153,7 @@ internal object PreviewData {
                     location = GeoPoint(48.2767, 16.3339),
                     rating = 4.6,
                     reviewCount = 9_800,
+                    description = "Monte del Bosco Viennese con vista su tutta la città e sul Danubio.",
                     tags = setOf(PoiTag.PANORAMIC, PoiTag.INSTAGRAMMABLE, PoiTag.SUNSET_SPOT),
                 ),
                 score = 0.61,
@@ -277,4 +284,33 @@ internal object PreviewData {
             ),
         )
     }
+
+    // ---- Scheda di un luogo ---------------------------------------------------------------------
+
+    private val stephansdom = PointOfInterest(
+        id = "wikipedia:it:83456",
+        name = "Duomo di Vienna",
+        category = PoiCategory.RELIGIOUS_SITE,
+        location = GeoPoint(48.2085, 16.3731),
+        description = "Cattedrale cattolica della città austriaca di Vienna",
+        tags = setOf(PoiTag.INSTAGRAMMABLE),
+        popularity = 1.0,
+        wikipediaPage = WikipediaPage("it", "Duomo di Vienna"),
+    )
+
+    private val stephansdomDetails = PoiDetails(
+        summary = "Il duomo di Santo Stefano è la cattedrale di Vienna e il simbolo della città: capolavoro del gotico " +
+            "austriaco, sorge nel cuore del centro storico.\n\nLa torre sud, alta 136 metri, domina il panorama: i viennesi " +
+            "la chiamano affettuosamente «Steffl».",
+        history = listOf(
+            HistoryChapter("Origini", "La prima chiesa, in stile romanico, fu consacrata nel 1147, quando sorgeva ancora fuori dalle mura."),
+            HistoryChapter("Il gotico", "Nel 1359 il duca Rodolfo IV avviò la ricostruzione gotica, che diede alla chiesa la forma attuale."),
+            HistoryChapter("Dalla guerra a oggi", "Danneggiato da un incendio nel 1945, il duomo fu ricostruito e riaperto nel 1952."),
+        ),
+        imageCredit = ImageCredit(author = "Bwag", license = "CC BY-SA 4.0", sourceUrl = "https://commons.wikimedia.org/wiki/File:Stephansdom.jpg"),
+        sourceUrl = "https://it.wikipedia.org/wiki/Duomo_di_Vienna",
+        language = "it",
+    )
+
+    fun placeDetailState() = PlaceDetailUiState(poi = stephansdom, details = UiState.Success(stephansdomDetails))
 }

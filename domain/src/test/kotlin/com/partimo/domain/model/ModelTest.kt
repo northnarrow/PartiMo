@@ -105,3 +105,13 @@ class QueryValidationTest {
         assertEquals(QueryIssue.INVALID_TRAVELLER_COUNT, stay.copy(adults = 1, rooms = 2).validate(today))
     }
 }
+
+class PointOfInterestTest {
+
+    @Test
+    fun `la notorietà deve stare tra 0 e 1`() {
+        assertEquals(0.4, TestData.poi("ok", popularity = 0.4).popularity)
+        assertFailsWith<IllegalArgumentException> { TestData.poi("troppo", popularity = 1.5) }
+        assertFailsWith<IllegalArgumentException> { TestData.poi("negativa", popularity = -0.1) }
+    }
+}

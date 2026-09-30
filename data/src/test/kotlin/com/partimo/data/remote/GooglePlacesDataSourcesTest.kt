@@ -1,5 +1,7 @@
 package com.partimo.data.remote
 
+import com.partimo.data.config.AndroidAppIdentity
+import com.partimo.data.network.AndroidAppHeaders
 import com.partimo.data.remote.places.GooglePlacesApi
 import com.partimo.data.remote.places.GooglePlacesPoiDataSource
 import com.partimo.data.remote.places.GooglePlacesRestaurantDataSource
@@ -131,6 +133,25 @@ class GooglePlacesDataSourcesTest {
         val pois = source.pointsOfInterest(PoiQuery(TestData.VIENNA_CENTER, Month.DECEMBER, seasonalThemes = listOf(theme)), false).data
 
         assertEquals(listOf("museum"), pois.map { it.id })
+    }
+
+    @Test
+    fun `con una chiave limitata alle app Android invia package e certificato dell'app`() = runTest {
+        val requests = mutableListOf<HttpRequestData>()
+        val client = mockHttpClient { request ->
+            requests += request
+            respond(restaurantsJson, HttpStatusCode.OK, jsonHeaders)
+        }
+        val identity = AndroidAppIdentity(packageName = "com.partimo.app", certificateSha1 = "A9993E364706816ABA3E25717850C26C9CD0D89D")
+        val withIdentity = GooglePlacesApi(client, "test-key", "https://places.test/v1/", androidApp = identity)
+        val withoutIdentity = GooglePlacesApi(client, "test-key", "https://places.test/v1/")
+
+        GooglePlacesRestaurantDataSource(withIdentity, inMemoryCache(), "it").searchRestaurants(RestaurantSearchQuery(TestData.VIENNA_CENTER), false)
+        GooglePlacesRestaurantDataSource(withoutIdentity, inMemoryCache(), "it").searchRestaurants(RestaurantSearchQuery(TestData.VIENNA_CENTER), false)
+
+        assertEquals("com.partimo.app", requests[0].headers[AndroidAppHeaders.PACKAGE])
+        assertEquals("A9993E364706816ABA3E25717850C26C9CD0D89D", requests[0].headers[AndroidAppHeaders.CERTIFICATE])
+        assertNull(requests[1].headers[AndroidAppHeaders.PACKAGE], "Senza identità nessuna intestazione Android")
     }
 
     @Test

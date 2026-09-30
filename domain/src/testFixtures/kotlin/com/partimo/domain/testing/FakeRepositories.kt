@@ -11,6 +11,7 @@ import com.partimo.domain.model.place.Airport
 import com.partimo.domain.model.place.CatalogDestination
 import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DeparturePoint
+import com.partimo.domain.model.poi.PoiArticle
 import com.partimo.domain.model.poi.PoiQuery
 import com.partimo.domain.model.poi.PointOfInterest
 import com.partimo.domain.model.stay.AccommodationOffer
@@ -23,6 +24,7 @@ import com.partimo.domain.repository.AirportRepository
 import com.partimo.domain.repository.CitySearchRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
 import com.partimo.domain.repository.FlightRepository
+import com.partimo.domain.repository.PoiArticleRepository
 import com.partimo.domain.repository.PoiRepository
 import com.partimo.domain.repository.PriceWatchRepository
 import com.partimo.domain.repository.RestaurantRepository
@@ -78,6 +80,21 @@ class FakePoiRepository(
 
     override suspend fun getPointsOfInterest(query: PoiQuery, forceRefresh: Boolean): DataResult<List<PointOfInterest>> {
         queries += query
+        if (delayMillis > 0) delay(delayMillis)
+        return result
+    }
+}
+
+class FakePoiArticleRepository(
+    var result: DataResult<PoiArticle?> = DataResult.Success(null),
+    var delayMillis: Long = 0,
+) : PoiArticleRepository {
+    val requestedPois = mutableListOf<PointOfInterest>()
+    val forceRefreshFlags = mutableListOf<Boolean>()
+
+    override suspend fun findArticle(poi: PointOfInterest, forceRefresh: Boolean): DataResult<PoiArticle?> {
+        requestedPois += poi
+        forceRefreshFlags += forceRefresh
         if (delayMillis > 0) delay(delayMillis)
         return result
     }

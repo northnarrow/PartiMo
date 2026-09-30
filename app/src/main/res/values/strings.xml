@@ -63,7 +63,7 @@
     <string name="flights_change_departure">Cambia partenza</string>
 
     <!-- Banner demo -->
-    <string name="demo_banner">Modalità demo: alcune sezioni usano dati di esempio. Aggiungi le chiavi API in local.properties per i dati reali (il meteo è sempre reale).</string>
+    <string name="demo_banner">Modalità demo: voli, alloggi, trasporti e ristoranti usano dati di esempio. Aggiungi le chiavi API in local.properties per i dati reali (meteo e luoghi da vedere sono sempre reali).</string>
 
     <!-- Provenienza dei dati -->
     <string name="origin_cache">Dalla cache</string>
@@ -167,6 +167,37 @@
     <string name="reason_snow">Atmosfera invernale</string>
     <string name="reason_weather_risk">Meteo incerto</string>
     <string name="reason_photo_spot">Spot fotografico</string>
+    <string name="place_open_hint">Scopri storia e percorso ›</string>
+
+    <!-- Categorie dei luoghi -->
+    <string name="category_museum">Museo</string>
+    <string name="category_monument">Monumento</string>
+    <string name="category_religious_site">Luogo di culto</string>
+    <string name="category_viewpoint">Punto panoramico</string>
+    <string name="category_park">Parco e natura</string>
+    <string name="category_beach">Spiaggia</string>
+    <string name="category_market">Mercato</string>
+    <string name="category_seasonal_event">Evento di stagione</string>
+    <string name="category_ski_area">Piste da sci</string>
+    <string name="category_neighborhood">Quartiere e piazze</string>
+    <string name="category_attraction">Attrazione</string>
+    <string name="category_shopping">Shopping</string>
+    <string name="category_other">Luogo da visitare</string>
+
+    <!-- Scheda del luogo -->
+    <string name="place_description">Descrizione</string>
+    <string name="place_history">Storia</string>
+    <string name="place_no_description">Nessuna descrizione disponibile per questo luogo.</string>
+    <string name="place_no_history">Nessuna notizia storica disponibile per questo luogo.</string>
+    <string name="place_text_language">Testo in %1$s: la voce non esiste in italiano.</string>
+    <string name="place_read_more">Leggi la voce completa su Wikipedia</string>
+    <string name="place_text_credit">Testi da Wikipedia, licenza CC BY-SA 4.0.</string>
+    <string name="place_photo_credit">Foto: %1$s (Wikimedia Commons)</string>
+    <string name="place_navigate">Naviga</string>
+    <string name="place_navigate_description">Naviga con Google Maps fino a %1$s</string>
+    <string name="place_navigate_hint">Percorso con Google Maps dalla tua posizione</string>
+    <string name="place_no_maps_app">Nessuna app disponibile per aprire le mappe.</string>
+    <string name="place_no_browser">Nessuna app disponibile per aprire il collegamento.</string>
 
     <!-- Trasporti -->
     <string name="transit_times">%1$s → %2$s</string>

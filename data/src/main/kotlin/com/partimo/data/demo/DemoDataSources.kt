@@ -2,7 +2,6 @@ package com.partimo.data.demo
 
 import com.partimo.data.network.Fetched
 import com.partimo.data.source.FlightOffersDataSource
-import com.partimo.data.source.PoiDataSource
 import com.partimo.data.source.RestaurantDataSource
 import com.partimo.data.source.StayOffersDataSource
 import com.partimo.data.source.TransitDataSource
@@ -11,8 +10,6 @@ import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.dining.RestaurantSearchQuery
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightSearchQuery
-import com.partimo.domain.model.poi.PoiQuery
-import com.partimo.domain.model.poi.PointOfInterest
 import com.partimo.domain.model.stay.AccommodationOffer
 import com.partimo.domain.model.stay.AccommodationSearchQuery
 import com.partimo.domain.model.transit.TransitRoute
@@ -41,16 +38,6 @@ internal class DemoStayDataSource(
     override suspend fun searchStays(query: AccommodationSearchQuery, forceRefresh: Boolean): Fetched<List<AccommodationOffer>> {
         delay(latencyMillis)
         return Fetched(catalog.stays(query), DataOrigin.DEMO)
-    }
-}
-
-internal class DemoPoiDataSource(
-    private val catalog: DemoCatalog,
-    private val latencyMillis: Long = DEFAULT_DEMO_LATENCY_MILLIS,
-) : PoiDataSource {
-    override suspend fun pointsOfInterest(query: PoiQuery, forceRefresh: Boolean): Fetched<List<PointOfInterest>> {
-        delay(latencyMillis)
-        return Fetched(catalog.pointsOfInterest(query), DataOrigin.DEMO)
     }
 }
 

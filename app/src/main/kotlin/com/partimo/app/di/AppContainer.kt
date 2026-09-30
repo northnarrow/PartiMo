@@ -10,6 +10,7 @@ import com.partimo.data.di.DataModule
 import com.partimo.domain.usecase.CheckPriceWatchesUseCase
 import com.partimo.domain.usecase.FindBudgetRestaurantsUseCase
 import com.partimo.domain.usecase.FindDepartureAirportsUseCase
+import com.partimo.domain.usecase.GetPoiDetailsUseCase
 import com.partimo.domain.usecase.GetSeasonalHighlightsUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObservePriceAlertUseCase
@@ -38,6 +39,7 @@ interface AppContainer {
     val searchFlights: SearchFlightsUseCase
     val searchAccommodations: SearchAccommodationsUseCase
     val getSeasonalHighlights: GetSeasonalHighlightsUseCase
+    val getPoiDetails: GetPoiDetailsUseCase
     val planTransitRoute: PlanTransitRouteUseCase
     val findBudgetRestaurants: FindBudgetRestaurantsUseCase
     val searchCities: SearchCitiesUseCase
@@ -69,6 +71,8 @@ class DefaultAppContainer(context: Context) : AppContainer {
             googleMapsApiKey = BuildConfig.GOOGLE_MAPS_API_KEY,
             languageCode = Locale.getDefault().language.ifBlank { DEFAULT_LANGUAGE },
             enableHttpLogging = BuildConfig.DEBUG,
+            userAgent = PARTIMO_USER_AGENT,
+            androidApp = androidAppIdentity(context),
         ),
         clock = clock,
     )
@@ -89,6 +93,8 @@ class DefaultAppContainer(context: Context) : AppContainer {
     override val getSeasonalHighlights: GetSeasonalHighlightsUseCase by lazy {
         GetSeasonalHighlightsUseCase(dataModule.poiRepository, dataModule.weatherRepository, clock = clock)
     }
+
+    override val getPoiDetails: GetPoiDetailsUseCase by lazy { GetPoiDetailsUseCase(dataModule.poiArticleRepository) }
 
     override val planTransitRoute: PlanTransitRouteUseCase by lazy {
         PlanTransitRouteUseCase(dataModule.transitRepository, clock)

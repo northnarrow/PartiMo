@@ -21,6 +21,7 @@ import com.partimo.app.ui.theme.PartiMoTheme
 import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.deal.PriceChange
+import com.partimo.domain.model.poi.PointOfInterest
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -98,6 +99,21 @@ class TripDashboardScreenTest {
             composeRule.onNodeWithTag(DASHBOARD_LIST_TAG).performScrollToNode(hasText(content, substring = true))
             composeRule.onNodeWithText(content, substring = true).assertExists()
         }
+    }
+
+    @Test
+    fun `toccando un luogo da vedere si apre la sua scheda`() {
+        var opened: PointOfInterest? = null
+        showDashboard(
+            PreviewData.loadedState().copy(selectedSection = DashboardSection.HIGHLIGHTS),
+            DashboardActions(onOpenPlace = { opened = it }),
+        )
+
+        composeRule.onNodeWithTag(DASHBOARD_LIST_TAG).performScrollToNode(hasText("Kahlenberg"))
+        composeRule.onNodeWithText("Monte del Bosco Viennese", substring = true).assertExists()
+        composeRule.onNodeWithText("Kahlenberg").performClick()
+
+        assertEquals("kahlenberg", opened?.id)
     }
 
     @Test

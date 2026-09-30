@@ -84,6 +84,9 @@ internal object CachePolicy {
 
     /** POI e ristoranti cambiano raramente. */
     val POIS: Duration = Duration.ofHours(24)
+
+    /** Testi e crediti delle voci enciclopediche cambiano pochissimo. */
+    val ARTICLES: Duration = Duration.ofDays(7)
     val RESTAURANTS: Duration = Duration.ofHours(12)
 
     /** Orari in tempo reale: cache minima, solo per evitare richieste duplicate ravvicinate. */

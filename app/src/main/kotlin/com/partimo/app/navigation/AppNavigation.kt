@@ -15,11 +15,17 @@ import com.partimo.app.ui.dashboard.TripDashboardRoute
 import com.partimo.app.ui.dashboard.TripDashboardViewModel
 import com.partimo.app.ui.departure.DeparturePickerRoute
 import com.partimo.app.ui.departure.DeparturePickerViewModel
+import com.partimo.app.ui.place.PlaceDetailRoute
+import com.partimo.app.ui.place.PlaceDetailViewModel
 import com.partimo.app.ui.search.SearchRoute
 import com.partimo.app.ui.search.SearchViewModel
 import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.poi.PoiCategory
+import com.partimo.domain.model.poi.PoiTag
+import com.partimo.domain.model.poi.PointOfInterest
+import com.partimo.domain.model.poi.WikipediaPage
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.time.ZoneId
@@ -88,8 +94,73 @@ data class DashboardDestination(
 }
 
 /**
- * Grafo di navigazione: ricerca della meta → dashboard, più la scelta della partenza raggiungibile da
- * entrambe. [pendingDashboard] è il viaggio da aprire subito (tocco su una notifica).
+ * Scheda di un luogo da vedere. Come per la dashboard la rotta contiene i dati del luogo (tipi
+ * semplici): la scheda mostra subito nome e foto e viene ripristinata anche dopo la chiusura del processo.
+ */
+@Serializable
+data class PlaceDetailDestination(
+    val id: String,
+    val name: String,
+    /** Nome della [PoiCategory]. */
+    val category: String,
+    val latitude: Double,
+    val longitude: Double,
+    val description: String? = null,
+    val photoUrl: String? = null,
+    val rating: Double? = null,
+    val reviewCount: Int? = null,
+    val isIndoor: Boolean = false,
+    /** Nomi delle [PoiTag] assegnate nella dashboard. */
+    val tags: List<String> = emptyList(),
+    val mapsUrl: String? = null,
+    val wikipediaLanguage: String? = null,
+    val wikipediaTitle: String? = null,
+    val popularity: Double? = null,
+) {
+    fun toPointOfInterest(): PointOfInterest {
+        val poiCategory = PoiCategory.entries.firstOrNull { it.name == category } ?: PoiCategory.ATTRACTION
+        return PointOfInterest(
+            id = id,
+            name = name,
+            category = poiCategory,
+            location = GeoPoint(latitude, longitude),
+            rating = rating,
+            reviewCount = reviewCount,
+            description = description,
+            photoUrl = photoUrl,
+            isIndoor = isIndoor,
+            tags = tags.mapNotNull { tag -> PoiTag.entries.firstOrNull { it.name == tag } }.toSet(),
+            mapsUrl = mapsUrl,
+            wikipediaPage = if (wikipediaLanguage != null && wikipediaTitle != null) WikipediaPage(wikipediaLanguage, wikipediaTitle) else null,
+            popularity = popularity?.coerceIn(0.0, 1.0),
+        )
+    }
+
+    companion object {
+        fun from(poi: PointOfInterest) = PlaceDetailDestination(
+            id = poi.id,
+            name = poi.name,
+            category = poi.category.name,
+            latitude = poi.location.latitude,
+            longitude = poi.location.longitude,
+            description = poi.description,
+            photoUrl = poi.photoUrl,
+            rating = poi.rating,
+            reviewCount = poi.reviewCount,
+            isIndoor = poi.isIndoor,
+            tags = poi.tags.map { it.name }.sorted(),
+            mapsUrl = poi.mapsUrl,
+            wikipediaLanguage = poi.wikipediaPage?.language,
+            wikipediaTitle = poi.wikipediaPage?.title,
+            popularity = poi.popularity,
+        )
+    }
+}
+
+/**
+ * Grafo di navigazione: ricerca della meta → dashboard → scheda di un luogo, più la scelta della
+ * partenza raggiungibile da ricerca e dashboard. [pendingDashboard] è il viaggio da aprire subito
+ * (tocco su una notifica).
  */
 @Composable
 fun PartiMoNavHost(
@@ -126,7 +197,13 @@ fun PartiMoNavHost(
                 viewModel = viewModel,
                 onBack = { navController.popBackStack() },
                 onChooseDeparture = { navController.navigate(DeparturePickerDestination) },
+                onOpenPlace = { poi -> navController.navigate(PlaceDetailDestination.from(poi)) },
             )
+        }
+        composable<PlaceDetailDestination> { backStackEntry ->
+            val route = backStackEntry.toRoute<PlaceDetailDestination>()
+            val viewModel: PlaceDetailViewModel = viewModel(factory = PlaceDetailViewModel.factory(container, route.toPointOfInterest()))
+            PlaceDetailRoute(viewModel = viewModel, onBack = { navController.popBackStack() })
         }
         composable<DeparturePickerDestination> {
             val viewModel: DeparturePickerViewModel = viewModel(factory = DeparturePickerViewModel.factory(container))

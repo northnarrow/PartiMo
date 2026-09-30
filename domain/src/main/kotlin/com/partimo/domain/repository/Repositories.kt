@@ -11,6 +11,7 @@ import com.partimo.domain.model.place.Airport
 import com.partimo.domain.model.place.CatalogDestination
 import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DeparturePoint
+import com.partimo.domain.model.poi.PoiArticle
 import com.partimo.domain.model.poi.PoiQuery
 import com.partimo.domain.model.poi.PointOfInterest
 import com.partimo.domain.model.stay.AccommodationOffer
@@ -36,6 +37,12 @@ interface AccommodationRepository {
 
 interface PoiRepository {
     suspend fun getPointsOfInterest(query: PoiQuery, forceRefresh: Boolean = false): DataResult<List<PointOfInterest>>
+}
+
+/** Voci enciclopediche (Wikipedia) che raccontano i luoghi da visitare. */
+interface PoiArticleRepository {
+    /** Voce che descrive [poi]; `null` se non ne esiste una che lo riguardi con certezza. */
+    suspend fun findArticle(poi: PointOfInterest, forceRefresh: Boolean = false): DataResult<PoiArticle?>
 }
 
 interface WeatherRepository {

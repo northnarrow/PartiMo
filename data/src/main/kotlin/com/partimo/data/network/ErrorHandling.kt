@@ -17,6 +17,15 @@ import kotlin.coroutines.cancellation.CancellationException
 /** Dato recuperato dal data layer insieme alla sua provenienza (rete, cache, demo). */
 data class Fetched<out T>(val data: T, val origin: DataOrigin)
 
+/** Provenienza complessiva di più risposte: basta un dato "stale" perché la UI lo segnali. */
+internal fun combinedOrigin(origins: List<DataOrigin>): DataOrigin = when {
+    origins.isEmpty() -> DataOrigin.REMOTE
+    DataOrigin.STALE_CACHE in origins -> DataOrigin.STALE_CACHE
+    origins.all { it == DataOrigin.CACHE } -> DataOrigin.CACHE
+    origins.all { it == DataOrigin.DEMO } -> DataOrigin.DEMO
+    else -> DataOrigin.REMOTE
+}
+
 /**
  * Confine degli errori del data layer: esegue [block] sul dispatcher di I/O e converte ogni
  * eccezione (rete, HTTP, parsing) in un [DataError]. La cancellazione viene sempre propagata.

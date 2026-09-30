@@ -7,7 +7,6 @@ import com.partimo.data.cache.PartiMoDatabase
 import com.partimo.data.config.ApiConfig
 import com.partimo.data.demo.DemoCatalog
 import com.partimo.data.demo.DemoFlightDataSource
-import com.partimo.data.demo.DemoPoiDataSource
 import com.partimo.data.demo.DemoRestaurantDataSource
 import com.partimo.data.demo.DemoStayDataSource
 import com.partimo.data.demo.DemoTransitDataSource
@@ -27,11 +26,16 @@ import com.partimo.data.remote.places.GooglePlacesRestaurantDataSource
 import com.partimo.data.remote.routes.GoogleRoutesApi
 import com.partimo.data.remote.routes.GoogleRoutesTransitDataSource
 import com.partimo.data.remote.weather.OpenMeteoWeatherDataSource
+import com.partimo.data.remote.wikipedia.WikipediaApi
+import com.partimo.data.remote.wikipedia.WikipediaArticleDataSource
+import com.partimo.data.remote.wikipedia.WikipediaPoiDataSource
+import com.partimo.data.remote.wikipedia.wikipediaLanguages
 import com.partimo.data.repository.DefaultAccommodationRepository
 import com.partimo.data.repository.DefaultAirportRepository
 import com.partimo.data.repository.DefaultCitySearchRepository
 import com.partimo.data.repository.DefaultDestinationCatalogRepository
 import com.partimo.data.repository.DefaultFlightRepository
+import com.partimo.data.repository.DefaultPoiArticleRepository
 import com.partimo.data.repository.DefaultPoiRepository
 import com.partimo.data.repository.DefaultRestaurantRepository
 import com.partimo.data.repository.DefaultTransitRepository
@@ -41,6 +45,7 @@ import com.partimo.domain.repository.AirportRepository
 import com.partimo.domain.repository.CitySearchRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
 import com.partimo.domain.repository.FlightRepository
+import com.partimo.domain.repository.PoiArticleRepository
 import com.partimo.domain.repository.PoiRepository
 import com.partimo.domain.repository.PriceWatchRepository
 import com.partimo.domain.repository.RestaurantRepository
@@ -59,7 +64,7 @@ import java.time.Clock
  * Per ogni modulo sceglie il provider reale se la relativa chiave è configurata, altrimenti la
  * sorgente demo. Client HTTP, database, cache e preferenze sono condivisi e creati in modo lazy:
  * DataModule va istanziato una sola volta per processo (DataStore non ammette istanze duplicate).
- * Il meteo usa sempre Open-Meteo, che non richiede chiavi.
+ * Meteo (Open-Meteo) e luoghi da vedere (Wikipedia) non richiedono chiavi e sono sempre reali.
  */
 class DataModule(
     context: Context,
@@ -81,8 +86,10 @@ class DataModule(
     private val userDataStore by lazy { createUserDataStore(appContext) }
 
     private val duffelApi by lazy { DuffelApi(httpClient, config.duffelAccessToken) }
-    private val placesApi by lazy { GooglePlacesApi(httpClient, config.googleMapsApiKey) }
-    private val routesApi by lazy { GoogleRoutesApi(httpClient, config.googleMapsApiKey) }
+    private val placesApi by lazy { GooglePlacesApi(httpClient, config.googleMapsApiKey, androidApp = config.androidApp) }
+    private val routesApi by lazy { GoogleRoutesApi(httpClient, config.googleMapsApiKey, androidApp = config.androidApp) }
+    private val wikipediaApi by lazy { WikipediaApi(httpClient, config.userAgent) }
+    private val wikipediaLanguages by lazy { wikipediaLanguages(config.languageCode) }
 
     val flightRepository: FlightRepository by lazy {
         val source = if (config.hasDuffelToken) DuffelFlightDataSource(duffelApi, responseCache) else DemoFlightDataSource(demoCatalog)
@@ -94,13 +101,22 @@ class DataModule(
         DefaultAccommodationRepository(source, ioDispatcher)
     }
 
+    /**
+     * Luoghi da vedere: Google Places se la chiave è configurata (valutazioni e temi stagionali),
+     * altrimenti Wikipedia, gratuita e senza chiave, con luoghi e foto reali.
+     */
     val poiRepository: PoiRepository by lazy {
         val source = if (config.hasGoogleMapsKey) {
             GooglePlacesPoiDataSource(placesApi, responseCache, config.languageCode)
         } else {
-            DemoPoiDataSource(demoCatalog)
+            WikipediaPoiDataSource(wikipediaApi, responseCache, wikipediaLanguages)
         }
         DefaultPoiRepository(source, ioDispatcher)
+    }
+
+    /** Descrizione e storia dei luoghi da Wikipedia, qualunque sia il provider dei luoghi. */
+    val poiArticleRepository: PoiArticleRepository by lazy {
+        DefaultPoiArticleRepository(WikipediaArticleDataSource(wikipediaApi, responseCache, wikipediaLanguages), ioDispatcher)
     }
 
     val restaurantRepository: RestaurantRepository by lazy {

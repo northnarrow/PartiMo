@@ -2,7 +2,6 @@ package com.partimo.data.demo
 
 import com.partimo.data.network.Fetched
 import com.partimo.data.repository.DefaultFlightRepository
-import com.partimo.data.repository.DefaultPoiRepository
 import com.partimo.data.repository.DefaultRestaurantRepository
 import com.partimo.data.source.FlightOffersDataSource
 import com.partimo.data.testing.MutableClock
@@ -14,15 +13,11 @@ import com.partimo.domain.model.dining.RestaurantSearchQuery
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.flight.FlightSearchQuery
-import com.partimo.domain.model.poi.PoiCategory
-import com.partimo.domain.model.poi.PoiQuery
 import com.partimo.domain.model.stay.AccommodationSearchQuery
 import com.partimo.domain.model.transit.TransitRouteQuery
-import com.partimo.domain.testing.FakeWeatherRepository
 import com.partimo.domain.testing.TestData
 import com.partimo.domain.testing.successData
 import com.partimo.domain.usecase.FindBudgetRestaurantsUseCase
-import com.partimo.domain.usecase.GetSeasonalHighlightsUseCase
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import java.io.IOException
@@ -31,7 +26,6 @@ import java.time.LocalDate
 import java.time.Month
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class DemoDataSourcesTest {
@@ -81,43 +75,6 @@ class DemoDataSourcesTest {
 
         assertTrue(budget.size in 1 until all.size)
         assertTrue(budget.all { BudgetDiningCriteria().matches(it) })
-    }
-
-    @Test
-    fun `con i dati demo dicembre propone i mercatini e luglio le spiagge`() = runTest {
-        val dispatcher = StandardTestDispatcher(testScheduler)
-        val poiRepository = DefaultPoiRepository(DemoPoiDataSource(catalog, latencyMillis = 0), dispatcher)
-        val useCase = GetSeasonalHighlightsUseCase(poiRepository, FakeWeatherRepository(), clock = TestData.FIXED_CLOCK)
-
-        val december = useCase(TestData.VIENNA_CENTER, departure).successData().recommendations.map { it.poi.id }
-        val july = useCase(TestData.VIENNA_CENTER, LocalDate.of(2027, Month.JULY, 10)).successData().recommendations.map { it.poi.id }
-
-        assertTrue("demo-christkindlmarkt" in december)
-        assertFalse("demo-donauinsel" in december, "Spiaggia fuori stagione a dicembre")
-        assertFalse("demo-eistraum" in december, "Il pattinaggio apre a gennaio")
-        assertTrue("demo-donauinsel" in july)
-        assertFalse("demo-christkindlmarkt" in july)
-    }
-
-    @Test
-    fun `per le altre città la demo genera luoghi generici attorno al centro`() = runTest {
-        val tokyo = GeoPoint(35.6762, 139.6503)
-
-        val pois = catalog.pointsOfInterest(PoiQuery(tokyo, Month.DECEMBER))
-
-        assertFalse(pois.any { "Vienna" in it.name || "Wiener" in it.name })
-        assertTrue(pois.all { it.location.distanceTo(tokyo) < 10_000 })
-        assertTrue(pois.any { it.category == PoiCategory.SEASONAL_EVENT })
-    }
-
-    @Test
-    fun `gli eventi estivi generici seguono l'emisfero della città`() = runTest {
-        val sydney = GeoPoint(-33.8688, 151.2093)
-
-        val festival = catalog.pointsOfInterest(PoiQuery(sydney, Month.JANUARY)).first { it.id == "demo-festival-estivo" }
-
-        assertTrue(Month.JANUARY in festival.activeMonths)
-        assertFalse(Month.JULY in festival.activeMonths)
     }
 
     @Test

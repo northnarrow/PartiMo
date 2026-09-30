@@ -1,0 +1,1131 @@
+{
+ "batchcomplete": true,
+ "continue": {
+  "gsroffset": 50,
+  "continue": "gsroffset||"
+ },
+ "query": {
+  "pages": [
+   {
+    "pageid": 18091,
+    "ns": 0,
+    "title": "Lisbon",
+    "index": 1,
+    "coordinates": [
+     {
+      "lat": 38.72527778,
+      "lon": -9.15,
+      "primary": true
+     }
+    ],
+    "description": "Capital and largest city of Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Lisboa_-_Portugal_%2852597836992%29.jpg/960px-Lisboa_-_Portugal_%2852597836992%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 615
+    },
+    "pageimage": "Lisboa_-_Portugal_(52597836992).jpg",
+    "pageprops": {
+     "wikibase_item": "Q597"
+    }
+   },
+   {
+    "pageid": 212190,
+    "ns": 0,
+    "title": "Lisbon Cathedral",
+    "index": 12,
+    "coordinates": [
+     {
+      "lat": 38.70972222,
+      "lon": -9.13305556,
+      "primary": true
+     }
+    ],
+    "description": "Roman Catholic cathedral located in Lisbon, Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Catedral%2C_Lisboa%2C_Portugal%2C_2022-07-24%2C_DD_24.jpg/960px-Catedral%2C_Lisboa%2C_Portugal%2C_2022-07-24%2C_DD_24.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 1118
+    },
+    "pageimage": "Catedral,_Lisboa,_Portugal,_2022-07-24,_DD_24.jpg",
+    "pageprops": {
+     "wikibase_item": "Q432290"
+    }
+   },
+   {
+    "pageid": 300651,
+    "ns": 0,
+    "title": "Alfama",
+    "index": 11,
+    "coordinates": [
+     {
+      "lat": 38.71222222,
+      "lon": -9.13,
+      "primary": true
+     }
+    ],
+    "description": "Neighborhood in Lisbon",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/Lisbon_alfalma.jpg/960px-Lisbon_alfalma.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 539
+    },
+    "pageimage": "Lisbon_alfalma.jpg",
+    "pageprops": {
+     "wikibase_item": "Q985517"
+    }
+   },
+   {
+    "pageid": 577704,
+    "ns": 0,
+    "title": "Estado Novo (Portugal)",
+    "index": 2,
+    "coordinates": [
+     {
+      "lat": 38.71277778,
+      "lon": -9.15527778,
+      "primary": true
+     }
+    ],
+    "description": "1933–1974 authoritarian regime in Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/Flag_of_Portugal_%28official%29.svg/960px-Flag_of_Portugal_%28official%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 640
+    },
+    "pageimage": "Flag_of_Portugal_(official).svg",
+    "pageprops": {
+     "wikibase_item": "Q824489"
+    }
+   },
+   {
+    "pageid": 680370,
+    "ns": 0,
+    "title": "Portuguese Football Federation",
+    "index": 5,
+    "coordinates": [
+     {
+      "lat": 38.72111111,
+      "lon": -9.15305556,
+      "primary": true
+     }
+    ],
+    "description": "Governing body of football in Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/52/Federa%C3%A7%C3%A3o_Portuguesa_de_Futebol_logo_%282026%29.svg/960px-Federa%C3%A7%C3%A3o_Portuguesa_de_Futebol_logo_%282026%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 373
+    },
+    "pageimage": "Federação_Portuguesa_de_Futebol_logo_(2026).svg",
+    "pageprops": {
+     "wikibase_item": "Q309005"
+    }
+   },
+   {
+    "pageid": 705704,
+    "ns": 0,
+    "title": "PIDE",
+    "index": 24,
+    "coordinates": [
+     {
+      "lat": 38.708526,
+      "lon": -9.142516,
+      "primary": true
+     }
+    ],
+    "description": "1933–1969 Portuguese secret police force",
+    "pageprops": {
+     "wikibase_item": "Q958917"
+    }
+   },
+   {
+    "pageid": 906053,
+    "ns": 0,
+    "title": "Rádio e Televisão de Portugal",
+    "index": 22,
+    "coordinates": [
+     {
+      "lat": 38.75961944,
+      "lon": -9.11754722,
+      "primary": true
+     }
+    ],
+    "description": "Portuguese broadcasting company",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c9/RTPhead.jpg/960px-RTPhead.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 645
+    },
+    "pageimage": "RTPhead.jpg",
+    "pageprops": {
+     "wikibase_item": "Q649618"
+    }
+   },
+   {
+    "pageid": 980082,
+    "ns": 0,
+    "title": "Calouste Gulbenkian Museum",
+    "index": 18,
+    "coordinates": [
+     {
+      "lat": 38.73666667,
+      "lon": -9.15416667,
+      "primary": true
+     }
+    ],
+    "description": "Art museum in Lisbon, Portugal",
+    "thumbnail": {
+     "source": "https://upload.wikimedia.org/wikipedia/commons/f/f1/FCG_Calouste_Gulbenkian_Logo.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+     "width": 267,
+     "height": 271
+    },
+    "pageimage": "FCG_Calouste_Gulbenkian_Logo.jpg",
+    "pageprops": {
+     "wikibase_item": "Q211262"
+    }
+   },
+   {
+    "pageid": 997238,
+    "ns": 0,
+    "title": "Almada",
+    "index": 13,
+    "coordinates": [
+     {
+      "lat": 38.68027778,
+      "lon": -9.15833333,
+      "primary": true
+     }
+    ],
+    "description": "Municipality in Lisbon, Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Vista_de_Almada_by_Juntas_%28cropped%29.jpg/960px-Vista_de_Almada_by_Juntas_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 337
+    },
+    "pageimage": "Vista_de_Almada_by_Juntas_(cropped).jpg",
+    "pageprops": {
+     "wikibase_item": "Q328015"
+    }
+   },
+   {
+    "pageid": 1025859,
+    "ns": 0,
+    "title": "Instituto Superior Técnico",
+    "index": 16,
+    "coordinates": [
+     {
+      "lat": 38.73666667,
+      "lon": -9.13888889,
+      "primary": true
+     }
+    ],
+    "description": "Public school of engineering and technology in Lisbon, Portugal",
+    "pageprops": {
+     "wikibase_item": "Q1636837"
+    }
+   },
+   {
+    "pageid": 1367586,
+    "ns": 0,
+    "title": "25 de Abril Bridge",
+    "index": 4,
+    "coordinates": [
+     {
+      "lat": 38.68916667,
+      "lon": -9.17694444,
+      "primary": true
+     }
+    ],
+    "description": "Suspension bridge in Lisbon, Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/25_De_Abril_Bridge_%28226290561%29.jpeg/960px-25_De_Abril_Bridge_%28226290561%29.jpeg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 741
+    },
+    "pageimage": "25_De_Abril_Bridge_(226290561).jpeg",
+    "pageprops": {
+     "wikibase_item": "Q721152"
+    }
+   },
+   {
+    "pageid": 1449162,
+    "ns": 0,
+    "title": "Lisbon District",
+    "index": 37,
+    "coordinates": [
+     {
+      "lat": 38.7,
+      "lon": -9.18333333,
+      "primary": true
+     }
+    ],
+    "description": "District of Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/Distrikt_Lissabon_in_Portugal.svg/960px-Distrikt_Lissabon_in_Portugal.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 1840
+    },
+    "pageimage": "Distrikt_Lissabon_in_Portugal.svg",
+    "pageprops": {
+     "wikibase_item": "Q207199"
+    }
+   },
+   {
+    "pageid": 1485115,
+    "ns": 0,
+    "title": "Bairro Alto",
+    "index": 45,
+    "coordinates": [
+     {
+      "lat": 38.71222222,
+      "lon": -9.145,
+      "primary": true
+     }
+    ],
+    "description": "Neighborhood of Lisbon in Misericórdia",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/64/Lisboa-Entrada_no_Bairro_Alto-20140917.jpg/960px-Lisboa-Entrada_no_Bairro_Alto-20140917.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 640
+    },
+    "pageimage": "Lisboa-Entrada_no_Bairro_Alto-20140917.jpg",
+    "pageprops": {
+     "wikibase_item": "Q652613"
+    }
+   },
+   {
+    "pageid": 1821903,
+    "ns": 0,
+    "title": "Patriarchate of Lisbon",
+    "index": 33,
+    "coordinates": [
+     {
+      "lat": 38.71472222,
+      "lon": -9.1275,
+      "primary": true
+     }
+    ],
+    "description": "Roman Catholic archdiocese in Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Catedral%2C_Lisboa%2C_Portugal%2C_2022-07-24%2C_DD_24.jpg/960px-Catedral%2C_Lisboa%2C_Portugal%2C_2022-07-24%2C_DD_24.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 1118
+    },
+    "pageimage": "Catedral,_Lisboa,_Portugal,_2022-07-24,_DD_24.jpg",
+    "pageprops": {
+     "wikibase_item": "Q1110488"
+    }
+   },
+   {
+    "pageid": 1873761,
+    "ns": 0,
+    "title": "Santa Justa Lift",
+    "index": 10,
+    "coordinates": [
+     {
+      "lat": 38.71222222,
+      "lon": -9.13944444,
+      "primary": true
+     }
+    ],
+    "description": "Municipal elevator in Lisbon, Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Elevador_de_Santa_Justa_from_Rua_de_Santa_Justa.jpg/960px-Elevador_de_Santa_Justa_from_Rua_de_Santa_Justa.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 1877
+    },
+    "pageimage": "Elevador_de_Santa_Justa_from_Rua_de_Santa_Justa.jpg",
+    "pageprops": {
+     "wikibase_item": "Q168001"
+    }
+   },
+   {
+    "pageid": 1979067,
+    "ns": 0,
+    "title": "Siege of Lisbon",
+    "index": 14,
+    "coordinates": [
+     {
+      "lat": 38.71388889,
+      "lon": -9.13333333,
+      "primary": true
+     }
+    ],
+    "description": "1147 Second Crusade battle",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/48/Conquista_de_Lisboa_%28Roque_Gameiro%2C_Quadros_da_Hist%C3%B3ria_de_Portugal%2C_1917%29.png/960px-Conquista_de_Lisboa_%28Roque_Gameiro%2C_Quadros_da_Hist%C3%B3ria_de_Portugal%2C_1917%29.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 639
+    },
+    "pageimage": "Conquista_de_Lisboa_(Roque_Gameiro,_Quadros_da_História_de_Portugal,_1917).png",
+    "pageprops": {
+     "wikibase_item": "Q815177"
+    }
+   },
+   {
+    "pageid": 2085757,
+    "ns": 0,
+    "title": "NOVA University of Lisbon",
+    "index": 23,
+    "coordinates": [
+     {
+      "lat": 38.73361111,
+      "lon": -9.16027778,
+      "primary": true
+     }
+    ],
+    "description": "University in Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Universidade_NOVA_de_Lisboa_logo_logotipo_2021.png/960px-Universidade_NOVA_de_Lisboa_logo_logotipo_2021.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 482
+    },
+    "pageimage": "Universidade_NOVA_de_Lisboa_logo_logotipo_2021.png",
+    "pageprops": {
+     "wikibase_item": "Q1979891"
+    }
+   },
+   {
+    "pageid": 2128784,
+    "ns": 0,
+    "title": "National Republican Guard (Portugal)",
+    "index": 15,
+    "coordinates": [
+     {
+      "lat": 38.712597,
+      "lon": -9.140485,
+      "primary": true
+     }
+    ],
+    "description": "National gendarmerie force of Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/COA_pt_garde_nationale_r%C3%A9publicaine.svg/960px-COA_pt_garde_nationale_r%C3%A9publicaine.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 1600
+    },
+    "pageimage": "COA_pt_garde_nationale_républicaine.svg",
+    "pageprops": {
+     "wikibase_item": "Q1280906"
+    }
+   },
+   {
+    "pageid": 2569245,
+    "ns": 0,
+    "title": "First Portuguese Republic",
+    "index": 9,
+    "coordinates": [
+     {
+      "lat": 38.7,
+      "lon": -9.18333333,
+      "primary": true
+     }
+    ],
+    "description": "1910–1926 republic in Southwestern Europe",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/Flag_of_Portugal_%28official%29.svg/960px-Flag_of_Portugal_%28official%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 640
+    },
+    "pageimage": "Flag_of_Portugal_(official).svg",
+    "pageprops": {
+     "wikibase_item": "Q167360"
+    }
+   },
+   {
+    "pageid": 2599739,
+    "ns": 0,
+    "title": "Lisbon Baixa",
+    "index": 25,
+    "coordinates": [
+     {
+      "lat": 38.71138889,
+      "lon": -9.13722222,
+      "primary": true
+     }
+    ],
+    "description": "Neighbourhood of Lisbon, Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b1/Lisbon_Pra%C3%A7a_do_Com%C3%A9rcio_BW_2018-10-08_17-42-58.jpg/960px-Lisbon_Pra%C3%A7a_do_Com%C3%A9rcio_BW_2018-10-08_17-42-58.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 659
+    },
+    "pageimage": "Lisbon_Praça_do_Comércio_BW_2018-10-08_17-42-58.jpg",
+    "pageprops": {
+     "wikibase_item": "Q804032"
+    }
+   },
+   {
+    "pageid": 2665642,
+    "ns": 0,
+    "title": "São Bento Palace",
+    "index": 50,
+    "coordinates": [
+     {
+      "lat": 38.7125,
+      "lon": -9.15361111,
+      "primary": true
+     }
+    ],
+    "description": "Building in Lisbon, Portugal",
+    "pageprops": {
+     "wikibase_item": "Q1464499"
+    }
+   },
+   {
+    "pageid": 2785024,
+    "ns": 0,
+    "title": "São Jorge Castle",
+    "index": 7,
+    "coordinates": [
+     {
+      "lat": 38.71388889,
+      "lon": -9.13361111,
+      "primary": true
+     }
+    ],
+    "description": "Historic castle in Lisbon, Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/LisbonCastle.jpg/960px-LisbonCastle.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 525
+    },
+    "pageimage": "LisbonCastle.jpg",
+    "pageprops": {
+     "wikibase_item": "Q636780"
+    }
+   },
+   {
+    "pageid": 2847252,
+    "ns": 0,
+    "title": "Monastery of São Vicente de Fora",
+    "index": 40,
+    "coordinates": [
+     {
+      "lat": 38.71472222,
+      "lon": -9.12777778,
+      "primary": true
+     }
+    ],
+    "description": "17th-century church and monastery in Lisbon, Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ef/Igreja_e_Mosteiro_de_S%C3%A3o_Vicente_de_Fora.jpg/960px-Igreja_e_Mosteiro_de_S%C3%A3o_Vicente_de_Fora.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 537
+    },
+    "pageimage": "Igreja_e_Mosteiro_de_São_Vicente_de_Fora.jpg",
+    "pageprops": {
+     "wikibase_item": "Q1776168"
+    }
+   },
+   {
+    "pageid": 3191116,
+    "ns": 0,
+    "title": "Calouste Gulbenkian Foundation",
+    "index": 29,
+    "coordinates": [
+     {
+      "lat": 38.73722222,
+      "lon": -9.15416667,
+      "primary": true
+     }
+    ],
+    "description": "Portuguese cultural and scientific institution",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/El_Gulbenkian%2C_con_muchos_patos_a_una_hora_ma%C3%B1anera_%2852214829064%29.jpg/960px-El_Gulbenkian%2C_con_muchos_patos_a_una_hora_ma%C3%B1anera_%2852214829064%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 540
+    },
+    "pageimage": "El_Gulbenkian,_con_muchos_patos_a_una_hora_mañanera_(52214829064).jpg",
+    "pageprops": {
+     "wikibase_item": "Q3052794"
+    }
+   },
+   {
+    "pageid": 3311604,
+    "ns": 0,
+    "title": "European Union Drugs Agency",
+    "index": 39,
+    "coordinates": [
+     {
+      "lat": 38.70572,
+      "lon": -9.14307,
+      "primary": true
+     }
+    ],
+    "description": "Agency on illicit drugs of the European Union, formerly \"EMCDDA\"",
+    "pageprops": {
+     "wikibase_item": "Q1377256"
+    }
+   },
+   {
+    "pageid": 4981913,
+    "ns": 0,
+    "title": "Olisipo",
+    "index": 49,
+    "coordinates": [
+     {
+      "lat": 38.7122204,
+      "lon": -9.1339731,
+      "primary": true
+     }
+    ],
+    "description": "Lisbon, Portugal in Roman times",
+    "pageprops": {
+     "wikibase_item": "Q3781561"
+    }
+   },
+   {
+    "pageid": 5640844,
+    "ns": 0,
+    "title": "Polícia de Segurança Pública",
+    "index": 34,
+    "coordinates": [
+     {
+      "lat": 38.729933,
+      "lon": -9.131227,
+      "primary": true
+     }
+    ],
+    "description": "National civil police force of Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/Bras%C3%A3o_de_Armas_da_Pol%C3%ADcia_de_Seguran%C3%A7a_P%C3%BAblica.svg/960px-Bras%C3%A3o_de_Armas_da_Pol%C3%ADcia_de_Seguran%C3%A7a_P%C3%BAblica.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 1357
+    },
+    "pageimage": "Brasão_de_Armas_da_Polícia_de_Segurança_Pública.svg",
+    "pageprops": {
+     "wikibase_item": "Q3460075"
+    }
+   },
+   {
+    "pageid": 6221840,
+    "ns": 0,
+    "title": "Church of Santa Engrácia",
+    "index": 38,
+    "coordinates": [
+     {
+      "lat": 38.715,
+      "lon": -9.125,
+      "primary": true
+     }
+    ],
+    "description": "National mausoleum of Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/Exterior_of_Igreja_de_Santa_Engr%C3%A1cia_70.jpg/960px-Exterior_of_Igreja_de_Santa_Engr%C3%A1cia_70.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 960
+    },
+    "pageimage": "Exterior_of_Igreja_de_Santa_Engrácia_70.jpg",
+    "pageprops": {
+     "wikibase_item": "Q1601019"
+    }
+   },
+   {
+    "pageid": 6391070,
+    "ns": 0,
+    "title": "Ribeira Palace",
+    "index": 28,
+    "coordinates": [
+     {
+      "lat": 38.70728056,
+      "lon": -9.13822222,
+      "primary": true
+     }
+    ],
+    "description": "Former royal palace in Lisbon (1498–1755)",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d5/Terreiro_do_Pa%C3%A7o_antes_do_Terramoto_de_1755.png/960px-Terreiro_do_Pa%C3%A7o_antes_do_Terramoto_de_1755.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 799
+    },
+    "pageimage": "Terreiro_do_Paço_antes_do_Terramoto_de_1755.png",
+    "pageprops": {
+     "wikibase_item": "Q1939953"
+    }
+   },
+   {
+    "pageid": 6402457,
+    "ns": 0,
+    "title": "Águas Livres Aqueduct",
+    "index": 27,
+    "coordinates": [
+     {
+      "lat": 38.72888889,
+      "lon": -9.16916667,
+      "primary": true
+     }
+    ],
+    "description": "Historic aqueduct in Lisbon, Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/Aqueduto_das_%C3%81guas_Livres2.JPG/960px-Aqueduto_das_%C3%81guas_Livres2.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 720
+    },
+    "pageimage": "Aqueduto_das_Águas_Livres2.JPG",
+    "pageprops": {
+     "wikibase_item": "Q623228"
+    }
+   },
+   {
+    "pageid": 6691149,
+    "ns": 0,
+    "title": "Rossio",
+    "index": 26,
+    "coordinates": [
+     {
+      "lat": 38.71388889,
+      "lon": -9.13944444,
+      "primary": true
+     }
+    ],
+    "description": "Town square in Lisbon, Portugal",
+    "thumbnail": {
+     "source": "https://upload.wikimedia.org/wikipedia/commons/5/52/Pra%C3%A7a_de_D._Pedro_IV.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+     "width": 700,
+     "height": 525
+    },
+    "pageimage": "Praça_de_D._Pedro_IV.jpg",
+    "pageprops": {
+     "wikibase_item": "Q1549270"
+    }
+   },
+   {
+    "pageid": 6811739,
+    "ns": 0,
+    "title": "Carmo Convent",
+    "index": 19,
+    "coordinates": [
+     {
+      "lat": 38.71222222,
+      "lon": -9.14,
+      "primary": true
+     }
+    ],
+    "description": "Church in Lisbon, Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f7/Lisbon09.jpg/960px-Lisbon09.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 720
+    },
+    "pageimage": "Lisbon09.jpg",
+    "pageprops": {
+     "wikibase_item": "Q1470414"
+    }
+   },
+   {
+    "pageid": 7433912,
+    "ns": 0,
+    "title": "Campo Pequeno Bullring",
+    "index": 43,
+    "coordinates": [
+     {
+      "lat": 38.7425,
+      "lon": -9.14527778,
+      "primary": true
+     }
+    ],
+    "description": "Building in Lisbon, Lisbon District, Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2b/Pra%C3%A7a_de_Touros_do_Campo_Pequeno_September_2014.jpg/960px-Pra%C3%A7a_de_Touros_do_Campo_Pequeno_September_2014.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 683
+    },
+    "pageimage": "Praça_de_Touros_do_Campo_Pequeno_September_2014.jpg",
+    "pageprops": {
+     "wikibase_item": "Q784174"
+    }
+   },
+   {
+    "pageid": 9352542,
+    "ns": 0,
+    "title": "Kingdom of Portugal",
+    "index": 3,
+    "coordinates": [
+     {
+      "lat": 38.7,
+      "lon": -9.18333333,
+      "primary": true
+     }
+    ],
+    "description": "Kingdom in Southwestern Europe (1139–1910)",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/Flag_of_Portugal_%281830%E2%80%931910%29.svg/960px-Flag_of_Portugal_%281830%E2%80%931910%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 640
+    },
+    "pageimage": "Flag_of_Portugal_(1830–1910).svg",
+    "pageprops": {
+     "wikibase_item": "Q45670"
+    }
+   },
+   {
+    "pageid": 9483027,
+    "ns": 0,
+    "title": "Café A Brasileira",
+    "index": 42,
+    "coordinates": [
+     {
+      "lat": 38.71069167,
+      "lon": -9.14204722,
+      "primary": true
+     }
+    ],
+    "description": "Café in Lisbon, in the old quarter Chiado",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0c/Cafe_Brasileira_in_Lisbon.jpg/960px-Cafe_Brasileira_in_Lisbon.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 640
+    },
+    "pageimage": "Cafe_Brasileira_in_Lisbon.jpg",
+    "pageprops": {
+     "wikibase_item": "Q2547006"
+    }
+   },
+   {
+    "pageid": 12286402,
+    "ns": 0,
+    "title": "Chiado",
+    "index": 41,
+    "coordinates": [
+     {
+      "lat": 38.71055556,
+      "lon": -9.14222222,
+      "primary": true
+     }
+    ],
+    "description": "Neighborhood of Lisbon",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/Lisbon_10064_Lisboa_Pra%C3%A7a_Lu%C3%ADs_de_Cam%C3%B5es_2006_Luca_Galuzzi_%28cropped%29.jpg/960px-Lisbon_10064_Lisboa_Pra%C3%A7a_Lu%C3%ADs_de_Cam%C3%B5es_2006_Luca_Galuzzi_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 527
+    },
+    "pageimage": "Lisbon_10064_Lisboa_Praça_Luís_de_Camões_2006_Luca_Galuzzi_(cropped).jpg",
+    "pageprops": {
+     "wikibase_item": "Q601430"
+    }
+   },
+   {
+    "pageid": 12355962,
+    "ns": 0,
+    "title": "Church of Saint Anthony of Lisbon",
+    "index": 36,
+    "coordinates": [
+     {
+      "lat": 38.71,
+      "lon": -9.13361111,
+      "primary": true
+     }
+    ],
+    "description": "Roman Catholic church in Lisbon, Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/53/Igreja-Antonio1.jpg/960px-Igreja-Antonio1.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 1107
+    },
+    "pageimage": "Igreja-Antonio1.jpg",
+    "pageprops": {
+     "wikibase_item": "Q2976487"
+    }
+   },
+   {
+    "pageid": 12428915,
+    "ns": 0,
+    "title": "Avenida da Liberdade",
+    "index": 32,
+    "coordinates": [
+     {
+      "lat": 38.72027778,
+      "lon": -9.14583333,
+      "primary": true
+     }
+    ],
+    "description": "Boulevard in Lisbon, Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/Avenida_da_Liberdade_%2822344060581%29_%28cropped%29.jpg/960px-Avenida_da_Liberdade_%2822344060581%29_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 1151
+    },
+    "pageimage": "Avenida_da_Liberdade_(22344060581)_(cropped).jpg",
+    "pageprops": {
+     "wikibase_item": "Q790492"
+    }
+   },
+   {
+    "pageid": 13489373,
+    "ns": 0,
+    "title": "Nova School of Business and Economics",
+    "index": 48,
+    "coordinates": [
+     {
+      "lat": 38.733,
+      "lon": -9.16046,
+      "primary": true
+     }
+    ],
+    "description": "Business school in Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e3/Nova_logo.png/960px-Nova_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 504
+    },
+    "pageimage": "Nova_logo.png",
+    "pageprops": {
+     "wikibase_item": "Q392754"
+    }
+   },
+   {
+    "pageid": 16944896,
+    "ns": 0,
+    "title": "Igreja de São Roque",
+    "index": 44,
+    "coordinates": [
+     {
+      "lat": 38.71361111,
+      "lon": -9.14361111,
+      "primary": true
+     }
+    ],
+    "description": "Jesuit church in Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/Exterior_of_Igreja_de_S%C3%A3o_Roque_%28Lisbon%29.jpg/960px-Exterior_of_Igreja_de_S%C3%A3o_Roque_%28Lisbon%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 1440
+    },
+    "pageimage": "Exterior_of_Igreja_de_São_Roque_(Lisbon).jpg",
+    "pageprops": {
+     "wikibase_item": "Q1078864"
+    }
+   },
+   {
+    "pageid": 18559624,
+    "ns": 0,
+    "title": "Marquis of Pombal Square",
+    "index": 31,
+    "coordinates": [
+     {
+      "lat": 38.72527778,
+      "lon": -9.15,
+      "primary": true
+     }
+    ],
+    "description": "Roundabout in Lisbon, Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/79/Marquis_of_Pombal_Square_%28Pra%C3%A7a_Marqu%C3%AAs_de_Pombal%29.jpg/960px-Marquis_of_Pombal_Square_%28Pra%C3%A7a_Marqu%C3%AAs_de_Pombal%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 640
+    },
+    "pageimage": "Marquis_of_Pombal_Square_(Praça_Marquês_de_Pombal).jpg",
+    "pageprops": {
+     "wikibase_item": "Q1807096"
+    }
+   },
+   {
+    "pageid": 21625121,
+    "ns": 0,
+    "title": "ISCTE – University Institute of Lisbon",
+    "index": 35,
+    "coordinates": [
+     {
+      "lat": 38.74888889,
+      "lon": -9.15388889,
+      "primary": true
+     }
+    ],
+    "description": "Public university in Lisbon, Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Raul_Hestnes_Ferreira_ISCTE_4042.jpg/960px-Raul_Hestnes_Ferreira_ISCTE_4042.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 960
+    },
+    "pageimage": "Raul_Hestnes_Ferreira_ISCTE_4042.jpg",
+    "pageprops": {
+     "wikibase_item": "Q2886844"
+    }
+   },
+   {
+    "pageid": 25575993,
+    "ns": 0,
+    "title": "Ascensor da Glória",
+    "index": 17,
+    "coordinates": [
+     {
+      "lat": 38.71611111,
+      "lon": -9.14277778,
+      "primary": true
+     }
+    ],
+    "description": "Funicular railway in Lisbon, Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Elevador_da_Gl%C3%B3ria%2C_Lisszabon_%282%2C_20250815%29_4.jpg/960px-Elevador_da_Gl%C3%B3ria%2C_Lisszabon_%282%2C_20250815%29_4.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 541
+    },
+    "pageimage": "Elevador_da_Glória,_Lisszabon_(2,_20250815)_4.jpg",
+    "pageprops": {
+     "wikibase_item": "Q99636"
+    }
+   },
+   {
+    "pageid": 29932961,
+    "ns": 0,
+    "title": "Rua Augusta Arch",
+    "index": 21,
+    "coordinates": [
+     {
+      "lat": 38.7084,
+      "lon": -9.1368,
+      "primary": true
+     }
+    ],
+    "description": "Arch-like historical bulinding in Lisbon, Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Arco_Triunfal_da_Rua_Augusta%2C_Plaza_del_Comercio%2C_Lisboa%2C_Portugal%2C_2012-05-12%2C_DD_02.JPG/960px-Arco_Triunfal_da_Rua_Augusta%2C_Plaza_del_Comercio%2C_Lisboa%2C_Portugal%2C_2012-05-12%2C_DD_02.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 651
+    },
+    "pageimage": "Arco_Triunfal_da_Rua_Augusta,_Plaza_del_Comercio,_Lisboa,_Portugal,_2012-05-12,_DD_02.JPG",
+    "pageprops": {
+     "wikibase_item": "Q637590"
+    }
+   },
+   {
+    "pageid": 30875369,
+    "ns": 0,
+    "title": "Banco de Portugal",
+    "index": 46,
+    "coordinates": [
+     {
+      "lat": 38.708729,
+      "lon": -9.138148,
+      "primary": true
+     }
+    ],
+    "description": "Central Bank of Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/34/Banco_de_Portugal_-_Sede.jpg/960px-Banco_de_Portugal_-_Sede.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 720
+    },
+    "pageimage": "Banco_de_Portugal_-_Sede.jpg",
+    "pageprops": {
+     "wikibase_item": "Q378372"
+    }
+   },
+   {
+    "pageid": 34062903,
+    "ns": 0,
+    "title": "Pantheon of the House of Braganza",
+    "index": 20,
+    "coordinates": [
+     {
+      "lat": 38.71472222,
+      "lon": -9.12694444,
+      "primary": true
+     }
+    ],
+    "description": "Building in Lisbon, Lisbon District, Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/Igreja_de_S%C3%A3o_Vincente_%2810000314823%29_%282%29_%28cropped%29.jpg/960px-Igreja_de_S%C3%A3o_Vincente_%2810000314823%29_%282%29_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 428
+    },
+    "pageimage": "Igreja_de_São_Vincente_(10000314823)_(2)_(cropped).jpg",
+    "pageprops": {
+     "wikibase_item": "Q1638625"
+    }
+   },
+   {
+    "pageid": 43506032,
+    "ns": 0,
+    "title": "Novo Banco",
+    "index": 47,
+    "coordinates": [
+     {
+      "lat": 38.7219,
+      "lon": -9.1478,
+      "primary": true
+     }
+    ],
+    "description": "Portuguese financial bank",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b2/Lisbon_NovoBanco.jpg/960px-Lisbon_NovoBanco.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 991
+    },
+    "pageimage": "Lisbon_NovoBanco.jpg",
+    "pageprops": {
+     "wikibase_item": "Q17488861"
+    }
+   },
+   {
+    "pageid": 51615064,
+    "ns": 0,
+    "title": "Livraria Bertrand",
+    "index": 30,
+    "coordinates": [
+     {
+      "lat": 38.71063889,
+      "lon": -9.14113889,
+      "primary": true
+     }
+    ],
+    "description": "Portuguese book retailer",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/65/LivrariaBertrand2.JPG/960px-LivrariaBertrand2.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 540
+    },
+    "pageimage": "LivrariaBertrand2.JPG",
+    "pageprops": {
+     "wikibase_item": "Q1866547"
+    }
+   },
+   {
+    "pageid": 54878937,
+    "ns": 0,
+    "title": "Cadeia do Aljube",
+    "index": 8,
+    "coordinates": [
+     {
+      "lat": 38.710173,
+      "lon": -9.13274,
+      "primary": true
+     }
+    ],
+    "description": "Former prison in Lisbon, Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/92/Museu_do_Aljube.jpg/960px-Museu_do_Aljube.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 640
+    },
+    "pageimage": "Museu_do_Aljube.jpg",
+    "pageprops": {
+     "wikibase_item": "Q17389986"
+    }
+   },
+   {
+    "pageid": 80969194,
+    "ns": 0,
+    "title": "2025 Ascensor da Glória derailment",
+    "index": 6,
+    "coordinates": [
+     {
+      "lat": 38.716,
+      "lon": -9.143,
+      "primary": true
+     }
+    ],
+    "description": "2025 railway accident in Portugal",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ce/As%C3%AD_fue_el_accidente_de_un_funicular_en_Lisboa.png/960px-As%C3%AD_fue_el_accidente_de_un_funicular_en_Lisboa.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 540
+    },
+    "pageimage": "Así_fue_el_accidente_de_un_funicular_en_Lisboa.png",
+    "pageprops": {
+     "wikibase_item": "Q136090574"
+    }
+   }
+  ]
+ }
+}

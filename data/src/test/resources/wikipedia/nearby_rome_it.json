@@ -1,0 +1,1155 @@
+{
+ "batchcomplete": true,
+ "continue": {
+  "gsroffset": 50,
+  "continue": "gsroffset||"
+ },
+ "query": {
+  "pages": [
+   {
+    "pageid": 12267,
+    "ns": 0,
+    "title": "Circo Massimo",
+    "index": 34,
+    "coordinates": [
+     {
+      "lat": 41.8859,
+      "lon": 12.4857,
+      "primary": true
+     }
+    ],
+    "description": "antico circo situato a Roma",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Circus_Maximus_%E2%80%A2_Circo_Massimo_%2846813512141%29.jpg/960px-Circus_Maximus_%E2%80%A2_Circo_Massimo_%2846813512141%29.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 533
+    },
+    "pageimage": "Circus_Maximus_•_Circo_Massimo_(46813512141).jpg",
+    "pageprops": {
+     "wikibase_item": "Q207808"
+    }
+   },
+   {
+    "pageid": 12279,
+    "ns": 0,
+    "title": "Pantheon (Roma)",
+    "index": 2,
+    "coordinates": [
+     {
+      "lat": 41.898611,
+      "lon": 12.476944,
+      "primary": true
+     }
+    ],
+    "description": "tempio della Roma antica e basilica minore cattolica",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7b/Pantheon_%28Rome%29_-_Right_side_and_front.jpg/960px-Pantheon_%28Rome%29_-_Right_side_and_front.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 773
+    },
+    "pageimage": "Pantheon_(Rome)_-_Right_side_and_front.jpg",
+    "pageprops": {
+     "wikibase_item": "Q99309"
+    }
+   },
+   {
+    "pageid": 41091,
+    "ns": 0,
+    "title": "Piazza del Popolo (Roma)",
+    "index": 38,
+    "coordinates": [
+     {
+      "lat": 41.910556,
+      "lon": 12.476389,
+      "primary": true
+     }
+    ],
+    "description": "piazza di Roma, Italia",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Piazza_del_Popolo%2C_Roma_%28Rome%29.jpg/960px-Piazza_del_Popolo%2C_Roma_%28Rome%29.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 720
+    },
+    "pageimage": "Piazza_del_Popolo,_Roma_(Rome).jpg",
+    "pageprops": {
+     "wikibase_item": "Q824997"
+    }
+   },
+   {
+    "pageid": 41094,
+    "ns": 0,
+    "title": "Vittoriano",
+    "index": 5,
+    "coordinates": [
+     {
+      "lat": 41.894599,
+      "lon": 12.483092,
+      "primary": true
+     }
+    ],
+    "description": "monumento di Roma dedicato a Vittorio Emanuele II, che celebra il Risorgimento e l'Unità d'Italia",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/Altare_della_Patria_%28Roma%29.jpg/960px-Altare_della_Patria_%28Roma%29.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 606
+    },
+    "pageimage": "Altare_della_Patria_(Roma).jpg",
+    "pageprops": {
+     "wikibase_item": "Q506234"
+    }
+   },
+   {
+    "pageid": 52849,
+    "ns": 0,
+    "title": "Colonna Traiana",
+    "index": 48,
+    "coordinates": [
+     {
+      "lat": 41.895833,
+      "lon": 12.484167,
+      "primary": true
+     }
+    ],
+    "description": "monumento celebrativo e sepolcrale dell'imperatore Traiano, sito a Roma",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ea/Piranesi-16034.jpg/960px-Piranesi-16034.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 1260
+    },
+    "pageimage": "Piranesi-16034.jpg",
+    "pageprops": {
+     "wikibase_item": "Q192784"
+    }
+   },
+   {
+    "pageid": 54221,
+    "ns": 0,
+    "title": "Arco di Costantino",
+    "index": 45,
+    "coordinates": [
+     {
+      "lat": 41.889828,
+      "lon": 12.490605,
+      "primary": true
+     }
+    ],
+    "description": "antico arco di trionfo situato a Roma",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a3/Arch_of_Constantine_%28Rome%29_-_South_side%2C_from_Via_triumphalis.jpg/960px-Arch_of_Constantine_%28Rome%29_-_South_side%2C_from_Via_triumphalis.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 810
+    },
+    "pageimage": "Arch_of_Constantine_(Rome)_-_South_side,_from_Via_triumphalis.jpg",
+    "pageprops": {
+     "wikibase_item": "Q5786"
+    }
+   },
+   {
+    "pageid": 71850,
+    "ns": 0,
+    "title": "Pietà vaticana",
+    "index": 14,
+    "coordinates": [
+     {
+      "lat": 41.902222,
+      "lon": 12.453333,
+      "primary": true
+     }
+    ],
+    "description": "scultura di Michelangelo Buonarroti nella basilica di San Pietro in Vaticano",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/Michelangelo%27s_Piet%C3%A0%2C_St_Peter%27s_Basilica_%281498%E2%80%9399%29.jpg/960px-Michelangelo%27s_Piet%C3%A0%2C_St_Peter%27s_Basilica_%281498%E2%80%9399%29.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 795
+    },
+    "pageimage": "Michelangelo's_Pietà,_St_Peter's_Basilica_(1498–99).jpg",
+    "pageprops": {
+     "wikibase_item": "Q235242"
+    }
+   },
+   {
+    "pageid": 72715,
+    "ns": 0,
+    "title": "Fontana dei Quattro Fiumi",
+    "index": 10,
+    "coordinates": [
+     {
+      "lat": 41.898953,
+      "lon": 12.473075,
+      "primary": true
+     }
+    ],
+    "description": "fontana di Roma",
+    "thumbnail": {
+     "source": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Vierstroemebrunnen_Piazza_Navona_Rom.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+     "width": 812,
+     "height": 1400
+    },
+    "pageimage": "Vierstroemebrunnen_Piazza_Navona_Rom.jpg",
+    "pageprops": {
+     "wikibase_item": "Q655470"
+    }
+   },
+   {
+    "pageid": 80900,
+    "ns": 0,
+    "title": "Ara Pacis",
+    "index": 37,
+    "coordinates": [
+     {
+      "lat": 41.906389,
+      "lon": 12.475556,
+      "primary": true
+     }
+    ],
+    "description": "antico altare romano dedicato alla Pace",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3c/Ara_Pacis_%28SW%29.jpg/960px-Ara_Pacis_%28SW%29.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 611
+    },
+    "pageimage": "Ara_Pacis_(SW).jpg",
+    "pageprops": {
+     "wikibase_item": "Q623612"
+    }
+   },
+   {
+    "pageid": 88430,
+    "ns": 0,
+    "title": "Piazza Navona",
+    "index": 21,
+    "coordinates": [
+     {
+      "lat": 41.89871,
+      "lon": 12.47316,
+      "primary": true
+     }
+    ],
+    "description": "piazza barocca di Roma, sede dello Stadio di Domiziano",
+    "thumbnail": {
+     "source": "https://upload.wikimedia.org/wikipedia/commons/1/18/Paolo_Monti_-_Servizio_fotografico_%28Roma%2C_1966%29_-_BEIC_6329173.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+     "width": 816,
+     "height": 1280
+    },
+    "pageimage": "Paolo_Monti_-_Servizio_fotografico_(Roma,_1966)_-_BEIC_6329173.jpg",
+    "pageprops": {
+     "wikibase_item": "Q463400"
+    }
+   },
+   {
+    "pageid": 89612,
+    "ns": 0,
+    "title": "Eccidio delle Fosse Ardeatine",
+    "index": 32,
+    "coordinates": [
+     {
+      "lat": 41.856667,
+      "lon": 12.510278,
+      "primary": true
+     }
+    ],
+    "description": "eccidio di 335 civili compiuto dai nazisti in Italia",
+    "thumbnail": {
+     "source": "https://upload.wikimedia.org/wikipedia/it/d/d3/Vittime_Fosse_Ardeatine.png?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+     "width": 500,
+     "height": 288
+    },
+    "pageimage": "Vittime_Fosse_Ardeatine.png",
+    "pageprops": {
+     "wikibase_item": "Q638761"
+    }
+   },
+   {
+    "pageid": 97842,
+    "ns": 0,
+    "title": "Palazzo Madama (Roma)",
+    "index": 39,
+    "coordinates": [
+     {
+      "lat": 41.899192,
+      "lon": 12.474278,
+      "primary": true
+     }
+    ],
+    "description": "palazzo storico di Roma e sede del Senato della Repubblica italiana",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cb/Palazzo_Madama_%28Roma%29.jpg/960px-Palazzo_Madama_%28Roma%29.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 631
+    },
+    "pageimage": "Palazzo_Madama_(Roma).jpg",
+    "pageprops": {
+     "wikibase_item": "Q1755046"
+    }
+   },
+   {
+    "pageid": 101786,
+    "ns": 0,
+    "title": "Fontana di Trevi",
+    "index": 11,
+    "coordinates": [
+     {
+      "lat": 41.900932,
+      "lon": 12.483313,
+      "primary": true
+     }
+    ],
+    "description": "fontana barocca di Roma, Italia",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/Trevi_Fountain_-_Roma.jpg/960px-Trevi_Fountain_-_Roma.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 521
+    },
+    "pageimage": "Trevi_Fountain_-_Roma.jpg",
+    "pageprops": {
+     "wikibase_item": "Q185382"
+    }
+   },
+   {
+    "pageid": 104903,
+    "ns": 0,
+    "title": "Basilica di San Paolo fuori le mura",
+    "index": 30,
+    "coordinates": [
+     {
+      "lat": 41.858611,
+      "lon": 12.477222,
+      "primary": true
+     }
+    ],
+    "description": "basilica papale di Roma",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/StPaul.jpg/960px-StPaul.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 633
+    },
+    "pageimage": "StPaul.jpg",
+    "pageprops": {
+     "wikibase_item": "Q231699"
+    }
+   },
+   {
+    "pageid": 106586,
+    "ns": 0,
+    "title": "Palazzo del Quirinale",
+    "index": 29,
+    "coordinates": [
+     {
+      "lat": 41.900059,
+      "lon": 12.488023,
+      "primary": true
+     }
+    ],
+    "description": "palazzo storico di Roma e residenza ufficiale del Presidente della Repubblica italiana",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e4/Quirinale_palazzo_e_obelisco_con_dioscuri_Roma.jpg/960px-Quirinale_palazzo_e_obelisco_con_dioscuri_Roma.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 677
+    },
+    "pageimage": "Quirinale_palazzo_e_obelisco_con_dioscuri_Roma.jpg",
+    "pageprops": {
+     "wikibase_item": "Q223079"
+    }
+   },
+   {
+    "pageid": 129055,
+    "ns": 0,
+    "title": "Baldacchino di San Pietro",
+    "index": 47,
+    "coordinates": [
+     {
+      "lat": 41.9022,
+      "lon": 12.4533,
+      "primary": true
+     }
+    ],
+    "description": "struttura ornamentale progettata da Gian Lorenzo Bernini",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Baldaquin_Bernin_Saint-Pierre_Vatican.jpg/960px-Baldaquin_Bernin_Saint-Pierre_Vatican.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 1281
+    },
+    "pageimage": "Baldaquin_Bernin_Saint-Pierre_Vatican.jpg",
+    "pageprops": {
+     "wikibase_item": "Q2439030"
+    }
+   },
+   {
+    "pageid": 132251,
+    "ns": 0,
+    "title": "Ratto di Proserpina (Bernini)",
+    "index": 31,
+    "coordinates": [
+     {
+      "lat": 41.914,
+      "lon": 12.492,
+      "primary": true
+     }
+    ],
+    "description": "scultura di Gian Lorenzo Bernini",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/The_Rape_of_Proserpina_%28Rome%29.jpg/960px-The_Rape_of_Proserpina_%28Rome%29.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 1549
+    },
+    "pageimage": "The_Rape_of_Proserpina_(Rome).jpg",
+    "pageprops": {
+     "wikibase_item": "Q2352789"
+    }
+   },
+   {
+    "pageid": 132394,
+    "ns": 0,
+    "title": "Apollo e Dafne (Bernini)",
+    "index": 22,
+    "coordinates": [
+     {
+      "lat": 41.913889,
+      "lon": 12.491944,
+      "primary": true
+     }
+    ],
+    "description": "scultura marmorea di Gianlorenzo Bernini",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Apollo_and_Daphne_%28Bernini%29.jpg/960px-Apollo_and_Daphne_%28Bernini%29.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 1483
+    },
+    "pageimage": "Apollo_and_Daphne_(Bernini).jpg",
+    "pageprops": {
+     "wikibase_item": "Q945850"
+    }
+   },
+   {
+    "pageid": 133991,
+    "ns": 0,
+    "title": "Palazzo Chigi",
+    "index": 35,
+    "coordinates": [
+     {
+      "lat": 41.901235,
+      "lon": 12.479771,
+      "primary": true
+     }
+    ],
+    "description": "palazzo storico di Roma, sede della Presidenza del Consiglio dei Ministri",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Palazzo_Chigi_-_esterno.jpg/960px-Palazzo_Chigi_-_esterno.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 650
+    },
+    "pageimage": "Palazzo_Chigi_-_esterno.jpg",
+    "pageprops": {
+     "wikibase_item": "Q2047548"
+    }
+   },
+   {
+    "pageid": 135834,
+    "ns": 0,
+    "title": "Basilica di San Giovanni in Laterano",
+    "index": 9,
+    "coordinates": [
+     {
+      "lat": 41.885906,
+      "lon": 12.506156,
+      "primary": true
+     }
+    ],
+    "description": "basilica papale e cattedrale della diocesi di Roma",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5f/San_Giovanni_in_Laterano_2021.jpg/960px-San_Giovanni_in_Laterano_2021.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 720
+    },
+    "pageimage": "San_Giovanni_in_Laterano_2021.jpg",
+    "pageprops": {
+     "wikibase_item": "Q84090"
+    }
+   },
+   {
+    "pageid": 152093,
+    "ns": 0,
+    "title": "Palazzo Farnese (Roma)",
+    "index": 42,
+    "coordinates": [
+     {
+      "lat": 41.895282,
+      "lon": 12.471021,
+      "primary": true
+     }
+    ],
+    "description": "palazzo storico di Roma",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7c/Palazzo_Farnese_Fassade.jpg/960px-Palazzo_Farnese_Fassade.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 491
+    },
+    "pageimage": "Palazzo_Farnese_Fassade.jpg",
+    "pageprops": {
+     "wikibase_item": "Q848386"
+    }
+   },
+   {
+    "pageid": 193174,
+    "ns": 0,
+    "title": "Mosè (Michelangelo)",
+    "index": 41,
+    "coordinates": [
+     {
+      "lat": 41.893772,
+      "lon": 12.493306,
+      "primary": true
+     }
+    ],
+    "description": "scultura di Michelangelo Buonarroti",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/59/Michelangelo%27s_Moses_%28Rome%29.jpg/960px-Michelangelo%27s_Moses_%28Rome%29.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 1155
+    },
+    "pageimage": "Michelangelo's_Moses_(Rome).jpg",
+    "pageprops": {
+     "wikibase_item": "Q1989744"
+    }
+   },
+   {
+    "pageid": 196349,
+    "ns": 0,
+    "title": "Estasi di santa Teresa d'Avila",
+    "index": 20,
+    "coordinates": [
+     {
+      "lat": 41.904722,
+      "lon": 12.494167,
+      "primary": true
+     }
+    ],
+    "description": "scultura di Gianlorenzo Bernini",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/Ecstasy_of_St._Teresa_HDR.jpg/960px-Ecstasy_of_St._Teresa_HDR.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 1565
+    },
+    "pageimage": "Ecstasy_of_St._Teresa_HDR.jpg",
+    "pageprops": {
+     "wikibase_item": "Q1333433"
+    }
+   },
+   {
+    "pageid": 207819,
+    "ns": 0,
+    "title": "Piramide Cestia",
+    "index": 17,
+    "coordinates": [
+     {
+      "lat": 41.876389,
+      "lon": 12.480833,
+      "primary": true
+     }
+    ],
+    "description": "monumento funerario della Roma antica",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9e/Piramide_Cestia.jpg/960px-Piramide_Cestia.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 900
+    },
+    "pageimage": "Piramide_Cestia.jpg",
+    "pageprops": {
+     "wikibase_item": "Q725404"
+    }
+   },
+   {
+    "pageid": 219052,
+    "ns": 0,
+    "title": "Basilica di Santa Maria Maggiore",
+    "index": 16,
+    "coordinates": [
+     {
+      "lat": 41.8975,
+      "lon": 12.498611,
+      "primary": true
+     }
+    ],
+    "description": "basilica papale di Roma",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/84/Basilica_di_Santa_Maria_Maggiore_-_Roma.jpg/960px-Basilica_di_Santa_Maria_Maggiore_-_Roma.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 745
+    },
+    "pageimage": "Basilica_di_Santa_Maria_Maggiore_-_Roma.jpg",
+    "pageprops": {
+     "wikibase_item": "Q186282"
+    }
+   },
+   {
+    "pageid": 229164,
+    "ns": 0,
+    "title": "Chiesa di Sant'Agnese in Agone",
+    "index": 46,
+    "coordinates": [
+     {
+      "lat": 41.89877,
+      "lon": 12.4726,
+      "primary": true
+     }
+    ],
+    "description": "chiesa in piazza Navona a Roma",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/Sant%27Agnese_in_Agone_%28Rome%29_esterno.jpg/960px-Sant%27Agnese_in_Agone_%28Rome%29_esterno.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 858
+    },
+    "pageimage": "Sant'Agnese_in_Agone_(Rome)_esterno.jpg",
+    "pageprops": {
+     "wikibase_item": "Q1192577"
+    }
+   },
+   {
+    "pageid": 233471,
+    "ns": 0,
+    "title": "Chiesa di San Luigi dei Francesi",
+    "index": 28,
+    "coordinates": [
+     {
+      "lat": 41.899444,
+      "lon": 12.474722,
+      "primary": true
+     }
+    ],
+    "description": "edificio religioso di Roma",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/66/San_Luigi_dei_Francesi_-_facciata.jpg/960px-San_Luigi_dei_Francesi_-_facciata.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 942
+    },
+    "pageimage": "San_Luigi_dei_Francesi_-_facciata.jpg",
+    "pageprops": {
+     "wikibase_item": "Q638283"
+    }
+   },
+   {
+    "pageid": 270933,
+    "ns": 0,
+    "title": "Garbatella",
+    "index": 19,
+    "coordinates": [
+     {
+      "lat": 41.860548,
+      "lon": 12.488151,
+      "primary": true
+     }
+    ],
+    "description": "zona urbanistica di Roma",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/92/Roma_Garbatella_teatro_Palladium.jpg/960px-Roma_Garbatella_teatro_Palladium.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 640
+    },
+    "pageimage": "Roma_Garbatella_teatro_Palladium.jpg",
+    "pageprops": {
+     "wikibase_item": "Q2249573"
+    }
+   },
+   {
+    "pageid": 366460,
+    "ns": 0,
+    "title": "Villa Torlonia (Roma)",
+    "index": 49,
+    "coordinates": [
+     {
+      "lat": 41.915745,
+      "lon": 12.511284,
+      "primary": true
+     }
+    ],
+    "description": "villa storica di Roma",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/04/Villa_Torlonia_01304.JPG/960px-Villa_Torlonia_01304.JPG?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 720
+    },
+    "pageimage": "Villa_Torlonia_01304.JPG",
+    "pageprops": {
+     "wikibase_item": "Q474857"
+    }
+   },
+   {
+    "pageid": 496124,
+    "ns": 0,
+    "title": "Basilica di Santa Maria degli Angeli e dei Martiri",
+    "index": 50,
+    "coordinates": [
+     {
+      "lat": 41.903056,
+      "lon": 12.496944,
+      "primary": true
+     }
+    ],
+    "description": "basilica cattolica di Roma",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/16/Santa_Maria_degli_Angeli_%28Rome%29_-_Facade.jpg/960px-Santa_Maria_degli_Angeli_%28Rome%29_-_Facade.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 623
+    },
+    "pageimage": "Santa_Maria_degli_Angeli_(Rome)_-_Facade.jpg",
+    "pageprops": {
+     "wikibase_item": "Q569253"
+    }
+   },
+   {
+    "pageid": 562723,
+    "ns": 0,
+    "title": "Cimitero del Verano",
+    "index": 43,
+    "coordinates": [
+     {
+      "lat": 41.901516,
+      "lon": 12.5203,
+      "primary": true
+     }
+    ],
+    "description": "cimitero di Roma",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/Cimitero_del_Verano_%28Rome%29_-_Ingresso_monumentale.jpg/960px-Cimitero_del_Verano_%28Rome%29_-_Ingresso_monumentale.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 510
+    },
+    "pageimage": "Cimitero_del_Verano_(Rome)_-_Ingresso_monumentale.jpg",
+    "pageprops": {
+     "wikibase_item": "Q27426"
+    }
+   },
+   {
+    "pageid": 597076,
+    "ns": 0,
+    "title": "Palazzetto dello Sport (Roma)",
+    "index": 24,
+    "coordinates": [
+     {
+      "lat": 41.929617,
+      "lon": 12.470732,
+      "primary": true
+     }
+    ],
+    "description": "impianto sportivo coperto di Roma, nel quartiere Parioli",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ef/Le_Palazzetto_dello_Sport_en_vue_a%C3%A9rienne.png/960px-Le_Palazzetto_dello_Sport_en_vue_a%C3%A9rienne.png?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 540
+    },
+    "pageimage": "Le_Palazzetto_dello_Sport_en_vue_aérienne.png",
+    "pageprops": {
+     "wikibase_item": "Q2033373"
+    }
+   },
+   {
+    "pageid": 706114,
+    "ns": 0,
+    "title": "Campidoglio",
+    "index": 36,
+    "coordinates": [
+     {
+      "lat": 41.893333,
+      "lon": 12.483056,
+      "primary": true
+     }
+    ],
+    "description": "uno dei sette colli di Roma",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/Palazzo_dei_Senatori_in_Rome_%281%29.jpg/960px-Palazzo_dei_Senatori_in_Rome_%281%29.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 656
+    },
+    "pageimage": "Palazzo_dei_Senatori_in_Rome_(1).jpg",
+    "pageprops": {
+     "wikibase_item": "Q34925"
+    }
+   },
+   {
+    "pageid": 766453,
+    "ns": 0,
+    "title": "Gruppo del Laocoonte",
+    "index": 33,
+    "coordinates": [
+     {
+      "lat": 41.892053,
+      "lon": 12.500311,
+      "primary": true
+     }
+    ],
+    "description": "scultura ellenistica, conservata nei Musei Vaticani in Città del Vaticano",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bd/Laocoon_and_His_Sons.jpg/960px-Laocoon_and_His_Sons.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 863
+    },
+    "pageimage": "Laocoon_and_His_Sons.jpg",
+    "pageprops": {
+     "wikibase_item": "Q465762"
+    }
+   },
+   {
+    "pageid": 768956,
+    "ns": 0,
+    "title": "Cappella Sistina",
+    "index": 23,
+    "coordinates": [
+     {
+      "lat": 41.903055,
+      "lon": 12.454444,
+      "primary": true
+     }
+    ],
+    "description": "cappella nel Palazzo Apostolico della Città del Vaticano",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Chapelle_sixtine2.jpg/960px-Chapelle_sixtine2.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 643
+    },
+    "pageimage": "Chapelle_sixtine2.jpg",
+    "pageprops": {
+     "wikibase_item": "Q2943"
+    }
+   },
+   {
+    "pageid": 1199496,
+    "ns": 0,
+    "title": "Creazione di Adamo",
+    "index": 26,
+    "coordinates": [
+     {
+      "lat": 41.902778,
+      "lon": 12.454167,
+      "primary": true
+     }
+    ],
+    "description": "affresco di Michelangelo Buonarroti",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/Creaci%C3%B3n_de_Ad%C3%A1n.jpg/960px-Creaci%C3%B3n_de_Ad%C3%A1n.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 641
+    },
+    "pageimage": "Creación_de_Adán.jpg",
+    "pageprops": {
+     "wikibase_item": "Q500242"
+    }
+   },
+   {
+    "pageid": 1199516,
+    "ns": 0,
+    "title": "Giudizio universale (Michelangelo)",
+    "index": 13,
+    "coordinates": [
+     {
+      "lat": 41.9028,
+      "lon": 12.4542,
+      "primary": true
+     }
+    ],
+    "description": "affresco di Michelangelo nella Cappella Sistina",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/Michelangelo%2C_Giudizio_Universale_02.jpg/960px-Michelangelo%2C_Giudizio_Universale_02.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 1154
+    },
+    "pageimage": "Michelangelo,_Giudizio_Universale_02.jpg",
+    "pageprops": {
+     "wikibase_item": "Q567861"
+    }
+   },
+   {
+    "pageid": 1383257,
+    "ns": 0,
+    "title": "Castel Sant'Angelo",
+    "index": 6,
+    "coordinates": [
+     {
+      "lat": 41.903044,
+      "lon": 12.466307,
+      "primary": true
+     }
+    ],
+    "description": "castello e museo a Roma",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Castel_Sant%27Angelo_at_Night.jpg/960px-Castel_Sant%27Angelo_at_Night.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 860
+    },
+    "pageimage": "Castel_Sant'Angelo_at_Night.jpg",
+    "pageprops": {
+     "wikibase_item": "Q486382"
+    }
+   },
+   {
+    "pageid": 1413483,
+    "ns": 0,
+    "title": "Quartiere Coppedè",
+    "index": 27,
+    "coordinates": [
+     {
+      "lat": 41.918614,
+      "lon": 12.501354,
+      "primary": true
+     }
+    ],
+    "description": "complesso architettonico nel quartiere Trieste di Roma",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Quartiere_Copped%C3%A9_09.jpg/960px-Quartiere_Copped%C3%A9_09.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 636
+    },
+    "pageimage": "Quartiere_Coppedé_09.jpg",
+    "pageprops": {
+     "wikibase_item": "Q3927173"
+    }
+   },
+   {
+    "pageid": 1510212,
+    "ns": 0,
+    "title": "Colosseo",
+    "index": 3,
+    "coordinates": [
+     {
+      "lat": 41.890278,
+      "lon": 12.492222,
+      "primary": true
+     }
+    ],
+    "description": "antico anfiteatro romano a Roma",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/960px-Colosseo_2020.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 673
+    },
+    "pageimage": "Colosseo_2020.jpg",
+    "pageprops": {
+     "wikibase_item": "Q10285"
+    }
+   },
+   {
+    "pageid": 1824537,
+    "ns": 0,
+    "title": "Lazio",
+    "index": 8,
+    "coordinates": [
+     {
+      "lat": 41.89305556,
+      "lon": 12.48277778,
+      "primary": true
+     }
+    ],
+    "description": "regione italiana a statuto ordinario",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/Flag_of_Lazio.svg/960px-Flag_of_Lazio.svg.png?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 641
+    },
+    "pageimage": "Flag_of_Lazio.svg",
+    "pageprops": {
+     "wikibase_item": "Q1282"
+    }
+   },
+   {
+    "pageid": 2318427,
+    "ns": 0,
+    "title": "Roma",
+    "index": 1,
+    "coordinates": [
+     {
+      "lat": 41.893056,
+      "lon": 12.482778,
+      "primary": true
+     }
+    ],
+    "description": "capitale d'Italia, capoluogo dell'omonima città metropolitana e della regione Lazio",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/98/Roma-Gonfalone.svg/960px-Roma-Gonfalone.svg.png?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 639
+    },
+    "pageimage": "Roma-Gonfalone.svg",
+    "pageprops": {
+     "wikibase_item": "Q220"
+    }
+   },
+   {
+    "pageid": 2371160,
+    "ns": 0,
+    "title": "Caso Moro",
+    "index": 7,
+    "coordinates": [
+     {
+      "lat": 41.89427,
+      "lon": 12.47843,
+      "primary": true
+     }
+    ],
+    "description": "sequestro e uccisione di Aldo Moro da parte delle Brigate Rosse (16 marzo - 9 maggio 1978)",
+    "thumbnail": {
+     "source": "https://upload.wikimedia.org/wikipedia/commons/7/70/Aldo_Moro_br.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+     "width": 737,
+     "height": 853
+    },
+    "pageimage": "Aldo_Moro_br.jpg",
+    "pageprops": {
+     "wikibase_item": "Q1634609"
+    }
+   },
+   {
+    "pageid": 2399306,
+    "ns": 0,
+    "title": "Delitto Casati Stampa",
+    "index": 18,
+    "coordinates": [
+     {
+      "lat": 41.91174,
+      "lon": 12.49247,
+      "primary": true
+     }
+    ],
+    "description": "evento di cronaca nera",
+    "thumbnail": {
+     "source": "https://upload.wikimedia.org/wikipedia/it/c/cb/Casati_Stampa_Fallarino.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+     "width": 386,
+     "height": 331
+    },
+    "pageimage": "Casati_Stampa_Fallarino.jpg",
+    "pageprops": {
+     "wikibase_item": "Q3705062"
+    }
+   },
+   {
+    "pageid": 2461269,
+    "ns": 0,
+    "title": "Città del Vaticano",
+    "index": 4,
+    "coordinates": [
+     {
+      "lat": 41.904,
+      "lon": 12.453,
+      "primary": true
+     }
+    ],
+    "description": "stato dell'Europa meridionale",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/Flag_of_Vatican_City_%282023%E2%80%93present%29.svg/960px-Flag_of_Vatican_City_%282023%E2%80%93present%29.svg.png?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 960
+    },
+    "pageimage": "Flag_of_Vatican_City_(2023–present).svg",
+    "pageprops": {
+     "wikibase_item": "Q237"
+    }
+   },
+   {
+    "pageid": 2482851,
+    "ns": 0,
+    "title": "Volta della Cappella Sistina",
+    "index": 40,
+    "coordinates": [
+     {
+      "lat": 41.902778,
+      "lon": 12.454167,
+      "primary": true
+     }
+    ],
+    "description": "ciclo di affreschi di Michelangelo Buonarroti",
+    "pageprops": {
+     "wikibase_item": "Q844675"
+    }
+   },
+   {
+    "pageid": 2498645,
+    "ns": 0,
+    "title": "Delitto di via Carlo Poma",
+    "index": 12,
+    "coordinates": [
+     {
+      "lat": 41.913972,
+      "lon": 12.462056,
+      "primary": true
+     }
+    ],
+    "description": "caso di omicidio avvenuto a Roma nel 1990",
+    "thumbnail": {
+     "source": "https://upload.wikimedia.org/wikipedia/it/d/db/Simonetta_Cesaroni.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+     "width": 436,
+     "height": 230
+    },
+    "pageimage": "Simonetta_Cesaroni.jpg",
+    "pageprops": {
+     "wikibase_item": "Q3705061"
+    }
+   },
+   {
+    "pageid": 2565480,
+    "ns": 0,
+    "title": "Piazza di Spagna",
+    "index": 44,
+    "coordinates": [
+     {
+      "lat": 41.90595,
+      "lon": 12.482058,
+      "primary": true
+     }
+    ],
+    "description": "piazza di Roma con la Scalinata di Trinità dei Monti e la Fontana della Barcaccia",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/29/Piazza_di_Spagna_2018.jpg/960px-Piazza_di_Spagna_2018.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 1280
+    },
+    "pageimage": "Piazza_di_Spagna_2018.jpg",
+    "pageprops": {
+     "wikibase_item": "Q15124814"
+    }
+   },
+   {
+    "pageid": 5156662,
+    "ns": 0,
+    "title": "Città metropolitana di Roma Capitale",
+    "index": 15,
+    "coordinates": [
+     {
+      "lat": 41.893056,
+      "lon": 12.482778,
+      "primary": true
+     }
+    ],
+    "description": "ente locale italiano istituito nel 2015, corrispondente alla precedente provincia di Roma",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/39/Flag_of_the_Province_of_Rome.svg/960px-Flag_of_the_Province_of_Rome.svg.png?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 639
+    },
+    "pageimage": "Flag_of_the_Province_of_Rome.svg",
+    "pageprops": {
+     "wikibase_item": "Q18288160"
+    }
+   },
+   {
+    "pageid": 5332341,
+    "ns": 0,
+    "title": "Palazzo Caffarelli al Campidoglio",
+    "index": 25,
+    "coordinates": [
+     {
+      "lat": 41.892667,
+      "lon": 12.481861,
+      "primary": true
+     }
+    ],
+    "description": "palazzo storico di Roma",
+    "thumbnail": {
+     "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Palazzo_Caffarelli_-_22-11-2019.jpg/960px-Palazzo_Caffarelli_-_22-11-2019.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+     "width": 960,
+     "height": 720
+    },
+    "pageimage": "Palazzo_Caffarelli_-_22-11-2019.jpg",
+    "pageprops": {
+     "wikibase_item": "Q1805709"
+    }
+   }
+  ]
+ }
+}

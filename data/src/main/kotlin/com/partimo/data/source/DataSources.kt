@@ -9,6 +9,7 @@ import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.place.Airport
 import com.partimo.domain.model.place.CatalogDestination
 import com.partimo.domain.model.place.CityPlace
+import com.partimo.domain.model.poi.PoiArticle
 import com.partimo.domain.model.poi.PoiQuery
 import com.partimo.domain.model.poi.PointOfInterest
 import com.partimo.domain.model.stay.AccommodationOffer
@@ -17,8 +18,9 @@ import com.partimo.domain.model.transit.TransitRoute
 import com.partimo.domain.model.transit.TransitRouteQuery
 import com.partimo.domain.model.weather.WeatherSnapshot
 
-// Sorgenti dati per provider. Ogni interfaccia ha un'implementazione reale (Ktor + cache Room)
-// e una demo: sostituire un provider (es. passare a un backend proprio) richiede una sola classe.
+// Sorgenti dati per provider. Ogni interfaccia ha un'implementazione reale (Ktor + cache Room),
+// e quelle che richiedono una chiave anche una demo: sostituire un provider (es. passare a un
+// backend proprio) richiede una sola classe.
 // Le implementazioni possono lanciare eccezioni, che i repository convertono in DataError.
 
 interface FlightOffersDataSource {
@@ -31,6 +33,11 @@ interface StayOffersDataSource {
 
 interface PoiDataSource {
     suspend fun pointsOfInterest(query: PoiQuery, forceRefresh: Boolean): Fetched<List<PointOfInterest>>
+}
+
+interface PoiArticleDataSource {
+    /** Voce enciclopedica che descrive [poi]; `null` se non ne esiste una che lo riguardi con certezza. */
+    suspend fun findArticle(poi: PointOfInterest, forceRefresh: Boolean): Fetched<PoiArticle?>
 }
 
 interface RestaurantDataSource {
