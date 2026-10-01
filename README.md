@@ -285,7 +285,7 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
 ```bash
 ./gradlew compileDebugKotlin        # compilazione Kotlin di tutti i moduli
 ./gradlew test                      # test unitari (domain, data, app)
-./gradlew :app:assembleDebug        # APK di debug
+./gradlew :app:assembleDebug        # APK di debug (arm64-v8a, armeabi-v7a e universale)
 ```
 
 444 test unitari:
@@ -439,8 +439,9 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
   risorse dell'app, quindi segue la lingua dell'interfaccia. La voce è quella del telefono
   (`TextToSpeech`, dichiarata in `<queries>` per Android 11+): se manca per una lingua, l'app lo dice.
   ML Kit invia a Google statistiche anonime d'uso della libreria.
-- **Peso dell'APK:** mappa e traduttore hanno librerie native; l'APK contiene solo quelle per i
-  telefoni ARM (64 e 32 bit), compresse, e pesa circa 40 MB.
+- **Peso dell'APK:** mappa e traduttore hanno librerie native, incluse solo per i telefoni ARM e
+  compresse. `assembleDebug` genera tre APK: `arm64-v8a` (circa 30 MB, per quasi tutti i telefoni),
+  `armeabi-v7a` (vecchi telefoni a 32 bit) e `universal` (entrambi, circa 40 MB).
 - **Trasporti senza chiave:** [Transitous](https://transitous.org) offre percorsi reali senza chiave,
   ma solo per app open source non commerciali e previo contatto con il progetto: per ora non è
   attivo e senza chiave Google il percorso reale si apre in Google Maps.

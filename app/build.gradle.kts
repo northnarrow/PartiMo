@@ -38,11 +38,17 @@ android {
         buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${secret("GOOGLE_MAPS_API_KEY")}\"")
         // Assistente di viaggio (itinerari e domande): Google Gemini, livello gratuito.
         buildConfigField("String", "GEMINI_API_KEY", "\"${secret("GEMINI_API_KEY")}\"")
+    }
 
-        // Librerie native (mappa, traduttore) per i telefoni ARM a 64 e 32 bit: gli emulatori recenti le
-        // eseguono con la traduzione ARM, e senza x86 l'APK pesa circa 10 MB in meno.
-        ndk {
-            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
+    // Librerie native (mappa, traduttore) solo per i telefoni ARM: gli emulatori recenti le eseguono con
+    // la traduzione ARM. Oltre all'APK universale si generano gli APK per i telefoni a 64 bit (quasi
+    // tutti) e a 32 bit, più leggeri da scaricare e installare.
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("arm64-v8a", "armeabi-v7a")
+            isUniversalApk = true
         }
     }
 
@@ -71,8 +77,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
         // Librerie native compresse nell'APK: file da scaricare molto più leggero (Android le estrae all'installazione).
+        // Niente librerie x86: anche l'APK universale contiene solo quelle per i telefoni ARM.
         jniLibs {
             useLegacyPackaging = true
+            excludes += listOf("lib/x86/**", "lib/x86_64/**")
         }
     }
 
