@@ -24,6 +24,7 @@ import com.partimo.domain.model.plan.TripPreferences
 import com.partimo.domain.model.poi.PoiArticle
 import com.partimo.domain.model.poi.PoiQuery
 import com.partimo.domain.model.poi.PointOfInterest
+import com.partimo.domain.model.saved.SavedTrip
 import com.partimo.domain.model.stay.AccommodationOffer
 import com.partimo.domain.model.stay.AccommodationSearchQuery
 import com.partimo.domain.model.stay.Lodging
@@ -33,8 +34,8 @@ import com.partimo.domain.model.transit.TransitRouteQuery
 import com.partimo.domain.model.weather.DailyForecast
 import com.partimo.domain.model.weather.DailyObservation
 import com.partimo.domain.model.weather.WeatherSnapshot
-import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 // Contratti del dominio verso il data layer. Le implementazioni decidono provider, cache e
 // threading; il parametro forceRefresh permette di ignorare una cache ancora valida.
@@ -167,6 +168,14 @@ interface UserPreferencesRepository {
     val departure: Flow<DeparturePoint?>
 
     suspend fun setDeparture(departure: DeparturePoint)
+}
+
+/** Viaggi salvati con i loro preferiti, sul dispositivo. */
+interface SavedTripRepository {
+    val trips: Flow<List<SavedTrip>>
+
+    /** Modifica atomica dell'elenco: lettura e scrittura nella stessa transazione. */
+    suspend fun update(transform: (List<SavedTrip>) -> List<SavedTrip>)
 }
 
 /** Liste di controllo salvate sul dispositivo (es. la valigia di un viaggio): le voci spuntate di ogni lista. */

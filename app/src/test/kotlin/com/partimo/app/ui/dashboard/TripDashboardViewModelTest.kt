@@ -10,10 +10,12 @@ import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.dining.PriceLevel
-import com.partimo.domain.model.poi.PoiCategory
-import com.partimo.domain.model.place.DeparturePoint
 import com.partimo.domain.model.event.EventKind
 import com.partimo.domain.model.event.EventTiming
+import com.partimo.domain.model.place.DeparturePoint
+import com.partimo.domain.model.poi.PoiCategory
+import com.partimo.domain.model.saved.Favorite
+import com.partimo.domain.model.saved.FavoriteKind
 import com.partimo.domain.service.SeasonalCalendar
 import com.partimo.domain.testing.FakeAccommodationRepository
 import com.partimo.domain.testing.FakeEventRepository
@@ -23,6 +25,7 @@ import com.partimo.domain.testing.FakeLodgingRepository
 import com.partimo.domain.testing.FakePoiRepository
 import com.partimo.domain.testing.FakePriceWatchRepository
 import com.partimo.domain.testing.FakeRestaurantRepository
+import com.partimo.domain.testing.FakeSavedTripRepository
 import com.partimo.domain.testing.FakeTransitRepository
 import com.partimo.domain.testing.FakeUserPreferencesRepository
 import com.partimo.domain.testing.FakeWeatherRepository
@@ -33,10 +36,13 @@ import com.partimo.domain.usecase.GetSeasonalHighlightsUseCase
 import com.partimo.domain.usecase.GetTripEventsUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObservePriceAlertUseCase
+import com.partimo.domain.usecase.ObserveSavedTripUseCase
 import com.partimo.domain.usecase.PlanTransitRouteUseCase
 import com.partimo.domain.usecase.SearchAccommodationsUseCase
 import com.partimo.domain.usecase.SearchFlightsUseCase
 import com.partimo.domain.usecase.SetPriceAlertUseCase
+import com.partimo.domain.usecase.SetTripSavedUseCase
+import com.partimo.domain.usecase.ToggleFavoriteUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -108,6 +114,8 @@ class TripDashboardViewModelTest {
     private val preferences = FakeUserPreferencesRepository(initial = TestData.departure("Milano", "MXP"))
     private val watches = FakePriceWatchRepository()
 
+    private val savedTrips = FakeSavedTripRepository()
+
     private fun createViewModel(initialPeriod: TravelPeriod = december) = TripDashboardViewModel(
         searchFlights = SearchFlightsUseCase(flights, clock = TestData.FIXED_CLOCK),
         searchAccommodations = SearchAccommodationsUseCase(stays, clock = TestData.FIXED_CLOCK),
@@ -122,7 +130,39 @@ class TripDashboardViewModelTest {
         clock = TestData.FIXED_CLOCK,
         destination = SampleDestinations.VIENNA,
         initialPeriod = initialPeriod,
+        observeSavedTrip = ObserveSavedTripUseCase(savedTrips),
+        setTripSaved = SetTripSavedUseCase(savedTrips, TestData.FIXED_CLOCK),
+        toggleFavorite = ToggleFavoriteUseCase(savedTrips, TestData.FIXED_CLOCK),
     )
+
+    @Test
+    fun `il segnalibro salva il viaggio del periodo mostrato e le stelle i suoi preferiti`() = runTest {
+        val viewModel = createViewModel()
+        assertTrue(viewModel.uiState.value.favoritesEnabled)
+        assertEquals(emptySet(), viewModel.uiState.value.favoriteKeys)
+
+        viewModel.onToggleTripSaved()
+        advanceUntilIdle()
+        assertEquals(DashboardMessage.TRIP_SAVED, viewModel.uiState.value.message)
+        assertEquals("AT:Vienna:2026-12", viewModel.uiState.value.savedTrip?.id)
+
+        val museum = Favorite("museum", FavoriteKind.PLACE, "Kunsthistorisches Museum")
+        viewModel.onToggleFavorite(museum)
+        advanceUntilIdle()
+        assertEquals(setOf("PLACE:museum"), viewModel.uiState.value.favoriteKeys)
+
+        // Un altro periodo è un altro viaggio: niente segnalibro né stelle.
+        viewModel.onPeriodSelected(TravelPeriod.NextDays)
+        advanceUntilIdle()
+        assertNull(viewModel.uiState.value.savedTrip)
+
+        viewModel.onPeriodSelected(december)
+        advanceUntilIdle()
+        viewModel.onToggleTripSaved()
+        advanceUntilIdle()
+        assertEquals(DashboardMessage.TRIP_REMOVED, viewModel.uiState.value.message)
+        assertTrue(savedTrips.current.isEmpty())
+    }
 
     @Test
     fun `all'avvio carica tutte le sezioni partendo dalla città scelta dall'utente`() = runTest {

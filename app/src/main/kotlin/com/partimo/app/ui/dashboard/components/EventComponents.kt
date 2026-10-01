@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,6 +16,7 @@ import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -25,9 +27,11 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.partimo.app.R
 import com.partimo.app.ui.common.DashboardSection
+import com.partimo.app.ui.common.FavoriteButton
 import com.partimo.app.ui.common.Formatters
 import com.partimo.app.ui.common.TravelLinks
 import com.partimo.app.ui.common.UiState
+import com.partimo.app.ui.common.toFavorite
 import com.partimo.app.ui.place.googleMapsSearchUrl
 import com.partimo.domain.model.TripContext
 import com.partimo.domain.model.event.EventKind
@@ -54,6 +58,8 @@ fun TripEventsSection(
     onOpenLink: (String) -> Unit,
     onEventClick: (PointOfInterest) -> Unit,
     modifier: Modifier = Modifier,
+    favoriteKeys: Set<String>? = null,
+    onToggleFavorite: (TripEvent) -> Unit = {},
 ) {
     val city = trip.destination.name
     // Dalle date del viaggio, non dagli eventi: il pulsante resta anche se la fonte degli eventi non risponde.
@@ -98,7 +104,13 @@ fun TripEventsSection(
             tripEvents.events.forEachIndexed { index, event ->
                 if (index > 0) HorizontalDivider(modifier = Modifier.padding(horizontal = 8.dp))
                 val place = event.toPointOfInterest()
-                TripEventRow(event = event, onClick = place?.let { { onEventClick(it) } })
+                TripEventRow(
+                    event = event,
+                    onClick = place?.let { { onEventClick(it) } },
+                    // Le festività valgono in tutto il paese: non sono un posto da salvare.
+                    isFavorite = favoriteKeys?.takeIf { event.kind != EventKind.PUBLIC_HOLIDAY }?.let { event.toFavorite().key in it },
+                    onToggleFavorite = { onToggleFavorite(event) },
+                )
             }
             Text(
                 text = stringResource(R.string.events_attribution),
@@ -111,7 +123,13 @@ fun TripEventsSection(
 }
 
 @Composable
-fun TripEventRow(event: TripEvent, modifier: Modifier = Modifier, onClick: (() -> Unit)? = null) {
+fun TripEventRow(
+    event: TripEvent,
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+    isFavorite: Boolean? = null,
+    onToggleFavorite: () -> Unit = {},
+) {
     val whenText = eventTimingText(event)
     val details = when (event.kind) {
         EventKind.PUBLIC_HOLIDAY -> listOfNotNull(event.localName, stringResource(R.string.event_holiday_note)).joinToString(" · ")
@@ -144,7 +162,16 @@ fun TripEventRow(event: TripEvent, modifier: Modifier = Modifier, onClick: (() -
                 )
             }
         },
-        trailingContent = onClick?.let { { Text("›", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary) } },
+        trailingContent = if (onClick == null && isFavorite == null) {
+            null
+        } else {
+            {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    isFavorite?.let { FavoriteButton(isFavorite = it, name = event.name, onToggle = onToggleFavorite) }
+                    if (onClick != null) Text("›", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
+                }
+            }
+        },
         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
     )
 }

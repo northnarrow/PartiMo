@@ -7,6 +7,7 @@ import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DeparturePoint
 import com.partimo.domain.model.place.DestinationSuggestion
+import com.partimo.domain.model.saved.SavedTrip
 import java.time.LocalDate
 
 /** Stato della schermata iniziale "Dove vuoi andare?". */
@@ -26,6 +27,8 @@ data class SearchUiState(
     /** Apertura della dashboard da eseguire; la UI la consuma e poi lo notifica. */
     val pendingNavigation: PendingNavigation? = null,
     val preparationError: PreparationError? = null,
+    /** Viaggi salvati, da riaprire con un tocco (prima quelli in arrivo). */
+    val savedTrips: List<SavedTrip> = emptyList(),
 )
 
 data class PendingNavigation(val destination: Destination, val period: TravelPeriod)

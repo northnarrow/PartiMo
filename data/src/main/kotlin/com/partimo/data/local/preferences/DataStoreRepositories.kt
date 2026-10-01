@@ -11,8 +11,10 @@ import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.place.DeparturePoint
+import com.partimo.domain.model.saved.SavedTrip
 import com.partimo.domain.repository.ChecklistRepository
 import com.partimo.domain.repository.PriceWatchRepository
+import com.partimo.domain.repository.SavedTripRepository
 import com.partimo.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -25,6 +27,7 @@ import java.io.IOException
 
 private val DEPARTURE_KEY = stringPreferencesKey("departure")
 private val PRICE_WATCHES_KEY = stringPreferencesKey("price_watches")
+private val SAVED_TRIPS_KEY = stringPreferencesKey("saved_trips")
 private const val USER_DATA_STORE_NAME = "partimo_user"
 
 /** Crea il DataStore dell'utente: va creato una sola volta per processo (lo garantisce DataModule). */
@@ -94,4 +97,21 @@ class DataStoreChecklistRepository internal constructor(
     }
 
     private fun keyOf(listId: String) = stringSetPreferencesKey("checklist:$listId")
+}
+
+/** Viaggi salvati con i preferiti, in JSON versionabile come gli avvisi. */
+class DataStoreSavedTripRepository internal constructor(
+    private val dataStore: DataStore<Preferences>,
+) : SavedTripRepository {
+
+    override val trips: Flow<List<SavedTrip>> = dataStore.safeData()
+        .map { preferences -> StoredJson.decodeSavedTrips(preferences[SAVED_TRIPS_KEY]) }
+        .distinctUntilChanged()
+
+    override suspend fun update(transform: (List<SavedTrip>) -> List<SavedTrip>) {
+        dataStore.edit { preferences ->
+            val current = StoredJson.decodeSavedTrips(preferences[SAVED_TRIPS_KEY])
+            preferences[SAVED_TRIPS_KEY] = StoredJson.encodeSavedTrips(transform(current))
+        }
+    }
 }

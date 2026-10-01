@@ -16,6 +16,7 @@ import com.partimo.domain.model.TripContext
 import com.partimo.domain.model.deal.PriceChange
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.poi.PoiTag
+import com.partimo.domain.model.saved.Favorite
 import com.partimo.domain.model.stay.AccommodationSearchQuery
 import com.partimo.domain.model.transit.TransitRouteQuery
 import com.partimo.domain.usecase.FindBudgetRestaurantsUseCase
@@ -24,10 +25,13 @@ import com.partimo.domain.usecase.GetSeasonalHighlightsUseCase
 import com.partimo.domain.usecase.GetTripEventsUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObservePriceAlertUseCase
+import com.partimo.domain.usecase.ObserveSavedTripUseCase
 import com.partimo.domain.usecase.PlanTransitRouteUseCase
 import com.partimo.domain.usecase.SearchAccommodationsUseCase
 import com.partimo.domain.usecase.SearchFlightsUseCase
 import com.partimo.domain.usecase.SetPriceAlertUseCase
+import com.partimo.domain.usecase.SetTripSavedUseCase
+import com.partimo.domain.usecase.ToggleFavoriteUseCase
 import com.partimo.domain.usecase.TrackedPrices
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -70,9 +74,18 @@ class TripDashboardViewModel(
     initialPeriod: TravelPeriod = TravelPeriod.NextDays,
     isDemoMode: Boolean = false,
     assistantAvailable: Boolean = false,
+    /** Viaggi salvati e preferiti: facoltativi (senza, la dashboard non mostra segnalibro e stelle). */
+    private val observeSavedTrip: ObserveSavedTripUseCase? = null,
+    private val setTripSaved: SetTripSavedUseCase? = null,
+    private val toggleFavorite: ToggleFavoriteUseCase? = null,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(initialState(initialPeriod, isDemoMode).copy(assistantAvailable = assistantAvailable))
+    private val _uiState = MutableStateFlow(
+        initialState(initialPeriod, isDemoMode).copy(
+            assistantAvailable = assistantAvailable,
+            favoritesEnabled = observeSavedTrip != null && setTripSaved != null && toggleFavorite != null,
+        ),
+    )
     val uiState: StateFlow<TripDashboardUiState> = _uiState.asStateFlow()
 
     private val sectionJobs = mutableMapOf<DashboardSection, Job>()
@@ -90,6 +103,16 @@ class TripDashboardViewModel(
                 } else {
                     loadSection(DashboardSection.FLIGHTS, forceRefresh = false)
                 }
+            }
+        }
+        observeSavedTrip?.let { observe ->
+            viewModelScope.launch {
+                // Segnalibro e stelle seguono il periodo mostrato: ogni periodo è un viaggio diverso.
+                _uiState
+                    .map { it.period }
+                    .distinctUntilChanged()
+                    .flatMapLatest { period -> observe(destination, period) }
+                    .collect { trip -> _uiState.update { it.copy(savedTrip = trip) } }
             }
         }
         viewModelScope.launch {
@@ -163,6 +186,24 @@ class TripDashboardViewModel(
             }
             _uiState.update { it.copy(message = message) }
         }
+    }
+
+    /** Segnalibro: salva il viaggio (lo si ritrova nella schermata iniziale) o lo toglie dai salvati. */
+    fun onToggleTripSaved() {
+        val save = setTripSaved ?: return
+        val state = _uiState.value
+        val saving = state.savedTrip == null
+        viewModelScope.launch {
+            save(destination, state.period, saving)
+            _uiState.update { it.copy(message = if (saving) DashboardMessage.TRIP_SAVED else DashboardMessage.TRIP_REMOVED) }
+        }
+    }
+
+    /** Stella su un luogo, evento, ristorante o alloggio: il primo preferito salva anche il viaggio. */
+    fun onToggleFavorite(favorite: Favorite) {
+        val toggle = toggleFavorite ?: return
+        val period = _uiState.value.period
+        viewModelScope.launch { toggle(destination, period, favorite) }
     }
 
     fun onRefreshSummaryShown() {
@@ -372,6 +413,9 @@ class TripDashboardViewModel(
                     initialPeriod = initialPeriod,
                     isDemoMode = container.isDemoMode,
                     assistantAvailable = container.planTrip.isAvailable,
+                    observeSavedTrip = container.observeSavedTrip,
+                    setTripSaved = container.setTripSaved,
+                    toggleFavorite = container.toggleFavorite,
                 )
             }
         }

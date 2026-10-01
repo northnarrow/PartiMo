@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.partimo.app.R
+import com.partimo.app.ui.common.FavoriteButton
 import com.partimo.app.ui.common.SectionError
 import com.partimo.app.ui.common.SectionLoading
 import com.partimo.app.ui.common.UiState
@@ -81,6 +82,7 @@ data class PlaceDetailActions(
     val onNavigate: () -> Unit = {},
     val onOpenLink: (String) -> Unit = {},
     val onRetry: () -> Unit = {},
+    val onToggleFavorite: () -> Unit = {},
 )
 
 /** Collega il ViewModel alla scheda e apre Google Maps o il browser interno per le azioni esterne. */
@@ -104,6 +106,7 @@ fun PlaceDetailRoute(viewModel: PlaceDetailViewModel, onBack: () -> Unit, modifi
                 if (!ExternalLinks.openLink(context, url, toolbarColor)) Toast.makeText(context, noBrowser, Toast.LENGTH_LONG).show()
             },
             onRetry = viewModel::retry,
+            onToggleFavorite = viewModel::onToggleFavorite,
         ),
         modifier = modifier,
     )
@@ -127,6 +130,9 @@ fun PlaceDetailScreen(state: PlaceDetailUiState, actions: PlaceDetailActions, mo
                     IconButton(onClick = actions.onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.action_back))
                     }
+                },
+                actions = {
+                    state.isFavorite?.let { favorite -> FavoriteButton(isFavorite = favorite, name = poi.name, onToggle = actions.onToggleFavorite) }
                 },
             )
         },

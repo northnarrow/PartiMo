@@ -2,8 +2,8 @@ package com.partimo.data.di
 
 import android.content.Context
 import com.partimo.data.cache.CachePolicy
-import com.partimo.data.cache.ResponseCache
 import com.partimo.data.cache.PartiMoDatabase
+import com.partimo.data.cache.ResponseCache
 import com.partimo.data.config.ApiConfig
 import com.partimo.data.demo.DemoCatalog
 import com.partimo.data.demo.DemoFlightDataSource
@@ -13,6 +13,7 @@ import com.partimo.data.local.BundledCountryInfoDataSource
 import com.partimo.data.local.CuratedDestinationCatalog
 import com.partimo.data.local.preferences.DataStoreChecklistRepository
 import com.partimo.data.local.preferences.DataStorePriceWatchRepository
+import com.partimo.data.local.preferences.DataStoreSavedTripRepository
 import com.partimo.data.local.preferences.DataStoreUserPreferencesRepository
 import com.partimo.data.local.preferences.createUserDataStore
 import com.partimo.data.network.HttpClientFactory
@@ -56,9 +57,9 @@ import com.partimo.data.repository.DefaultPoiArticleRepository
 import com.partimo.data.repository.DefaultPoiRepository
 import com.partimo.data.repository.DefaultRestaurantRepository
 import com.partimo.data.repository.DefaultTransitRepository
+import com.partimo.data.repository.DefaultTravelAssistantRepository
 import com.partimo.data.repository.DefaultTravelGuideRepository
 import com.partimo.data.repository.DefaultTripWeatherRepository
-import com.partimo.data.repository.DefaultTravelAssistantRepository
 import com.partimo.data.repository.DefaultWeatherRepository
 import com.partimo.data.source.NoStayOffersDataSource
 import com.partimo.domain.repository.AccommodationRepository
@@ -76,10 +77,11 @@ import com.partimo.domain.repository.PoiArticleRepository
 import com.partimo.domain.repository.PoiRepository
 import com.partimo.domain.repository.PriceWatchRepository
 import com.partimo.domain.repository.RestaurantRepository
+import com.partimo.domain.repository.SavedTripRepository
 import com.partimo.domain.repository.TransitRepository
+import com.partimo.domain.repository.TravelAssistantRepository
 import com.partimo.domain.repository.TravelGuideRepository
 import com.partimo.domain.repository.TripWeatherRepository
-import com.partimo.domain.repository.TravelAssistantRepository
 import com.partimo.domain.repository.UserPreferencesRepository
 import com.partimo.domain.repository.WeatherRepository
 import io.ktor.client.HttpClient
@@ -247,6 +249,9 @@ class DataModule(
 
     /** Preferenze dell'utente (punto di partenza), salvate sul dispositivo. */
     val userPreferencesRepository: UserPreferencesRepository by lazy { DataStoreUserPreferencesRepository(userDataStore) }
+
+    /** Viaggi salvati e preferiti, sul dispositivo. */
+    val savedTripRepository: SavedTripRepository by lazy { DataStoreSavedTripRepository(userDataStore) }
 
     /** Liste di controllo dei viaggi (la valigia), salvate sul dispositivo. */
     val checklistRepository: ChecklistRepository by lazy { DataStoreChecklistRepository(userDataStore) }

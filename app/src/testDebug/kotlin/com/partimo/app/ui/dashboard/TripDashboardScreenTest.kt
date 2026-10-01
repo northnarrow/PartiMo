@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
@@ -353,6 +354,32 @@ class TripDashboardScreenTest {
         composeRule.onNodeWithText(text(R.string.assistant_itinerary_chip)).assertDoesNotExist()
         state.value = state.value.copy(assistantAvailable = true)
         composeRule.onNodeWithText(text(R.string.assistant_itinerary_chip)).assertExists()
+    }
+
+    @Test
+    fun `stelle e segnalibro salvano luoghi, eventi, ristoranti e il viaggio`() {
+        val favorites = mutableListOf<com.partimo.domain.model.saved.Favorite>()
+        var saves = 0
+        var opened = 0
+        val state = showDashboard(
+            PreviewData.loadedState().copy(selectedSection = DashboardSection.HIGHLIGHTS),
+            DashboardActions(onToggleFavorite = { favorites += it }, onToggleTripSaved = { saves++ }, onOpenFavorites = { opened++ }),
+        )
+
+        composeRule.onNodeWithContentDescription(text(R.string.trip_unsave)).performClick()
+        composeRule.onNodeWithContentDescription(composeRule.activity.getString(R.string.favorite_remove, "Weihnachtsmarkt am Spittelberg")).assertExists()
+        val addMarket = composeRule.activity.getString(R.string.favorite_add, "Wiener Christkindlmarkt al Rathausplatz")
+        composeRule.onNodeWithTag(DASHBOARD_LIST_TAG).performScrollToNode(hasContentDescription(addMarket))
+        composeRule.onNodeWithContentDescription(addMarket).performClick()
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.favorites_chip, 3)).performClick()
+
+        state.value = PreviewData.openDataState().copy(selectedSection = DashboardSection.RESTAURANTS)
+        composeRule.onNodeWithContentDescription(composeRule.activity.getString(R.string.favorite_add, "Pizza Bizi")).performClick()
+
+        assertEquals(1, saves)
+        assertEquals(1, opened)
+        // Un mercatino tra i luoghi da vedere è un evento anche tra i preferiti.
+        assertEquals(listOf("EVENT:xmas", "RESTAURANT:osm:node/13"), favorites.map { it.key })
     }
 
     @Test

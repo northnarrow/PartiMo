@@ -4,9 +4,11 @@ import android.app.Application
 import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -146,6 +148,33 @@ class SearchScreenTest {
         composeRule.waitForIdle()
 
         assertEquals("Tokyo", chosen?.destination?.city?.name)
+    }
+
+    @Test
+    fun `i viaggi salvati si riaprono o si tolgono dalla schermata iniziale`() {
+        val opened = mutableListOf<String>()
+        val removed = mutableListOf<String>()
+        composeRule.setContent {
+            PartiMoTheme {
+                SearchScreen(
+                    PreviewData.searchIdleState().copy(savedTrips = PreviewData.savedTrips),
+                    query = "",
+                    actions = SearchActions(onSavedTripSelected = { opened += it.id }, onRemoveSavedTrip = { removed += it.id }),
+                )
+            }
+        }
+
+        composeRule.onNodeWithText(text(R.string.saved_trips_title)).assertExists()
+        composeRule.onNodeWithText("10–14 dic").assertExists()
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.saved_trip_in_days, 71)).assertExists()
+        composeRule.onNodeWithText(composeRule.activity.getString(R.string.saved_trip_favorites, 3)).assertExists()
+        composeRule.onNodeWithText("🇦🇹 Vienna").performClick()
+        val removeLisbon = composeRule.activity.getString(R.string.saved_trip_remove, "Lisbona")
+        composeRule.onNodeWithTag(SAVED_TRIPS_TAG).performScrollToNode(hasContentDescription(removeLisbon))
+        composeRule.onNodeWithContentDescription(removeLisbon).performClick()
+
+        assertEquals(listOf("AT:Vienna:2026-12"), opened)
+        assertEquals(listOf("PT:Lisbona:2027-03"), removed)
     }
 
     @Test

@@ -26,6 +26,8 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Refresh
@@ -69,9 +71,11 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.partimo.app.R
+import com.partimo.app.navigation.TripArgs
 import com.partimo.app.ui.common.Formatters
 import com.partimo.app.ui.common.PeriodChips
 import com.partimo.app.ui.common.flagEmoji
+import com.partimo.app.ui.common.toFavorite
 import com.partimo.app.ui.dashboard.components.FlightsSection
 import com.partimo.app.ui.dashboard.components.HighlightsSection
 import com.partimo.app.ui.dashboard.components.LodgingsSection
@@ -79,6 +83,7 @@ import com.partimo.app.ui.dashboard.components.RestaurantsSection
 import com.partimo.app.ui.dashboard.components.StaysSection
 import com.partimo.app.ui.dashboard.components.TransitSection
 import com.partimo.app.ui.dashboard.components.TripEventsSection
+import com.partimo.app.ui.dashboard.components.lodgingMapsUrl
 import com.partimo.app.ui.place.ExternalLinks
 import com.partimo.app.ui.place.googleMapsTransitUrl
 import com.partimo.app.ui.theme.PartiMoTheme
@@ -86,6 +91,7 @@ import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.TripContext
 import com.partimo.domain.model.deal.PriceChange
 import com.partimo.domain.model.poi.PointOfInterest
+import com.partimo.domain.model.saved.Favorite
 import java.time.Instant
 import java.time.ZoneId
 
@@ -117,6 +123,12 @@ data class DashboardActions(
     val onOpenAssistant: () -> Unit = {},
     /** Guida del viaggio: meteo per le date, paese, valuta, emergenze, Wikivoyage. */
     val onOpenGuide: () -> Unit = {},
+    /** Segnalibro: salva il viaggio o lo toglie dai salvati. */
+    val onToggleTripSaved: () -> Unit = {},
+    /** Stella su un luogo, evento, ristorante o alloggio. */
+    val onToggleFavorite: (Favorite) -> Unit = {},
+    /** Elenco dei preferiti del viaggio. */
+    val onOpenFavorites: () -> Unit = {},
 )
 
 /**
@@ -128,11 +140,12 @@ fun TripDashboardRoute(
     viewModel: TripDashboardViewModel,
     onBack: () -> Unit,
     onChooseDeparture: () -> Unit,
-    onOpenPlace: (PointOfInterest) -> Unit,
+    onOpenPlace: (PointOfInterest, TripArgs) -> Unit,
     modifier: Modifier = Modifier,
-    onOpenItinerary: (TripContext) -> Unit = {},
-    onOpenAssistant: (TripContext) -> Unit = {},
-    onOpenGuide: (TripContext) -> Unit = {},
+    onOpenItinerary: (TripArgs) -> Unit = {},
+    onOpenAssistant: (TripArgs) -> Unit = {},
+    onOpenGuide: (TripArgs) -> Unit = {},
+    onOpenFavorites: (TripArgs) -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -163,13 +176,16 @@ fun TripDashboardRoute(
             onRefreshSummaryShown = viewModel::onRefreshSummaryShown,
             onMessageShown = viewModel::onMessageShown,
             onOpenNotificationSettings = { context.startActivity(notificationSettingsIntent(context)) },
-            onOpenPlace = onOpenPlace,
+            onOpenPlace = { poi -> onOpenPlace(poi, TripArgs.from(state.trip, state.period)) },
             onOpenLink = { url ->
                 if (!ExternalLinks.openLink(context, url, toolbarColor)) Toast.makeText(context, noAppForLink, Toast.LENGTH_LONG).show()
             },
-            onOpenItinerary = { onOpenItinerary(state.trip) },
-            onOpenAssistant = { onOpenAssistant(state.trip) },
-            onOpenGuide = { onOpenGuide(state.trip) },
+            onOpenItinerary = { onOpenItinerary(TripArgs.from(state.trip, state.period)) },
+            onOpenAssistant = { onOpenAssistant(TripArgs.from(state.trip, state.period)) },
+            onOpenGuide = { onOpenGuide(TripArgs.from(state.trip, state.period)) },
+            onToggleTripSaved = viewModel::onToggleTripSaved,
+            onToggleFavorite = viewModel::onToggleFavorite,
+            onOpenFavorites = { onOpenFavorites(TripArgs.from(state.trip, state.period)) },
         ),
         modifier = modifier,
     )
@@ -238,9 +254,11 @@ fun TripDashboardScreen(
             )
             TripToolChips(
                 assistantAvailable = state.assistantAvailable,
+                favoriteCount = state.savedTrip?.favorites?.size ?: 0,
                 onOpenGuide = actions.onOpenGuide,
                 onOpenItinerary = actions.onOpenItinerary,
                 onOpenAssistant = actions.onOpenAssistant,
+                onOpenFavorites = actions.onOpenFavorites,
             )
             PullToRefreshBox(
                 isRefreshing = state.isRefreshing,
@@ -297,6 +315,8 @@ private fun LazyListScope.sectionContent(section: DashboardSection, state: TripD
                     trip = state.trip,
                     onRetry = { actions.onRetry(DashboardSection.STAYS) },
                     onOpenLink = actions.onOpenLink,
+                    favoriteKeys = state.favoriteKeys,
+                    onToggleFavorite = { lodging -> actions.onToggleFavorite(lodging.toFavorite(lodgingMapsUrl(lodging, state.trip.destination.name))) },
                 )
             }
         }
@@ -308,6 +328,8 @@ private fun LazyListScope.sectionContent(section: DashboardSection, state: TripD
                     onRetry = actions.onRetryEvents,
                     onOpenLink = actions.onOpenLink,
                     onEventClick = actions.onOpenPlace,
+                    favoriteKeys = state.favoriteKeys,
+                    onToggleFavorite = { event -> actions.onToggleFavorite(event.toFavorite()) },
                 )
             }
             item(key = "highlights") {
@@ -318,6 +340,8 @@ private fun LazyListScope.sectionContent(section: DashboardSection, state: TripD
                     onPhotoSpotsOnlyChanged = actions.onPhotoSpotsOnlyChanged,
                     onRetry = { actions.onRetry(DashboardSection.HIGHLIGHTS) },
                     onPlaceClick = actions.onOpenPlace,
+                    favoriteKeys = state.favoriteKeys,
+                    onToggleFavorite = { poi -> actions.onToggleFavorite(poi.toFavorite()) },
                 )
             }
         }
@@ -341,6 +365,8 @@ private fun LazyListScope.sectionContent(section: DashboardSection, state: TripD
                 onOpenLink = actions.onOpenLink,
                 hoursWeekOf = state.trip.departureDate,
                 nowAtDestination = state.nowAtDestination,
+                favoriteKeys = state.favoriteKeys,
+                onToggleFavorite = { restaurant -> actions.onToggleFavorite(restaurant.toFavorite()) },
             )
         }
     }
@@ -378,6 +404,16 @@ private fun DashboardTopBar(state: TripDashboardUiState, actions: DashboardActio
             }
         },
         actions = {
+            if (state.favoritesEnabled) {
+                val saved = state.savedTrip != null
+                IconButton(onClick = actions.onToggleTripSaved) {
+                    Icon(
+                        imageVector = if (saved) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        contentDescription = stringResource(if (saved) R.string.trip_unsave else R.string.trip_save),
+                        tint = if (saved) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
             IconButton(onClick = actions.onToggleAlert) {
                 Icon(
                     imageVector = if (state.alertEnabled) Icons.Filled.Notifications else Icons.Outlined.Notifications,
@@ -448,12 +484,24 @@ const val TRIP_TOOLS_TAG = "trip_tools"
  * domande all'assistente con l'IA.
  */
 @Composable
-private fun TripToolChips(assistantAvailable: Boolean, onOpenGuide: () -> Unit, onOpenItinerary: () -> Unit, onOpenAssistant: () -> Unit) {
+private fun TripToolChips(
+    assistantAvailable: Boolean,
+    favoriteCount: Int,
+    onOpenGuide: () -> Unit,
+    onOpenItinerary: () -> Unit,
+    onOpenAssistant: () -> Unit,
+    onOpenFavorites: () -> Unit,
+) {
     LazyRow(
         modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp).testTag(TRIP_TOOLS_TAG),
         contentPadding = PaddingValues(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
+        if (favoriteCount > 0) {
+            item(key = "favorites") {
+                AssistChip(onClick = onOpenFavorites, label = { Text(stringResource(R.string.favorites_chip, favoriteCount)) }, leadingIcon = { Text("⭐") })
+            }
+        }
         item(key = "guide") {
             AssistChip(onClick = onOpenGuide, label = { Text(stringResource(R.string.guide_chip)) }, leadingIcon = { Text("📖") })
         }
@@ -546,6 +594,8 @@ private fun messageText(message: DashboardMessage, destinationName: String): Str
     DashboardMessage.ALERT_ENABLED_WITHOUT_NOTIFICATIONS -> stringResource(R.string.alert_enabled_without_notifications)
     DashboardMessage.ALERT_DISABLED -> stringResource(R.string.alert_disabled)
     DashboardMessage.ALERT_NEEDS_DEPARTURE -> stringResource(R.string.alert_needs_departure)
+    DashboardMessage.TRIP_SAVED -> stringResource(R.string.trip_saved_message)
+    DashboardMessage.TRIP_REMOVED -> stringResource(R.string.trip_removed_message)
 }
 
 // ---- Anteprime ---------------------------------------------------------------------------------

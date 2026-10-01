@@ -429,4 +429,30 @@
     <string name="wheelchair_yes">♿ Accessibile in carrozzina</string>
     <string name="wheelchair_limited">♿ In parte accessibile in carrozzina</string>
     <string name="wheelchair_no">Non accessibile in carrozzina</string>
+
+    <!-- Preferiti e viaggi salvati -->
+    <string name="favorite_add">Aggiungi %1$s ai preferiti</string>
+    <string name="favorite_remove">Togli %1$s dai preferiti</string>
+    <string name="favorite_state_on">Nei preferiti</string>
+    <string name="favorite_state_off">Non nei preferiti</string>
+    <string name="trip_save">Salva il viaggio</string>
+    <string name="trip_unsave">Togli il viaggio dai salvati</string>
+    <string name="trip_saved_message">Viaggio salvato: lo ritrovi nella schermata iniziale.</string>
+    <string name="trip_removed_message">Viaggio tolto dai salvati.</string>
+    <string name="favorites_chip">Preferiti (%1$d)</string>
+    <string name="favorites_title">I preferiti di %1$s</string>
+    <string name="favorites_empty">Ancora nessun preferito: tocca ☆ su luoghi, eventi, ristoranti e alloggi per ritrovarli qui.</string>
+    <string name="favorites_places">Da vedere</string>
+    <string name="favorites_events">Eventi</string>
+    <string name="favorites_restaurants">Ristoranti</string>
+    <string name="favorites_lodgings">Alloggi</string>
+    <string name="favorites_walk">Giro a piedi tra i preferiti</string>
+    <string name="favorites_share">Condividi i preferiti</string>
+    <string name="favorites_share_title">I miei preferiti a %1$s</string>
+    <string name="saved_trips_title">I tuoi viaggi</string>
+    <string name="saved_trip_in_days">tra %1$d giorni</string>
+    <string name="saved_trip_tomorrow">domani</string>
+    <string name="saved_trip_past">passato</string>
+    <string name="saved_trip_favorites">★ %1$d</string>
+    <string name="saved_trip_remove">Togli %1$s dai viaggi salvati</string>
 </resources>

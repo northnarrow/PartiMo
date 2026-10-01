@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -81,6 +82,9 @@ import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DeparturePoint
 import com.partimo.domain.model.place.DestinationSuggestion
+import com.partimo.domain.model.saved.SavedTrip
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 /** Tag della lista della schermata di ricerca, usato dai test UI per lo scroll. */
 const val SEARCH_LIST_TAG = "search_list"
@@ -99,6 +103,8 @@ data class SearchActions(
     val onMoreRecommendations: () -> Unit = {},
     val onSuggestionSelected: (DestinationSuggestion) -> Unit = {},
     val onDismissError: () -> Unit = {},
+    val onSavedTripSelected: (SavedTrip) -> Unit = {},
+    val onRemoveSavedTrip: (SavedTrip) -> Unit = {},
 )
 
 /** Collega il ViewModel alla schermata e apre la dashboard quando la meta è pronta. */
@@ -131,6 +137,8 @@ fun SearchRoute(
             onMoreRecommendations = viewModel::onMoreRecommendations,
             onSuggestionSelected = viewModel::onSuggestionSelected,
             onDismissError = viewModel::onPreparationErrorDismissed,
+            onSavedTripSelected = viewModel::onSavedTripSelected,
+            onRemoveSavedTrip = viewModel::onRemoveSavedTrip,
         ),
         modifier = modifier,
     )
@@ -193,6 +201,16 @@ fun SearchScreen(
 
             val results = state.results
             if (results == null) {
+                if (state.savedTrips.isNotEmpty()) {
+                    item(key = "saved-trips") {
+                        SavedTripsRow(
+                            trips = state.savedTrips,
+                            today = state.today,
+                            onSelected = actions.onSavedTripSelected,
+                            onRemove = actions.onRemoveSavedTrip,
+                        )
+                    }
+                }
                 item(key = "departure") { DepartureRow(departure = state.departure, onChoose = actions.onChooseDeparture) }
                 item(key = "period") {
                     Column(modifier = Modifier.padding(top = 8.dp)) {
@@ -479,4 +497,66 @@ private fun SearchIdeasPreview() {
 @Composable
 private fun SearchResultsPreview() {
     PartiMoTheme { SearchScreen(state = PreviewData.searchResultsState(), query = "Par", actions = SearchActions()) }
+}
+
+/** Tag della riga dei viaggi salvati, scorrevole in orizzontale. */
+const val SAVED_TRIPS_TAG = "saved_trips"
+
+/** "I tuoi viaggi": i viaggi salvati, dal più vicino, da riaprire con un tocco. */
+@Composable
+private fun SavedTripsRow(trips: List<SavedTrip>, today: LocalDate, onSelected: (SavedTrip) -> Unit, onRemove: (SavedTrip) -> Unit) {
+    Column(modifier = Modifier.padding(top = 8.dp)) {
+        SectionTitle(stringResource(R.string.saved_trips_title))
+        LazyRow(
+            modifier = Modifier.testTag(SAVED_TRIPS_TAG),
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            items(trips, key = { it.id }) { trip -> SavedTripCard(trip, today, onClick = { onSelected(trip) }, onRemove = { onRemove(trip) }) }
+        }
+    }
+}
+
+@Composable
+private fun SavedTripCard(trip: SavedTrip, today: LocalDate, onClick: () -> Unit, onRemove: () -> Unit) {
+    val from = trip.departureDate(today)
+    val past = trip.period.isOver(today)
+    val days = ChronoUnit.DAYS.between(today, from)
+    OutlinedCard(onClick = onClick, modifier = Modifier.width(220.dp)) {
+        Row(modifier = Modifier.padding(start = 12.dp, top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = flagEmoji(trip.destination.countryCode) + " " + trip.destination.name,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f),
+            )
+            IconButton(onClick = onRemove) {
+                Icon(Icons.Default.Close, contentDescription = stringResource(R.string.saved_trip_remove, trip.destination.name))
+            }
+        }
+        Column(modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(
+                text = if (past) stringResource(R.string.saved_trip_past) else Formatters.dateRange(from, trip.returnDate(today)),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (!past) {
+                    Text(
+                        text = if (days <= 1) stringResource(R.string.saved_trip_tomorrow) else stringResource(R.string.saved_trip_in_days, days.toInt()),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
+                if (trip.favorites.isNotEmpty()) {
+                    Text(
+                        text = stringResource(R.string.saved_trip_favorites, trip.favorites.size),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+        }
+    }
 }

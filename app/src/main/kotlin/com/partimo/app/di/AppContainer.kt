@@ -3,9 +3,9 @@ package com.partimo.app.di
 import android.content.Context
 import android.util.Log
 import com.partimo.app.BuildConfig
-import com.partimo.data.config.ApiConfig
 import com.partimo.app.notifications.DealCheckScheduler
 import com.partimo.app.notifications.DealNotifier
+import com.partimo.data.config.ApiConfig
 import com.partimo.data.di.DataModule
 import com.partimo.domain.usecase.AskTravelAssistantUseCase
 import com.partimo.domain.usecase.CheckPriceWatchesUseCase
@@ -22,9 +22,11 @@ import com.partimo.domain.usecase.GetTripWeatherUseCase
 import com.partimo.domain.usecase.LoadTripKnowledgeUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObservePriceAlertUseCase
+import com.partimo.domain.usecase.ObserveSavedTripUseCase
+import com.partimo.domain.usecase.ObserveSavedTripsUseCase
 import com.partimo.domain.usecase.PackingChecklistUseCase
-import com.partimo.domain.usecase.PlanTripUseCase
 import com.partimo.domain.usecase.PlanTransitRouteUseCase
+import com.partimo.domain.usecase.PlanTripUseCase
 import com.partimo.domain.usecase.RecommendDestinationsUseCase
 import com.partimo.domain.usecase.ResolveDestinationUseCase
 import com.partimo.domain.usecase.SaveDepartureUseCase
@@ -32,6 +34,8 @@ import com.partimo.domain.usecase.SearchAccommodationsUseCase
 import com.partimo.domain.usecase.SearchCitiesUseCase
 import com.partimo.domain.usecase.SearchFlightsUseCase
 import com.partimo.domain.usecase.SetPriceAlertUseCase
+import com.partimo.domain.usecase.SetTripSavedUseCase
+import com.partimo.domain.usecase.ToggleFavoriteUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -75,6 +79,12 @@ interface AppContainer {
     val getExchangeRate: GetExchangeRateUseCase
     val getTravelGuide: GetTravelGuideUseCase
     val getTripWeather: GetTripWeatherUseCase
+
+    /** Viaggi salvati e preferiti. */
+    val observeSavedTrips: ObserveSavedTripsUseCase
+    val observeSavedTrip: ObserveSavedTripUseCase
+    val setTripSaved: SetTripSavedUseCase
+    val toggleFavorite: ToggleFavoriteUseCase
 }
 
 /**
@@ -172,6 +182,14 @@ class DefaultAppContainer(context: Context) : AppContainer {
     override val getTravelGuide: GetTravelGuideUseCase by lazy { GetTravelGuideUseCase(dataModule.travelGuideRepository) }
 
     override val getTripWeather: GetTripWeatherUseCase by lazy { GetTripWeatherUseCase(dataModule.tripWeatherRepository, clock) }
+
+    override val observeSavedTrips: ObserveSavedTripsUseCase by lazy { ObserveSavedTripsUseCase(dataModule.savedTripRepository, clock) }
+
+    override val observeSavedTrip: ObserveSavedTripUseCase by lazy { ObserveSavedTripUseCase(dataModule.savedTripRepository) }
+
+    override val setTripSaved: SetTripSavedUseCase by lazy { SetTripSavedUseCase(dataModule.savedTripRepository, clock) }
+
+    override val toggleFavorite: ToggleFavoriteUseCase by lazy { ToggleFavoriteUseCase(dataModule.savedTripRepository, clock) }
 
     override val planTrip: PlanTripUseCase by lazy { PlanTripUseCase(dataModule.travelAssistantRepository, loadTripKnowledge) }
 

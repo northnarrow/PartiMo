@@ -9,6 +9,7 @@ import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.event.TripEvents
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.poi.SeasonalHighlights
+import com.partimo.domain.model.saved.SavedTrip
 import com.partimo.domain.model.stay.AccommodationOffer
 import com.partimo.domain.model.stay.Lodging
 import com.partimo.domain.model.transit.TransitRoute
@@ -20,7 +21,7 @@ import java.time.LocalDateTime
 enum class DashboardSection { FLIGHTS, STAYS, HIGHLIGHTS, TRANSIT, RESTAURANTS }
 
 /** Messaggi temporanei (snackbar) mostrati dopo un'azione dell'utente. */
-enum class DashboardMessage { ALERT_ENABLED, ALERT_ENABLED_WITHOUT_NOTIFICATIONS, ALERT_DISABLED, ALERT_NEEDS_DEPARTURE }
+enum class DashboardMessage { ALERT_ENABLED, ALERT_ENABLED_WITHOUT_NOTIFICATIONS, ALERT_DISABLED, ALERT_NEEDS_DEPARTURE, TRIP_SAVED, TRIP_REMOVED }
 
 /** Esito di "Aggiorna": variazione dei prezzi migliori rispetto al caricamento precedente. */
 data class RefreshSummary(val flight: PriceChange?, val stay: PriceChange?)
@@ -58,6 +59,10 @@ data class TripDashboardUiState(
      * posto): serve per "Aperto ora". `null` per i viaggi nei mesi futuri.
      */
     val nowAtDestination: LocalDateTime? = null,
+    /** `true` se si possono salvare il viaggio e i preferiti. */
+    val favoritesEnabled: Boolean = false,
+    /** Viaggio salvato (meta e periodo mostrati), con i preferiti; `null` se non è salvato. */
+    val savedTrip: SavedTrip? = null,
     /** Viaggio seguito: PartiMo avvisa quando voli o alloggi diventano davvero convenienti. */
     val alertEnabled: Boolean = false,
     /** Ora dell'ultimo caricamento completo delle offerte. */
@@ -65,4 +70,8 @@ data class TripDashboardUiState(
     /** Da mostrare una sola volta; la UI lo consuma e lo notifica al ViewModel. */
     val refreshSummary: RefreshSummary? = null,
     val message: DashboardMessage? = null,
-)
+) {
+    /** Chiavi dei preferiti del viaggio ([com.partimo.domain.model.saved.Favorite.key]); `null` se i preferiti non sono attivi. */
+    val favoriteKeys: Set<String>?
+        get() = if (favoritesEnabled) savedTrip?.favorites?.map { it.key }?.toSet().orEmpty() else null
+}

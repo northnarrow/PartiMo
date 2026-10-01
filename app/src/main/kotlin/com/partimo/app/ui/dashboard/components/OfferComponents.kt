@@ -33,11 +33,13 @@ import coil3.compose.AsyncImage
 import com.partimo.app.R
 import com.partimo.app.ui.common.BestValueBadge
 import com.partimo.app.ui.common.DashboardSection
+import com.partimo.app.ui.common.FavoriteButton
 import com.partimo.app.ui.common.Formatters
-import com.partimo.app.ui.common.labelRes
 import com.partimo.app.ui.common.TravelLinks
 import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.common.ValueScoreBar
+import com.partimo.app.ui.common.labelRes
+import com.partimo.app.ui.common.toFavorite
 import com.partimo.app.ui.place.googleMapsSearchUrl
 import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.model.ScoredOffer
@@ -270,6 +272,8 @@ fun LodgingsSection(
     onRetry: () -> Unit,
     onOpenLink: (String) -> Unit,
     modifier: Modifier = Modifier,
+    favoriteKeys: Set<String>? = null,
+    onToggleFavorite: (Lodging) -> Unit = {},
 ) {
     DashboardSection(
         title = stringResource(R.string.section_lodgings),
@@ -282,7 +286,13 @@ fun LodgingsSection(
     ) { lodgings ->
         Column(modifier = Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             lodgings.take(MAX_VISIBLE_LODGINGS).forEach { lodging ->
-                LodgingCard(lodging = lodging, trip = trip, onOpenLink = onOpenLink)
+                LodgingCard(
+                    lodging = lodging,
+                    trip = trip,
+                    onOpenLink = onOpenLink,
+                    isFavorite = favoriteKeys?.let { lodging.toFavorite(lodgingMapsUrl(lodging, trip.destination.name)).key in it },
+                    onToggleFavorite = { onToggleFavorite(lodging) },
+                )
             }
             OsmAttribution(onOpenLink = onOpenLink)
         }
@@ -291,7 +301,14 @@ fun LodgingsSection(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun LodgingCard(lodging: Lodging, trip: TripContext, onOpenLink: (String) -> Unit, modifier: Modifier = Modifier) {
+fun LodgingCard(
+    lodging: Lodging,
+    trip: TripContext,
+    onOpenLink: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    isFavorite: Boolean? = null,
+    onToggleFavorite: () -> Unit = {},
+) {
     val city = trip.destination.name
     val details = listOfNotNull(
         stringResource(lodging.type.labelRes()),
@@ -323,6 +340,7 @@ fun LodgingCard(lodging: Lodging, trip: TripContext, onOpenLink: (String) -> Uni
                     Text(text = stringResource(access.labelRes()), style = MaterialTheme.typography.bodySmall)
                 }
             }
+            isFavorite?.let { FavoriteButton(isFavorite = it, name = lodging.name, onToggle = onToggleFavorite) }
         }
         FlowRow(
             modifier = Modifier.padding(start = 12.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
@@ -335,7 +353,7 @@ fun LodgingCard(lodging: Lodging, trip: TripContext, onOpenLink: (String) -> Uni
                 ),
                 onOpenLink = onOpenLink,
             )
-            TextButton(onClick = { onOpenLink(googleMapsSearchUrl(listOfNotNull(lodging.name, lodging.address, city).joinToString(", "))) }) {
+            TextButton(onClick = { onOpenLink(lodgingMapsUrl(lodging, city)) }) {
                 Text(stringResource(R.string.lodging_map))
             }
             lodging.website?.let { website ->
@@ -374,3 +392,7 @@ private fun LodgingType.emoji(): String = when (this) {
     LodgingType.APARTMENT -> "🏢"
     LodgingType.MOTEL -> "🚗"
 }
+
+/** Pagina della struttura su Google Maps (foto, recensioni, indicazioni). */
+fun lodgingMapsUrl(lodging: Lodging, city: String): String =
+    googleMapsSearchUrl(listOfNotNull(lodging.name, lodging.address, city).joinToString(", "))

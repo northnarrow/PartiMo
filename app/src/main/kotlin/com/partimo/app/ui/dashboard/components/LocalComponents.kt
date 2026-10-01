@@ -34,15 +34,14 @@ import androidx.core.graphics.toColorInt
 import coil3.compose.AsyncImage
 import com.partimo.app.R
 import com.partimo.app.ui.common.DashboardSection
+import com.partimo.app.ui.common.FavoriteButton
 import com.partimo.app.ui.common.Formatters
 import com.partimo.app.ui.common.OpeningHoursText
-import com.partimo.app.ui.common.labelRes
-import com.partimo.app.ui.common.openStateText
-import com.partimo.domain.service.OpeningHoursParser
-import java.time.LocalDate
-import java.time.LocalDateTime
 import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.common.emoji
+import com.partimo.app.ui.common.labelRes
+import com.partimo.app.ui.common.openStateText
+import com.partimo.app.ui.common.toFavorite
 import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.dining.BudgetDiningCriteria
@@ -50,6 +49,9 @@ import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.transit.TransferConnection
 import com.partimo.domain.model.transit.TransitLeg
 import com.partimo.domain.model.transit.TransitRoute
+import com.partimo.domain.service.OpeningHoursParser
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 
 // Ogni sezione ha una schermata dedicata: si mostrano più risultati che nella vecchia pagina unica.
@@ -215,6 +217,8 @@ fun RestaurantsSection(
     hoursWeekOf: LocalDate? = null,
     /** Ora locale della meta, per "Aperto ora"; `null` se il viaggio non è imminente. */
     nowAtDestination: LocalDateTime? = null,
+    favoriteKeys: Set<String>? = null,
+    onToggleFavorite: (Restaurant) -> Unit = {},
 ) {
     DashboardSection(
         title = stringResource(if (ratingsAvailable) R.string.section_restaurants else R.string.section_restaurants_nearby),
@@ -237,6 +241,8 @@ fun RestaurantsSection(
                     onClick = restaurant.mapsUrl?.let { url -> { onOpenLink(url) } },
                     hoursWeekOf = hoursWeekOf,
                     nowAtDestination = nowAtDestination,
+                    isFavorite = favoriteKeys?.let { restaurant.toFavorite().key in it },
+                    onToggleFavorite = { onToggleFavorite(restaurant) },
                 )
             }
             if (!ratingsAvailable) OsmAttribution(onOpenLink = onOpenLink, modifier = Modifier.padding(horizontal = 16.dp))
@@ -252,6 +258,8 @@ fun RestaurantRow(
     onClick: (() -> Unit)? = null,
     hoursWeekOf: LocalDate? = null,
     nowAtDestination: LocalDateTime? = null,
+    isFavorite: Boolean? = null,
+    onToggleFavorite: () -> Unit = {},
 ) {
     val details = listOfNotNull(
         restaurant.cuisine,
@@ -297,6 +305,7 @@ fun RestaurantRow(
         },
         trailingContent = {
             Column(horizontalAlignment = Alignment.End) {
+                isFavorite?.let { FavoriteButton(isFavorite = it, name = restaurant.name, onToggle = onToggleFavorite) }
                 restaurant.rating?.let {
                     Text(
                         text = "★ " + Formatters.rating(it),

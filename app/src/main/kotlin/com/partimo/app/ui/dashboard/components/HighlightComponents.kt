@@ -2,6 +2,7 @@ package com.partimo.app.ui.dashboard.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -22,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.pluralStringResource
@@ -32,10 +34,12 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.partimo.app.R
 import com.partimo.app.ui.common.DashboardSection
+import com.partimo.app.ui.common.FavoriteButton
 import com.partimo.app.ui.common.Formatters
 import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.common.emoji
 import com.partimo.app.ui.common.labelRes
+import com.partimo.app.ui.common.toFavorite
 import com.partimo.domain.model.poi.PoiTag
 import com.partimo.domain.model.poi.PointOfInterest
 import com.partimo.domain.model.poi.SeasonalHighlights
@@ -64,6 +68,9 @@ fun HighlightsSection(
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
     onPlaceClick: (PointOfInterest) -> Unit = {},
+    /** Preferiti del viaggio; `null` se non si possono salvare (niente stelle). */
+    favoriteKeys: Set<String>? = null,
+    onToggleFavorite: (PointOfInterest) -> Unit = {},
 ) {
     DashboardSection(
         title = stringResource(R.string.section_highlights),
@@ -91,6 +98,8 @@ fun HighlightsSection(
                     recommendation = recommendation,
                     onClick = { onPlaceClick(recommendation.poi) },
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                    isFavorite = favoriteKeys?.let { recommendation.poi.toFavorite().key in it },
+                    onToggleFavorite = { onToggleFavorite(recommendation.poi) },
                 )
             }
         }
@@ -140,19 +149,37 @@ private fun SeasonWeatherCard(highlights: SeasonalHighlights, destinationName: S
 
 /** Card di un luogo con la sua foto reale; il tocco apre la scheda con storia e indicazioni. */
 @Composable
-fun PoiCard(recommendation: SeasonalRecommendation, modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
+fun PoiCard(
+    recommendation: SeasonalRecommendation,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    /** Stato della stella dei preferiti; `null` per non mostrarla. */
+    isFavorite: Boolean? = null,
+    onToggleFavorite: () -> Unit = {},
+) {
     val poi = recommendation.poi
     val ratingText = poiRatingText(poi)
     ElevatedCard(onClick = onClick, modifier = modifier) {
-        AsyncImage(
-            model = poi.photoUrl,
-            contentDescription = poi.name,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(170.dp)
-                .background(MaterialTheme.colorScheme.surfaceVariant),
-        )
+        Box {
+            AsyncImage(
+                model = poi.photoUrl,
+                contentDescription = poi.name,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(170.dp)
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
+            )
+            isFavorite?.let { favorite ->
+                FavoriteButton(
+                    isFavorite = favorite,
+                    name = poi.name,
+                    onToggle = onToggleFavorite,
+                    onPhoto = true,
+                    modifier = Modifier.align(Alignment.TopEnd).padding(4.dp),
+                )
+            }
+        }
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(
                 text = poi.name,

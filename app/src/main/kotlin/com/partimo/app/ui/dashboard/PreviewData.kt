@@ -1,8 +1,9 @@
 package com.partimo.app.ui.dashboard
 
-import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.chat.ChatUiState
+import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.departure.DeparturePickerUiState
+import com.partimo.app.ui.favorites.FavoritesUiState
 import com.partimo.app.ui.guide.GuideUiState
 import com.partimo.app.ui.itinerary.ItineraryUiState
 import com.partimo.app.ui.place.PlaceDetailUiState
@@ -60,6 +61,9 @@ import com.partimo.domain.model.poi.Season
 import com.partimo.domain.model.poi.SeasonalHighlights
 import com.partimo.domain.model.poi.SeasonalRecommendation
 import com.partimo.domain.model.poi.WikipediaPage
+import com.partimo.domain.model.saved.Favorite
+import com.partimo.domain.model.saved.FavoriteKind
+import com.partimo.domain.model.saved.SavedTrip
 import com.partimo.domain.model.stay.AccommodationOffer
 import com.partimo.domain.model.stay.Lodging
 import com.partimo.domain.model.stay.LodgingType
@@ -81,8 +85,8 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import java.time.MonthDay
 import java.time.Month
+import java.time.MonthDay
 import java.time.YearMonth
 import java.time.ZoneId
 
@@ -267,6 +271,8 @@ internal object PreviewData {
         restaurants = UiState.Success(restaurants),
         isDemoMode = true,
         assistantAvailable = true,
+        favoritesEnabled = true,
+        savedTrip = savedTrips.first(),
         alertEnabled = true,
         pricesUpdatedAt = Instant.parse("2026-09-30T19:15:00Z"),
     )
@@ -595,6 +601,47 @@ internal object PreviewData {
                     DailyForecast(LocalDate.of(2026, 10, 4), WeatherCondition.RAIN, 16.0, 10.0, 4.5, 75),
                 ),
             ),
+        ),
+    )
+
+    // ---- Preferiti e viaggi salvati ---------------------------------------------------------------
+
+    val favorites = listOf(
+        Favorite(
+            id = stephansdom.id,
+            kind = FavoriteKind.PLACE,
+            name = stephansdom.name,
+            location = stephansdom.location,
+            wikipediaPage = stephansdom.wikipediaPage,
+            category = stephansdom.category,
+            description = stephansdom.description,
+        ),
+        Favorite(id = "wikidata:spittelberg", kind = FavoriteKind.EVENT, name = "Weihnachtsmarkt am Spittelberg", location = GeoPoint(48.2030, 16.3540)),
+        Favorite(
+            id = "osm:node/11",
+            kind = FavoriteKind.RESTAURANT,
+            name = "Figlmüller",
+            subtitle = "Austriaca · Wollzeile 5",
+            location = GeoPoint(48.2091, 16.3747),
+            url = googleMapsSearchUrl("Figlmüller, Wollzeile 5, Vienna"),
+        ),
+    )
+
+    fun favoritesState() = FavoritesUiState(
+        destination = SampleDestinations.VIENNA,
+        period = DECEMBER,
+        from = LocalDate.of(2026, Month.DECEMBER, 10),
+        to = LocalDate.of(2026, Month.DECEMBER, 14),
+        favorites = favorites,
+        loaded = true,
+    )
+
+    val savedTrips = listOf(
+        SavedTrip(SampleDestinations.VIENNA, DECEMBER, Instant.parse("2026-09-30T08:00:00Z"), favorites),
+        SavedTrip(
+            SampleDestinations.VIENNA.copy(name = "Lisbona", countryCode = "PT", airportIata = "LIS", timeZone = ZoneId.of("Europe/Lisbon")),
+            TravelPeriod.InMonth(YearMonth.of(2027, Month.MARCH)),
+            Instant.parse("2026-09-29T08:00:00Z"),
         ),
     )
 }

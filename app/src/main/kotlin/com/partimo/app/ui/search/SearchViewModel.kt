@@ -13,10 +13,13 @@ import com.partimo.domain.common.DataResult
 import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DestinationSuggestion
+import com.partimo.domain.model.saved.SavedTrip
 import com.partimo.domain.usecase.ObserveDepartureUseCase
+import com.partimo.domain.usecase.ObserveSavedTripsUseCase
 import com.partimo.domain.usecase.RecommendDestinationsUseCase
 import com.partimo.domain.usecase.ResolveDestinationUseCase
 import com.partimo.domain.usecase.SearchCitiesUseCase
+import com.partimo.domain.usecase.SetTripSavedUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,6 +39,8 @@ class SearchViewModel(
     private val recommendDestinations: RecommendDestinationsUseCase,
     private val observeDeparture: ObserveDepartureUseCase,
     private val clock: Clock,
+    observeSavedTrips: ObserveSavedTripsUseCase? = null,
+    private val setTripSaved: SetTripSavedUseCase? = null,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SearchUiState(today = LocalDate.now(clock)))
@@ -54,6 +59,19 @@ class SearchViewModel(
         viewModelScope.launch {
             observeDeparture().collect { departure -> _uiState.update { it.copy(departure = departure) } }
         }
+        observeSavedTrips?.let { observe ->
+            viewModelScope.launch { observe().collect { trips -> _uiState.update { it.copy(savedTrips = trips) } } }
+        }
+    }
+
+    /** Riapre un viaggio salvato: meta e periodo sono già noti, niente ricerca dell'aeroporto. */
+    fun onSavedTripSelected(trip: SavedTrip) {
+        _uiState.update { it.copy(pendingNavigation = PendingNavigation(trip.destination, trip.period)) }
+    }
+
+    fun onRemoveSavedTrip(trip: SavedTrip) {
+        val remove = setTripSaved ?: return
+        viewModelScope.launch { remove(trip.destination, trip.period, saved = false) }
     }
 
     fun onQueryChange(text: String) = citySearch.onQueryChange(text)
@@ -125,6 +143,8 @@ class SearchViewModel(
                     recommendDestinations = container.recommendDestinations,
                     observeDeparture = container.observeDeparture,
                     clock = container.clock,
+                    observeSavedTrips = container.observeSavedTrips,
+                    setTripSaved = container.setTripSaved,
                 )
             }
         }

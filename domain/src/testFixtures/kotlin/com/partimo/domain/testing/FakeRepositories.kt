@@ -1,6 +1,7 @@
 package com.partimo.domain.testing
 
 import com.partimo.domain.common.DataResult
+import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.dining.Restaurant
@@ -9,6 +10,9 @@ import com.partimo.domain.model.event.EventQuery
 import com.partimo.domain.model.event.TripEvent
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightSearchQuery
+import com.partimo.domain.model.guide.CountryInfo
+import com.partimo.domain.model.guide.ExchangeRates
+import com.partimo.domain.model.guide.TravelGuide
 import com.partimo.domain.model.place.Airport
 import com.partimo.domain.model.place.CatalogDestination
 import com.partimo.domain.model.place.CityPlace
@@ -20,19 +24,24 @@ import com.partimo.domain.model.plan.TripPreferences
 import com.partimo.domain.model.poi.PoiArticle
 import com.partimo.domain.model.poi.PoiQuery
 import com.partimo.domain.model.poi.PointOfInterest
+import com.partimo.domain.model.saved.SavedTrip
 import com.partimo.domain.model.stay.AccommodationOffer
 import com.partimo.domain.model.stay.AccommodationSearchQuery
 import com.partimo.domain.model.stay.Lodging
 import com.partimo.domain.model.stay.LodgingQuery
 import com.partimo.domain.model.transit.TransitRoute
 import com.partimo.domain.model.transit.TransitRouteQuery
+import com.partimo.domain.model.weather.DailyForecast
+import com.partimo.domain.model.weather.DailyObservation
 import com.partimo.domain.model.weather.WeatherSnapshot
 import com.partimo.domain.repository.AccommodationRepository
 import com.partimo.domain.repository.AirportRepository
 import com.partimo.domain.repository.ChecklistRepository
 import com.partimo.domain.repository.CitySearchRepository
+import com.partimo.domain.repository.CountryInfoRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
 import com.partimo.domain.repository.EventRepository
+import com.partimo.domain.repository.ExchangeRateRepository
 import com.partimo.domain.repository.FlightRepository
 import com.partimo.domain.repository.HolidayRepository
 import com.partimo.domain.repository.LodgingRepository
@@ -40,19 +49,11 @@ import com.partimo.domain.repository.PoiArticleRepository
 import com.partimo.domain.repository.PoiRepository
 import com.partimo.domain.repository.PriceWatchRepository
 import com.partimo.domain.repository.RestaurantRepository
+import com.partimo.domain.repository.SavedTripRepository
 import com.partimo.domain.repository.TransitRepository
 import com.partimo.domain.repository.TravelAssistantRepository
-import com.partimo.domain.repository.TripWeatherRepository
-import com.partimo.domain.repository.CountryInfoRepository
-import com.partimo.domain.repository.ExchangeRateRepository
 import com.partimo.domain.repository.TravelGuideRepository
-import com.partimo.domain.model.weather.DailyForecast
-import com.partimo.domain.model.weather.DailyObservation
-import com.partimo.domain.model.guide.CountryInfo
-import com.partimo.domain.model.guide.ExchangeRates
-import com.partimo.domain.model.guide.TravelGuide
-import com.partimo.domain.model.Destination
-import java.time.LocalDate
+import com.partimo.domain.repository.TripWeatherRepository
 import com.partimo.domain.repository.UserPreferencesRepository
 import com.partimo.domain.repository.WeatherRepository
 import kotlinx.coroutines.delay
@@ -60,6 +61,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
+import java.time.LocalDate
 
 // Fake dei repository condivisi fra i moduli tramite testFixtures: restituiscono un risultato
 // configurabile, registrano le richieste ricevute e possono simulare latenza (tempo virtuale).
@@ -352,5 +354,17 @@ class FakeTravelGuideRepository(var result: DataResult<TravelGuide?> = DataResul
     override suspend fun guide(destination: Destination, forceRefresh: Boolean): DataResult<TravelGuide?> {
         requests += destination
         return result
+    }
+}
+
+class FakeSavedTripRepository(initial: List<SavedTrip> = emptyList()) : SavedTripRepository {
+    private val state = MutableStateFlow(initial)
+
+    override val trips: Flow<List<SavedTrip>> = state
+
+    val current: List<SavedTrip> get() = state.value
+
+    override suspend fun update(transform: (List<SavedTrip>) -> List<SavedTrip>) {
+        state.update(transform)
     }
 }

@@ -9,6 +9,11 @@ import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.place.Airport
 import com.partimo.domain.model.place.AirportSize
 import com.partimo.domain.model.place.DeparturePoint
+import com.partimo.domain.model.poi.PoiCategory
+import com.partimo.domain.model.poi.WikipediaPage
+import com.partimo.domain.model.saved.Favorite
+import com.partimo.domain.model.saved.FavoriteKind
+import com.partimo.domain.model.saved.SavedTrip
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
@@ -66,6 +71,29 @@ internal data class PriceWatchDto(
     val lastNotifiedStay: MoneyDto? = null,
 )
 
+@Serializable
+internal data class FavoriteDto(
+    val id: String,
+    val kind: String,
+    val name: String,
+    val subtitle: String? = null,
+    val location: GeoPointDto? = null,
+    val photoUrl: String? = null,
+    val url: String? = null,
+    val wikipediaLanguage: String? = null,
+    val wikipediaTitle: String? = null,
+    val category: String? = null,
+    val description: String? = null,
+)
+
+@Serializable
+internal data class SavedTripDto(
+    val destination: DestinationDto,
+    val period: String,
+    val savedAtMillis: Long,
+    val favorites: List<FavoriteDto> = emptyList(),
+)
+
 /** Codifica e decodifica delle preferenze. Un valore illeggibile viene ignorato, mai propagato come crash. */
 internal object StoredJson {
 
@@ -75,6 +103,16 @@ internal object StoredJson {
     }
 
     private val watchListSerializer = ListSerializer(PriceWatchDto.serializer())
+    private val tripListSerializer = ListSerializer(SavedTripDto.serializer())
+
+    fun encodeSavedTrips(trips: List<SavedTrip>): String = json.encodeToString(tripListSerializer, trips.map { it.toDto() })
+
+    /** Viaggi e preferiti non più interpretabili vengono scartati uno a uno. */
+    fun decodeSavedTrips(value: String?): List<SavedTrip> {
+        if (value.isNullOrBlank()) return emptyList()
+        val dtos = runCatching { json.decodeFromString(tripListSerializer, value) }.getOrDefault(emptyList())
+        return dtos.mapNotNull { dto -> runCatching { dto.toDomain() }.getOrNull() }
+    }
 
     fun encodeDeparture(departure: DeparturePoint): String = json.encodeToString(DeparturePointDto.serializer(), departure.toDto())
 
@@ -160,4 +198,48 @@ private fun PriceWatchDto.toDomain() = PriceWatch(
     stayPrices = stayPrices.map { it.toDomain() },
     lastNotifiedFlight = lastNotifiedFlight?.toDomain(),
     lastNotifiedStay = lastNotifiedStay?.toDomain(),
+)
+
+private fun Favorite.toDto() = FavoriteDto(
+    id = id,
+    kind = kind.name,
+    name = name,
+    subtitle = subtitle,
+    location = location?.toDto(),
+    photoUrl = photoUrl,
+    url = url,
+    wikipediaLanguage = wikipediaPage?.language,
+    wikipediaTitle = wikipediaPage?.title,
+    category = category?.name,
+    description = description,
+)
+
+private fun FavoriteDto.toDomain(): Favorite? {
+    val favoriteKind = FavoriteKind.entries.firstOrNull { it.name == kind } ?: return null
+    return Favorite(
+        id = id,
+        kind = favoriteKind,
+        name = name,
+        subtitle = subtitle,
+        location = location?.let { runCatching { it.toDomain() }.getOrNull() },
+        photoUrl = photoUrl,
+        url = url,
+        wikipediaPage = if (wikipediaLanguage != null && wikipediaTitle != null) WikipediaPage(wikipediaLanguage, wikipediaTitle) else null,
+        category = PoiCategory.entries.firstOrNull { it.name == category },
+        description = description,
+    )
+}
+
+private fun SavedTrip.toDto() = SavedTripDto(
+    destination = destination.toDto(),
+    period = period.key,
+    savedAtMillis = savedAt.toEpochMilli(),
+    favorites = favorites.map { it.toDto() },
+)
+
+private fun SavedTripDto.toDomain() = SavedTrip(
+    destination = destination.toDomain(),
+    period = requireNotNull(TravelPeriod.fromKey(period)) { "Periodo non valido: $period" },
+    savedAt = Instant.ofEpochMilli(savedAtMillis),
+    favorites = favorites.mapNotNull { it.toDomain() },
 )

@@ -17,6 +17,8 @@ import com.partimo.app.ui.dashboard.TripDashboardRoute
 import com.partimo.app.ui.dashboard.TripDashboardViewModel
 import com.partimo.app.ui.departure.DeparturePickerRoute
 import com.partimo.app.ui.departure.DeparturePickerViewModel
+import com.partimo.app.ui.favorites.FavoritesRoute
+import com.partimo.app.ui.favorites.FavoritesViewModel
 import com.partimo.app.ui.guide.GuideRoute
 import com.partimo.app.ui.guide.GuideViewModel
 import com.partimo.app.ui.itinerary.ItineraryRoute
@@ -122,7 +124,11 @@ data class PlaceDetailDestination(
     val wikipediaLanguage: String? = null,
     val wikipediaTitle: String? = null,
     val popularity: Double? = null,
+    /** Viaggio da cui si è aperta la scheda ([TripArgs] in JSON): permette di salvare il luogo tra i preferiti. */
+    val trip: String? = null,
 ) {
+    fun tripArgs(): TripArgs? = trip?.let(TripArgs::fromJson)
+
     fun toPointOfInterest(): PointOfInterest {
         val poiCategory = PoiCategory.entries.firstOrNull { it.name == category } ?: PoiCategory.ATTRACTION
         return PointOfInterest(
@@ -143,7 +149,7 @@ data class PlaceDetailDestination(
     }
 
     companion object {
-        fun from(poi: PointOfInterest) = PlaceDetailDestination(
+        fun from(poi: PointOfInterest, trip: TripArgs? = null) = PlaceDetailDestination(
             id = poi.id,
             name = poi.name,
             category = poi.category.name,
@@ -159,6 +165,7 @@ data class PlaceDetailDestination(
             wikipediaLanguage = poi.wikipediaPage?.language,
             wikipediaTitle = poi.wikipediaPage?.title,
             popularity = poi.popularity,
+            trip = trip?.toJson(),
         )
     }
 }
@@ -203,10 +210,28 @@ fun PartiMoNavHost(
                 viewModel = viewModel,
                 onBack = { navController.popBackStack() },
                 onChooseDeparture = { navController.navigate(DeparturePickerDestination) },
-                onOpenPlace = { poi -> navController.navigate(PlaceDetailDestination.from(poi)) },
-                onOpenItinerary = { trip -> navController.navigate(ItineraryDestination(TripArgs.from(trip).toJson())) },
-                onOpenAssistant = { trip -> navController.navigate(AssistantChatDestination(TripArgs.from(trip).toJson())) },
-                onOpenGuide = { trip -> navController.navigate(GuideDestination(TripArgs.from(trip).toJson())) },
+                onOpenPlace = { poi, trip -> navController.navigate(PlaceDetailDestination.from(poi, trip)) },
+                onOpenItinerary = { trip -> navController.navigate(ItineraryDestination(trip.toJson())) },
+                onOpenAssistant = { trip -> navController.navigate(AssistantChatDestination(trip.toJson())) },
+                onOpenGuide = { trip -> navController.navigate(GuideDestination(trip.toJson())) },
+                onOpenFavorites = { trip -> navController.navigate(FavoritesDestination(trip.toJson())) },
+            )
+        }
+        composable<FavoritesDestination> { backStackEntry ->
+            val tripJson = backStackEntry.toRoute<FavoritesDestination>().trip
+            val trip = TripArgs.fromJson(tripJson)
+            val period = trip?.travelPeriod()
+            if (trip == null || period == null) {
+                LaunchedEffect(Unit) { navController.popBackStack() }
+                return@composable
+            }
+            val viewModel: FavoritesViewModel = viewModel(
+                factory = FavoritesViewModel.factory(container, trip.destination(), period, trip.fromDate(), trip.toDate()),
+            )
+            FavoritesRoute(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+                onOpenPlace = { poi -> navController.navigate(PlaceDetailDestination.from(poi, trip)) },
             )
         }
         composable<GuideDestination> { backStackEntry ->
@@ -233,7 +258,7 @@ fun PartiMoNavHost(
             ItineraryRoute(
                 viewModel = viewModel,
                 onBack = { navController.popBackStack() },
-                onOpenPlace = { poi -> navController.navigate(PlaceDetailDestination.from(poi)) },
+                onOpenPlace = { poi -> navController.navigate(PlaceDetailDestination.from(poi, trip)) },
                 onAskAssistant = { navController.navigate(AssistantChatDestination(tripJson)) },
             )
         }
@@ -250,7 +275,7 @@ fun PartiMoNavHost(
         }
         composable<PlaceDetailDestination> { backStackEntry ->
             val route = backStackEntry.toRoute<PlaceDetailDestination>()
-            val viewModel: PlaceDetailViewModel = viewModel(factory = PlaceDetailViewModel.factory(container, route.toPointOfInterest()))
+            val viewModel: PlaceDetailViewModel = viewModel(factory = PlaceDetailViewModel.factory(container, route.toPointOfInterest(), route.tripArgs()))
             PlaceDetailRoute(viewModel = viewModel, onBack = { navController.popBackStack() })
         }
         composable<DeparturePickerDestination> {

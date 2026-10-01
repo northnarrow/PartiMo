@@ -5,10 +5,17 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import com.partimo.data.local.preferences.DataStoreChecklistRepository
 import com.partimo.data.local.preferences.DataStorePriceWatchRepository
+import com.partimo.data.local.preferences.DataStoreSavedTripRepository
 import com.partimo.data.local.preferences.DataStoreUserPreferencesRepository
 import com.partimo.data.local.preferences.StoredJson
+import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.poi.PoiCategory
+import com.partimo.domain.model.poi.WikipediaPage
+import com.partimo.domain.model.saved.Favorite
+import com.partimo.domain.model.saved.FavoriteKind
+import com.partimo.domain.model.saved.SavedTrip
 import com.partimo.domain.testing.TestData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -90,6 +97,40 @@ class PreferencesRepositoriesTest {
         assertEquals(setOf("Mare › Costume"), repository.checkedItems("packing:lisbona").first())
         assertEquals(emptySet(), repository.checkedItems("packing:parigi").first())
     }
+}
+
+class SavedTripRepositoryTest {
+
+    @Test
+    fun `viaggi e preferiti sopravvivono alla codifica`() = runTest {
+        val repository = DataStoreSavedTripRepository(InMemoryPreferencesDataStoreForTrips())
+        val trip = SavedTrip(
+            destination = TestData.destination(),
+            period = TravelPeriod.NextDays,
+            savedAt = TestData.NOW,
+            favorites = listOf(
+                Favorite("wikipedia:it:1", FavoriteKind.PLACE, "Duomo", "Luogo di culto", GeoPoint(48.2085, 16.3731), "https://img.test/a.jpg", null, WikipediaPage("it", "Duomo di Vienna"), PoiCategory.RELIGIOUS_SITE, "Cattedrale"),
+                Favorite("osm:node/11", FavoriteKind.RESTAURANT, "Figlmüller", url = "https://www.google.com/maps/search/?api=1&query=Figlm%C3%BCller"),
+            ),
+        )
+
+        repository.update { it + trip }
+
+        assertEquals(listOf(trip), repository.trips.first())
+        repository.update { trips -> trips.filterNot { it.id == trip.id } }
+        assertTrue(repository.trips.first().isEmpty())
+    }
+}
+
+/** Copia del DataStore in memoria di questo file per il test dei viaggi salvati. */
+private class InMemoryPreferencesDataStoreForTrips : DataStore<Preferences> {
+    private val state = MutableStateFlow(emptyPreferences())
+    private val mutex = Mutex()
+
+    override val data: Flow<Preferences> = state
+
+    override suspend fun updateData(transform: suspend (t: Preferences) -> Preferences): Preferences =
+        mutex.withLock { transform(state.value).also { state.value = it } }
 }
 
 class StoredJsonTest {
