@@ -148,7 +148,9 @@ fun BudgetScreen(state: BudgetUiState, actions: BudgetActions, modifier: Modifie
             contentPadding = PaddingValues(bottom = 96.dp),
         ) {
             state.summary?.let { summary ->
-                item(key = "summary") { SummaryCard(summary = summary, onEditLimit = actions.onEditLimit) }
+                item(key = "summary") {
+                    SummaryCard(summary = summary, onEditLimit = actions.onEditLimit, perPerson = state.perPerson, travellers = state.travellers.total)
+                }
                 if (summary.byCategory.isNotEmpty()) {
                     item(key = "categories") { CategoryBreakdown(summary) }
                 }
@@ -202,7 +204,7 @@ fun BudgetScreen(state: BudgetUiState, actions: BudgetActions, modifier: Modifie
 }
 
 @Composable
-private fun SummaryCard(summary: BudgetSummary, onEditLimit: () -> Unit) {
+private fun SummaryCard(summary: BudgetSummary, onEditLimit: () -> Unit, perPerson: BigDecimal? = null, travellers: Int = 1) {
     Card(
         modifier = Modifier.fillMaxWidth().padding(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
@@ -219,6 +221,13 @@ private fun SummaryCard(summary: BudgetSummary, onEditLimit: () -> Unit) {
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
+            perPerson?.let { share ->
+                Text(
+                    text = "👥 " + stringResource(R.string.budget_per_person, Formatters.currencyAmount(share, summary.currency), travellers),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+            }
             val limit = summary.limit
             if (limit != null) {
                 Text(

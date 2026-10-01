@@ -2,6 +2,7 @@ package com.partimo.domain.usecase
 
 import com.partimo.domain.common.DataError
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.backup.UserData
 import com.partimo.domain.model.backup.UserDataSummary
 import com.partimo.domain.model.budget.Expense
@@ -82,9 +83,12 @@ class UserDataUseCasesTest {
     }
 
     @Test
-    fun `un file senza punto di partenza conserva quello del telefono`() {
-        val merged = UserData(departure = TestData.departure()).mergedWith(UserData(savedTrips = listOf(viennaTrip)))
+    fun `un file senza punto di partenza né viaggiatori conserva quelli del telefono`() {
+        val family = Travellers(adults = 2, childAges = listOf(5))
+        val merged = UserData(departure = TestData.departure(), travellers = family).mergedWith(UserData(savedTrips = listOf(viennaTrip)))
         assertEquals("MXP", merged.departure?.airport?.iata)
+        assertEquals(family, merged.travellers)
+        assertEquals(Travellers(adults = 3), merged.mergedWith(UserData(travellers = Travellers(adults = 3))).travellers)
     }
 
     @Test

@@ -71,6 +71,7 @@ import com.partimo.app.ui.common.PeriodChips
 import com.partimo.app.ui.common.SectionError
 import com.partimo.app.ui.common.SectionLoading
 import com.partimo.app.ui.common.SectionMessage
+import com.partimo.app.ui.common.TravellersRow
 import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.common.emoji
 import com.partimo.app.ui.common.errorMessage
@@ -81,6 +82,7 @@ import com.partimo.app.ui.dashboard.PreviewData
 import com.partimo.app.ui.theme.PartiMoTheme
 import com.partimo.domain.model.Destination
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DeparturePoint
 import com.partimo.domain.model.place.DestinationSuggestion
@@ -101,6 +103,8 @@ data class SearchActions(
     val onPeriodSelected: (TravelPeriod) -> Unit = {},
     /** Date esatte scelte nelle celle «Andata» e «Ritorno». */
     val onDatesSelected: (LocalDate, LocalDate) -> Unit = { _, _ -> },
+    /** Adulti e bambini scelti nella cella «Chi parte». */
+    val onTravellersSelected: (Travellers) -> Unit = {},
     val onChooseDeparture: () -> Unit = {},
     val onCitySelected: (CityPlace) -> Unit = {},
     val onRecommend: () -> Unit = {},
@@ -139,6 +143,7 @@ fun SearchRoute(
             onRetrySearch = viewModel::onRetrySearch,
             onPeriodSelected = viewModel::onPeriodSelected,
             onDatesSelected = viewModel::onDatesSelected,
+            onTravellersSelected = viewModel::onTravellersSelected,
             onChooseDeparture = onChooseDeparture,
             onCitySelected = viewModel::onCitySelected,
             onRecommend = viewModel::onRecommend,
@@ -235,6 +240,11 @@ fun SearchScreen(
                             today = state.today,
                             onDatesSelected = actions.onDatesSelected,
                             modifier = Modifier.padding(top = 12.dp),
+                        )
+                        TravellersRow(
+                            travellers = state.travellers,
+                            onTravellersSelected = actions.onTravellersSelected,
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
                         )
                     }
                 }

@@ -20,9 +20,12 @@ import androidx.compose.ui.test.performTextReplacement
 import androidx.core.view.drawToBitmap
 import com.partimo.app.R
 import com.partimo.app.ui.common.PERIOD_CHIPS_TAG
+import com.partimo.app.ui.common.TRAVELLERS_TAG
+import com.partimo.app.ui.common.TravellersDialog
 import com.partimo.app.ui.dashboard.PreviewData
 import com.partimo.app.ui.theme.PartiMoTheme
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DestinationSuggestion
 import org.junit.Rule
@@ -47,7 +50,7 @@ class SearchScreenTest {
     @get:Rule
     val composeRule = createAndroidComposeRule<ComponentActivity>()
 
-    private fun text(@StringRes id: Int): String = composeRule.activity.getString(id)
+    private fun text(@StringRes id: Int, vararg args: Any): String = composeRule.activity.getString(id, *args)
 
     @Test
     fun `mostra marchio, titolo, partenza, campo di ricerca e consigliami`() {
@@ -220,11 +223,48 @@ class SearchScreenTest {
     }
 
     @Test
+    fun `chi parte si sceglie con adulti, bambini e la loro età`() {
+        val chosen = mutableListOf<Travellers>()
+        composeRule.setContent {
+            PartiMoTheme { SearchScreen(PreviewData.searchIdleState(), query = "", actions = SearchActions(onTravellersSelected = { chosen += it })) }
+        }
+
+        composeRule.onNodeWithTag(SEARCH_LIST_TAG).performScrollToNode(hasTestTag(TRAVELLERS_TAG))
+        composeRule.onNodeWithTag(TRAVELLERS_TAG).assert(hasText("1 adulto")).performClick()
+        composeRule.onNodeWithContentDescription(text(R.string.travellers_add_adult)).performClick()
+        composeRule.onNodeWithContentDescription(text(R.string.travellers_add_child)).performClick()
+        composeRule.onNodeWithText("8 anni").assertExists()
+        composeRule.onNodeWithContentDescription(text(R.string.travellers_younger, 1)).performClick()
+        composeRule.onNodeWithText(text(R.string.search_dates_confirm)).performClick()
+
+        assertEquals(listOf(Travellers(adults = 2, childAges = listOf(7))), chosen)
+    }
+
+    @Test
+    fun `due neonati con un solo adulto non si confermano finché non c'è un altro adulto`() {
+        val chosen = mutableListOf<Travellers>()
+        composeRule.setContent {
+            PartiMoTheme { TravellersDialog(initial = Travellers(adults = 1, childAges = listOf(1, 2)), onDismiss = {}, onConfirm = { chosen += it }) }
+        }
+
+        composeRule.onNodeWithText("2 anni").assertExists()
+        composeRule.onNodeWithContentDescription(text(R.string.travellers_younger, 2)).performClick()
+        composeRule.onNodeWithText(text(R.string.travellers_infants_error)).assertExists()
+        composeRule.onNodeWithText(text(R.string.search_dates_confirm)).assertIsNotEnabled()
+
+        composeRule.onNodeWithContentDescription(text(R.string.travellers_add_adult)).performClick()
+        composeRule.onNodeWithText(text(R.string.travellers_infants_note)).assertExists()
+        composeRule.onNodeWithText(text(R.string.search_dates_confirm)).performClick()
+
+        assertEquals(listOf(Travellers(adults = 2, childAges = listOf(1, 1))), chosen)
+    }
+
+    @Test
     fun `salva lo screenshot della schermata con le date scelte`() {
         composeRule.setContent {
             PartiMoTheme { SearchScreen(PreviewData.searchDatesState(), query = "", actions = SearchActions()) }
         }
-        composeRule.onNodeWithTag(SEARCH_LIST_TAG).performScrollToNode(hasTestTag(RETURN_DATE_TAG))
+        composeRule.onNodeWithTag(SEARCH_LIST_TAG).performScrollToNode(hasTestTag(TRAVELLERS_TAG))
         composeRule.waitForIdle()
 
         val bitmap = composeRule.activity.window.decorView.rootView.drawToBitmap()

@@ -1,5 +1,7 @@
 package com.partimo.data.remote.gemini
 
+import com.partimo.data.network.NetworkJson
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.event.EventKind
 import com.partimo.domain.model.event.TripEvent
 import com.partimo.domain.model.plan.StopTarget
@@ -12,7 +14,6 @@ import com.partimo.domain.model.weather.TripWeather
 import com.partimo.domain.model.weather.WeatherCondition
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonObject
-import com.partimo.data.network.NetworkJson
 import java.time.LocalDate
 import java.time.Month
 import java.time.format.TextStyle
@@ -137,8 +138,19 @@ internal object TravelPrompts {
         val country = Locale("", destination.countryCode).getDisplayCountry(italian).takeIf { it.isNotBlank() && it != destination.countryCode }
         val place = if (country != null) "${destination.name} ($country)" else destination.name
         val days = if (knowledge.dayCount == 1) "1 giorno" else "${knowledge.dayCount} giorni"
-        val travellers = if (knowledge.travellers == 1) "1 viaggiatore" else "${knowledge.travellers} viaggiatori"
-        return "$place ${dateRange(knowledge.from, knowledge.to)}: $days, $travellers"
+        return "$place ${dateRange(knowledge.from, knowledge.to)}: $days, ${travellersText(knowledge.travellers)}"
+    }
+
+    /** "1 viaggiatore", "2 adulti", "2 adulti e 2 bambini (4 e 9 anni)": con i bambini il programma cambia. */
+    private fun travellersText(travellers: Travellers): String {
+        if (travellers.isSolo) return "1 viaggiatore"
+        val adults = if (travellers.adults == 1) "1 adulto" else "${travellers.adults} adulti"
+        if (travellers.children == 0) return adults
+        val children = if (travellers.children == 1) "1 bambino" else "${travellers.children} bambini"
+        val ages = travellers.childAges.sorted().map { if (it == 0) "meno di 1" else "$it" }
+        val agesText = if (ages.size == 1) ages.single() else ages.dropLast(1).joinToString(", ") + " e " + ages.last()
+        val years = if (travellers.childAges.size == 1 && travellers.childAges.single() == 1) "anno" else "anni"
+        return "$adults e $children ($agesText $years)"
     }
 
     /** "dal 10 al 14 dicembre 2026", "dal 28 dicembre 2026 al 2 gennaio 2027" o "il 10 dicembre 2026". */

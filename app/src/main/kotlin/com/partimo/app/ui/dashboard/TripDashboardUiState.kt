@@ -78,7 +78,7 @@ data class TripDashboardUiState(
 ) {
     /** Emissioni per raggiungere la meta con i diversi mezzi, a persona; vuoto senza partenza o con la meta vicina. */
     val footprint: List<ModeFootprint>
-        get() = trip.departure?.let { CarbonFootprint.roundTrip(it.airport.location, trip.destination.center, trip.travellers) }.orEmpty()
+        get() = trip.departure?.let { CarbonFootprint.roundTrip(it.airport.location, trip.destination.center, trip.travellers.total) }.orEmpty()
 
     /** Chiavi dei preferiti del viaggio ([com.partimo.domain.model.saved.Favorite.key]); `null` se i preferiti non sono attivi. */
     val favoriteKeys: Set<String>?

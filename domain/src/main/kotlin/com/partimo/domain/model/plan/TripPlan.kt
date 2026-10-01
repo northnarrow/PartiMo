@@ -2,6 +2,7 @@ package com.partimo.domain.model.plan
 
 import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.event.TripEvent
 import com.partimo.domain.model.poi.PointOfInterest
 import com.partimo.domain.model.weather.TripWeather
@@ -28,7 +29,8 @@ data class TripKnowledge(
     val destination: Destination,
     val from: LocalDate,
     val to: LocalDate,
-    val travellers: Int = 1,
+    /** Chi parte: con i bambini l'assistente propone un ritmo e luoghi adatti. */
+    val travellers: Travellers = Travellers.SOLO,
     /** Luoghi consigliati per la stagione, dal più interessante. */
     val places: List<PointOfInterest> = emptyList(),
     /** Eventi tra arrivo e partenza (mercatini, festival, festività). */

@@ -9,6 +9,7 @@ import com.partimo.data.testing.mockHttpClient
 import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.flight.FlexibleDates
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.testing.failureError
@@ -201,7 +202,7 @@ class TravelpayoutsFlightDataSourceTest {
         val source = source("prices_rom_vie_2026_12.json")
 
         val first = source.searchOffers(december, forceRefresh = false)
-        val cached = source.searchOffers(december.copy(adults = 2), forceRefresh = false)
+        val cached = source.searchOffers(december.copy(travellers = Travellers(adults = 2)), forceRefresh = false)
         clock.advance(Duration.ofHours(3).plusMinutes(1))
         val refreshed = source.searchOffers(december, forceRefresh = false)
 
@@ -210,6 +211,33 @@ class TravelpayoutsFlightDataSourceTest {
         assertEquals("176.00", cached.data.first().totalPrice.amount.toPlainString())
         assertEquals(DataOrigin.REMOTE, refreshed.origin)
         assertEquals(2, requests.size)
+    }
+
+    @Test
+    fun `per una famiglia il prezzo è per tutti i posti e Aviasales si apre con adulti, bambini e neonati`() = runTest {
+        val family = december.copy(travellers = Travellers(adults = 2, childAges = listOf(7, 1)))
+
+        val cheapest = source("prices_rom_vie_2026_12.json").searchOffers(family, forceRefresh = false).data.first()
+
+        assertEquals("264.00", cheapest.totalPrice.amount.toPlainString(), "88 € per tre posti: il neonato viaggia in braccio")
+        assertEquals(3, cheapest.passengers)
+        assertEquals("88.00", cheapest.pricePerPassenger.amount.toPlainString())
+        assertTrue(cheapest.bookingUrl!!.startsWith("https://www.aviasales.com/search/ROM1112VIE1312211?t="), cheapest.bookingUrl)
+    }
+
+    @Test
+    fun `i passeggeri di Aviasales sono adulti, bambini da 2 a 11 anni e neonati`() {
+        assertEquals("1", AviasalesPassengers.code(Travellers.SOLO))
+        assertEquals("2", AviasalesPassengers.code(Travellers(adults = 2)))
+        assertEquals("21", AviasalesPassengers.code(Travellers(adults = 2, childAges = listOf(7))))
+        assertEquals("101", AviasalesPassengers.code(Travellers(adults = 1, childAges = listOf(0))))
+        assertEquals("2", AviasalesPassengers.code(Travellers(adults = 1, childAges = listOf(14))), "Dai 12 anni si paga come un adulto")
+
+        val family = Travellers(adults = 2, childAges = listOf(5, 1))
+        assertEquals("/search/ROM1112VIE1312211?t=FR123&search_date=30092026", AviasalesPassengers.applyTo("/search/ROM1112VIE13121?t=FR123&search_date=30092026", family))
+        assertEquals("/search/ROM1112VIE211", AviasalesPassengers.applyTo("/search/ROM1112VIE1", family), "Sola andata")
+        assertEquals("/search/ROM1112VIE13121", AviasalesPassengers.applyTo("/search/ROM1112VIE13121", Travellers.SOLO))
+        assertEquals("/flights/?origin=ROM", AviasalesPassengers.applyTo("/flights/?origin=ROM", family), "Percorso sconosciuto: invariato")
     }
 
     @Test

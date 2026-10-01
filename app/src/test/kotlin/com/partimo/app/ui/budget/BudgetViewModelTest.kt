@@ -4,14 +4,18 @@ import com.partimo.app.testing.MainDispatcherRule
 import com.partimo.app.ui.dashboard.SampleDestinations
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
+import com.partimo.domain.model.budget.Expense
 import com.partimo.domain.model.budget.ExpenseCategory
 import com.partimo.domain.model.guide.CountryInfo
 import com.partimo.domain.model.guide.ExchangeRates
 import com.partimo.domain.testing.FakeBudgetRepository
 import com.partimo.domain.testing.FakeCountryInfoRepository
 import com.partimo.domain.testing.FakeExchangeRateRepository
+import com.partimo.domain.testing.FakeUserPreferencesRepository
 import com.partimo.domain.usecase.EditTripBudgetUseCase
 import com.partimo.domain.usecase.GetCountryInfoUseCase
+import com.partimo.domain.usecase.ObserveTravellersUseCase
 import com.partimo.domain.usecase.ObserveTripBudgetUseCase
 import com.partimo.domain.usecase.SummarizeBudgetUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -45,6 +49,8 @@ class BudgetViewModelTest {
     private val czechia = CountryInfo("CZ", "CZE", "Cechia", "CZK", "corona ceca", "Kč", listOf("ceco"), listOf("cs"))
     private val rates = FakeExchangeRateRepository(DataResult.Success(ExchangeRates("EUR", mapOf("CZK" to BigDecimal("25")))))
 
+    private val preferences = FakeUserPreferencesRepository()
+
     /** Il 12 dicembre 2026 alle 10 a Praga: si è in viaggio. */
     private fun createViewModel(now: Instant = Instant.parse("2026-12-12T09:00:00Z")) = BudgetViewModel(
         observeTripBudget = ObserveTripBudgetUseCase(repository),
@@ -56,7 +62,21 @@ class BudgetViewModelTest {
         period = december,
         from = from,
         to = to,
+        observeTravellers = ObserveTravellersUseCase(preferences),
     )
+
+    @Test
+    fun `in più persone si vede anche la spesa a testa`() = runTest {
+        val viewModel = createViewModel()
+        repository.update("CZ:Praga:2026-12") { it.copy(expenses = listOf(Expense("1", BigDecimal("100"), "EUR", ExpenseCategory.FOOD, from))) }
+        advanceUntilIdle()
+        assertNull(viewModel.uiState.value.perPerson, "Da soli la spesa a testa non serve")
+
+        preferences.setTravellers(Travellers(adults = 2, childAges = listOf(5)))
+        advanceUntilIdle()
+
+        assertEquals(BigDecimal("33.33"), viewModel.uiState.value.perPerson)
+    }
 
     @Test
     fun `una spesa in corone si registra nel giorno di oggi e conta in euro`() = runTest {

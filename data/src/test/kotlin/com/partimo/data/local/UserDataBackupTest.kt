@@ -11,6 +11,7 @@ import com.partimo.domain.common.DataError
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.budget.Expense
 import com.partimo.domain.model.budget.ExpenseCategory
 import com.partimo.domain.model.poi.PoiCategory
@@ -63,6 +64,7 @@ class UserDataBackupTest {
     private suspend fun filledPhone(): InMemoryPreferencesDataStore {
         val store = InMemoryPreferencesDataStore()
         DataStoreUserPreferencesRepository(store).setDeparture(TestData.departure("Milano", "MXP"))
+        DataStoreUserPreferencesRepository(store).setTravellers(Travellers(adults = 2, childAges = listOf(4)))
         DataStoreSavedTripRepository(store).update {
             listOf(SavedTrip(vienna, december, TestData.NOW, listOf(stephansdom, figlmueller)), SavedTrip(lisbon, dates, TestData.NOW))
         }
@@ -84,6 +86,7 @@ class UserDataBackupTest {
         assertEquals(2, summary.trips)
         assertEquals(2, summary.favorites)
         assertEquals(TestData.departure("Milano", "MXP"), DataStoreUserPreferencesRepository(newPhone).departure.first())
+        assertEquals(Travellers(adults = 2, childAges = listOf(4)), DataStoreUserPreferencesRepository(newPhone).travellers.first())
         val trips = DataStoreSavedTripRepository(newPhone).trips.first()
         assertEquals(listOf(SavedTrip(vienna, december, TestData.NOW, listOf(stephansdom, figlmueller)), SavedTrip(lisbon, dates, TestData.NOW)), trips)
         val watch = DataStorePriceWatchRepository(newPhone).watches.first().single()

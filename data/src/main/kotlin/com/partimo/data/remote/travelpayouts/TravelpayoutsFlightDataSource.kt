@@ -11,6 +11,7 @@ import com.partimo.data.network.combinedOrigin
 import com.partimo.data.network.mapNotNullSafely
 import com.partimo.data.source.FlightOffersDataSource
 import com.partimo.domain.model.Money
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.flight.FlightSlice
@@ -157,11 +158,13 @@ internal class TravelpayoutsFlightDataSource(
             carrierName = codes.airlineName(carrier) ?: carrier,
             carrierIata = carrier,
             carrierLogoUrl = "$LOGO_BASE_URL$carrier.png",
-            // La Data API indica il prezzo per un adulto.
-            totalPrice = Money.of(fare.multiply(query.adults.toBigDecimal()), query.currencyCode),
+            // La Data API indica il prezzo di un posto: lo pagano tutti tranne i neonati in braccio
+            // (stima: il loro supplemento e lo sconto dei bambini si vedono su Aviasales).
+            totalPrice = Money.of(fare.multiply(query.travellers.seatedPassengers.toBigDecimal()), query.currencyCode),
             slices = listOfNotNull(outbound, inbound),
-            bookingUrl = bookingUrl(departure, returning),
+            bookingUrl = bookingUrl(departure, returning, query.travellers),
             priceFoundOn = priceFoundOn(),
+            passengers = query.travellers.seatedPassengers,
         )
     }
 
@@ -187,14 +190,17 @@ internal class TravelpayoutsFlightDataSource(
         )
     }
 
-    /** Pagina del volo su Aviasales (con il prezzo trovato); senza, la ricerca della tratta in quei giorni. */
-    private fun TravelpayoutsFareDto.bookingUrl(departure: OffsetDateTime, returning: OffsetDateTime?): String =
-        link?.takeIf { it.startsWith("/") }?.let { AVIASALES_BASE_URL + it }
+    /**
+     * Pagina del volo su Aviasales (con il prezzo trovato) per tutti i viaggiatori; senza, la ricerca della
+     * tratta in quei giorni.
+     */
+    private fun TravelpayoutsFareDto.bookingUrl(departure: OffsetDateTime, returning: OffsetDateTime?, travellers: Travellers): String =
+        link?.takeIf { it.startsWith("/") }?.let { AVIASALES_BASE_URL + AviasalesPassengers.applyTo(it, travellers) }
             ?: buildString {
                 append(AVIASALES_BASE_URL).append("/search/")
                 append(originAirport).append(departure.format(DAY_MONTH)).append(destinationAirport)
                 returning?.let { append(it.format(DAY_MONTH)) }
-                append(1)
+                append(AviasalesPassengers.code(travellers))
             }
 
     /** Il collegamento riporta il giorno della ricerca in cui è stato trovato il prezzo (`search_date=ggmmaaaa`). */
@@ -244,3 +250,34 @@ internal data class TravelpayoutsFareDto(
     val duration: Int? = null,
     val link: String? = null,
 )
+
+/**
+ * Passeggeri nelle ricerche di Aviasales: le ultime cifre del percorso dopo le date sono adulti, bambini e
+ * neonati (es. `/search/ROM1112VIE1312211` = 2 adulti, 1 bambino, 1 neonato).
+ */
+internal object AviasalesPassengers {
+
+    /** Percorso di ricerca: città, giorno e mese di andata e (facoltativi) di ritorno, poi i passeggeri. */
+    private val SEARCH_PATH = Regex("""^(/search/[A-Z]{3}\d{4}[A-Z]{3}(?:\d{4})?)(\d{1,3})(?=[?#]|$)""")
+
+    /** Su Aviasales la tariffa ridotta per bambini vale da 2 a 11 anni; dai 12 si paga come un adulto. */
+    private val CHILD_FARE_AGES = Travellers.INFANT_AGE_LIMIT..11
+
+    /** "1" per una persona, "21" per due adulti e un bambino, "211" con un neonato. */
+    fun code(travellers: Travellers): String {
+        val children = travellers.childAges.count { it in CHILD_FARE_AGES }
+        val infants = travellers.infants
+        val adults = travellers.total - children - infants
+        return buildString {
+            append(adults)
+            if (children > 0 || infants > 0) append(children)
+            if (infants > 0) append(infants)
+        }
+    }
+
+    /** [path] di una ricerca con i passeggeri di [travellers]; un percorso diverso resta com'è. */
+    fun applyTo(path: String, travellers: Travellers): String {
+        val match = SEARCH_PATH.find(path) ?: return path
+        return match.groupValues[1] + code(travellers) + path.substring(match.range.last + 1)
+    }
+}

@@ -3,6 +3,7 @@ package com.partimo.domain.usecase
 import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.common.QueryIssue
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.place.AirportOption
 import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DeparturePoint
@@ -45,4 +46,13 @@ class ObserveDepartureUseCase(private val preferences: UserPreferencesRepository
 
 class SaveDepartureUseCase(private val preferences: UserPreferencesRepository) {
     suspend operator fun invoke(departure: DeparturePoint) = preferences.setDeparture(departure)
+}
+
+/** Chi parte (adulti e bambini): una persona sola finché l'utente non sceglie. */
+class ObserveTravellersUseCase(private val preferences: UserPreferencesRepository) {
+    operator fun invoke(): Flow<Travellers> = preferences.travellers
+}
+
+class SaveTravellersUseCase(private val preferences: UserPreferencesRepository) {
+    suspend operator fun invoke(travellers: Travellers) = preferences.setTravellers(travellers)
 }

@@ -95,7 +95,11 @@ class QueryValidationTest {
             QueryIssue.RETURN_BEFORE_DEPARTURE,
             flightQuery.copy(returnDate = flightQuery.departureDate.minusDays(1)).validate(today),
         )
-        assertEquals(QueryIssue.INVALID_TRAVELLER_COUNT, flightQuery.copy(adults = 0).validate(today))
+        assertEquals(
+            QueryIssue.INVALID_TRAVELLER_COUNT,
+            flightQuery.copy(travellers = Travellers(adults = 1, childAges = listOf(0, 1))).validate(today),
+            "Due neonati in braccio a un solo adulto",
+        )
     }
 
     @Test
@@ -150,7 +154,7 @@ class QueryValidationTest {
         assertEquals(4, stay.nights)
         assertEquals(QueryIssue.INVALID_STAY_DATES, stay.copy(checkOut = stay.checkIn).validate(today))
         assertEquals(QueryIssue.STAY_TOO_LONG, stay.copy(checkOut = stay.checkIn.plusDays(45)).validate(today))
-        assertEquals(QueryIssue.INVALID_TRAVELLER_COUNT, stay.copy(adults = 1, rooms = 2).validate(today))
+        assertEquals(QueryIssue.INVALID_TRAVELLER_COUNT, stay.copy(travellers = Travellers(adults = 1), rooms = 2).validate(today))
     }
 }
 

@@ -25,11 +25,11 @@ data class TripContext(
     val returnDate: LocalDate,
     /** Punto di partenza scelto dall'utente; `null` finché non lo indica (i voli non si possono cercare). */
     val departure: DeparturePoint? = null,
-    val travellers: Int = 1,
+    /** Chi parte: decide prezzi dei voli, alloggi e collegamenti ai siti di prenotazione. */
+    val travellers: Travellers = Travellers.SOLO,
 ) {
     init {
         require(!returnDate.isBefore(departureDate)) { "La data di ritorno precede la partenza" }
-        require(travellers >= 1) { "Serve almeno un viaggiatore" }
     }
 
     val originIata: String? get() = departure?.airport?.iata

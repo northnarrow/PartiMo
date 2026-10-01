@@ -4,6 +4,7 @@ import com.partimo.app.ui.common.UiState
 import com.partimo.domain.common.DataError
 import com.partimo.domain.model.Destination
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DeparturePoint
 import com.partimo.domain.model.place.DestinationSuggestion
@@ -18,6 +19,8 @@ data class SearchUiState(
     val period: TravelPeriod = TravelPeriod.NextDays,
     /** Punto di partenza scelto dall'utente; `null` finché non ne indica uno. */
     val departure: DeparturePoint? = null,
+    /** Chi parte: vale per tutti i viaggi. */
+    val travellers: Travellers = Travellers.SOLO,
     /** Città trovate; `null` finché il testo digitato è troppo corto per cercare. */
     val results: UiState<List<CityPlace>>? = null,
     /** Mete consigliate; `null` finché l'utente non tocca "Consigliami". */

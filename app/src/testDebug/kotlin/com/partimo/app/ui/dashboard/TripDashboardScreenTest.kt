@@ -18,6 +18,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.core.view.drawToBitmap
 import com.partimo.app.R
+import com.partimo.app.ui.common.Formatters
 import com.partimo.app.ui.common.PERIOD_CHIPS_TAG
 import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.dashboard.components.GETTING_THERE_TAG
@@ -25,6 +26,7 @@ import com.partimo.app.ui.theme.PartiMoTheme
 import com.partimo.domain.common.DataError
 import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.deal.PriceChange
 import com.partimo.domain.model.poi.PoiCategory
 import com.partimo.domain.model.poi.PointOfInterest
@@ -269,6 +271,23 @@ class TripDashboardScreenTest {
         composeRule.onAllNodesWithText(text(R.string.flight_open_booking, "aviasales.com"))[0].performClick()
 
         assertEquals(listOf("https://www.aviasales.com/search/MIL1112VIE13121"), opened)
+    }
+
+    @Test
+    fun `per una famiglia i voli mostrano il totale e il prezzo a persona e chi parte si cambia da lì`() {
+        val chosen = mutableListOf<Travellers>()
+        showDashboard(PreviewData.familyFlightPricesState(), DashboardActions(onTravellersSelected = { chosen += it }))
+
+        composeRule.onNodeWithText(Formatters.money(Money.of(174, "EUR"))).assertExists()
+        val seats = composeRule.activity.resources.getQuantityString(R.plurals.flight_seats, 3, 3)
+        composeRule.onNodeWithText(text(R.string.flight_price_per_person, Formatters.money(Money.of(58, "EUR")), seats)).assertExists()
+        saveScreenshot("trip_dashboard_family.png")
+
+        composeRule.onNodeWithText("👥 2 adulti, 1 bambino · " + text(R.string.flights_change_travellers)).performClick()
+        composeRule.onNodeWithContentDescription(text(R.string.travellers_add_child)).performClick()
+        composeRule.onNodeWithText(text(R.string.search_dates_confirm)).performClick()
+
+        assertEquals(listOf(Travellers(adults = 2, childAges = listOf(7, Travellers.DEFAULT_CHILD_AGE))), chosen)
     }
 
     @Test

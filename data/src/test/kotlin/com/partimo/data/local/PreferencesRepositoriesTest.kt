@@ -13,6 +13,7 @@ import com.partimo.data.local.preferences.StoredJson
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.budget.Expense
 import com.partimo.domain.model.budget.ExpenseCategory
 import com.partimo.domain.model.budget.TripBudget
@@ -63,6 +64,19 @@ class PreferencesRepositoriesTest {
         repository.setDeparture(milan)
 
         assertEquals(milan, repository.departure.first())
+    }
+
+    @Test
+    fun `i viaggiatori si salvano e senza scelta si parte da soli`() = runTest {
+        val store = dataStore()
+        val repository = DataStoreUserPreferencesRepository(store)
+        assertEquals(Travellers.SOLO, repository.travellers.first())
+
+        val family = Travellers(adults = 2, childAges = listOf(9, 1))
+        repository.setTravellers(family)
+
+        assertEquals(family, repository.travellers.first())
+        assertNull(StoredJson.decodeTravellers("""{"adults": 0}"""), "Valore non più valido: ignorato")
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.partimo.domain.usecase
 import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.common.DataResult
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.event.EventKind
 import com.partimo.domain.model.plan.ChatMessage
 import com.partimo.domain.model.plan.ChatRole
@@ -22,6 +23,7 @@ import com.partimo.domain.testing.FakeEventRepository
 import com.partimo.domain.testing.FakeHolidayRepository
 import com.partimo.domain.testing.FakePoiRepository
 import com.partimo.domain.testing.FakeTravelAssistantRepository
+import com.partimo.domain.testing.FakeUserPreferencesRepository
 import com.partimo.domain.testing.FakeWeatherRepository
 import com.partimo.domain.testing.TestData
 import com.partimo.domain.testing.TestData.event
@@ -75,6 +77,19 @@ class TravelAssistantUseCasesTest {
         assertEquals(preferences, sentPreferences)
         assertTrue(forceRefresh)
         assertEquals(false, eventRepository.forceRefreshFlags.single(), "Gli eventi arrivano dalla cache")
+    }
+
+    @Test
+    fun `l'assistente sa chi parte, come scelto dall'utente`() = runTest {
+        val family = Travellers(adults = 2, childAges = listOf(6))
+        val load = LoadTripKnowledgeUseCase(
+            GetSeasonalHighlightsUseCase(poiRepository, FakeWeatherRepository(), clock = TestData.FIXED_CLOCK),
+            GetTripEventsUseCase(eventRepository, FakeHolidayRepository()),
+            observeTravellers = ObserveTravellersUseCase(FakeUserPreferencesRepository(initialTravellers = family)),
+        )
+
+        assertEquals(family, load(vienna, from, to).travellers)
+        assertEquals(Travellers.SOLO, loadKnowledge(vienna, from, to).travellers, "Senza preferenza: una persona")
     }
 
     @Test

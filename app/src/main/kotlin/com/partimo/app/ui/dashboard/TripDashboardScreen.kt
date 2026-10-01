@@ -94,6 +94,7 @@ import com.partimo.app.ui.place.ExternalLinks
 import com.partimo.app.ui.place.googleMapsTransitUrl
 import com.partimo.app.ui.theme.PartiMoTheme
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.TripContext
 import com.partimo.domain.model.deal.PriceChange
 import com.partimo.domain.model.flight.FlightPriceSource
@@ -142,6 +143,8 @@ data class DashboardActions(
     val onOpenTranslator: () -> Unit = {},
     /** Budget e spese del viaggio. */
     val onOpenBudget: () -> Unit = {},
+    /** Nuovi viaggiatori (adulti e bambini) scelti nella sezione dei voli. */
+    val onTravellersSelected: (Travellers) -> Unit = {},
 )
 
 /**
@@ -215,6 +218,7 @@ fun TripDashboardRoute(
             onOpenMap = { onOpenMap(TripArgs.from(state.trip, state.period)) },
             onOpenTranslator = { onOpenTranslator(TripArgs.from(state.trip, state.period)) },
             onOpenBudget = { onOpenBudget(TripArgs.from(state.trip, state.period)) },
+            onTravellersSelected = viewModel::onTravellersSelected,
         ),
         modifier = modifier,
     )
@@ -327,6 +331,7 @@ private fun LazyListScope.sectionContent(section: DashboardSection, state: TripD
                         priceSource = state.flightPriceSource,
                         exactDates = state.period is TravelPeriod.Dates,
                         onOpenLink = actions.onOpenLink,
+                        onTravellersSelected = actions.onTravellersSelected,
                     )
                 }
             }
@@ -398,7 +403,7 @@ private fun LazyListScope.sectionContent(section: DashboardSection, state: TripD
                             fromCity = departure.cityName,
                             toCity = state.trip.destination.name,
                             footprint = state.footprint,
-                            travellers = state.trip.travellers,
+                            travellers = state.trip.travellers.total,
                             onOpenLink = actions.onOpenLink,
                             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp).testTag(GETTING_THERE_TAG),
                         )

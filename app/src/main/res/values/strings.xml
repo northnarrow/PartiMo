@@ -291,6 +291,41 @@
     <string name="search_placeholder">Cerca una città, es. Lisbona</string>
     <string name="search_clear">Cancella ricerca</string>
     <string name="search_when">Quando vuoi partire?</string>
+    <string name="travellers_title">👥 Chi parte</string>
+    <string name="travellers_change">Cambia</string>
+    <string name="travellers_dialog_title">Chi parte?</string>
+    <string name="travellers_adults_label">Adulti</string>
+    <string name="travellers_adults_hint">Dai 18 anni</string>
+    <string name="travellers_children_label">Bambini e ragazzi</string>
+    <string name="travellers_children_hint">Da 0 a 17 anni</string>
+    <string name="travellers_child_age">Età del bambino %1$d</string>
+    <string name="travellers_age_baby">meno di 1 anno</string>
+    <string name="travellers_add_adult">Aggiungi un adulto</string>
+    <string name="travellers_remove_adult">Togli un adulto</string>
+    <string name="travellers_add_child">Aggiungi un bambino</string>
+    <string name="travellers_remove_child">Togli un bambino</string>
+    <string name="travellers_older">Bambino %1$d: un anno in più</string>
+    <string name="travellers_younger">Bambino %1$d: un anno in meno</string>
+    <string name="travellers_infants_note">Sotto i 2 anni in aereo si viaggia in braccio a un adulto: il supplemento si vede sul sito della compagnia.</string>
+    <string name="travellers_infants_error">Ogni bambino sotto i 2 anni viaggia in braccio a un adulto diverso: aggiungi un adulto.</string>
+    <string name="flights_change_travellers">Cambia</string>
+    <string name="flight_price_per_person">%1$s a persona · %2$s</string>
+    <plurals name="travellers_adults">
+        <item quantity="one">%d adulto</item>
+        <item quantity="other">%d adulti</item>
+    </plurals>
+    <plurals name="travellers_children">
+        <item quantity="one">%d bambino</item>
+        <item quantity="other">%d bambini</item>
+    </plurals>
+    <plurals name="travellers_age">
+        <item quantity="one">%d anno</item>
+        <item quantity="other">%d anni</item>
+    </plurals>
+    <plurals name="flight_seats">
+        <item quantity="one">totale per %d posto</item>
+        <item quantity="other">totale per %d posti</item>
+    </plurals>
     <string name="search_dates_hint">Oppure scegli le date esatte: i voli di quei giorni vengono prima.</string>
     <string name="search_departure_date">🛫 Andata</string>
     <string name="search_return_date">🛬 Ritorno</string>
@@ -561,6 +596,7 @@
     <string name="budget_chip">Budget</string>
     <string name="budget_title">Budget di %1$s</string>
     <string name="budget_spent">Speso finora</string>
+    <string name="budget_per_person">%1$s a testa, in %2$d</string>
     <string name="budget_of_limit">su un budget di %1$s</string>
     <string name="budget_remaining">Restano %1$s</string>
     <string name="budget_over">Oltre il budget di %1$s</string>

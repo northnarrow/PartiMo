@@ -12,6 +12,7 @@ import com.partimo.app.ui.common.toUiState
 import com.partimo.domain.model.Destination
 import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.TripContext
 import com.partimo.domain.model.deal.PriceChange
 import com.partimo.domain.model.flight.FlightSearchQuery
@@ -26,7 +27,9 @@ import com.partimo.domain.usecase.GetTripEventsUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObservePriceAlertUseCase
 import com.partimo.domain.usecase.ObserveSavedTripUseCase
+import com.partimo.domain.usecase.ObserveTravellersUseCase
 import com.partimo.domain.usecase.PlanTransitRouteUseCase
+import com.partimo.domain.usecase.SaveTravellersUseCase
 import com.partimo.domain.usecase.SearchAccommodationsUseCase
 import com.partimo.domain.usecase.SearchFlightsUseCase
 import com.partimo.domain.usecase.SetPriceAlertUseCase
@@ -38,8 +41,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.joinAll
@@ -78,6 +83,9 @@ class TripDashboardViewModel(
     private val observeSavedTrip: ObserveSavedTripUseCase? = null,
     private val setTripSaved: SetTripSavedUseCase? = null,
     private val toggleFavorite: ToggleFavoriteUseCase? = null,
+    /** Chi parte: senza, i prezzi sono per una persona. */
+    private val observeTravellers: ObserveTravellersUseCase? = null,
+    private val saveTravellers: SaveTravellersUseCase? = null,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -95,14 +103,18 @@ class TripDashboardViewModel(
     init {
         viewModelScope.launch {
             var firstLoad = true
-            observeDeparture().collect { departure ->
-                _uiState.update { it.copy(trip = it.trip.copy(departure = departure)) }
+            val travellers = observeTravellers?.invoke() ?: flowOf(Travellers.SOLO)
+            combine(observeDeparture(), travellers) { departure, people -> departure to people }.collect { (departure, people) ->
+                val previous = _uiState.value.trip
+                _uiState.update { it.copy(trip = it.trip.copy(departure = departure, travellers = people)) }
                 if (firstLoad) {
                     firstLoad = false
                     loadDashboard(forceRefresh = false)
-                } else {
-                    loadSection(DashboardSection.FLIGHTS, forceRefresh = false)
+                    return@collect
                 }
+                // Partenza e viaggiatori cambiano i prezzi dei voli; i viaggiatori anche quelli degli alloggi.
+                if (departure != previous.departure || people != previous.travellers) loadSection(DashboardSection.FLIGHTS, forceRefresh = false)
+                if (people != previous.travellers && _uiState.value.stayOffersAvailable) loadSection(DashboardSection.STAYS, forceRefresh = false)
             }
         }
         observeSavedTrip?.let { observe ->
@@ -129,6 +141,12 @@ class TripDashboardViewModel(
         if (period == _uiState.value.period) return
         _uiState.update { it.copy(period = period, trip = tripFor(period, it.trip), nowAtDestination = nowAtDestination(period)) }
         loadDashboard(forceRefresh = false)
+    }
+
+    /** Nuovi viaggiatori scelti nella dashboard: valgono per tutti i viaggi, i prezzi si ricaricano da soli. */
+    fun onTravellersSelected(travellers: Travellers) {
+        val save = saveTravellers ?: return
+        viewModelScope.launch { save(travellers) }
     }
 
     fun onSectionSelected(section: DashboardSection) {
@@ -177,7 +195,8 @@ class TripDashboardViewModel(
         }
         val enable = !state.alertEnabled
         viewModelScope.launch {
-            val (flightPrice, stayPrice) = bestPrices()
+            // Gli avvisi seguono il prezzo di un posto, come i controlli periodici (fatti per una persona).
+            val (flightPrice, stayPrice) = bestPrices(perPassenger = true)
             setPriceAlert(enable, departure, destination, state.period, flightPrice, stayPrice)
             val message = when {
                 !enable -> DashboardMessage.ALERT_DISABLED
@@ -254,7 +273,7 @@ class TripDashboardViewModel(
             destinationIata = trip.destination.airportIata,
             departureDate = trip.departureDate,
             returnDate = trip.returnDate,
-            adults = trip.travellers,
+            travellers = trip.travellers,
             // Chi raccoglie i prezzi di molte date (Aviasales) propone i voli più convenienti del periodo
             // o, con le date scelte, quelli di quei giorni e poi dei giorni vicini.
             flexibleDates = _uiState.value.period.flexibleDates(LocalDate.now(clock)),
@@ -277,7 +296,8 @@ class TripDashboardViewModel(
             location = trip.destination.center,
             checkIn = trip.departureDate,
             checkOut = trip.returnDate,
-            adults = trip.travellers,
+            travellers = trip.travellers,
+            rooms = AccommodationSearchQuery.roomsFor(trip.travellers),
         )
         val state = searchAccommodations(query, forceRefresh = forceRefresh).toListUiState()
         _uiState.update { it.copy(stays = state) }
@@ -350,12 +370,15 @@ class TripDashboardViewModel(
         }
     }
 
-    /** Volo più economico e alloggio ben recensito più economico (a notte): gli stessi prezzi seguiti dagli avvisi. */
-    private fun bestPrices(): Pair<Money?, Money?> {
+    /**
+     * Volo più economico e alloggio ben recensito più economico (a notte): gli stessi prezzi seguiti dagli avvisi.
+     * Il volo è il totale per tutti i viaggiatori o, con [perPassenger], il prezzo di un posto.
+     */
+    private fun bestPrices(perPassenger: Boolean = false): Pair<Money?, Money?> {
         val state = _uiState.value
         val flight = (state.flights as? UiState.Success)?.data?.let { offers -> TrackedPrices.cheapestFlight(offers.map { it.offer }) }
         val stay = (state.stays as? UiState.Success)?.data?.let { offers -> TrackedPrices.cheapestGoodStay(offers.map { it.offer }) }
-        return flight?.totalPrice to stay?.pricePerNight
+        return (if (perPassenger) flight?.pricePerPassenger else flight?.totalPrice) to stay?.pricePerNight
     }
 
     private fun changeOf(before: Money?, after: Money?): PriceChange? =
@@ -418,6 +441,8 @@ class TripDashboardViewModel(
                     isDemoMode = container.isDemoMode,
                     assistantAvailable = container.planTrip.isAvailable,
                     observeSavedTrip = container.observeSavedTrip,
+                    observeTravellers = container.observeTravellers,
+                    saveTravellers = container.saveTravellers,
                     setTripSaved = container.setTripSaved,
                     toggleFavorite = container.toggleFavorite,
                 )

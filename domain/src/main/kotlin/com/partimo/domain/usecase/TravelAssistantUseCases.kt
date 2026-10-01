@@ -4,6 +4,7 @@ import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.common.getOrNull
 import com.partimo.domain.model.Destination
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.plan.ChatMessage
 import com.partimo.domain.model.plan.ChatRole
 import com.partimo.domain.model.plan.DayPlan
@@ -13,9 +14,10 @@ import com.partimo.domain.model.plan.TripPlan
 import com.partimo.domain.model.plan.TripPreferences
 import com.partimo.domain.repository.ChecklistRepository
 import com.partimo.domain.repository.TravelAssistantRepository
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import java.time.LocalDate
 
 /**
@@ -28,10 +30,13 @@ class LoadTripKnowledgeUseCase(
     private val getTripEvents: GetTripEventsUseCase,
     private val getTripWeather: GetTripWeatherUseCase? = null,
     private val maxPlaces: Int = DEFAULT_MAX_PLACES,
+    /** Viaggiatori scelti dall'utente; senza, l'assistente pensa a una persona sola. */
+    private val observeTravellers: ObserveTravellersUseCase? = null,
 ) {
 
-    suspend operator fun invoke(destination: Destination, from: LocalDate, to: LocalDate, travellers: Int = 1): TripKnowledge =
+    suspend operator fun invoke(destination: Destination, from: LocalDate, to: LocalDate): TripKnowledge =
         coroutineScope {
+            val travellers = observeTravellers?.invoke()?.first() ?: Travellers.SOLO
             val highlights = async { getSeasonalHighlights(destination.center, from, areaName = destination.name) }
             val events = async { getTripEvents(destination, from, to) }
             val weather = async { getTripWeather?.invoke(destination.center, from, to)?.getOrNull() }

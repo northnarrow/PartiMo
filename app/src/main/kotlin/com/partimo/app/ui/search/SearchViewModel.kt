@@ -11,13 +11,16 @@ import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.common.toListUiState
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DestinationSuggestion
 import com.partimo.domain.model.saved.SavedTrip
 import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObserveSavedTripsUseCase
+import com.partimo.domain.usecase.ObserveTravellersUseCase
 import com.partimo.domain.usecase.RecommendDestinationsUseCase
 import com.partimo.domain.usecase.ResolveDestinationUseCase
+import com.partimo.domain.usecase.SaveTravellersUseCase
 import com.partimo.domain.usecase.SearchCitiesUseCase
 import com.partimo.domain.usecase.SetTripSavedUseCase
 import kotlinx.coroutines.Job
@@ -41,6 +44,8 @@ class SearchViewModel(
     private val clock: Clock,
     observeSavedTrips: ObserveSavedTripsUseCase? = null,
     private val setTripSaved: SetTripSavedUseCase? = null,
+    observeTravellers: ObserveTravellersUseCase? = null,
+    private val saveTravellers: SaveTravellersUseCase? = null,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SearchUiState(today = LocalDate.now(clock)))
@@ -62,6 +67,15 @@ class SearchViewModel(
         observeSavedTrips?.let { observe ->
             viewModelScope.launch { observe().collect { trips -> _uiState.update { it.copy(savedTrips = trips) } } }
         }
+        observeTravellers?.let { observe ->
+            viewModelScope.launch { observe().collect { travellers -> _uiState.update { it.copy(travellers = travellers) } } }
+        }
+    }
+
+    /** Adulti e bambini scelti nella cella «Chi parte»: valgono per tutti i viaggi. */
+    fun onTravellersSelected(travellers: Travellers) {
+        val save = saveTravellers ?: return
+        viewModelScope.launch { save(travellers) }
     }
 
     /** Riapre un viaggio salvato: meta e periodo sono già noti, niente ricerca dell'aeroporto. */
@@ -151,6 +165,8 @@ class SearchViewModel(
                     clock = container.clock,
                     observeSavedTrips = container.observeSavedTrips,
                     setTripSaved = container.setTripSaved,
+                    observeTravellers = container.observeTravellers,
+                    saveTravellers = container.saveTravellers,
                 )
             }
         }

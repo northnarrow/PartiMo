@@ -2,7 +2,9 @@ package com.partimo.domain.model.flight
 
 import com.partimo.domain.common.QueryIssue
 import com.partimo.domain.model.Money
+import com.partimo.domain.model.Travellers
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
@@ -17,7 +19,8 @@ data class FlightSearchQuery(
     val destinationIata: String,
     val departureDate: LocalDate,
     val returnDate: LocalDate? = null,
-    val adults: Int = 1,
+    /** Chi parte: i prezzi sono il totale per tutti (i neonati viaggiano in braccio). */
+    val travellers: Travellers = Travellers.SOLO,
     val cabinClass: CabinClass = CabinClass.ECONOMY,
     /** Numero massimo di scali per tratta richiesto al provider. */
     val maxConnections: Int = 1,
@@ -36,7 +39,7 @@ data class FlightSearchQuery(
         originIata.equals(destinationIata, ignoreCase = true) -> QueryIssue.SAME_ORIGIN_AND_DESTINATION
         departureDate.isBefore(today) -> QueryIssue.DATE_IN_THE_PAST
         returnDate != null && returnDate.isBefore(departureDate) -> QueryIssue.RETURN_BEFORE_DEPARTURE
-        adults !in 1..MAX_PASSENGERS -> QueryIssue.INVALID_TRAVELLER_COUNT
+        !travellers.infantsHaveLaps -> QueryIssue.INVALID_TRAVELLER_COUNT
         else -> null
     }
 
@@ -54,10 +57,6 @@ data class FlightSearchQuery(
         offer.outbound.departureTime.toLocalDate() == departureDate && offer.inbound?.departureTime?.toLocalDate() == returnDate
 
     private fun String.isIataCode(): Boolean = length == 3 && all(Char::isLetter)
-
-    companion object {
-        const val MAX_PASSENGERS = 9
-    }
 }
 
 /**
@@ -103,10 +102,17 @@ data class FlightOffer(
      * (Aviasales): nel frattempo può essere cambiato. `null` per le offerte in tempo reale e per le stime.
      */
     val priceFoundOn: LocalDate? = null,
+    /** Posti pagati compresi in [totalPrice] (tutti i viaggiatori tranne i neonati in braccio). */
+    val passengers: Int = 1,
 ) {
     init {
         require(slices.isNotEmpty()) { "Un'offerta deve contenere almeno una tratta" }
+        require(passengers >= 1) { "Un'offerta è per almeno un passeggero" }
     }
+
+    /** Prezzo di un posto: il totale diviso tra i passeggeri. */
+    val pricePerPassenger: Money
+        get() = if (passengers == 1) totalPrice else Money.of(totalPrice.amount.divide(passengers.toBigDecimal(), 2, RoundingMode.HALF_UP), totalPrice.currencyCode)
 
     val outbound: FlightSlice get() = slices.first()
     val inbound: FlightSlice? get() = slices.getOrNull(1)

@@ -9,6 +9,7 @@ import com.partimo.data.testing.jsonHeaders
 import com.partimo.data.testing.mockHttpClient
 import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataOrigin
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.plan.ChatMessage
 import com.partimo.domain.model.plan.ChatRole
 import com.partimo.domain.model.plan.DayPart
@@ -153,5 +154,16 @@ class GeminiTravelAssistantDataSourceTest {
             "Dove mangiare\n• Figlmüller: la cotoletta\n• Plachutta, per il Tafelspitz",
             GeminiTravelAssistantDataSource.plainText(text),
         )
+    }
+
+    @Test
+    fun `con i bambini l'assistente sa quanti sono e quanti anni hanno`() {
+        val family = ViennaTrip.knowledge().copy(travellers = Travellers(adults = 2, childAges = listOf(9, 4)))
+        val baby = ViennaTrip.knowledge().copy(travellers = Travellers(adults = 1, childAges = listOf(1)))
+        val couple = ViennaTrip.knowledge().copy(travellers = Travellers(adults = 2))
+
+        assertContains(TravelPrompts.chatSystem(family, ViennaTrip.from), "dicembre 2026: 5 giorni, 2 adulti e 2 bambini (4 e 9 anni).")
+        assertContains(TravelPrompts.chatSystem(baby, ViennaTrip.from), "5 giorni, 1 adulto e 1 bambino (1 anno).")
+        assertContains(TravelPrompts.chatSystem(couple, ViennaTrip.from), "5 giorni, 2 adulti.")
     }
 }

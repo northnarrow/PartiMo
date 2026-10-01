@@ -23,6 +23,7 @@ import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.Money
 import com.partimo.domain.model.ScoredOffer
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.TripContext
 import com.partimo.domain.model.WheelchairAccess
 import com.partimo.domain.model.budget.BudgetSummary
@@ -388,6 +389,9 @@ internal object PreviewData {
     /** Date scelte dall'utente (11–13 dicembre): il volo proprio in quei giorni, poi uno dei giorni vicini. */
     val DATES: TravelPeriod.Dates = TravelPeriod.Dates(LocalDate.of(2026, Month.DECEMBER, 11), LocalDate.of(2026, Month.DECEMBER, 13))
 
+    /** Due adulti e un bambino di 7 anni. */
+    val FAMILY = Travellers(adults = 2, childAges = listOf(7))
+
     private val datesFlights = listOf(
         recentFlights.first(),
         ScoredOffer(
@@ -414,6 +418,18 @@ internal object PreviewData {
         period = DATES,
         periods = listOf(TravelPeriod.NextDays, DATES) + TravelPeriod.selectable(TODAY).drop(1),
         flights = UiState.Success(datesFlights, DataOrigin.REMOTE),
+    )
+
+    /** Due adulti e un bambino: i prezzi trovati su Aviasales sono per tre posti. */
+    fun familyFlightPricesState() = recentFlightPricesState().copy(
+        trip = trip.copy(travellers = FAMILY),
+        flights = UiState.Success(
+            recentFlights.map { scored ->
+                val offer = scored.offer
+                scored.copy(offer = offer.copy(totalPrice = Money.of(offer.totalPrice.amount.multiply(BigDecimal(3)), "EUR"), passengers = 3))
+            },
+            DataOrigin.REMOTE,
+        ),
     )
 
     fun noDepartureState() = loadedState().copy(trip = trip.copy(departure = null), flights = UiState.Empty, alertEnabled = false)
@@ -479,7 +495,7 @@ internal object PreviewData {
     fun searchResultsState() = SearchUiState(today = TODAY, results = UiState.Success(searchResults))
 
     /** Schermata iniziale con le date esatte scelte nelle celle «Andata» e «Ritorno». */
-    fun searchDatesState() = searchIdleState().copy(period = DATES)
+    fun searchDatesState() = searchIdleState().copy(period = DATES, travellers = FAMILY)
 
     fun searchIdeasState() = SearchUiState(
         today = TODAY,

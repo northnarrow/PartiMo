@@ -7,8 +7,9 @@ import com.partimo.data.testing.MutableClock
 import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.common.DataResult
-import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.GeoPoint
+import com.partimo.domain.model.Travellers
+import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.transit.TransitRouteQuery
 import com.partimo.domain.testing.TestData
@@ -29,7 +30,7 @@ class DemoDataSourcesTest {
 
     @Test
     fun `i voli demo rispettano date, passeggeri e tratte richieste`() = runTest {
-        val query = FlightSearchQuery("MXP", "VIE", departure, departure.plusDays(4), adults = 2)
+        val query = FlightSearchQuery("MXP", "VIE", departure, departure.plusDays(4), travellers = Travellers(adults = 2, childAges = listOf(1)))
 
         val result = DemoFlightDataSource(catalog, latencyMillis = 0).searchOffers(query, forceRefresh = false)
 
@@ -37,6 +38,7 @@ class DemoDataSourcesTest {
         assertTrue(result.data.isNotEmpty())
         assertTrue(result.data.all { it.slices.size == 2 && it.outbound.departureTime.toLocalDate() == departure })
         assertTrue(result.data.all { it.outbound.originIata == "MXP" && it.inbound?.originIata == "VIE" })
+        assertTrue(result.data.all { it.passengers == 2 }, "Il neonato viaggia in braccio")
     }
 
     @Test

@@ -9,6 +9,7 @@ import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.common.QueryIssue
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.place.TravelExperience
 import com.partimo.domain.model.place.TravelTheme
 import com.partimo.domain.service.SeasonalCalendar
@@ -20,10 +21,13 @@ import com.partimo.domain.testing.FakeWeatherRepository
 import com.partimo.domain.testing.TestData
 import com.partimo.domain.testing.TestData.catalogDestination
 import com.partimo.domain.usecase.ObserveDepartureUseCase
+import com.partimo.domain.usecase.ObserveTravellersUseCase
 import com.partimo.domain.usecase.RecommendDestinationsUseCase
 import com.partimo.domain.usecase.ResolveDestinationUseCase
+import com.partimo.domain.usecase.SaveTravellersUseCase
 import com.partimo.domain.usecase.SearchCitiesUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -78,10 +82,25 @@ class SearchViewModelTest {
         recommendDestinations = RecommendDestinationsUseCase(catalog, FakeWeatherRepository()),
         observeDeparture = ObserveDepartureUseCase(preferences),
         clock = TestData.FIXED_CLOCK,
+        observeTravellers = ObserveTravellersUseCase(preferences),
+        saveTravellers = SaveTravellersUseCase(preferences),
     )
 
     private fun SearchViewModel.recommendedNames(): List<String> =
         assertNotNull(uiState.value.recommendations).successData().map { it.destination.city.name }
+
+    @Test
+    fun `chi parte si sceglie una volta e resta salvato`() = runTest {
+        val viewModel = createViewModel()
+        assertEquals(Travellers.SOLO, viewModel.uiState.value.travellers)
+
+        val family = Travellers(adults = 2, childAges = listOf(10, 4))
+        viewModel.onTravellersSelected(family)
+        advanceUntilIdle()
+
+        assertEquals(family, viewModel.uiState.value.travellers)
+        assertEquals(family, preferences.travellers.first())
+    }
 
     @Test
     fun `un testo troppo corto non avvia la ricerca`() = runTest {

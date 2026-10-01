@@ -23,6 +23,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,13 +45,16 @@ import com.partimo.app.ui.common.DashboardSection
 import com.partimo.app.ui.common.FavoriteButton
 import com.partimo.app.ui.common.Formatters
 import com.partimo.app.ui.common.TravelLinks
+import com.partimo.app.ui.common.TravellersDialog
 import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.common.ValueScoreBar
+import com.partimo.app.ui.common.label
 import com.partimo.app.ui.common.labelRes
 import com.partimo.app.ui.common.toFavorite
 import com.partimo.app.ui.place.googleMapsSearchUrl
 import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.model.ScoredOffer
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.TripContext
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightPriceSource
@@ -79,9 +86,12 @@ fun FlightsSection(
     /** Date di andata e ritorno scelte dall'utente: i voli di Aviasales proprio in quei giorni sono segnalati. */
     exactDates: Boolean = false,
     onOpenLink: (String) -> Unit = {},
+    /** Nuovi viaggiatori scelti dall'intestazione; `null` = nessun pulsante per cambiarli. */
+    onTravellersSelected: ((Travellers) -> Unit)? = null,
 ) {
     val departure = trip.departure
     val links = flightLinks(trip)
+    var pickingTravellers by rememberSaveable { mutableStateOf(false) }
     val estimated = priceSource == FlightPriceSource.ESTIMATES || (state as? UiState.Success)?.origin == DataOrigin.DEMO
     val recentPrices = priceSource == FlightPriceSource.RECENT_SEARCHES
     val note = when {
@@ -107,8 +117,15 @@ fun FlightsSection(
         headerContent = departure?.let {
             {
                 Column {
-                    TextButton(onClick = onChangeDeparture, contentPadding = PaddingValues(horizontal = 0.dp)) {
-                        Text("📍 " + it.cityName + " · " + stringResource(R.string.flights_change_departure))
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                        TextButton(onClick = onChangeDeparture, contentPadding = PaddingValues(horizontal = 0.dp)) {
+                            Text("📍 " + it.cityName + " · " + stringResource(R.string.flights_change_departure))
+                        }
+                        if (onTravellersSelected != null) {
+                            TextButton(onClick = { pickingTravellers = true }, contentPadding = PaddingValues(horizontal = 0.dp)) {
+                                Text("👥 " + trip.travellers.label() + " · " + stringResource(R.string.flights_change_travellers))
+                            }
+                        }
                     }
                     links?.let { flightLinks ->
                         ExternalLinksCard(
@@ -141,6 +158,16 @@ fun FlightsSection(
                 )
             }
         }
+    }
+    if (pickingTravellers && onTravellersSelected != null) {
+        TravellersDialog(
+            initial = trip.travellers,
+            onDismiss = { pickingTravellers = false },
+            onConfirm = { travellers ->
+                pickingTravellers = false
+                onTravellersSelected(travellers)
+            },
+        )
     }
 }
 
@@ -184,6 +211,18 @@ fun FlightCard(
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
+                )
+            }
+            if (offer.passengers > 1) {
+                Text(
+                    text = stringResource(
+                        R.string.flight_price_per_person,
+                        Formatters.money(offer.pricePerPassenger),
+                        pluralStringResource(R.plurals.flight_seats, offer.passengers, offer.passengers),
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.align(Alignment.End),
                 )
             }
             offer.slices.forEachIndexed { index, slice -> FlightSliceRow(slice, isReturn = index > 0) }

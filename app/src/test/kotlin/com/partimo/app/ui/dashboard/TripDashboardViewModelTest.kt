@@ -9,6 +9,7 @@ import com.partimo.domain.common.DataResult
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.dining.PriceLevel
 import com.partimo.domain.model.event.EventKind
 import com.partimo.domain.model.event.EventTiming
@@ -38,13 +39,16 @@ import com.partimo.domain.usecase.GetTripEventsUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObservePriceAlertUseCase
 import com.partimo.domain.usecase.ObserveSavedTripUseCase
+import com.partimo.domain.usecase.ObserveTravellersUseCase
 import com.partimo.domain.usecase.PlanTransitRouteUseCase
+import com.partimo.domain.usecase.SaveTravellersUseCase
 import com.partimo.domain.usecase.SearchAccommodationsUseCase
 import com.partimo.domain.usecase.SearchFlightsUseCase
 import com.partimo.domain.usecase.SetPriceAlertUseCase
 import com.partimo.domain.usecase.SetTripSavedUseCase
 import com.partimo.domain.usecase.ToggleFavoriteUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -137,7 +141,38 @@ class TripDashboardViewModelTest {
         observeSavedTrip = ObserveSavedTripUseCase(savedTrips),
         setTripSaved = SetTripSavedUseCase(savedTrips, TestData.FIXED_CLOCK),
         toggleFavorite = ToggleFavoriteUseCase(savedTrips, TestData.FIXED_CLOCK),
+        observeTravellers = ObserveTravellersUseCase(preferences),
+        saveTravellers = SaveTravellersUseCase(preferences),
     )
+
+    @Test
+    fun `i viaggiatori scelti valgono per voli e alloggi e cambiandoli i prezzi si ricaricano`() = runTest {
+        val family = Travellers(adults = 2, childAges = listOf(6))
+        val viewModel = createViewModel()
+        assertEquals(Travellers.SOLO, flights.queries.single().travellers)
+
+        viewModel.onTravellersSelected(family)
+        advanceUntilIdle()
+
+        assertEquals(family, preferences.travellers.first())
+        assertEquals(family, viewModel.uiState.value.trip.travellers)
+        assertEquals(2, flights.queries.size)
+        assertEquals(family, flights.queries.last().travellers)
+        assertEquals(family, stays.queries.last().travellers)
+        assertEquals(1, stays.queries.last().rooms, "Una camera per due adulti e un bambino")
+        assertEquals(1, pois.queries.size, "I luoghi da vedere non dipendono da chi parte")
+    }
+
+    @Test
+    fun `l'avviso segue il prezzo di un posto, come i controlli fatti per una persona`() = runTest {
+        flights.result = DataResult.Success(listOf(TestData.flightOffer("famiglia", "300").copy(passengers = 3)))
+        val viewModel = createViewModel()
+
+        viewModel.onAlertToggled(notificationsAllowed = true)
+        advanceUntilIdle()
+
+        assertEquals(Money.of("100", "EUR"), watches.current.single().flightPrices.single().price)
+    }
 
     @Test
     fun `il segnalibro salva il viaggio del periodo mostrato e le stelle i suoi preferiti`() = runTest {

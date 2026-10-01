@@ -9,6 +9,7 @@ import com.partimo.app.di.AppContainer
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.model.Destination
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.budget.BudgetSummary
 import com.partimo.domain.model.budget.Expense
 import com.partimo.domain.model.budget.ExpenseCategory
@@ -16,6 +17,7 @@ import com.partimo.domain.model.budget.TripBudget
 import com.partimo.domain.model.guide.EURO
 import com.partimo.domain.usecase.EditTripBudgetUseCase
 import com.partimo.domain.usecase.GetCountryInfoUseCase
+import com.partimo.domain.usecase.ObserveTravellersUseCase
 import com.partimo.domain.usecase.ObserveTripBudgetUseCase
 import com.partimo.domain.usecase.SummarizeBudgetUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,6 +28,7 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.time.Clock
 import java.time.LocalDate
 
@@ -57,7 +60,14 @@ data class BudgetUiState(
     val draft: ExpenseDraft? = null,
     /** Budget in scrittura; `null` con la finestra chiusa. */
     val limitText: String? = null,
+    /** Chi parte: con più persone si mostra anche la spesa a testa. */
+    val travellers: Travellers = Travellers.SOLO,
 ) {
+    /** Spesa a testa nella valuta dei totali; `null` per chi viaggia da solo o senza spese. */
+    val perPerson: BigDecimal?
+        get() = summary?.total?.takeIf { travellers.total > 1 && it.signum() > 0 }
+            ?.divide(travellers.total.toBigDecimal(), 2, RoundingMode.HALF_UP)
+
     /** Valute proposte per una spesa: l'euro e, se diversa, quella del paese. */
     val currencies: List<String> get() = listOfNotNull(homeCurrency, localCurrency?.takeIf { it != homeCurrency })
 
@@ -89,12 +99,16 @@ class BudgetViewModel(
     period: TravelPeriod,
     from: LocalDate,
     to: LocalDate,
+    observeTravellers: ObserveTravellersUseCase? = null,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(BudgetUiState(destination, period, from, to))
     val uiState: StateFlow<BudgetUiState> = _uiState.asStateFlow()
 
     init {
+        observeTravellers?.let { observe ->
+            viewModelScope.launch { observe().collect { travellers -> _uiState.update { it.copy(travellers = travellers) } } }
+        }
         viewModelScope.launch {
             val country = (getCountryInfo(destination.countryCode) as? DataResult.Success)?.data
             _uiState.update { it.copy(localCurrency = country?.currencyCode?.takeIf { code -> code != it.homeCurrency }) }
@@ -184,6 +198,7 @@ class BudgetViewModel(
                     period = period,
                     from = from,
                     to = to,
+                    observeTravellers = container.observeTravellers,
                 )
             }
         }

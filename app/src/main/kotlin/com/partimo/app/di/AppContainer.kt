@@ -34,6 +34,7 @@ import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObservePriceAlertUseCase
 import com.partimo.domain.usecase.ObserveSavedTripUseCase
 import com.partimo.domain.usecase.ObserveSavedTripsUseCase
+import com.partimo.domain.usecase.ObserveTravellersUseCase
 import com.partimo.domain.usecase.ObserveTripBudgetUseCase
 import com.partimo.domain.usecase.PackingChecklistUseCase
 import com.partimo.domain.usecase.PlanTransitRouteUseCase
@@ -42,6 +43,7 @@ import com.partimo.domain.usecase.PrefetchTripUseCase
 import com.partimo.domain.usecase.RecommendDestinationsUseCase
 import com.partimo.domain.usecase.ResolveDestinationUseCase
 import com.partimo.domain.usecase.SaveDepartureUseCase
+import com.partimo.domain.usecase.SaveTravellersUseCase
 import com.partimo.domain.usecase.SearchAccommodationsUseCase
 import com.partimo.domain.usecase.SearchCitiesUseCase
 import com.partimo.domain.usecase.SearchFlightsUseCase
@@ -80,6 +82,10 @@ interface AppContainer {
     val findDepartureAirports: FindDepartureAirportsUseCase
     val observeDeparture: ObserveDepartureUseCase
     val saveDeparture: SaveDepartureUseCase
+
+    /** Chi parte (adulti e bambini), per tutti i viaggi. */
+    val observeTravellers: ObserveTravellersUseCase
+    val saveTravellers: SaveTravellersUseCase
     val observePriceAlert: ObservePriceAlertUseCase
     val setPriceAlert: SetPriceAlertUseCase
     val checkPriceWatches: CheckPriceWatchesUseCase
@@ -201,6 +207,10 @@ class DefaultAppContainer(context: Context) : AppContainer {
 
     override val saveDeparture: SaveDepartureUseCase by lazy { SaveDepartureUseCase(dataModule.userPreferencesRepository) }
 
+    override val observeTravellers: ObserveTravellersUseCase by lazy { ObserveTravellersUseCase(dataModule.userPreferencesRepository) }
+
+    override val saveTravellers: SaveTravellersUseCase by lazy { SaveTravellersUseCase(dataModule.userPreferencesRepository) }
+
     override val observePriceAlert: ObservePriceAlertUseCase by lazy { ObservePriceAlertUseCase(dataModule.priceWatchRepository) }
 
     override val setPriceAlert: SetPriceAlertUseCase by lazy { SetPriceAlertUseCase(dataModule.priceWatchRepository, clock) }
@@ -210,7 +220,7 @@ class DefaultAppContainer(context: Context) : AppContainer {
     }
 
     override val loadTripKnowledge: LoadTripKnowledgeUseCase by lazy {
-        LoadTripKnowledgeUseCase(getSeasonalHighlights, getTripEvents, getTripWeather)
+        LoadTripKnowledgeUseCase(getSeasonalHighlights, getTripEvents, getTripWeather, observeTravellers = observeTravellers)
     }
 
     override val getCountryInfo: GetCountryInfoUseCase by lazy { GetCountryInfoUseCase(dataModule.countryInfoRepository) }

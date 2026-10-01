@@ -1,5 +1,6 @@
 package com.partimo.domain.model.backup
 
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.budget.TripBudget
 import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.place.DeparturePoint
@@ -12,6 +13,8 @@ import java.time.LocalDate
  */
 data class UserData(
     val departure: DeparturePoint? = null,
+    /** Viaggiatori scelti; `null` se l'utente non li ha mai indicati (una persona sola). */
+    val travellers: Travellers? = null,
     val savedTrips: List<SavedTrip> = emptyList(),
     val priceWatches: List<PriceWatch> = emptyList(),
     /** Budget con un tetto o almeno una spesa. */
@@ -37,6 +40,7 @@ data class UserData(
      */
     fun mergedWith(imported: UserData): UserData = UserData(
         departure = imported.departure ?: departure,
+        travellers = imported.travellers ?: travellers,
         savedTrips = mergeById(savedTrips, imported.savedTrips, SavedTrip::id) { current, incoming ->
             incoming.copy(favorites = (incoming.favorites + current.favorites).distinctBy { it.key })
         },

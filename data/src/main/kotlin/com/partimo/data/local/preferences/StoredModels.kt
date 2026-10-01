@@ -4,6 +4,7 @@ import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.backup.UserData
 import com.partimo.domain.model.budget.Expense
 import com.partimo.domain.model.budget.ExpenseCategory
@@ -49,6 +50,9 @@ internal data class AirportDto(
 
 @Serializable
 internal data class DeparturePointDto(val cityName: String, val airport: AirportDto)
+
+@Serializable
+internal data class TravellersDto(val adults: Int = 1, val childAges: List<Int> = emptyList())
 
 @Serializable
 internal data class DestinationDto(
@@ -135,6 +139,7 @@ internal data class UserDataBackupDto(
     /** Istante ISO dell'esportazione (es. "2026-10-01T16:30:00Z"). */
     val exportedAt: String? = null,
     val departure: DeparturePointDto? = null,
+    val travellers: TravellersDto? = null,
     val savedTrips: List<SavedTripDto> = emptyList(),
     val priceWatches: List<PriceWatchDto> = emptyList(),
     val budgets: List<TripBudgetBackupDto> = emptyList(),
@@ -176,6 +181,12 @@ internal object StoredJson {
     fun decodeDeparture(value: String): DeparturePoint? =
         runCatching { json.decodeFromString(DeparturePointDto.serializer(), value).toDomain() }.getOrNull()
 
+    fun encodeTravellers(travellers: Travellers): String = json.encodeToString(TravellersDto.serializer(), travellers.toDto())
+
+    /** `null` se il valore non descrive più dei viaggiatori validi. */
+    fun decodeTravellers(value: String): Travellers? =
+        runCatching { json.decodeFromString(TravellersDto.serializer(), value).toDomain() }.getOrNull()
+
     fun encodeBudget(budget: TripBudget): String = json.encodeToString(TripBudgetDto.serializer(), budget.toDto())
 
     /** Le spese non più interpretabili vengono scartate una a una; il budget resta. */
@@ -193,6 +204,7 @@ internal object StoredJson {
             version = BACKUP_VERSION,
             exportedAt = exportedAt.toString(),
             departure = data.departure?.toDto(),
+            travellers = data.travellers?.toDto(),
             savedTrips = data.savedTrips.map { it.toDto() },
             priceWatches = data.priceWatches.map { it.toDto() },
             budgets = data.budgets.filter { it.hasData }.map { budget ->
@@ -211,6 +223,7 @@ internal object StoredJson {
         if (dto.format != BACKUP_FORMAT) return null
         return UserData(
             departure = dto.departure?.let { runCatching { it.toDomain() }.getOrNull() },
+            travellers = dto.travellers?.let { runCatching { it.toDomain() }.getOrNull() },
             savedTrips = dto.savedTrips.mapNotNull { runCatching { it.toDomain() }.getOrNull() },
             priceWatches = dto.priceWatches.mapNotNull { runCatching { it.toDomain() }.getOrNull() },
             budgets = dto.budgets.mapNotNull { budget ->
@@ -256,6 +269,10 @@ private fun AirportDto.toDomain() = Airport(
     location = location.toDomain(),
     size = AirportSize.entries.firstOrNull { it.name == size } ?: AirportSize.MEDIUM,
 )
+
+private fun Travellers.toDto() = TravellersDto(adults, childAges)
+
+private fun TravellersDto.toDomain() = Travellers(adults, childAges)
 
 private fun DeparturePoint.toDto() = DeparturePointDto(cityName, airport.toDto())
 

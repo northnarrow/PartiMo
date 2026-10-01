@@ -5,6 +5,7 @@ import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.backup.UserData
 import com.partimo.domain.model.budget.TripBudget
 import com.partimo.domain.model.deal.PriceWatch
@@ -257,12 +258,21 @@ class FakeDestinationCatalogRepository(
     }
 }
 
-class FakeUserPreferencesRepository(initial: DeparturePoint? = null) : UserPreferencesRepository {
+class FakeUserPreferencesRepository(
+    initial: DeparturePoint? = null,
+    initialTravellers: Travellers = Travellers.SOLO,
+) : UserPreferencesRepository {
     private val state = MutableStateFlow(initial)
+    private val travellersState = MutableStateFlow(initialTravellers)
     override val departure: Flow<DeparturePoint?> = state
+    override val travellers: Flow<Travellers> = travellersState
 
     override suspend fun setDeparture(departure: DeparturePoint) {
         state.value = departure
+    }
+
+    override suspend fun setTravellers(travellers: Travellers) {
+        travellersState.value = travellers
     }
 }
 

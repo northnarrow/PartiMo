@@ -3,6 +3,7 @@ package com.partimo.domain.repository
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.backup.UserData
 import com.partimo.domain.model.budget.TripBudget
 import com.partimo.domain.model.deal.PriceWatch
@@ -207,6 +208,11 @@ interface UserPreferencesRepository {
     val departure: Flow<DeparturePoint?>
 
     suspend fun setDeparture(departure: DeparturePoint)
+
+    /** Chi parte di solito (adulti e bambini); una persona sola finché l'utente non sceglie. */
+    val travellers: Flow<Travellers>
+
+    suspend fun setTravellers(travellers: Travellers)
 }
 
 /** Viaggi salvati con i loro preferiti, sul dispositivo. */

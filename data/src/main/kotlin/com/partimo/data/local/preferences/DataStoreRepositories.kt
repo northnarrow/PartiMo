@@ -10,6 +10,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStoreFile
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.backup.UserData
 import com.partimo.domain.model.budget.TripBudget
 import com.partimo.domain.model.deal.PriceWatch
@@ -37,6 +38,7 @@ import java.time.Instant
 private val DEPARTURE_KEY = stringPreferencesKey("departure")
 private val PRICE_WATCHES_KEY = stringPreferencesKey("price_watches")
 private val SAVED_TRIPS_KEY = stringPreferencesKey("saved_trips")
+private val TRAVELLERS_KEY = stringPreferencesKey("travellers")
 private const val BUDGET_KEY_PREFIX = "budget:"
 private const val CHECKLIST_KEY_PREFIX = "checklist:"
 private const val USER_DATA_STORE_NAME = "partimo_user"
@@ -71,6 +73,14 @@ class DataStoreUserPreferencesRepository internal constructor(
 
     override suspend fun setDeparture(departure: DeparturePoint) {
         dataStore.edit { preferences -> preferences[DEPARTURE_KEY] = StoredJson.encodeDeparture(departure) }
+    }
+
+    override val travellers: Flow<Travellers> = dataStore.safeData()
+        .map { preferences -> preferences[TRAVELLERS_KEY]?.let(StoredJson::decodeTravellers) ?: Travellers.SOLO }
+        .distinctUntilChanged()
+
+    override suspend fun setTravellers(travellers: Travellers) {
+        dataStore.edit { preferences -> preferences[TRAVELLERS_KEY] = StoredJson.encodeTravellers(travellers) }
     }
 }
 
@@ -198,6 +208,7 @@ class DataStoreUserDataRepository internal constructor(
         val entries = asMap()
         return UserData(
             departure = this[DEPARTURE_KEY]?.let(StoredJson::decodeDeparture),
+            travellers = this[TRAVELLERS_KEY]?.let(StoredJson::decodeTravellers),
             savedTrips = StoredJson.decodeSavedTrips(this[SAVED_TRIPS_KEY]),
             priceWatches = StoredJson.decodeWatches(this[PRICE_WATCHES_KEY]),
             budgets = entries.mapNotNull { (key, value) ->
@@ -216,6 +227,8 @@ class DataStoreUserDataRepository internal constructor(
     private fun MutablePreferences.write(data: UserData) {
         val departure = data.departure
         if (departure != null) this[DEPARTURE_KEY] = StoredJson.encodeDeparture(departure) else remove(DEPARTURE_KEY)
+        val travellers = data.travellers
+        if (travellers != null) this[TRAVELLERS_KEY] = StoredJson.encodeTravellers(travellers) else remove(TRAVELLERS_KEY)
         this[SAVED_TRIPS_KEY] = StoredJson.encodeSavedTrips(data.savedTrips)
         this[PRICE_WATCHES_KEY] = StoredJson.encodeWatches(data.priceWatches)
         asMap().keys

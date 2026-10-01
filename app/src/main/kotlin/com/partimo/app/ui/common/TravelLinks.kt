@@ -1,5 +1,7 @@
 package com.partimo.app.ui.common
 
+import com.partimo.domain.model.Travellers
+import com.partimo.domain.model.stay.AccommodationSearchQuery
 import java.net.URLEncoder
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -19,23 +21,39 @@ object TravelLinks {
             encode("Flights from $originIata to $destinationIata on $departure through $returnDate") +
             "&hl=it&curr=EUR"
 
-    /** Skyscanner: compagnie di linea, low cost e agenzie a confronto per la stessa tratta e le stesse date. */
-    fun skyscanner(originIata: String, destinationIata: String, departure: LocalDate, returnDate: LocalDate, adults: Int): String =
+    /**
+     * Skyscanner: compagnie di linea, low cost e agenzie a confronto per la stessa tratta e le stesse date,
+     * con gli adulti e l'età di ogni bambino.
+     */
+    fun skyscanner(originIata: String, destinationIata: String, departure: LocalDate, returnDate: LocalDate, travellers: Travellers): String =
         "https://www.skyscanner.it/trasporti/voli/" +
             "${originIata.lowercase(Locale.ROOT)}/${destinationIata.lowercase(Locale.ROOT)}/" +
-            "${departure.format(skyscannerDate)}/${returnDate.format(skyscannerDate)}/?adultsv2=$adults"
+            "${departure.format(skyscannerDate)}/${returnDate.format(skyscannerDate)}/?adultsv2=${travellers.adults}" +
+            (if (travellers.children > 0) "&childrenv2=" + travellers.childAges.joinToString("%7C") else "")
 
     /**
      * Booking.com con disponibilità e prezzi per le date: [place] è una città ("Vienna") oppure una
-     * struttura precisa ("Hotel Sacher, Vienna").
+     * struttura precisa ("Hotel Sacher, Vienna"). Adulti, età dei bambini e una camera ogni due adulti.
      */
-    fun booking(place: String, checkIn: LocalDate, checkOut: LocalDate, adults: Int): String =
+    fun booking(place: String, checkIn: LocalDate, checkOut: LocalDate, travellers: Travellers): String =
         "https://www.booking.com/searchresults.it.html?ss=" + encode(place) +
-            "&checkin=$checkIn&checkout=$checkOut&group_adults=$adults&no_rooms=1&group_children=0"
+            "&checkin=$checkIn&checkout=$checkOut&group_adults=${travellers.adults}" +
+            "&no_rooms=${AccommodationSearchQuery.roomsFor(travellers)}&group_children=${travellers.children}" +
+            travellers.childAges.joinToString("") { "&age=$it" }
 
-    /** Airbnb: case e appartamenti a [place] per le date del viaggio. */
-    fun airbnb(place: String, checkIn: LocalDate, checkOut: LocalDate, adults: Int): String =
-        "https://www.airbnb.it/s/" + encode(place) + "/homes?checkin=$checkIn&checkout=$checkOut&adults=$adults"
+    /**
+     * Airbnb: case e appartamenti a [place] per le date del viaggio. Per Airbnb i ragazzi dai 13 anni
+     * contano come adulti, i bambini sotto i 2 anni come neonati.
+     */
+    fun airbnb(place: String, checkIn: LocalDate, checkOut: LocalDate, travellers: Travellers): String {
+        val infants = travellers.infants
+        val children = travellers.childAges.count { it in Travellers.INFANT_AGE_LIMIT..AIRBNB_MAX_CHILD_AGE }
+        val adults = travellers.total - children - infants
+        return "https://www.airbnb.it/s/" + encode(place) + "/homes?checkin=$checkIn&checkout=$checkOut&adults=$adults" +
+            (if (children > 0) "&children=$children" else "") + (if (infants > 0) "&infants=$infants" else "")
+    }
+
+    private const val AIRBNB_MAX_CHILD_AGE = 12
 
     /**
      * Ricerca Google degli eventi in città nei giorni del viaggio: concerti, mostre e spettacoli con

@@ -50,15 +50,17 @@ internal class DemoCatalog(
                 template.slice(query.destinationIata, query.originIata, it, template.returnTime, minutes)
             }
             val market = marketFactor("flight|${template.carrierIata}|${query.originIata}|${query.destinationIata}|${query.departureDate}")
-            val fare = (template.baseFare + distanceKm * template.farePerKm) * cityFactor * tripFactor * market * query.adults
+            val passengers = query.travellers.seatedPassengers
+            val fare = (template.baseFare + distanceKm * template.farePerKm) * cityFactor * tripFactor * market * passengers
             FlightOffer(
                 id = "demo-${template.carrierIata.lowercase()}-${query.destinationIata.lowercase()}-${query.departureDate}",
                 carrierName = template.carrierName,
                 carrierIata = template.carrierIata,
                 totalPrice = Money.of(BigDecimal(fare).setScale(0, RoundingMode.HALF_UP), "EUR"),
                 slices = listOfNotNull(outbound, inbound),
-                co2EmissionsKg = (distanceKm * CO2_KG_PER_KM * query.adults * (if (inbound != null) 2 else 1)).toInt(),
+                co2EmissionsKg = (distanceKm * CO2_KG_PER_KM * passengers * (if (inbound != null) 2 else 1)).toInt(),
                 refundable = template.refundable,
+                passengers = passengers,
             )
         }
     }
