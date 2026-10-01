@@ -15,6 +15,10 @@ import com.partimo.app.R
 import com.partimo.app.di.AppContainer
 import com.partimo.app.ui.about.AboutRoute
 import com.partimo.app.ui.about.BackupViewModel
+import com.partimo.app.ui.bookings.BookingEditorRoute
+import com.partimo.app.ui.bookings.BookingEditorViewModel
+import com.partimo.app.ui.bookings.BookingsRoute
+import com.partimo.app.ui.bookings.BookingsViewModel
 import com.partimo.app.ui.budget.BudgetRoute
 import com.partimo.app.ui.budget.BudgetViewModel
 import com.partimo.app.ui.chat.ChatRoute
@@ -186,20 +190,20 @@ data class PlaceDetailDestination(
 
 /**
  * Grafo di navigazione: ricerca della meta → dashboard → scheda di un luogo, più la scelta della
- * partenza raggiungibile da ricerca e dashboard. [pendingDashboard] è il viaggio da aprire subito
- * (tocco su una notifica).
+ * partenza raggiungibile da ricerca e dashboard. [pendingRoute] è la schermata da aprire subito
+ * (tocco su una notifica, contenuto condiviso con PartiMo: vedi [IncomingRoutes]).
  */
 @Composable
 fun PartiMoNavHost(
     container: AppContainer,
     modifier: Modifier = Modifier,
-    pendingDashboard: DashboardDestination? = null,
-    onPendingDashboardOpened: () -> Unit = {},
+    pendingRoute: Any? = null,
+    onPendingRouteOpened: () -> Unit = {},
 ) {
     val navController = rememberNavController()
-    val onOpened by rememberUpdatedState(onPendingDashboardOpened)
-    LaunchedEffect(pendingDashboard) {
-        pendingDashboard?.let { route ->
+    val onOpened by rememberUpdatedState(onPendingRouteOpened)
+    LaunchedEffect(pendingRoute) {
+        pendingRoute?.let { route ->
             navController.navigate(route) { launchSingleTop = true }
             onOpened()
         }
@@ -214,6 +218,38 @@ fun PartiMoNavHost(
                 },
                 onChooseDeparture = { navController.navigate(DeparturePickerDestination) },
                 onOpenAbout = { navController.navigate(AboutDestination) },
+                onOpenBookings = { navController.navigate(BookingsDestination()) },
+            )
+        }
+        composable<BookingsDestination> { backStackEntry ->
+            val route = backStackEntry.toRoute<BookingsDestination>()
+            val tripDates = route.tripDates()
+            val viewModel: BookingsViewModel = viewModel(factory = BookingsViewModel.factory(container, tripDates, route.tripName))
+            BookingsRoute(
+                viewModel = viewModel,
+                documents = container.bookingDocuments,
+                onBack = { navController.popBackStack() },
+                onAdd = { navController.navigate(BookingEditorDestination(defaultDate = tripDates?.start?.toString())) },
+                onEdit = { booking -> navController.navigate(BookingEditorDestination(bookingId = booking.id)) },
+            )
+        }
+        composable<BookingEditorDestination> { backStackEntry ->
+            val route = backStackEntry.toRoute<BookingEditorDestination>()
+            val viewModel: BookingEditorViewModel = viewModel(
+                factory = BookingEditorViewModel.factory(container, route.bookingId, route.shared(), route.defaultLocalDate()),
+            )
+            BookingEditorRoute(
+                viewModel = viewModel,
+                documents = container.bookingDocuments,
+                onDone = {
+                    if (route.isShared) {
+                        // Da una condivisione: dopo il salvataggio si vedono tutte le prenotazioni.
+                        navController.navigate(BookingsDestination()) { popUpTo<BookingEditorDestination> { inclusive = true } }
+                    } else {
+                        navController.popBackStack()
+                    }
+                },
+                onBack = { navController.popBackStack() },
             )
         }
         composable<AboutDestination> {
@@ -237,6 +273,7 @@ fun PartiMoNavHost(
                 onOpenMap = { trip -> navController.navigate(MapDestination(trip.toJson())) },
                 onOpenTranslator = { trip -> navController.navigate(TranslatorDestination(trip.toJson())) },
                 onOpenBudget = { trip -> navController.navigate(BudgetDestination(trip.toJson())) },
+                onOpenBookings = { trip -> navController.navigate(BookingsDestination.forTrip(trip)) },
             )
         }
         composable<BudgetDestination> { backStackEntry ->

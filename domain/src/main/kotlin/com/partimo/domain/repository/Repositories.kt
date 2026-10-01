@@ -5,6 +5,7 @@ import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.backup.UserData
+import com.partimo.domain.model.booking.Booking
 import com.partimo.domain.model.budget.TripBudget
 import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.dining.Restaurant
@@ -20,6 +21,9 @@ import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.guide.CountryInfo
 import com.partimo.domain.model.guide.ExchangeRates
 import com.partimo.domain.model.guide.TravelGuide
+import com.partimo.domain.model.ocr.DocumentSource
+import com.partimo.domain.model.ocr.RecognizedText
+import com.partimo.domain.model.ocr.TextScript
 import com.partimo.domain.model.place.Airport
 import com.partimo.domain.model.place.CatalogDestination
 import com.partimo.domain.model.place.CityPlace
@@ -45,6 +49,7 @@ import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.ZoneId
 
 // Contratti del dominio verso il data layer. Le implementazioni decidono provider, cache e
 // threading; il parametro forceRefresh permette di ignorare una cache ancora valida.
@@ -200,6 +205,9 @@ interface ReminderLogRepository {
     suspend fun sentReminders(): Set<String>
 
     suspend fun markSent(keys: Collection<String>)
+
+    /** Toglie dal registro le chiavi che non servono più (es. di prenotazioni passate). */
+    suspend fun forget(keys: Collection<String>)
 }
 
 /** Budget e spese dei viaggi, salvati sul telefono (un budget per viaggio, cioè meta e periodo). */
@@ -291,4 +299,30 @@ interface UserDataRepository {
 
     /** Dati di un file di backup; `null` se [content] non è un backup di PartiMo leggibile. */
     fun decode(content: String): UserData?
+}
+
+/** Prenotazioni dell'utente (voli, alloggi, treni...), salvate sul telefono. */
+interface BookingRepository {
+    val bookings: Flow<List<Booking>>
+
+    /** Modifica atomica dell'elenco: lettura e scrittura nella stessa transazione. */
+    suspend fun update(transform: (List<Booking>) -> List<Booking>)
+}
+
+/** Codici dei voli inclusi nell'app: aeroporti, compagnie aeree e fusi orari degli aeroporti. */
+interface FlightCodesRepository {
+    suspend fun airportCodes(): Set<String>
+
+    /** Compagnie aeree: codice IATA → nome. */
+    suspend fun airlines(): Map<String, String>
+
+    suspend fun airportTimeZone(iata: String): ZoneId?
+}
+
+/**
+ * Riconoscimento del testo sul telefono (foto, screenshot, PDF): una volta scaricati i modelli funziona anche
+ * senza Internet e il documento non lascia il telefono.
+ */
+interface TextRecognitionRepository {
+    suspend fun recognize(source: DocumentSource, script: TextScript = TextScript.LATIN): DataResult<RecognizedText>
 }

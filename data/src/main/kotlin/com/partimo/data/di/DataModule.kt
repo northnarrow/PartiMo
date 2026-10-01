@@ -11,7 +11,9 @@ import com.partimo.data.demo.DemoTransitDataSource
 import com.partimo.data.local.BundledAirportsDataSource
 import com.partimo.data.local.BundledCountryInfoDataSource
 import com.partimo.data.local.BundledFlightCodes
+import com.partimo.data.local.BundledFlightCodesRepository
 import com.partimo.data.local.CuratedDestinationCatalog
+import com.partimo.data.local.preferences.DataStoreBookingRepository
 import com.partimo.data.local.preferences.DataStoreBudgetRepository
 import com.partimo.data.local.preferences.DataStoreChecklistRepository
 import com.partimo.data.local.preferences.DataStorePriceWatchRepository
@@ -21,6 +23,7 @@ import com.partimo.data.local.preferences.DataStoreUserDataRepository
 import com.partimo.data.local.preferences.DataStoreUserPreferencesRepository
 import com.partimo.data.local.preferences.createUserDataStore
 import com.partimo.data.network.HttpClientFactory
+import com.partimo.data.ocr.MlKitTextRecognitionRepository
 import com.partimo.data.remote.currency.ExchangeRateApiDataSource
 import com.partimo.data.remote.duffel.DuffelApi
 import com.partimo.data.remote.duffel.DuffelFlightDataSource
@@ -73,6 +76,7 @@ import com.partimo.data.translate.MlKitTranslatorRepository
 import com.partimo.domain.model.flight.FlightPriceSource
 import com.partimo.domain.repository.AccommodationRepository
 import com.partimo.domain.repository.AirportRepository
+import com.partimo.domain.repository.BookingRepository
 import com.partimo.domain.repository.BudgetRepository
 import com.partimo.domain.repository.ChecklistRepository
 import com.partimo.domain.repository.CitySearchRepository
@@ -80,6 +84,7 @@ import com.partimo.domain.repository.CountryInfoRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
 import com.partimo.domain.repository.EventRepository
 import com.partimo.domain.repository.ExchangeRateRepository
+import com.partimo.domain.repository.FlightCodesRepository
 import com.partimo.domain.repository.FlightInsightsRepository
 import com.partimo.domain.repository.FlightRepository
 import com.partimo.domain.repository.HolidayRepository
@@ -90,6 +95,7 @@ import com.partimo.domain.repository.PriceWatchRepository
 import com.partimo.domain.repository.ReminderLogRepository
 import com.partimo.domain.repository.RestaurantRepository
 import com.partimo.domain.repository.SavedTripRepository
+import com.partimo.domain.repository.TextRecognitionRepository
 import com.partimo.domain.repository.TransitRepository
 import com.partimo.domain.repository.TranslatorRepository
 import com.partimo.domain.repository.TravelAssistantRepository
@@ -313,6 +319,15 @@ class DataModule(
 
     /** Viaggi seguiti per gli avvisi sulle offerte convenienti. */
     val priceWatchRepository: PriceWatchRepository by lazy { DataStorePriceWatchRepository(userDataStore) }
+
+    /** Prenotazioni dell'utente (voli, alloggi, treni...), sul dispositivo. */
+    val bookingRepository: BookingRepository by lazy { DataStoreBookingRepository(userDataStore) }
+
+    /** Aeroporti, compagnie e fusi orari inclusi nell'app, per leggere le conferme dei voli. */
+    val flightCodesRepository: FlightCodesRepository by lazy { BundledFlightCodesRepository(flightCodes) }
+
+    /** Testo di foto, screenshot e PDF riconosciuto sul telefono (ML Kit). */
+    val textRecognitionRepository: TextRecognitionRepository by lazy { MlKitTextRecognitionRepository(appContext) }
 
     /** Tutti i dati dell'utente insieme, per esportarli in un file e reimportarli. */
     val userDataRepository: UserDataRepository by lazy { DataStoreUserDataRepository(userDataStore) }

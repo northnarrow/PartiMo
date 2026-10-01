@@ -4,8 +4,12 @@ import android.content.Context
 import android.util.Log
 import androidx.glance.appwidget.updateAll
 import com.partimo.app.BuildConfig
+import com.partimo.app.files.BookingDocuments
+import com.partimo.app.files.BookingFiles
 import com.partimo.app.files.ContentResolverDocuments
 import com.partimo.app.files.UserDocuments
+import com.partimo.app.notifications.BookingReminderNotifier
+import com.partimo.app.notifications.BookingReminderScheduler
 import com.partimo.app.notifications.DealCheckScheduler
 import com.partimo.app.notifications.DealNotifier
 import com.partimo.app.notifications.TripReminderNotifier
@@ -14,7 +18,9 @@ import com.partimo.app.widget.NextTripWidget
 import com.partimo.data.config.ApiConfig
 import com.partimo.data.di.DataModule
 import com.partimo.domain.usecase.AskTravelAssistantUseCase
+import com.partimo.domain.usecase.BookingRemindersUseCase
 import com.partimo.domain.usecase.CheckPriceWatchesUseCase
+import com.partimo.domain.usecase.DeleteBookingUseCase
 import com.partimo.domain.usecase.EditTripBudgetUseCase
 import com.partimo.domain.usecase.ExportUserDataUseCase
 import com.partimo.domain.usecase.FindBudgetRestaurantsUseCase
@@ -33,6 +39,7 @@ import com.partimo.domain.usecase.GetTripWeatherUseCase
 import com.partimo.domain.usecase.ImportUserDataUseCase
 import com.partimo.domain.usecase.LanguagePacksUseCase
 import com.partimo.domain.usecase.LoadTripKnowledgeUseCase
+import com.partimo.domain.usecase.ObserveBookingsUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObservePriceAlertUseCase
 import com.partimo.domain.usecase.ObserveSavedTripUseCase
@@ -43,8 +50,11 @@ import com.partimo.domain.usecase.PackingChecklistUseCase
 import com.partimo.domain.usecase.PlanTransitRouteUseCase
 import com.partimo.domain.usecase.PlanTripUseCase
 import com.partimo.domain.usecase.PrefetchTripUseCase
+import com.partimo.domain.usecase.ReadBookingDocumentUseCase
+import com.partimo.domain.usecase.ReadBookingTextUseCase
 import com.partimo.domain.usecase.RecommendDestinationsUseCase
 import com.partimo.domain.usecase.ResolveDestinationUseCase
+import com.partimo.domain.usecase.SaveBookingUseCase
 import com.partimo.domain.usecase.SaveDepartureUseCase
 import com.partimo.domain.usecase.SaveTravellersUseCase
 import com.partimo.domain.usecase.SearchAccommodationsUseCase
@@ -61,6 +71,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.Clock
@@ -136,6 +147,15 @@ interface AppContainer {
 
     /** File scelti dall'utente con il selettore di Android. */
     val documents: UserDocuments
+
+    /** Le mie prenotazioni: linea del tempo, lettura delle conferme (testo, PDF, foto) e documenti. */
+    val observeBookings: ObserveBookingsUseCase
+    val saveBooking: SaveBookingUseCase
+    val deleteBooking: DeleteBookingUseCase
+    val readBookingText: ReadBookingTextUseCase
+    val readBookingDocument: ReadBookingDocumentUseCase
+    val bookingReminders: BookingRemindersUseCase
+    val bookingDocuments: BookingDocuments
 }
 
 /**
@@ -296,6 +316,24 @@ class DefaultAppContainer(context: Context) : AppContainer {
 
     override val documents: UserDocuments by lazy { ContentResolverDocuments(appContext) }
 
+    override val observeBookings: ObserveBookingsUseCase by lazy { ObserveBookingsUseCase(dataModule.bookingRepository) }
+
+    override val saveBooking: SaveBookingUseCase by lazy { SaveBookingUseCase(dataModule.bookingRepository, dataModule.flightCodesRepository) }
+
+    override val deleteBooking: DeleteBookingUseCase by lazy { DeleteBookingUseCase(dataModule.bookingRepository) }
+
+    override val readBookingText: ReadBookingTextUseCase by lazy { ReadBookingTextUseCase(dataModule.flightCodesRepository, clock) }
+
+    override val readBookingDocument: ReadBookingDocumentUseCase by lazy {
+        ReadBookingDocumentUseCase(dataModule.textRecognitionRepository, readBookingText)
+    }
+
+    override val bookingReminders: BookingRemindersUseCase by lazy {
+        BookingRemindersUseCase(dataModule.bookingRepository, dataModule.reminderLogRepository, clock)
+    }
+
+    override val bookingDocuments: BookingDocuments by lazy { BookingFiles(appContext, documents) }
+
     /**
      * Attività di avvio non bloccanti: pulizia delle risposte troppo vecchie in cache, canale delle
      * notifiche e controllo periodico delle offerte, attivo solo finché c'è almeno un viaggio seguito.
@@ -314,6 +352,15 @@ class DefaultAppContainer(context: Context) : AppContainer {
                     if (upcoming) scheduler.scheduleReminders() else scheduler.cancelReminders()
                     if (anyTrip) scheduler.schedulePrefetch() else scheduler.cancelPrefetch()
                 }
+        }
+        runSafely("Creazione del canale delle prenotazioni non riuscita") { BookingReminderNotifier(appContext).ensureChannel() }
+        runSafely("Pulizia dei documenti delle prenotazioni non riuscita") {
+            bookingDocuments.deleteUnused(dataModule.bookingRepository.bookings.first().mapNotNull { it.attachment }.toSet())
+        }
+        runSafely("Pianificazione dei promemoria delle prenotazioni non riuscita") {
+            // Ogni modifica alle prenotazioni ripianifica i loro promemoria (check-in, partenza per l'aeroporto...).
+            val scheduler = BookingReminderScheduler(appContext)
+            dataModule.bookingRepository.bookings.distinctUntilChanged().collect { scheduler.schedule(bookingReminders.nextCheck()) }
         }
         runSafely("Aggiornamento del widget non riuscito") {
             // Il widget "Prossimo viaggio" segue i viaggi salvati.

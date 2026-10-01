@@ -68,6 +68,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.partimo.app.R
+import com.partimo.app.ui.bookings.emoji
 import com.partimo.app.ui.common.CityResultItem
 import com.partimo.app.ui.common.CitySearchField
 import com.partimo.app.ui.common.Formatters
@@ -88,6 +89,7 @@ import com.partimo.domain.model.Destination
 import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.Travellers
+import com.partimo.domain.model.booking.Booking
 import com.partimo.domain.model.flight.CheapDestination
 import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DeparturePoint
@@ -125,6 +127,8 @@ data class SearchActions(
     val onAnywhere: () -> Unit = {},
     val onAnywhereMaxPrice: (Int?) -> Unit = {},
     val onCheapDestinationSelected: (CheapDestination) -> Unit = {},
+    /** Le mie prenotazioni: voli, alloggi e biglietti salvati sul telefono. */
+    val onOpenBookings: () -> Unit = {},
 )
 
 /** Collega il ViewModel alla schermata e apre la dashboard quando la meta è pronta. */
@@ -135,6 +139,7 @@ fun SearchRoute(
     onChooseDeparture: () -> Unit,
     modifier: Modifier = Modifier,
     onOpenAbout: () -> Unit = {},
+    onOpenBookings: () -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val openDestination by rememberUpdatedState(onOpenDestination)
@@ -166,6 +171,7 @@ fun SearchRoute(
             onAnywhere = viewModel::onAnywhere,
             onAnywhereMaxPrice = viewModel::onAnywhereMaxPrice,
             onCheapDestinationSelected = viewModel::onCheapDestinationSelected,
+            onOpenBookings = onOpenBookings,
         ),
         modifier = modifier,
     )
@@ -237,6 +243,9 @@ fun SearchScreen(
                             onRemove = actions.onRemoveSavedTrip,
                         )
                     }
+                }
+                item(key = "bookings") {
+                    BookingsEntryRow(next = state.upcomingBookings.firstOrNull(), count = state.upcomingBookings.size, onOpen = actions.onOpenBookings)
                 }
                 item(key = "departure") { DepartureRow(departure = state.departure, onChoose = actions.onChooseDeparture) }
                 item(key = "period") {
@@ -374,6 +383,40 @@ private fun DepartureRow(departure: DeparturePoint?, onChoose: () -> Unit) {
             TextButton(onClick = onChoose) {
                 Text(stringResource(if (departure == null) R.string.departure_choose else R.string.departure_change))
             }
+        }
+    }
+}
+
+/** Tag della riga «Le mie prenotazioni», usato dai test UI. */
+const val BOOKINGS_ENTRY_TAG = "bookings_entry"
+
+/** «Le mie prenotazioni», con la prossima in arrivo (o un invito ad aggiungerne). */
+@Composable
+private fun BookingsEntryRow(next: Booking?, count: Int, onOpen: () -> Unit) {
+    OutlinedCard(
+        onClick = onOpen,
+        modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 16.dp).testTag(BOOKINGS_ENTRY_TAG),
+    ) {
+        Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "🎫", style = MaterialTheme.typography.titleLarge)
+            Spacer(Modifier.width(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = if (count > 0) pluralStringResource(R.plurals.bookings_entry_count, count, count) else stringResource(R.string.bookings_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Text(
+                    text = next?.let {
+                        stringResource(R.string.bookings_entry_next, it.kind.emoji() + " " + it.title, Formatters.weekdayDayMonth(it.startDate))
+                    } ?: stringResource(R.string.bookings_entry_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+            TextButton(onClick = onOpen) { Text(stringResource(R.string.bookings_entry_open)) }
         }
     }
 }

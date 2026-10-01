@@ -42,6 +42,15 @@ dependencies {
 
     // Traduttore offline
     implementation(libs.mlkit.translate)
+    // Testo di foto, screenshot e PDF sul telefono (prenotazioni, traduzione con la fotocamera): modelli scaricati
+    // da Google Play Services, per l'alfabeto latino e per le scritture cinese, devanagari, giapponese e coreana.
+    implementation(libs.mlkit.text.recognition)
+    implementation(libs.mlkit.text.recognition.chinese)
+    implementation(libs.mlkit.text.recognition.devanagari)
+    implementation(libs.mlkit.text.recognition.japanese)
+    implementation(libs.mlkit.text.recognition.korean)
+    // Orientamento delle foto su Android 8 (da Android 9 lo applica ImageDecoder).
+    implementation(libs.androidx.exifinterface)
 
     testImplementation(testFixtures(project(":domain")))
     testImplementation(libs.kotlin.test.junit)

@@ -145,6 +145,8 @@ data class DashboardActions(
     val onOpenTranslator: () -> Unit = {},
     /** Budget e spese del viaggio. */
     val onOpenBudget: () -> Unit = {},
+    /** Prenotazioni delle date del viaggio (voli, alloggi, treni...). */
+    val onOpenBookings: () -> Unit = {},
     /** Nuovi viaggiatori (adulti e bambini) scelti nella sezione dei voli. */
     val onTravellersSelected: (Travellers) -> Unit = {},
     /** Calendario dei prezzi: apertura, mese, giorno scelto, chiusura. */
@@ -170,6 +172,7 @@ fun TripDashboardRoute(
     onOpenMap: (TripArgs) -> Unit = {},
     onOpenTranslator: (TripArgs) -> Unit = {},
     onOpenBudget: (TripArgs) -> Unit = {},
+    onOpenBookings: (TripArgs) -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -223,6 +226,7 @@ fun TripDashboardRoute(
             onOpenMap = { onOpenMap(TripArgs.from(state.trip, state.period)) },
             onOpenTranslator = { onOpenTranslator(TripArgs.from(state.trip, state.period)) },
             onOpenBudget = { onOpenBudget(TripArgs.from(state.trip, state.period)) },
+            onOpenBookings = { onOpenBookings(TripArgs.from(state.trip, state.period)) },
             onTravellersSelected = viewModel::onTravellersSelected,
             onOpenPriceCalendar = viewModel::onOpenPriceCalendar,
             priceCalendar = PriceCalendarActions(
@@ -309,6 +313,7 @@ fun TripDashboardScreen(
                 onOpenMap = actions.onOpenMap,
                 onOpenTranslator = actions.onOpenTranslator,
                 onOpenBudget = actions.onOpenBudget,
+                onOpenBookings = actions.onOpenBookings,
             )
             PullToRefreshBox(
                 isRefreshing = state.isRefreshing,
@@ -561,8 +566,8 @@ fun DashboardSection.emoji(): String = when (this) {
 const val TRIP_TOOLS_TAG = "trip_tools"
 
 /**
- * Strumenti del viaggio mostrato: i preferiti (se ce ne sono), la mappa, la guida, il traduttore e il
- * budget (sempre) e, con la chiave Gemini, l'itinerario e le domande all'assistente con l'IA.
+ * Strumenti del viaggio mostrato: i preferiti (se ce ne sono), la mappa, la guida, il traduttore, il
+ * budget e le prenotazioni (sempre) e, con la chiave Gemini, l'itinerario e le domande all'assistente con l'IA.
  */
 @Composable
 private fun TripToolChips(
@@ -575,6 +580,7 @@ private fun TripToolChips(
     onOpenMap: () -> Unit,
     onOpenTranslator: () -> Unit,
     onOpenBudget: () -> Unit,
+    onOpenBookings: () -> Unit,
 ) {
     LazyRow(
         modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp).testTag(TRIP_TOOLS_TAG),
@@ -606,6 +612,9 @@ private fun TripToolChips(
         }
         item(key = "budget") {
             AssistChip(onClick = onOpenBudget, label = { Text(stringResource(R.string.budget_chip)) }, leadingIcon = { Text("💶") })
+        }
+        item(key = "bookings") {
+            AssistChip(onClick = onOpenBookings, label = { Text(stringResource(R.string.bookings_chip)) }, leadingIcon = { Text("🎫") })
         }
     }
 }

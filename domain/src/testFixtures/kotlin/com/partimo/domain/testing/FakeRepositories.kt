@@ -7,6 +7,7 @@ import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.backup.UserData
+import com.partimo.domain.model.booking.Booking
 import com.partimo.domain.model.budget.TripBudget
 import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.dining.Restaurant
@@ -22,6 +23,9 @@ import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.guide.CountryInfo
 import com.partimo.domain.model.guide.ExchangeRates
 import com.partimo.domain.model.guide.TravelGuide
+import com.partimo.domain.model.ocr.DocumentSource
+import com.partimo.domain.model.ocr.RecognizedText
+import com.partimo.domain.model.ocr.TextScript
 import com.partimo.domain.model.place.Airport
 import com.partimo.domain.model.place.CatalogDestination
 import com.partimo.domain.model.place.CityPlace
@@ -45,6 +49,7 @@ import com.partimo.domain.model.weather.DailyObservation
 import com.partimo.domain.model.weather.WeatherSnapshot
 import com.partimo.domain.repository.AccommodationRepository
 import com.partimo.domain.repository.AirportRepository
+import com.partimo.domain.repository.BookingRepository
 import com.partimo.domain.repository.BudgetRepository
 import com.partimo.domain.repository.ChecklistRepository
 import com.partimo.domain.repository.CitySearchRepository
@@ -52,6 +57,7 @@ import com.partimo.domain.repository.CountryInfoRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
 import com.partimo.domain.repository.EventRepository
 import com.partimo.domain.repository.ExchangeRateRepository
+import com.partimo.domain.repository.FlightCodesRepository
 import com.partimo.domain.repository.FlightInsightsRepository
 import com.partimo.domain.repository.FlightRepository
 import com.partimo.domain.repository.HolidayRepository
@@ -62,6 +68,7 @@ import com.partimo.domain.repository.PriceWatchRepository
 import com.partimo.domain.repository.ReminderLogRepository
 import com.partimo.domain.repository.RestaurantRepository
 import com.partimo.domain.repository.SavedTripRepository
+import com.partimo.domain.repository.TextRecognitionRepository
 import com.partimo.domain.repository.TransitRepository
 import com.partimo.domain.repository.TranslatorRepository
 import com.partimo.domain.repository.TravelAssistantRepository
@@ -79,6 +86,7 @@ import kotlinx.coroutines.flow.update
 import java.time.Instant
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.ZoneId
 
 // Fake dei repository condivisi fra i moduli tramite testFixtures: restituiscono un risultato
 // configurabile, registrano le richieste ricevute e possono simulare latenza (tempo virtuale).
@@ -450,6 +458,10 @@ class FakeReminderLogRepository(sent: Set<String> = emptySet()) : ReminderLogRep
     override suspend fun markSent(keys: Collection<String>) {
         sent += keys
     }
+
+    override suspend fun forget(keys: Collection<String>) {
+        sent -= keys.toSet()
+    }
 }
 
 
@@ -510,5 +522,53 @@ class FakeFlightInsightsRepository(
     override suspend fun cheapestDestinations(query: AnywhereQuery, forceRefresh: Boolean): DataResult<List<CheapDestination>> {
         destinationQueries += query
         return destinations
+    }
+}
+
+/** Prenotazioni in memoria. */
+class FakeBookingRepository(initial: List<Booking> = emptyList()) : BookingRepository {
+    private val state = MutableStateFlow(initial)
+    override val bookings: Flow<List<Booking>> = state
+
+    val current: List<Booking> get() = state.value
+
+    override suspend fun update(transform: (List<Booking>) -> List<Booking>) {
+        state.update(transform)
+    }
+}
+
+/** Codici dei voli di prova: pochi aeroporti e compagnie, con i fusi orari. */
+class FakeFlightCodesRepository(
+    private val airports: Map<String, ZoneId> = mapOf(
+        "MXP" to ZoneId.of("Europe/Rome"),
+        "BGY" to ZoneId.of("Europe/Rome"),
+        "FCO" to ZoneId.of("Europe/Rome"),
+        "VIE" to ZoneId.of("Europe/Vienna"),
+        "LGW" to ZoneId.of("Europe/London"),
+    ),
+    private val airlines: Map<String, String> = mapOf("FR" to "Ryanair", "U2" to "easyJet", "OS" to "Austrian Airlines", "AZ" to "ITA Airways"),
+) : FlightCodesRepository {
+    var loads = 0
+        private set
+
+    override suspend fun airportCodes(): Set<String> {
+        loads++
+        return airports.keys
+    }
+
+    override suspend fun airlines(): Map<String, String> = airlines
+
+    override suspend fun airportTimeZone(iata: String): ZoneId? = airports[iata]
+}
+
+/** Riconoscimento del testo finto: restituisce il testo configurato per ogni documento. */
+class FakeTextRecognitionRepository(
+    var result: DataResult<RecognizedText> = DataResult.Success(RecognizedText("")),
+) : TextRecognitionRepository {
+    val requests = mutableListOf<Pair<DocumentSource, TextScript>>()
+
+    override suspend fun recognize(source: DocumentSource, script: TextScript): DataResult<RecognizedText> {
+        requests += source to script
+        return result
     }
 }

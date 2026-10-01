@@ -1,6 +1,7 @@
 package com.partimo.domain.model.backup
 
 import com.partimo.domain.model.Travellers
+import com.partimo.domain.model.booking.Booking
 import com.partimo.domain.model.budget.TripBudget
 import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.place.DeparturePoint
@@ -21,6 +22,8 @@ data class UserData(
     val budgets: List<TripBudget> = emptyList(),
     /** Voci spuntate delle liste di controllo (es. la valigia di un viaggio), per lista. */
     val checklists: Map<String, Set<String>> = emptyMap(),
+    /** Prenotazioni (voli, alloggi, treni...); i documenti allegati restano nei file dell'app. */
+    val bookings: List<Booking> = emptyList(),
 ) {
     /** Quanto contengono i dati, per i messaggi all'utente. */
     val summary: UserDataSummary
@@ -31,6 +34,7 @@ data class UserData(
             expenses = budgets.sumOf { it.expenses.size },
             checkedItems = checklists.values.sumOf { it.size },
             hasDeparture = departure != null,
+            bookings = bookings.size,
         )
 
     /**
@@ -50,6 +54,10 @@ data class UserData(
         },
         checklists = (checklists.keys + imported.checklists.keys).associateWith { id ->
             checklists[id].orEmpty() + imported.checklists[id].orEmpty()
+        },
+        // Una prenotazione del file sostituisce quella con lo stesso id, ma il documento del telefono resta.
+        bookings = mergeById(bookings, imported.bookings, Booking::id) { current, incoming ->
+            incoming.copy(attachment = current.attachment, attachmentType = current.attachmentType)
         },
     )
 
@@ -72,8 +80,9 @@ data class UserDataSummary(
     val expenses: Int = 0,
     val checkedItems: Int = 0,
     val hasDeparture: Boolean = false,
+    val bookings: Int = 0,
 ) {
-    val isEmpty: Boolean get() = trips == 0 && alerts == 0 && expenses == 0 && checkedItems == 0 && !hasDeparture
+    val isEmpty: Boolean get() = trips == 0 && alerts == 0 && expenses == 0 && checkedItems == 0 && !hasDeparture && bookings == 0
 }
 
 /** File di backup pronto da salvare: nome proposto, contenuto e riepilogo di ciò che contiene. */

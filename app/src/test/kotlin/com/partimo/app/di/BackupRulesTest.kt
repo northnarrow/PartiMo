@@ -6,6 +6,7 @@ import android.content.pm.ApplicationInfo
 import androidx.annotation.XmlRes
 import androidx.test.core.app.ApplicationProvider
 import com.partimo.app.R
+import com.partimo.app.files.BookingFiles
 import com.partimo.data.local.preferences.userDataStoreFile
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -15,7 +16,10 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-/** Backup di Android: c'è, e contiene solo il file dei dati dell'utente (non la cache né i modelli scaricati). */
+/**
+ * Backup di Android: c'è, e contiene solo il file dei dati dell'utente (non la cache né i modelli scaricati); i
+ * documenti delle prenotazioni passano solo a un telefono nuovo (nel backup su Google supererebbero i 25 MB).
+ */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34], application = Application::class)
 class BackupRulesTest {
@@ -42,7 +46,10 @@ class BackupRulesTest {
         val path = userDataStoreFile(context).relativeTo(context.filesDir).path
         assertEquals("datastore/partimo_user.preferences_pb", path)
 
-        assertEquals(listOf("cloud-backup:include:file:$path", "device-transfer:include:file:$path"), rules(R.xml.data_extraction_rules))
+        assertEquals(
+            listOf("cloud-backup:include:file:$path", "device-transfer:include:file:$path", "device-transfer:include:file:${BookingFiles.DIRECTORY}/"),
+            rules(R.xml.data_extraction_rules),
+        )
         assertEquals(listOf("full-backup-content:include:file:$path"), rules(R.xml.backup_rules))
     }
 

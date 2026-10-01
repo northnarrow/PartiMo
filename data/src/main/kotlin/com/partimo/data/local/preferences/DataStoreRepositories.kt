@@ -12,10 +12,12 @@ import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.backup.UserData
+import com.partimo.domain.model.booking.Booking
 import com.partimo.domain.model.budget.TripBudget
 import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.place.DeparturePoint
 import com.partimo.domain.model.saved.SavedTrip
+import com.partimo.domain.repository.BookingRepository
 import com.partimo.domain.repository.BudgetRepository
 import com.partimo.domain.repository.ChecklistRepository
 import com.partimo.domain.repository.PriceWatchRepository
@@ -39,6 +41,7 @@ private val DEPARTURE_KEY = stringPreferencesKey("departure")
 private val PRICE_WATCHES_KEY = stringPreferencesKey("price_watches")
 private val SAVED_TRIPS_KEY = stringPreferencesKey("saved_trips")
 private val TRAVELLERS_KEY = stringPreferencesKey("travellers")
+private val BOOKINGS_KEY = stringPreferencesKey("bookings")
 private const val BUDGET_KEY_PREFIX = "budget:"
 private const val CHECKLIST_KEY_PREFIX = "checklist:"
 private const val USER_DATA_STORE_NAME = "partimo_user"
@@ -180,11 +183,35 @@ class DataStoreReminderLogRepository internal constructor(
         dataStore.edit { preferences -> preferences[SENT_REMINDERS_KEY] = preferences[SENT_REMINDERS_KEY].orEmpty() + keys }
     }
 
+    override suspend fun forget(keys: Collection<String>) {
+        dataStore.edit { preferences ->
+            val remaining = preferences[SENT_REMINDERS_KEY].orEmpty() - keys.toSet()
+            if (remaining.isEmpty()) preferences.remove(SENT_REMINDERS_KEY) else preferences[SENT_REMINDERS_KEY] = remaining
+        }
+    }
+
     private companion object {
         val SENT_REMINDERS_KEY = stringSetPreferencesKey("sent_reminders")
     }
 }
 
+
+/** Prenotazioni dell'utente, in JSON versionabile come i viaggi salvati. */
+class DataStoreBookingRepository internal constructor(
+    private val dataStore: DataStore<Preferences>,
+) : BookingRepository {
+
+    override val bookings: Flow<List<Booking>> = dataStore.safeData()
+        .map { preferences -> StoredJson.decodeBookings(preferences[BOOKINGS_KEY]) }
+        .distinctUntilChanged()
+
+    override suspend fun update(transform: (List<Booking>) -> List<Booking>) {
+        dataStore.edit { preferences ->
+            val updated = transform(StoredJson.decodeBookings(preferences[BOOKINGS_KEY]))
+            if (updated.isEmpty()) preferences.remove(BOOKINGS_KEY) else preferences[BOOKINGS_KEY] = StoredJson.encodeBookings(updated)
+        }
+    }
+}
 
 /**
  * Tutti i dati dell'utente insieme, per il file di backup: le stesse preferenze dei repository qui sopra,
@@ -211,6 +238,7 @@ class DataStoreUserDataRepository internal constructor(
             travellers = this[TRAVELLERS_KEY]?.let(StoredJson::decodeTravellers),
             savedTrips = StoredJson.decodeSavedTrips(this[SAVED_TRIPS_KEY]),
             priceWatches = StoredJson.decodeWatches(this[PRICE_WATCHES_KEY]),
+            bookings = StoredJson.decodeBookings(this[BOOKINGS_KEY]),
             budgets = entries.mapNotNull { (key, value) ->
                 val tripId = key.name.removePrefix(BUDGET_KEY_PREFIX).takeIf { key.name.startsWith(BUDGET_KEY_PREFIX) }
                 tripId?.let { StoredJson.decodeBudget(it, value as? String) }?.takeIf { it.hasData }
@@ -231,6 +259,7 @@ class DataStoreUserDataRepository internal constructor(
         if (travellers != null) this[TRAVELLERS_KEY] = StoredJson.encodeTravellers(travellers) else remove(TRAVELLERS_KEY)
         this[SAVED_TRIPS_KEY] = StoredJson.encodeSavedTrips(data.savedTrips)
         this[PRICE_WATCHES_KEY] = StoredJson.encodeWatches(data.priceWatches)
+        if (data.bookings.isEmpty()) remove(BOOKINGS_KEY) else this[BOOKINGS_KEY] = StoredJson.encodeBookings(data.bookings)
         asMap().keys
             .filter { it.name.startsWith(BUDGET_KEY_PREFIX) || it.name.startsWith(CHECKLIST_KEY_PREFIX) }
             .forEach { key -> remove(key) }

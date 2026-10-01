@@ -44,6 +44,12 @@ internal class BundledFlightCodes(
 
     suspend fun airlineName(iata: String): String? = loadAirlines()[iata.uppercase(Locale.ROOT)]
 
+    /** Codici IATA di tutti gli aeroporti inclusi. */
+    suspend fun airportCodes(): Set<String> = loadAirports().keys
+
+    /** Tutte le compagnie aeree incluse: codice IATA → nome. */
+    suspend fun airlines(): Map<String, String> = loadAirlines()
+
     /** Città con il codice dei voli [code] (es. "BCN" → Barcellona); `null` se non è tra quelle incluse. */
     suspend fun city(code: String): FlightCity? = loadCities()[code.uppercase(Locale.ROOT)]
 

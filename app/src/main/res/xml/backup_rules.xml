@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Android 8–11: il backup automatico (Google) contiene solo i dati dell'utente: viaggi salvati, preferiti,
-    avvisi, budget, valigia e punto di partenza (il file DataStore). Cache, pacchetti lingua e mappe si
-    riscaricano.
+    avvisi, budget, valigia, prenotazioni e punto di partenza (il file DataStore). I documenti delle
+    prenotazioni no: potrebbero superare i 25 MB del backup, e oltre quel limite Android non salva nulla.
+    Cache, pacchetti lingua e mappe si riscaricano.
 -->
 <full-backup-content>
     <include domain="file" path="datastore/partimo_user.preferences_pb" />

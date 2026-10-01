@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- File che PartiMo può far aprire ad altre app: i documenti delle prenotazioni e le foto della fotocamera. -->
+<paths>
+    <files-path name="bookings" path="bookings/" />
+    <cache-path name="camera" path="camera/" />
+</paths>

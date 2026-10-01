@@ -37,7 +37,31 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- «Condividi con PartiMo»: la mail di conferma, il PDF o lo screenshot di un biglietto diventano una prenotazione. -->
+            <intent-filter android:label="@string/share_booking_label">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="application/pdf" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
         </activity>
+
+        <!-- Documenti delle prenotazioni e foto della fotocamera, aperti con altre app (lettore PDF, galleria). -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.files"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- Riconoscimento del testo (prenotazioni, traduzione con la fotocamera): il modello si scarica all'installazione. -->
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="ocr" />
 
         <receiver
             android:name=".widget.NextTripWidgetReceiver"

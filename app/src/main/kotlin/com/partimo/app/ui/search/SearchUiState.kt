@@ -5,6 +5,7 @@ import com.partimo.domain.common.DataError
 import com.partimo.domain.model.Destination
 import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.Travellers
+import com.partimo.domain.model.booking.Booking
 import com.partimo.domain.model.flight.CheapDestination
 import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DeparturePoint
@@ -39,6 +40,8 @@ data class SearchUiState(
     val anywhere: UiState<List<CheapDestination>>? = null,
     /** Prezzo massimo a persona scelto per «Ovunque»; `null` = tutte le mete. */
     val anywhereMaxPrice: Int? = null,
+    /** Prenotazioni non ancora passate, dalla più vicina: la prima si mostra nella riga «Le mie prenotazioni». */
+    val upcomingBookings: List<Booking> = emptyList(),
 ) {
     /** Mete di «Ovunque» entro il prezzo massimo scelto. */
     val anywhereShown: List<CheapDestination>

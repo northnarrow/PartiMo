@@ -1,5 +1,9 @@
 package com.partimo.app.ui.dashboard
 
+import com.partimo.app.files.StoredDocument
+import com.partimo.app.ui.bookings.BookingDay
+import com.partimo.app.ui.bookings.BookingEditorUiState
+import com.partimo.app.ui.bookings.BookingsUiState
 import com.partimo.app.ui.budget.BudgetUiState
 import com.partimo.app.ui.budget.ExpenseDraft
 import com.partimo.app.ui.chat.ChatUiState
@@ -26,6 +30,9 @@ import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.TripContext
 import com.partimo.domain.model.WheelchairAccess
+import com.partimo.domain.model.booking.Booking
+import com.partimo.domain.model.booking.BookingDraft
+import com.partimo.domain.model.booking.BookingKind
 import com.partimo.domain.model.budget.BudgetSummary
 import com.partimo.domain.model.budget.Expense
 import com.partimo.domain.model.budget.ExpenseCategory
@@ -935,5 +942,99 @@ internal object PreviewData {
     fun budgetDraftState() = budgetState().copy(
         draft = ExpenseDraft(amountText = "320", currency = "CZK", category = ExpenseCategory.TRANSPORT, date = LocalDate.of(2026, Month.DECEMBER, 12), note = "Biglietti del tram"),
     )
-}
 
+    // ---- Prenotazioni ---------------------------------------------------------------------------
+
+    private val outboundFlight = Booking(
+        id = "preview-andata",
+        kind = BookingKind.FLIGHT,
+        title = "Ryanair FR 7178",
+        startDate = LocalDate.of(2026, Month.DECEMBER, 11),
+        startTime = LocalTime.of(21, 10),
+        endDate = LocalDate.of(2026, Month.DECEMBER, 11),
+        endTime = LocalTime.of(22, 55),
+        origin = "BGY",
+        destination = "VIE",
+        reference = "K7M2QX",
+        provider = "Ryanair",
+        notes = "Posto 12A · solo bagaglio a mano",
+        attachment = "booking-preview.pdf",
+        attachmentType = "application/pdf",
+    )
+
+    val previewBookings: List<Booking> = listOf(
+        outboundFlight,
+        Booking(
+            id = "preview-hotel",
+            kind = BookingKind.LODGING,
+            title = "Hotel Sacher Wien",
+            startDate = LocalDate.of(2026, Month.DECEMBER, 11),
+            startTime = LocalTime.of(15, 0),
+            endDate = LocalDate.of(2026, Month.DECEMBER, 13),
+            endTime = LocalTime.of(12, 0),
+            reference = "4815162342",
+            provider = "Booking.com",
+            address = "Philharmoniker Str. 4, 1010 Wien",
+        ),
+        Booking(
+            id = "preview-scuola",
+            kind = BookingKind.ACTIVITY,
+            title = "Scuola di equitazione spagnola",
+            startDate = LocalDate.of(2026, Month.DECEMBER, 12),
+            startTime = LocalTime.of(11, 0),
+            reference = "SRS-2291",
+            address = "Michaelerplatz 1, 1010 Wien",
+        ),
+        Booking(
+            id = "preview-ritorno",
+            kind = BookingKind.FLIGHT,
+            title = "Ryanair FR 7179",
+            startDate = LocalDate.of(2026, Month.DECEMBER, 13),
+            startTime = LocalTime.of(8, 25),
+            endDate = LocalDate.of(2026, Month.DECEMBER, 13),
+            endTime = LocalTime.of(10, 0),
+            origin = "VIE",
+            destination = "BGY",
+            reference = "K7M2QX",
+            provider = "Ryanair",
+        ),
+    )
+
+    private val pastTrain = Booking(
+        id = "preview-treno",
+        kind = BookingKind.TRAIN,
+        title = "Frecciarossa 9517",
+        startDate = LocalDate.of(2026, Month.SEPTEMBER, 12),
+        startTime = LocalTime.of(8, 0),
+        endTime = LocalTime.of(11, 10),
+        origin = "Milano Centrale",
+        destination = "Roma Termini",
+        reference = "PNR8XK",
+        provider = "Trenitalia",
+    )
+
+    /** Linea del tempo del viaggio a Vienna, con un treno già passato. */
+    fun bookingsState() = BookingsUiState(
+        today = TODAY,
+        upcoming = previewBookings.groupBy { it.startDate }.map { (date, bookings) -> BookingDay(date, bookings) },
+        past = listOf(pastTrain),
+        loaded = true,
+    )
+
+    fun bookingsEmptyState() = BookingsUiState(today = TODAY, loaded = true)
+
+    /** Nuova prenotazione con la mail di conferma incollata, da leggere. */
+    fun bookingEditorState() = BookingEditorUiState(
+        today = TODAY,
+        pastedText = "Conferma della prenotazione K7M2QX\nven, 11 dic 2026 · FR 7178 Milano Bergamo (BGY) - Vienna (VIE)\nPartenza 21:10 · Arrivo 22:55",
+    )
+
+    /** Andata e ritorno letti dal PDF del biglietto: la prima da controllare, poi la seconda. */
+    fun bookingEditorReadState() = BookingEditorUiState(
+        today = TODAY,
+        draft = BookingDraft.of(outboundFlight).copy(notes = ""),
+        pending = listOf(BookingDraft.of(previewBookings.last())),
+        readCount = 2,
+        attachment = StoredDocument("booking-preview.pdf", "application/pdf"),
+    )
+}

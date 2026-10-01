@@ -6,6 +6,8 @@ import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.backup.UserData
+import com.partimo.domain.model.booking.Booking
+import com.partimo.domain.model.booking.BookingKind
 import com.partimo.domain.model.budget.Expense
 import com.partimo.domain.model.budget.ExpenseCategory
 import com.partimo.domain.model.budget.TripBudget
@@ -25,6 +27,7 @@ import kotlinx.serialization.json.Json
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 
@@ -120,6 +123,27 @@ internal data class TripBudgetDto(
     val expenses: List<ExpenseDto> = emptyList(),
 )
 
+@Serializable
+internal data class BookingDto(
+    val id: String,
+    val kind: String,
+    val title: String,
+    /** Date e orari ISO locali (es. "2026-12-11", "21:10"). */
+    val startDate: String,
+    val startTime: String? = null,
+    val endDate: String? = null,
+    val endTime: String? = null,
+    val timeZone: String? = null,
+    val origin: String? = null,
+    val destination: String? = null,
+    val reference: String? = null,
+    val provider: String? = null,
+    val address: String? = null,
+    val notes: String = "",
+    val attachment: String? = null,
+    val attachmentType: String? = null,
+)
+
 /** Budget di un viaggio nel file di backup, dove non c'è la chiave della preferenza a indicarne il viaggio. */
 @Serializable
 internal data class TripBudgetBackupDto(
@@ -144,6 +168,7 @@ internal data class UserDataBackupDto(
     val priceWatches: List<PriceWatchDto> = emptyList(),
     val budgets: List<TripBudgetBackupDto> = emptyList(),
     val checklists: Map<String, List<String>> = emptyMap(),
+    val bookings: List<BookingDto> = emptyList(),
 )
 
 /** Codifica e decodifica delle preferenze. Un valore illeggibile viene ignorato, mai propagato come crash. */
@@ -165,6 +190,16 @@ internal object StoredJson {
     const val BACKUP_VERSION = 1
 
     private val watchListSerializer = ListSerializer(PriceWatchDto.serializer())
+    private val bookingListSerializer = ListSerializer(BookingDto.serializer())
+
+    fun encodeBookings(bookings: List<Booking>): String = json.encodeToString(bookingListSerializer, bookings.map { it.toDto() })
+
+    /** Le prenotazioni non più interpretabili vengono scartate una a una. */
+    fun decodeBookings(value: String?): List<Booking> {
+        if (value.isNullOrBlank()) return emptyList()
+        val dtos = runCatching { json.decodeFromString(bookingListSerializer, value) }.getOrDefault(emptyList())
+        return dtos.mapNotNull { dto -> runCatching { dto.toDomain() }.getOrNull() }
+    }
     private val tripListSerializer = ListSerializer(SavedTripDto.serializer())
 
     fun encodeSavedTrips(trips: List<SavedTrip>): String = json.encodeToString(tripListSerializer, trips.map { it.toDto() })
@@ -211,6 +246,7 @@ internal object StoredJson {
                 TripBudgetBackupDto(budget.tripId, budget.limit?.toPlainString(), budget.expenses.map { it.toDto() })
             },
             checklists = data.checklists.filterValues { it.isNotEmpty() }.mapValues { (_, items) -> items.sorted() },
+            bookings = data.bookings.map { it.toDto() },
         ),
     )
 
@@ -230,6 +266,8 @@ internal object StoredJson {
                 budget.tripId.takeIf { it.isNotBlank() }?.let { budgetOf(it, budget.limit, budget.expenses) }?.takeIf { it.hasData }
             },
             checklists = dto.checklists.mapValues { (_, items) -> items.filter { it.isNotBlank() }.toSet() }.filter { (id, items) -> id.isNotBlank() && items.isNotEmpty() },
+            // Il documento allegato è un file del telefono che ha fatto il backup: qui non c'è.
+            bookings = dto.bookings.mapNotNull { runCatching { it.toDomain().copy(attachment = null, attachmentType = null) }.getOrNull() },
         )
     }
 
@@ -391,3 +429,44 @@ private fun ExpenseDto.toDomain() = Expense(
 
 /** `true` se il budget ha un tetto o almeno una spesa: un budget vuoto non si salva. */
 internal val TripBudget.hasData: Boolean get() = limit != null || expenses.isNotEmpty()
+
+private fun Booking.toDto() = BookingDto(
+    id = id,
+    kind = kind.name,
+    title = title,
+    startDate = startDate.toString(),
+    startTime = startTime?.toString(),
+    endDate = endDate?.toString(),
+    endTime = endTime?.toString(),
+    timeZone = timeZone?.id,
+    origin = origin,
+    destination = destination,
+    reference = reference,
+    provider = provider,
+    address = address,
+    notes = notes,
+    attachment = attachment,
+    attachmentType = attachmentType,
+)
+
+private fun BookingDto.toDomain() = Booking(
+    id = id,
+    kind = BookingKind.entries.firstOrNull { it.name == kind } ?: BookingKind.OTHER,
+    title = title,
+    startDate = LocalDate.parse(startDate),
+    startTime = startTime?.let { runCatching { LocalTime.parse(it) }.getOrNull() },
+    endDate = endDate?.let { runCatching { LocalDate.parse(it) }.getOrNull() },
+    endTime = endTime?.let { runCatching { LocalTime.parse(it) }.getOrNull() },
+    timeZone = timeZone?.let { runCatching { ZoneId.of(it) }.getOrNull() },
+    origin = origin,
+    destination = destination,
+    reference = reference,
+    provider = provider,
+    address = address,
+    notes = notes,
+    attachment = attachment?.takeIf { it.isSafeFileName() },
+    attachmentType = attachmentType,
+)
+
+/** Il nome del documento allegato è solo un nome di file nella cartella delle prenotazioni, mai un percorso. */
+private fun String.isSafeFileName(): Boolean = isNotBlank() && none { it == '/' || it == '\\' } && this != "." && this != ".."

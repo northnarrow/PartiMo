@@ -17,6 +17,7 @@ import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DestinationSuggestion
 import com.partimo.domain.model.saved.SavedTrip
 import com.partimo.domain.usecase.FindCheapDestinationsUseCase
+import com.partimo.domain.usecase.ObserveBookingsUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObserveSavedTripsUseCase
 import com.partimo.domain.usecase.ObserveTravellersUseCase
@@ -50,6 +51,7 @@ class SearchViewModel(
     private val saveTravellers: SaveTravellersUseCase? = null,
     /** «Ovunque»: le mete più economiche dalla città di partenza (facoltativo). */
     private val findCheapDestinations: FindCheapDestinationsUseCase? = null,
+    observeBookings: ObserveBookingsUseCase? = null,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -81,6 +83,14 @@ class SearchViewModel(
         }
         observeTravellers?.let { observe ->
             viewModelScope.launch { observe().collect { travellers -> _uiState.update { it.copy(travellers = travellers) } } }
+        }
+        observeBookings?.let { observe ->
+            viewModelScope.launch {
+                observe().collect { bookings ->
+                    val today = LocalDate.now(clock)
+                    _uiState.update { state -> state.copy(upcomingBookings = bookings.filterNot { it.isPast(today) }) }
+                }
+            }
         }
     }
 
@@ -211,6 +221,7 @@ class SearchViewModel(
                     observeTravellers = container.observeTravellers,
                     saveTravellers = container.saveTravellers,
                     findCheapDestinations = container.findCheapDestinations,
+                    observeBookings = container.observeBookings,
                 )
             }
         }

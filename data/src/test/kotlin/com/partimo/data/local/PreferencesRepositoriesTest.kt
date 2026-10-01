@@ -147,6 +147,11 @@ class SavedTripRepositoryTest {
         repository.markSent(listOf("AT:Vienna:2026-12:DAY_BEFORE"))
 
         assertEquals(setOf("AT:Vienna:2026-12:WEEK_BEFORE", "AT:Vienna:2026-12:DAY_BEFORE"), repository.sentReminders())
+
+        repository.forget(listOf("AT:Vienna:2026-12:WEEK_BEFORE", "mai segnato"))
+        assertEquals(setOf("AT:Vienna:2026-12:DAY_BEFORE"), repository.sentReminders())
+        repository.forget(listOf("AT:Vienna:2026-12:DAY_BEFORE"))
+        assertTrue(repository.sentReminders().isEmpty())
     }
 
     @Test

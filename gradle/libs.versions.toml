@@ -23,6 +23,9 @@ datastore = "1.2.1"
 work = "2.12.0"
 maplibre = "13.6.1"
 mlkitTranslate = "17.0.3"
+mlkitTextRecognition = "19.0.1"
+mlkitTextRecognitionScripts = "16.0.1"
+exifinterface = "1.4.2"
 glance = "1.2.0"
 leakcanary = "2.14"
 
@@ -84,6 +87,12 @@ glance-material3 = { group = "androidx.glance", name = "glance-material3", versi
 
 # Traduttore sul telefono (ML Kit: pacchetti lingua gratuiti scaricati una volta, poi offline)
 mlkit-translate = { group = "com.google.mlkit", name = "translate", version.ref = "mlkitTranslate" }
+androidx-exifinterface = { group = "androidx.exifinterface", name = "exifinterface", version.ref = "exifinterface" }
+mlkit-text-recognition = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition", version.ref = "mlkitTextRecognition" }
+mlkit-text-recognition-chinese = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition-chinese", version.ref = "mlkitTextRecognitionScripts" }
+mlkit-text-recognition-devanagari = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition-devanagari", version.ref = "mlkitTextRecognitionScripts" }
+mlkit-text-recognition-japanese = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition-japanese", version.ref = "mlkitTextRecognitionScripts" }
+mlkit-text-recognition-korean = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition-korean", version.ref = "mlkitTextRecognitionScripts" }
 
 # Immagini
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }

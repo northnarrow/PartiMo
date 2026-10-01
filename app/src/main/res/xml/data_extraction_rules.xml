@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Android 12+: backup su Google e trasferimento a un telefono nuovo contengono solo i dati dell'utente
-    (viaggi salvati, preferiti, avvisi, budget, valigia e punto di partenza: il file DataStore). Cache,
-    pacchetti lingua e mappe si riscaricano.
+    Android 12+: backup su Google e trasferimento a un telefono nuovo contengono i dati dell'utente (viaggi
+    salvati, preferiti, avvisi, budget, valigia, prenotazioni e punto di partenza: il file DataStore). I
+    documenti delle prenotazioni passano solo al telefono nuovo, che non ha limiti di dimensione: nel backup
+    su Google potrebbero superare i 25 MB, e oltre quel limite Android non salva nulla. Cache, pacchetti
+    lingua e mappe si riscaricano.
 -->
 <data-extraction-rules>
     <cloud-backup>
@@ -10,5 +12,6 @@
     </cloud-backup>
     <device-transfer>
         <include domain="file" path="datastore/partimo_user.preferences_pb" />
+        <include domain="file" path="bookings/" />
     </device-transfer>
 </data-extraction-rules>
