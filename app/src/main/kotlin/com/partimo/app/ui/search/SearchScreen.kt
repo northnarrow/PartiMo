@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -28,6 +29,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -105,6 +107,8 @@ data class SearchActions(
     val onDismissError: () -> Unit = {},
     val onSavedTripSelected: (SavedTrip) -> Unit = {},
     val onRemoveSavedTrip: (SavedTrip) -> Unit = {},
+    /** Fonti, licenze e privacy. */
+    val onOpenAbout: () -> Unit = {},
 )
 
 /** Collega il ViewModel alla schermata e apre la dashboard quando la meta è pronta. */
@@ -114,6 +118,7 @@ fun SearchRoute(
     onOpenDestination: (Destination, TravelPeriod) -> Unit,
     onChooseDeparture: () -> Unit,
     modifier: Modifier = Modifier,
+    onOpenAbout: () -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val openDestination by rememberUpdatedState(onOpenDestination)
@@ -139,6 +144,7 @@ fun SearchRoute(
             onDismissError = viewModel::onPreparationErrorDismissed,
             onSavedTripSelected = viewModel::onSavedTripSelected,
             onRemoveSavedTrip = viewModel::onRemoveSavedTrip,
+            onOpenAbout = onOpenAbout,
         ),
         modifier = modifier,
     )
@@ -182,7 +188,7 @@ fun SearchScreen(
             contentPadding = PaddingValues(bottom = innerPadding.calculateBottomPadding() + 24.dp),
         ) {
             item(key = "header") {
-                SearchHeader(topInset = innerPadding.calculateTopPadding(), compact = searchMode)
+                SearchHeader(topInset = innerPadding.calculateTopPadding(), compact = searchMode, onOpenAbout = actions.onOpenAbout)
             }
             item(key = "field") {
                 CitySearchField(
@@ -238,7 +244,7 @@ fun SearchScreen(
 
 /** Intestazione con marchio e titolo; in modalità ricerca ([compact]) resta solo il titolo. */
 @Composable
-private fun SearchHeader(topInset: Dp, compact: Boolean, modifier: Modifier = Modifier) {
+private fun SearchHeader(topInset: Dp, compact: Boolean, onOpenAbout: () -> Unit, modifier: Modifier = Modifier) {
     val colors = MaterialTheme.colorScheme
     Box(
         modifier = modifier
@@ -273,6 +279,9 @@ private fun SearchHeader(topInset: Dp, compact: Boolean, modifier: Modifier = Mo
                     modifier = Modifier.padding(top = 8.dp),
                 )
             }
+        }
+        IconButton(onClick = onOpenAbout, modifier = Modifier.align(Alignment.TopEnd).offset(x = 12.dp, y = (-8).dp)) {
+            Icon(Icons.Outlined.Info, contentDescription = stringResource(R.string.about_open), tint = colors.onSurfaceVariant)
         }
     }
 }

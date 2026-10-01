@@ -1,0 +1,17 @@
+# Aggiornamenti delle dipendenze: librerie Gradle (catalogo gradle/libs.versions.toml) ogni settimana,
+# azioni di GitHub ogni mese. Le versioni minori e le patch arrivano raggruppate in una sola PR.
+version: 2
+updates:
+  - package-ecosystem: gradle
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      librerie:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

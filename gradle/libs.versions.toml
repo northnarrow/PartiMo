@@ -24,6 +24,7 @@ work = "2.12.0"
 maplibre = "13.6.1"
 mlkitTranslate = "17.0.3"
 glance = "1.2.0"
+leakcanary = "2.14"
 
 [libraries]
 # AndroidX
@@ -73,6 +74,9 @@ kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 
 # Mappa (MapLibre Native, variante OpenGL ES 3 compatibile con quasi tutti i telefoni, con le mappe di OpenFreeMap, senza chiave)
 maplibre-android = { group = "org.maplibre.gl", name = "android-sdk-opengl", version.ref = "maplibre" }
+
+# Rilevamento delle perdite di memoria, solo nelle build di debug
+leakcanary-android = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
 
 # Widget della schermata Home (Jetpack Glance)
 glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }

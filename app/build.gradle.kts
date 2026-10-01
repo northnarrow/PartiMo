@@ -128,6 +128,9 @@ dependencies {
     implementation(libs.glance.appwidget)
     implementation(libs.glance.material3)
 
+    // Perdite di memoria segnalate durante lo sviluppo (non entra nella build di rilascio)
+    debugImplementation(libs.leakcanary.android)
+
     testImplementation(testFixtures(project(":domain")))
     testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.kotlinx.coroutines.test)

@@ -1,0 +1,56 @@
+# Build e test di PartiMo a ogni push su main e a ogni pull request.
+# Gira senza chiavi API (local.properties non è nel repository): l'app usa i dati aperti e la demo,
+# quindi l'APK di debug prodotto qui non contiene segreti e si può scaricare come artefatto.
+name: Build e test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Test unitari e APK di debug
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: JDK 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Gradle (con cache e verifica del wrapper)
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Test unitari (domain, data, app con Robolectric)
+        run: ./gradlew :domain:test :data:testDebugUnitTest :app:testDebugUnitTest --stacktrace
+
+      - name: APK di debug
+        run: ./gradlew :app:assembleDebug --stacktrace
+
+      - name: Carica gli APK
+        uses: actions/upload-artifact@v5
+        with:
+          name: partimo-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          retention-days: 14
+
+      - name: Carica i report dei test
+        if: failure()
+        uses: actions/upload-artifact@v5
+        with:
+          name: report-test
+          path: '**/build/reports/tests/'
+          retention-days: 14

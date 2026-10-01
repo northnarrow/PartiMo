@@ -575,4 +575,37 @@
     <string name="widget_today">si parte oggi</string>
     <string name="widget_tomorrow">si parte domani</string>
     <string name="widget_in_days">tra %1$d giorni</string>
+
+    <!-- Fonti, licenze e privacy -->
+    <string name="about_open">Fonti, licenze e privacy</string>
+    <string name="about_title">Fonti, licenze e privacy</string>
+    <string name="about_version">PartiMo %1$s</string>
+    <string name="about_tagline">App personale per organizzare i viaggi con dati aperti e gratuiti.</string>
+    <string name="about_privacy">🔒 Privacy</string>
+    <string name="about_privacy_device">Viaggi salvati, preferiti, budget, valigia e punto di partenza restano sul telefono.</string>
+    <string name="about_privacy_location">La posizione si legge solo quando tocchi «Dove sono» sulla mappa e non lascia il telefono.</string>
+    <string name="about_privacy_ai">Le domande all\'assistente, con città, date ed eventi del viaggio, vanno a Google (Gemini) per la risposta.</string>
+    <string name="about_privacy_translator">Il traduttore lavora sul telefono; ML Kit invia a Google statistiche anonime d\'uso.</string>
+    <string name="about_privacy_sources">Le ricerche di luoghi, eventi, meteo e cambi vanno ai servizi aperti qui sotto, senza dati personali.</string>
+    <string name="about_sources">📚 Fonti dei dati</string>
+    <string name="about_maps">🗺️ Mappe</string>
+    <string name="about_services">🔗 Servizi collegati</string>
+    <string name="about_libraries">🧩 Librerie open source</string>
+    <string name="about_src_wikipedia">Luoghi da vedere, descrizioni, storia e foto · testi CC BY-SA 4.0, foto con la licenza indicata nella scheda</string>
+    <string name="about_src_wikivoyage">Guida della città · CC BY-SA 4.0</string>
+    <string name="about_src_wikidata">Eventi e ricorrenze · CC0</string>
+    <string name="about_src_osm">Ristoranti, alloggi, orari e accessibilità · ODbL, © OpenStreetMap contributors</string>
+    <string name="about_src_openmeteo">Meteo, previsioni, clima e ricerca delle città · CC BY 4.0</string>
+    <string name="about_src_nager">Festività nazionali · MIT</string>
+    <string name="about_src_exchangerate">Cambi del giorno · Rates By Exchange Rate API</string>
+    <string name="about_src_ourairports">Aeroporti · pubblico dominio</string>
+    <string name="about_src_desnz">Emissioni di CO₂ dei mezzi · Open Government Licence v3.0</string>
+    <string name="about_src_viaggiaresicuri">Sicurezza e documenti per paese · Ministero degli Affari Esteri</string>
+    <string name="about_map_openfreemap">Mappe vettoriali gratuite, senza chiave</string>
+    <string name="about_map_openmaptiles">Schema e stile delle mappe · © OpenMapTiles</string>
+    <string name="about_map_maplibre">Disegno della mappa sul telefono · BSD 2-Clause</string>
+    <string name="about_service_gemini">Assistente con l\'IA (itinerario e domande) · termini di Google</string>
+    <string name="about_service_mlkit">Traduttore sul telefono · termini di Google</string>
+    <string name="about_service_links">Collegamenti a Google Voli, Skyscanner, Booking.com, Airbnb, Google Maps, Rome2rio e Tiqets: PartiMo apre le loro pagine, non legge i loro dati</string>
+    <string name="about_libraries_text">Kotlin, Jetpack Compose e Material 3, Navigation, Room, DataStore, WorkManager, Glance, Ktor, OkHttp, kotlinx.serialization, Coil, MapLibre, ML Kit · Apache 2.0, MIT, BSD</string>
 </resources>

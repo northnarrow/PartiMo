@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.partimo.app.R
 import com.partimo.app.di.AppContainer
+import com.partimo.app.ui.about.AboutRoute
 import com.partimo.app.ui.budget.BudgetRoute
 import com.partimo.app.ui.budget.BudgetViewModel
 import com.partimo.app.ui.chat.ChatRoute
@@ -50,6 +51,10 @@ import java.time.ZoneOffset
 /** Schermata iniziale: "Dove vuoi andare?". */
 @Serializable
 data object SearchDestination
+
+/** Fonti, licenze e privacy. */
+@Serializable
+data object AboutDestination
 
 /** Scelta del punto di partenza ("Da dove parti?"). */
 @Serializable
@@ -207,7 +212,11 @@ fun PartiMoNavHost(
                     navController.navigate(DashboardDestination.from(destination, period))
                 },
                 onChooseDeparture = { navController.navigate(DeparturePickerDestination) },
+                onOpenAbout = { navController.navigate(AboutDestination) },
             )
+        }
+        composable<AboutDestination> {
+            AboutRoute(onBack = { navController.popBackStack() })
         }
         composable<DashboardDestination> { backStackEntry ->
             val route = backStackEntry.toRoute<DashboardDestination>()

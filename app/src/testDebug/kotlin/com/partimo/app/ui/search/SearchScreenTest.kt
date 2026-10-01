@@ -47,9 +47,12 @@ class SearchScreenTest {
 
     @Test
     fun `mostra marchio, titolo, partenza, campo di ricerca e consigliami`() {
+        var abouts = 0
         composeRule.setContent {
-            PartiMoTheme { SearchScreen(PreviewData.searchIdleState(), query = "", actions = SearchActions()) }
+            PartiMoTheme { SearchScreen(PreviewData.searchIdleState(), query = "", actions = SearchActions(onOpenAbout = { abouts++ })) }
         }
+        composeRule.onNodeWithContentDescription(text(R.string.about_open)).performClick()
+        kotlin.test.assertEquals(1, abouts)
 
         composeRule.onNodeWithText("PartiMo").assertExists()
         composeRule.onNodeWithText(text(R.string.search_title)).assertExists()
