@@ -566,4 +566,13 @@
     <string name="budget_category_shopping">Acquisti</string>
     <string name="budget_category_other">Altro</string>
     <string name="error_query_invalid_amount">Importo non valido.</string>
+
+    <!-- Widget "Prossimo viaggio" -->
+    <string name="widget_name">Prossimo viaggio</string>
+    <string name="widget_description">Il primo viaggio salvato con il conto alla rovescia.</string>
+    <string name="widget_label">Prossimo viaggio</string>
+    <string name="widget_empty">Salva un viaggio con il cuore ♥ per vederlo qui.</string>
+    <string name="widget_today">si parte oggi</string>
+    <string name="widget_tomorrow">si parte domani</string>
+    <string name="widget_in_days">tra %1$d giorni</string>
 </resources>

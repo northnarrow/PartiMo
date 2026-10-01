@@ -54,11 +54,16 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // R8 toglie le parti inutilizzate delle librerie: APK molto più leggero. Il codice dell'app
+            // resta intero e non offuscato (vedi proguard-rules.pro).
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            // App personale: firmata con la chiave di debug, così si installa sopra le versioni di debug.
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
@@ -118,6 +123,10 @@ dependencies {
 
     // Mappa dei luoghi del viaggio
     implementation(libs.maplibre.android)
+
+    // Widget "Prossimo viaggio"
+    implementation(libs.glance.appwidget)
+    implementation(libs.glance.material3)
 
     testImplementation(testFixtures(project(":domain")))
     testImplementation(libs.kotlin.test.junit)

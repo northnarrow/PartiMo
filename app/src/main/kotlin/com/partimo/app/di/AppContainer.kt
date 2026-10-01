@@ -2,11 +2,13 @@ package com.partimo.app.di
 
 import android.content.Context
 import android.util.Log
+import androidx.glance.appwidget.updateAll
 import com.partimo.app.BuildConfig
 import com.partimo.app.notifications.DealCheckScheduler
 import com.partimo.app.notifications.DealNotifier
 import com.partimo.app.notifications.TripReminderNotifier
 import com.partimo.app.notifications.TripWorkScheduler
+import com.partimo.app.widget.NextTripWidget
 import com.partimo.data.config.ApiConfig
 import com.partimo.data.di.DataModule
 import com.partimo.domain.usecase.AskTravelAssistantUseCase
@@ -264,6 +266,10 @@ class DefaultAppContainer(context: Context) : AppContainer {
                     if (upcoming) scheduler.scheduleReminders() else scheduler.cancelReminders()
                     if (anyTrip) scheduler.schedulePrefetch() else scheduler.cancelPrefetch()
                 }
+        }
+        runSafely("Aggiornamento del widget non riuscito") {
+            // Il widget "Prossimo viaggio" segue i viaggi salvati.
+            dataModule.savedTripRepository.trips.distinctUntilChanged().collect { NextTripWidget().updateAll(appContext) }
         }
         runSafely("Pianificazione del controllo delle offerte non riuscita") {
             val scheduler = DealCheckScheduler(appContext)
