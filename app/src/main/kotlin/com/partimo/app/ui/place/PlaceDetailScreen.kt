@@ -39,6 +39,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -82,11 +83,12 @@ data class PlaceDetailActions(
     val onRetry: () -> Unit = {},
 )
 
-/** Collega il ViewModel alla scheda e apre Google Maps o il browser per le azioni esterne. */
+/** Collega il ViewModel alla scheda e apre Google Maps o il browser interno per le azioni esterne. */
 @Composable
 fun PlaceDetailRoute(viewModel: PlaceDetailViewModel, onBack: () -> Unit, modifier: Modifier = Modifier) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val toolbarColor = MaterialTheme.colorScheme.surface.toArgb()
     val noMapsApp = stringResource(R.string.place_no_maps_app)
     val noBrowser = stringResource(R.string.place_no_browser)
     PlaceDetailScreen(
@@ -94,12 +96,12 @@ fun PlaceDetailRoute(viewModel: PlaceDetailViewModel, onBack: () -> Unit, modifi
         actions = PlaceDetailActions(
             onBack = onBack,
             onNavigate = {
-                if (!ExternalLinks.openNavigation(context, state.poi.location)) {
+                if (!ExternalLinks.openNavigation(context, state.poi.location, toolbarColor)) {
                     Toast.makeText(context, noMapsApp, Toast.LENGTH_LONG).show()
                 }
             },
             onOpenLink = { url ->
-                if (!ExternalLinks.openWebPage(context, url)) Toast.makeText(context, noBrowser, Toast.LENGTH_LONG).show()
+                if (!ExternalLinks.openLink(context, url, toolbarColor)) Toast.makeText(context, noBrowser, Toast.LENGTH_LONG).show()
             },
             onRetry = viewModel::retry,
         ),

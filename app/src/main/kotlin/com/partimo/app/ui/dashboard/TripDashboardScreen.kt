@@ -55,6 +55,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -102,7 +103,7 @@ data class DashboardActions(
     val onOpenNotificationSettings: () -> Unit = {},
     /** Tocco su un luogo da vedere: apre la sua scheda (descrizione, storia, "Naviga"). */
     val onOpenPlace: (PointOfInterest) -> Unit = {},
-    /** Collegamento esterno: siti di prenotazione con le date del viaggio, Google Maps, fonti dei dati. */
+    /** Collegamento: siti di voli e alloggi con le date del viaggio (nel browser interno), Google Maps, fonti dei dati. */
     val onOpenLink: (String) -> Unit = {},
 )
 
@@ -121,6 +122,7 @@ fun TripDashboardRoute(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val noAppForLink = stringResource(R.string.place_no_browser)
+    val toolbarColor = MaterialTheme.colorScheme.surface.toArgb()
     val notificationPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         viewModel.onAlertToggled(notificationsAllowed = granted)
     }
@@ -147,7 +149,7 @@ fun TripDashboardRoute(
             onOpenNotificationSettings = { context.startActivity(notificationSettingsIntent(context)) },
             onOpenPlace = onOpenPlace,
             onOpenLink = { url ->
-                if (!ExternalLinks.openLink(context, url)) Toast.makeText(context, noAppForLink, Toast.LENGTH_LONG).show()
+                if (!ExternalLinks.openLink(context, url, toolbarColor)) Toast.makeText(context, noAppForLink, Toast.LENGTH_LONG).show()
             },
         ),
         modifier = modifier,

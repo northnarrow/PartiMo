@@ -20,7 +20,8 @@ al centro arrivano da **OpenStreetMap**. Ogni struttura ha **Vedi prezzi**, che 
 nome e date del viaggio già compilati; ogni ristorante si apre su Google Maps con recensioni, foto e
 orari. Per **voli** e **trasporti** i prezzi e gli orari reali richiedono una chiave: senza chiave
 l'app mostra delle stime e i pulsanti verso **Google Voli**, **Skyscanner** e **Google Maps** (percorso
-con i mezzi), che si aprono con tratta e date del viaggio.
+con i mezzi), che si aprono con tratta e date del viaggio. I siti si aprono nel **browser interno** di
+PartiMo, senza uscire dall'app; le pagine di Google Maps nell'app Maps.
 
 <img src="docs/search_ideas.png" alt="Schermata iniziale con partenza, mesi e consigli" width="240" /> <img src="docs/departure_picker.png" alt="Scelta dell'aeroporto di partenza" width="240" /> <img src="docs/trip_dashboard.png" alt="Dashboard: sezione Voli con i collegamenti a Google Voli e Skyscanner" width="240" /> <img src="docs/trip_dashboard_stays.png" alt="Dashboard: alloggi reali da OpenStreetMap con Booking.com e Airbnb" width="240" /> <img src="docs/trip_dashboard_explore.png" alt="Dashboard: sezione Da vedere" width="240" /> <img src="docs/place_detail.png" alt="Scheda di un luogo con descrizione, storia e pulsante Naviga" width="240" /> <img src="docs/trip_dashboard_transit.png" alt="Dashboard: trasporti con il percorso reale su Google Maps" width="240" /> <img src="docs/trip_dashboard_restaurants.png" alt="Dashboard: ristoranti reali da OpenStreetMap" width="240" />
 
@@ -200,7 +201,7 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
 ./gradlew :app:assembleDebug        # APK di debug
 ```
 
-292 test unitari:
+293 test unitari:
 - **`:domain` (130):** modelli e validazioni (compresi i dodici mesi di `TravelPeriod`), servizi di
   dominio (qualità/prezzo, stagionalità, notorietà dei luoghi, scelta degli aeroporti, rilevamento
   degli affari, estratti brevi di descrizione e storia) e tutti i casi d'uso, compresi ristoranti
@@ -212,9 +213,9 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
   cambio di istanza Overpass se sovraccarica, intestazioni per le chiavi Google con restrizione
   Android, dataset aeroporti reale (es. Roma → FCO, Parigi → CDG), catalogo delle mete, repository
   DataStore e formato di salvataggio, mercato simulato della demo.
-- **`:app` (85):** ViewModel (dashboard con e senza chiavi, ricerca, scelta della partenza, scheda del
+- **`:app` (86):** ViewModel (dashboard con e senza chiavi, ricerca, scelta della partenza, scheda del
   luogo), rotte di navigazione, collegamenti a Google Maps, Google Voli, Skyscanner, Booking.com e
-  Airbnb, User-Agent delle foto, notifiche (Robolectric), formattazione e test UI Compose con
+  Airbnb, browser interno (Custom Tabs), User-Agent delle foto, notifiche (Robolectric), formattazione e test UI Compose con
   Robolectric (`app/src/testDebug`), che salvano anche gli screenshot in `app/build/outputs/screenshots/`.
 
 ## Scelte tecniche
@@ -256,7 +257,7 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
   il primo paragrafo di ogni sottosezione, fino a 5 capitoli, tagliato alla fine di una frase.
 - **Naviga:** usa le [Maps URLs](https://developers.google.com/maps/documentation/urls/get-started)
   (`https://www.google.com/maps/dir/?api=1&destination=lat,lng`): nessuna chiave, apre l'app Google
-  Maps se installata, altrimenti il browser, e lascia a Maps la scelta del mezzo (a piedi, mezzi, auto).
+  Maps se installata, altrimenti il browser interno, e lascia a Maps la scelta del mezzo (a piedi, mezzi, auto).
 - **Licenze:** i testi di Wikipedia sono CC BY-SA 4.0 e le foto di Wikimedia Commons hanno licenze
   libere con attribuzione: la scheda mostra fonte, autore e licenza, con i collegamenti alle pagine
   originali. I dati di OpenStreetMap sono ODbL: sotto alloggi e ristoranti c'è "Dati © OpenStreetMap
@@ -272,7 +273,11 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
 - **Collegamenti ai siti di viaggio** (`TravelLinks`, `MapsLinks`): URL pubblici con la ricerca già
   compilata (es. `booking.com/searchresults.it.html?ss=Vienna&checkin=…&checkout=…`), senza chiavi,
   accordi o codici di affiliazione. Dall'app escono solo tratta, città, date e numero di viaggiatori.
-  I collegamenti a Google Maps si aprono nell'app Maps se installata.
+  I siti si aprono nel browser interno (Android [Custom Tabs](https://developer.chrome.com/docs/android/custom-tabs)):
+  una scheda del browser sopra PartiMo, con la barra nei colori dell'app e la X per tornare indietro,
+  che condivide accessi e cookie del browser (consenso di Google, account Booking). Le pagine di
+  Google Maps si aprono nell'app Maps se installata. I prezzi restano sul sito: PartiMo non legge le
+  pagine (lo vietano i termini d'uso dei siti di viaggio).
 - **Trasporti senza chiave:** [Transitous](https://transitous.org) offre percorsi reali senza chiave,
   ma solo per app open source non commerciali e previo contatto con il progetto: per ora non è
   attivo e senza chiave Google il percorso reale si apre in Google Maps.

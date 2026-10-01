@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Intent
 import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.annotation.StringRes
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
@@ -28,6 +29,7 @@ import org.robolectric.annotation.GraphicsMode
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /** Test UI della scheda di un luogo, eseguiti sulla JVM con Robolectric. */
@@ -93,6 +95,25 @@ class PlaceDetailScreenTest {
         assertEquals(Intent.ACTION_VIEW, intent.action)
         assertEquals(GOOGLE_MAPS_PACKAGE, intent.`package`)
         assertEquals("https://www.google.com/maps/dir/?api=1&destination=48.208500%2C16.373100", intent.dataString)
+    }
+
+    @Test
+    fun `i siti si aprono nel browser interno con la barra nei colori dell'app`() {
+        val url = "https://www.skyscanner.it/trasporti/voli/mxp/vie/261210/261214/?adultsv2=1"
+
+        val opened = ExternalLinks.openLink(composeRule.activity, url, toolbarColor = 0xFF123456.toInt())
+
+        val intent = shadowOf(composeRule.activity).nextStartedActivity
+        assertTrue(opened)
+        assertEquals(Intent.ACTION_VIEW, intent.action)
+        assertEquals(url, intent.dataString)
+        assertNull(intent.`package`, "Nessuna app imposta: si usa la scheda del browser predefinito")
+        assertTrue(intent.hasExtra(CustomTabsIntent.EXTRA_SESSION), "Deve aprirsi come Custom Tab dentro PartiMo")
+        assertEquals(0xFF123456.toInt(), intent.getIntExtra(CustomTabsIntent.EXTRA_TOOLBAR_COLOR, 0))
+        assertEquals(
+            CustomTabsIntent.SHOW_PAGE_TITLE,
+            intent.getIntExtra(CustomTabsIntent.EXTRA_TITLE_VISIBILITY_STATE, CustomTabsIntent.NO_TITLE),
+        )
     }
 
     @Test
