@@ -72,7 +72,21 @@ davanti; le lingue si invertono per tradurre cartelli e menù. C'è un **frasari
 spostamenti, albergo, acquisti, emergenze) e la scorciatoia a Google Traduttore per fotocamera e
 conversazione.
 
-<img src="docs/search_ideas.png" alt="Schermata iniziale con partenza, mesi e consigli" width="240" /> <img src="docs/departure_picker.png" alt="Scelta dell'aeroporto di partenza" width="240" /> <img src="docs/trip_dashboard.png" alt="Dashboard: sezione Voli con i collegamenti a Google Voli e Skyscanner" width="240" /> <img src="docs/trip_dashboard_stays.png" alt="Dashboard: alloggi reali da OpenStreetMap con Booking.com e Airbnb" width="240" /> <img src="docs/trip_dashboard_explore.png" alt="Dashboard: sezione Da vedere" width="240" /> <img src="docs/place_detail.png" alt="Scheda di un luogo con descrizione, storia e pulsante Naviga" width="240" /> <img src="docs/trip_dashboard_transit.png" alt="Dashboard: trasporti con il percorso reale su Google Maps" width="240" /> <img src="docs/trip_dashboard_restaurants.png" alt="Dashboard: ristoranti reali da OpenStreetMap" width="240" /> <img src="docs/guide.png" alt="Guida del viaggio: meteo, alba e tramonto, informazioni pratiche ed emergenze" width="240" /> <img src="docs/guide_currency.png" alt="Guida con previsioni giorno per giorno e cambio valuta" width="240" /> <img src="docs/itinerary.png" alt="Itinerario con l'IA giorno per giorno, con giro a piedi e calendario" width="240" /> <img src="docs/itinerary_packing.png" alt="Lista per la valigia dell'itinerario" width="240" /> <img src="docs/chat.png" alt="Chiedi a PartiMo: domande all'assistente sul viaggio" width="240" /> <img src="docs/favorites.png" alt="Preferiti del viaggio con mappa, giro a piedi e condivisione" width="240" /> <img src="docs/translator.png" alt="Traduttore con Ascolta, Copia, Mostra in grande e frasario" width="240" /> <img src="docs/translator_pack.png" alt="Traduttore al primo uso: pacchetto lingua da scaricare" width="240" />
+Altri strumenti del viaggio, tutti senza chiavi:
+- **🧭 Come arrivare** (in Trasporti): treni, pullman e voli dalla città di partenza su Google Maps e
+  Rome2rio, con le **emissioni di CO₂** a persona di aereo, treno, pullman e auto (fattori ufficiali
+  DESNZ 2025).
+- **🎟️ Biglietti** per musei e attrazioni su Tiqets, sia per la città sia dalla scheda di un museo.
+- **💶 Budget**: spese nella valuta in cui si pagano, totali in euro con i cambi del giorno, spese
+  per categoria e tetto di spesa con quanto resta.
+- **Promemoria** una settimana prima e il giorno prima della partenza dei viaggi salvati e
+  **preparazione offline**: con il Wi-Fi i viaggi salvati che partono entro un mese scaricano luoghi,
+  eventi, ristoranti, alloggi, guida, meteo, cambio e foto, così l'app funziona anche senza rete.
+- **📍 Dove sono** sulla mappa, con la distanza dal punto scelto (la posizione resta sul telefono).
+- Widget **Prossimo viaggio** per la schermata Home, con il conto alla rovescia.
+- **Fonti, licenze e privacy** (ⓘ nella schermata iniziale).
+
+<img src="docs/search_ideas.png" alt="Schermata iniziale con partenza, mesi e consigli" width="240" /> <img src="docs/departure_picker.png" alt="Scelta dell'aeroporto di partenza" width="240" /> <img src="docs/trip_dashboard.png" alt="Dashboard: sezione Voli con i collegamenti a Google Voli e Skyscanner" width="240" /> <img src="docs/trip_dashboard_stays.png" alt="Dashboard: alloggi reali da OpenStreetMap con Booking.com e Airbnb" width="240" /> <img src="docs/trip_dashboard_explore.png" alt="Dashboard: sezione Da vedere" width="240" /> <img src="docs/place_detail.png" alt="Scheda di un luogo con descrizione, storia e pulsante Naviga" width="240" /> <img src="docs/trip_dashboard_transit.png" alt="Dashboard: trasporti con il percorso reale su Google Maps" width="240" /> <img src="docs/trip_dashboard_restaurants.png" alt="Dashboard: ristoranti reali da OpenStreetMap" width="240" /> <img src="docs/guide.png" alt="Guida del viaggio: meteo, alba e tramonto, informazioni pratiche ed emergenze" width="240" /> <img src="docs/guide_currency.png" alt="Guida con previsioni giorno per giorno e cambio valuta" width="240" /> <img src="docs/itinerary.png" alt="Itinerario con l'IA giorno per giorno, con giro a piedi e calendario" width="240" /> <img src="docs/itinerary_packing.png" alt="Lista per la valigia dell'itinerario" width="240" /> <img src="docs/chat.png" alt="Chiedi a PartiMo: domande all'assistente sul viaggio" width="240" /> <img src="docs/favorites.png" alt="Preferiti del viaggio con mappa, giro a piedi e condivisione" width="240" /> <img src="docs/translator.png" alt="Traduttore con Ascolta, Copia, Mostra in grande e frasario" width="240" /> <img src="docs/translator_pack.png" alt="Traduttore al primo uso: pacchetto lingua da scaricare" width="240" /> <img src="docs/budget.png" alt="Budget del viaggio con spese in euro e in corone" width="240" /> <img src="docs/about.png" alt="Fonti, licenze e privacy" width="240" />
 
 Negli screenshot (generati dai test, senza rete, con dati di esempio) le foto sono segnaposto grigi: nell'app si caricano
 le foto reali dei luoghi. La mappa non è tra gli screenshot: i test girano sulla JVM, dove la libreria
@@ -154,6 +168,11 @@ nativa della mappa non c'è.
 | Orari e accessibilità | `OpeningHoursParser`, `OpeningHours`, `WheelchairAccess` | OpenStreetMap (`opening_hours`, `wheelchair`) | Orari della settimana del viaggio con i giorni uguali raggruppati (es. «lun–ven 11:30–14:30, 18:00–22:00 · dom chiuso»), «aperto ora / apre domani alle 11:00» all'ora della meta per i viaggi dei prossimi giorni, chiusure dopo mezzanotte; accessibilità in carrozzina di ristoranti e alloggi |
 | Preferiti e viaggi salvati | `ToggleFavoriteUseCase`, `SetTripSavedUseCase`, `ObserveSavedTripsUseCase`, `SavedTrip`, `Favorite` | DataStore (sul telefono) | Stella su luoghi, eventi, ristoranti e alloggi (il primo preferito salva anche il viaggio), cuore per salvare il viaggio, «I tuoi viaggi» nella schermata iniziale (prima i prossimi, con il conto alla rovescia), preferiti per tipo con giro a piedi (dal primo, poi sempre il più vicino) e condivisione |
 | Mappa del viaggio | `MapViewModel`, `MapPoints` | [MapLibre Native](https://maplibre.org) + [OpenFreeMap](https://openfreemap.org) (stile vettoriale gratuito, senza chiave, dati © OpenStreetMap) | Luoghi, eventi, ristoranti e alloggi del viaggio (gli stessi dati della dashboard, dalla cache) più i preferiti salvati; filtri per tipo con i conteggi, «Solo preferiti», tema chiaro e scuro, scheda del punto con «Apri la scheda», «Apri la pagina», «Naviga» e stella. Zoom e posizione restano tornando dalla scheda di un luogo |
+| Come arrivare e CO₂ | `CarbonFootprint` | Google Maps URLs, [Rome2rio](https://www.rome2rio.com), fattori di conversione [DESNZ 2025](https://www.gov.uk/government/publications/greenhouse-gas-reporting-conversion-factors-2025) (OGL v3) | Treni e bus tra le città su Google Maps, tutti i mezzi su Rome2rio; CO₂e andata e ritorno a persona: aereo internazionale 0,143 kg/km con gli effetti in quota (voli sotto 500 km 0,229), treno 0,035, pullman 0,028, auto 0,167 a veicolo divisa tra i viaggiatori; percorsi via terra stimati come linea d'aria +20%, solo aereo oltre 2.000 km |
+| Biglietti | `TravelLinks.tiqets` | [Tiqets](https://www.tiqets.com) (collegamenti) | Biglietti delle attrazioni della città in Da vedere; nella scheda di musei, monumenti, chiese e attrazioni il pulsante «Biglietti» apre i biglietti del luogo |
+| Budget del viaggio | `EditTripBudgetUseCase`, `SummarizeBudgetUseCase`, `TripBudget` | DataStore (sul telefono) + ExchangeRate-API | Spese in euro o nella valuta del paese, categoria, giorno e nota; totali in euro con i cambi del giorno (anche offline dalla cache, le spese senza cambio vengono segnalate), spese per categoria, tetto di spesa con quanto resta o di quanto lo si supera |
+| Promemoria e uso offline | `TripRemindersUseCase`, `PrefetchTripUseCase`, `TripReminders` | WorkManager + notifiche | Promemoria una settimana prima (valido fino a due giorni prima) e il giorno prima della partenza, una volta sola; con il Wi-Fi e la batteria carica i viaggi salvati entro un mese si preparano per l'uso senza rete (dati e foto) |
+| Widget e posizione | `NextTripWidget`, `rememberMyLocation` | Jetpack Glance, LocationManager di Android | Widget «Prossimo viaggio» con conto alla rovescia; sulla mappa «Dove sono» con la distanza dal punto scelto, permesso chiesto solo al tocco |
 | Traduttore | `TranslateTextUseCase`, `LanguagePacksUseCase`, `TranslatorLanguages` | [ML Kit Translation](https://developers.google.com/ml-kit/language/translation) (gratuito, sul telefono) + sintesi vocale di Android | 58 lingue; lingua del posto proposta dal paese, pacchetti di circa 30 MB scaricati una volta e poi offline, inversione delle lingue, Ascolta, Copia, Mostra in grande, frasario per categorie tradotto sul telefono, scorciatoia a Google Traduttore |
 | Ristoranti | `FindBudgetRestaurantsUseCase`, `BudgetDiningCriteria` | Google Places API (New), oppure senza chiave OpenStreetMap (Overpass API) | Con Google: vincolo `price_level` 1–2 e valutazione ≥ 4,3, riapplicato sempre dal dominio. Senza chiave: locali reali vicino al centro (cucina, indirizzo, distanza), prima i più completi e vicini, catene in fondo. Il tocco apre il locale su Google Maps (recensioni, foto, orari) |
 
@@ -286,10 +305,15 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
 ./gradlew compileDebugKotlin        # compilazione Kotlin di tutti i moduli
 ./gradlew test                      # test unitari (domain, data, app)
 ./gradlew :app:assembleDebug        # APK di debug (arm64-v8a, armeabi-v7a e universale)
+./gradlew :app:assembleRelease      # APK ottimizzati con R8, firmati con la chiave di debug
 ```
 
-444 test unitari:
-- **`:domain` (175):** modelli e validazioni (compresi i dodici mesi di `TravelPeriod` e i periodi
+Ogni push su `main` e ogni pull request passano dalla CI di GitHub Actions
+(`.github/workflows/android.yml`): test unitari e APK di debug senza chiavi, scaricabile come
+artefatto. Dependabot propone gli aggiornamenti delle librerie ogni settimana.
+
+480 test unitari:
+- **`:domain` (187):** modelli e validazioni (compresi i dodici mesi di `TravelPeriod` e i periodi
   degli eventi, anche a cavallo di Capodanno), servizi di dominio (qualità/prezzo, stagionalità,
   notorietà dei luoghi, scelta degli aeroporti, rilevamento degli affari, estratti brevi di descrizione
   e storia) e tutti i casi d'uso, compresi ristoranti senza valutazioni, strutture ricettive, eventi
@@ -297,8 +321,9 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
   (previsioni o clima tipico, anche a cavallo di Capodanno), cambio, capitoli della guida, orari di
   apertura su orari **reali** dei ristoranti di Vienna e alba e tramonto confrontati con i valori
   **reali** di Open-Meteo (più Sydney e la notte polare di Tromsø), viaggi salvati e preferiti, lingua
-  del traduttore proposta per paese, con fake condivisi tramite `testFixtures`.
-- **`:data` (119):** cache e TTL, mappatura degli errori, client HTTP con risposte JSON simulate
+  del traduttore proposta per paese, CO₂ dei mezzi, budget con i cambi, promemoria prima della
+  partenza e preparazione offline, con fake condivisi tramite `testFixtures`.
+- **`:data` (122):** cache e TTL, mappatura degli errori, client HTTP con risposte JSON simulate
   (Duffel, Places, Routes, Open-Meteo, Wikipedia, Overpass, Wikidata, Nager.Date), Gemini con risposte
   **reali** (itinerario di Vienna e risposta a una domanda in `data/src/test/resources/gemini`), cambio
   di modello se uno è sovraccarico e richieste "di riserva" (tempo virtuale), guide **reali** di
@@ -309,12 +334,14 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
   eventi di Vienna e Monaco da risposte **reali** di Wikidata e festività 2026 di Austria e Italia,
   cambio di istanza Overpass se sovraccarica, intestazioni per le chiavi Google con restrizione
   Android, dataset aeroporti reale (es. Roma → FCO, Parigi → CDG), catalogo delle mete, repository
-  DataStore e formato di salvataggio (anche la valigia, i viaggi salvati e i preferiti), lingue dei
+  DataStore e formato di salvataggio (anche la valigia, i viaggi salvati, i preferiti, il budget e i
+  promemoria già mostrati), lingue dei
   paesi come codici per il traduttore, mercato simulato della demo.
-- **`:app` (150):** ViewModel (dashboard con e senza chiavi, eventi del soggiorno, ricerca, scelta della
+- **`:app` (171):** ViewModel (dashboard con e senza chiavi, eventi del soggiorno, ricerca, scelta della
   partenza, scheda del luogo, itinerario, domande all'assistente, guida con convertitore di valuta e
   fuso orario con l'ora legale, preferiti e viaggi salvati, mappa con filtri e «solo preferiti»,
-  traduttore con pacchetti lingua, inversione e frasario), testi degli orari di apertura, rotte di navigazione, collegamenti a
+  traduttore con pacchetti lingua, inversione e frasario, budget, «Dove sono»), notifiche dei
+  promemoria, widget, come arrivare con la CO₂, biglietti, fonti e licenze, testi degli orari di apertura, rotte di navigazione, collegamenti a
   Google Maps (anche il giro a piedi con le tappe), Google Voli, Skyscanner, Booking.com, Airbnb e
   ricerca degli eventi, calendario e condivisione dell'itinerario, browser interno (Custom Tabs),
   User-Agent delle foto, notifiche (Robolectric), formattazione e test UI Compose con
@@ -440,8 +467,19 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
   (`TextToSpeech`, dichiarata in `<queries>` per Android 11+): se manca per una lingua, l'app lo dice.
   ML Kit invia a Google statistiche anonime d'uso della libreria.
 - **Peso dell'APK:** mappa e traduttore hanno librerie native, incluse solo per i telefoni ARM e
-  compresse. `assembleDebug` genera tre APK: `arm64-v8a` (circa 30 MB, per quasi tutti i telefoni),
-  `armeabi-v7a` (vecchi telefoni a 32 bit) e `universal` (entrambi, circa 40 MB).
+  compresse; si generano gli APK `arm64-v8a` (quasi tutti i telefoni), `armeabi-v7a` (vecchi telefoni
+  a 32 bit) e `universal`. La build di rilascio passa da R8, che toglie le parti inutilizzate delle
+  librerie senza offuscare il codice dell'app (JSON, Room, WorkManager, rotte e widget usano i nomi
+  delle classi): l'APK universale scende da circa 42 a 23 MB. È firmata con la chiave di debug, quindi
+  si installa sopra le versioni di debug.
+- **Promemoria e uso offline:** due lavori di WorkManager, uno al giorno per i promemoria (solo per i
+  viaggi in un mese preciso: «Prossimi giorni» non ha una data fissa) e uno al giorno con il Wi-Fi per
+  riempire le cache, avviati solo finché ci sono viaggi salvati.
+- **Posizione:** «Dove sono» usa il LocationManager di Android (fornitore «fused» da Android 12),
+  quindi funziona anche senza i servizi Google e con la sola posizione approssimativa; il permesso si
+  chiede solo al tocco.
+- **Finestre con i moduli:** AlertDialog di Material 3 con un campo di testo non si assesta mai nei
+  test sulla JVM (Robolectric); `FormDialog` ha lo stesso aspetto ma lascia la larghezza al contenuto.
 - **Trasporti senza chiave:** [Transitous](https://transitous.org) offre percorsi reali senza chiave,
   ma solo per app open source non commerciali e previo contatto con il progetto: per ora non è
   attivo e senza chiave Google il percorso reale si apre in Google Maps.
@@ -474,7 +512,8 @@ data/src/main/kotlin/com/partimo/data/
 app/src/main/kotlin/com/partimo/app/
   di/             AppContainer, User-Agent e identità dell'app per le API
   navigation/     NavHost e rotte type-safe
-  notifications/  DealCheckWorker, DealCheckScheduler, DealNotifier
+  notifications/  DealCheckWorker, DealCheckScheduler, DealNotifier, promemoria dei viaggi e
+                  preparazione offline (TripWorkers, TripReminderNotifier)
   ui/common/      UiState, componenti condivisi, periodi, ricerca città, formattazione, testi,
                   collegamenti ai siti di viaggio (TravelLinks)
   ui/search/      schermata "Dove vuoi andare?" e "Consigliami"
@@ -487,6 +526,9 @@ app/src/main/kotlin/com/partimo/app/
   ui/favorites/   preferiti del viaggio (giro a piedi, mappa, condivisione)
   ui/map/         mappa del viaggio (MapLibre + OpenFreeMap, schema dei punti senza libreria nativa)
   ui/translator/  traduttore offline, frasario e sintesi vocale
+  ui/budget/      budget e spese del viaggio
+  ui/about/       fonti, licenze e privacy
+  widget/         widget «Prossimo viaggio» (Glance)
 app/src/test/        test di ViewModel, notifiche, stati UI e formattazione
 app/src/testDebug/   test UI Compose con Robolectric (+ screenshot)
 docs/                screenshot delle schermate
