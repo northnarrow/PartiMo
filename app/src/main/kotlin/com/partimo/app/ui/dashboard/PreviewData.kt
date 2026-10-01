@@ -1,7 +1,9 @@
 package com.partimo.app.ui.dashboard
 
 import com.partimo.app.ui.common.UiState
+import com.partimo.app.ui.chat.ChatUiState
 import com.partimo.app.ui.departure.DeparturePickerUiState
+import com.partimo.app.ui.itinerary.ItineraryUiState
 import com.partimo.app.ui.place.PlaceDetailUiState
 import com.partimo.app.ui.place.googleMapsSearchUrl
 import com.partimo.app.ui.search.SearchUiState
@@ -28,6 +30,16 @@ import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DestinationSuggestion
 import com.partimo.domain.model.place.TravelExperience
 import com.partimo.domain.model.place.TravelTheme
+import com.partimo.domain.model.plan.ChatMessage
+import com.partimo.domain.model.plan.ChatRole
+import com.partimo.domain.model.plan.DayPart
+import com.partimo.domain.model.plan.DayPlan
+import com.partimo.domain.model.plan.PackingGroup
+import com.partimo.domain.model.plan.PlanStop
+import com.partimo.domain.model.plan.StopTarget
+import com.partimo.domain.model.plan.TripInterest
+import com.partimo.domain.model.plan.TripPlan
+import com.partimo.domain.model.plan.TripPreferences
 import com.partimo.domain.model.poi.HistoryChapter
 import com.partimo.domain.model.poi.ImageCredit
 import com.partimo.domain.model.poi.PoiCategory
@@ -238,6 +250,7 @@ internal object PreviewData {
         transit = UiState.Success(transit),
         restaurants = UiState.Success(restaurants),
         isDemoMode = true,
+        assistantAvailable = true,
         alertEnabled = true,
         pricesUpdatedAt = Instant.parse("2026-09-30T19:15:00Z"),
     )
@@ -399,4 +412,72 @@ internal object PreviewData {
     )
 
     fun placeDetailState() = PlaceDetailUiState(poi = stephansdom, details = UiState.Success(stephansdomDetails))
+
+    // ---- Itinerario dell'assistente -------------------------------------------------------------
+
+    private val hofburg = PointOfInterest(
+        id = "wikipedia:it:hofburg",
+        name = "Hofburg",
+        category = PoiCategory.MONUMENT,
+        location = GeoPoint(48.2066, 16.3654),
+        description = "Palazzo imperiale degli Asburgo",
+    )
+
+    /** Itinerario come quelli proposti da Gemini: luoghi ed eventi dell'app più un caffè storico suggerito dall'IA. */
+    val tripPlan = TripPlan(
+        days = listOf(
+            DayPlan(
+                date = LocalDate.of(2026, Month.DECEMBER, 10),
+                title = "Arrivo e prime luci nel centro",
+                stops = listOf(
+                    PlanStop(DayPart.AFTERNOON, "Duomo di Vienna", "Ammira la cattedrale gotica e sali sulla torre sud.", 60, StopTarget.Place(stephansdom)),
+                    PlanStop(DayPart.AFTERNOON, "Café Central", "Una fetta di Sachertorte nel caffè letterario più famoso.", 60),
+                    PlanStop(DayPart.EVENING, "Weihnachtsmarkt am Spittelberg", "Vin brulè e artigianato tra i vicoli Biedermeier.", 90, StopTarget.Event(tripEvents.events.first())),
+                ),
+                tip = "Compra il biglietto dei mezzi da 72 ore: conviene già dal primo giorno.",
+            ),
+            DayPlan(
+                date = LocalDate.of(2026, Month.DECEMBER, 11),
+                title = "Arte imperiale",
+                stops = listOf(
+                    PlanStop(DayPart.MORNING, "Hofburg", "Appartamenti imperiali e Museo di Sissi.", 120, StopTarget.Place(hofburg)),
+                    PlanStop(DayPart.EVENING, "Weihnachtsmarkt Schloss Schönbrunn", "Il mercatino davanti alla reggia.", 90, StopTarget.Event(tripEvents.events.last())),
+                ),
+            ),
+        ),
+        packing = listOf(
+            PackingGroup("Abbigliamento", listOf("Cappotto caldo", "Sciarpa, guanti e berretto", "Scarpe impermeabili")),
+            PackingGroup("Documenti e soldi", listOf("Carta d'identità", "Contanti per i mercatini")),
+        ),
+        tips = listOf(
+            "Molte bancarelle dei mercatini accettano solo contanti.",
+            "Al ristorante si arrotonda il conto del 5–10%.",
+        ),
+    )
+
+    fun itineraryState() = ItineraryUiState(
+        destination = SampleDestinations.VIENNA,
+        from = LocalDate.of(2026, Month.DECEMBER, 10),
+        to = LocalDate.of(2026, Month.DECEMBER, 14),
+        preferences = TripPreferences(interests = setOf(TripInterest.ART, TripInterest.FOOD)),
+        plan = UiState.Success(tripPlan),
+        packedItems = setOf("Abbigliamento › Cappotto caldo"),
+    )
+
+    // ---- Chiedi a PartiMo -------------------------------------------------------------------------
+
+    fun chatState() = ChatUiState(
+        destination = SampleDestinations.VIENNA,
+        from = LocalDate.of(2026, Month.DECEMBER, 10),
+        to = LocalDate.of(2026, Month.DECEMBER, 14),
+        messages = listOf(
+            ChatMessage(ChatRole.USER, "Cosa devo assolutamente mangiare a Vienna?"),
+            ChatMessage(
+                ChatRole.ASSISTANT,
+                "Ecco tre piatti imperdibili:\n\n• Wiener Schnitzel: la cotoletta di vitello impanata, da Figlmüller.\n" +
+                    "• Tafelspitz: bollito di manzo con salsa di rafano e mele, da Plachutta.\n" +
+                    "• Sachertorte: la torta al cioccolato più famosa, all'Hotel Sacher.\n\nPrenota in anticipo: a dicembre i locali sono pieni.",
+            ),
+        ),
+    )
 }

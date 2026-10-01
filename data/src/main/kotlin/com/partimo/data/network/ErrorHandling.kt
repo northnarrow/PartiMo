@@ -44,8 +44,16 @@ internal suspend fun <T> safeApiCall(
     }
 }
 
+/** Il provider ha rifiutato la chiave API (es. Gemini risponde 400 `API_KEY_INVALID` invece di 401). */
+internal class ApiKeyRejectedException(message: String? = null) : Exception(message)
+
+/** Risposta ricevuta ma inutilizzabile: vuota, bloccata dai filtri o non conforme al formato richiesto. */
+internal class UnusableResponseException(message: String) : Exception(message)
+
 /** Traduce le eccezioni di Ktor, della JVM e di kotlinx.serialization in errori di dominio. */
 internal fun Throwable.toDataError(): DataError = when (this) {
+    is ApiKeyRejectedException -> DataError.Unauthorized
+    is UnusableResponseException -> DataError.InvalidResponse
     is ResponseException -> httpStatusToDataError(response.status.value)
     // I timeout estendono IOException: vanno riconosciuti prima dei generici errori di I/O.
     is HttpRequestTimeoutException, is ConnectTimeoutException, is SocketTimeoutException -> DataError.Timeout

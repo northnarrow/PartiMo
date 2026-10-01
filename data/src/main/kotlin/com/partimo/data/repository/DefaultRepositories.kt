@@ -13,7 +13,9 @@ import com.partimo.data.source.PoiDataSource
 import com.partimo.data.source.RestaurantDataSource
 import com.partimo.data.source.StayOffersDataSource
 import com.partimo.data.source.TransitDataSource
+import com.partimo.data.source.TravelAssistantDataSource
 import com.partimo.data.source.WeatherDataSource
+import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.dining.Restaurant
@@ -25,6 +27,10 @@ import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.place.Airport
 import com.partimo.domain.model.place.CatalogDestination
 import com.partimo.domain.model.place.CityPlace
+import com.partimo.domain.model.plan.ChatMessage
+import com.partimo.domain.model.plan.TripKnowledge
+import com.partimo.domain.model.plan.TripPlan
+import com.partimo.domain.model.plan.TripPreferences
 import com.partimo.domain.model.poi.PoiArticle
 import com.partimo.domain.model.poi.PoiQuery
 import com.partimo.domain.model.poi.PointOfInterest
@@ -47,6 +53,7 @@ import com.partimo.domain.repository.PoiArticleRepository
 import com.partimo.domain.repository.PoiRepository
 import com.partimo.domain.repository.RestaurantRepository
 import com.partimo.domain.repository.TransitRepository
+import com.partimo.domain.repository.TravelAssistantRepository
 import com.partimo.domain.repository.WeatherRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -136,6 +143,24 @@ class DefaultHolidayRepository(
 ) : HolidayRepository {
     override suspend fun publicHolidays(countryCode: String, year: Int, forceRefresh: Boolean): DataResult<List<TripEvent>> =
         safeApiCall(ioDispatcher) { dataSource.publicHolidays(countryCode, year, forceRefresh) }
+}
+
+/** Assistente di viaggio; senza sorgente (nessuna chiave configurata) non è disponibile. */
+class DefaultTravelAssistantRepository(
+    private val dataSource: TravelAssistantDataSource?,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+) : TravelAssistantRepository {
+    override val isAvailable: Boolean get() = dataSource != null
+
+    override suspend fun planTrip(knowledge: TripKnowledge, preferences: TripPreferences, forceRefresh: Boolean): DataResult<TripPlan> {
+        val source = dataSource ?: return DataResult.Failure(DataError.Unauthorized)
+        return safeApiCall(ioDispatcher) { source.planTrip(knowledge, preferences, forceRefresh) }
+    }
+
+    override suspend fun answer(knowledge: TripKnowledge, conversation: List<ChatMessage>): DataResult<String> {
+        val source = dataSource ?: return DataResult.Failure(DataError.Unauthorized)
+        return safeApiCall(ioDispatcher) { source.answer(knowledge, conversation) }
+    }
 }
 
 class DefaultCitySearchRepository(

@@ -27,6 +27,35 @@ fun googleMapsTransitUrl(origin: GeoPoint, destination: GeoPoint): String =
         "&destination=" + encode(destination.coordinates()) +
         "&travelmode=transit"
 
+/** Tappa di un percorso: le coordinate, se note, altrimenti il nome da cercare (es. "Café Central, Vienna"). */
+sealed interface RouteStop {
+    data class At(val point: GeoPoint) : RouteStop
+
+    data class Named(val query: String) : RouteStop
+}
+
+/** Tappe intermedie accettate da Google Maps nell'app (nel browser del telefono solo 3). */
+const val MAX_ROUTE_WAYPOINTS = 9
+
+/**
+ * Giro a piedi tra le tappe, nell'ordine dato: si parte dalla prima, si arriva all'ultima e le altre
+ * sono tappe intermedie (oltre [MAX_ROUTE_WAYPOINTS] vengono omesse). `null` con meno di due tappe.
+ * https://developers.google.com/maps/documentation/urls/get-started#directions-action
+ */
+fun googleMapsWalkingRouteUrl(stops: List<RouteStop>): String? {
+    if (stops.size < 2) return null
+    val waypoints = stops.subList(1, stops.size - 1).take(MAX_ROUTE_WAYPOINTS)
+    return "$DIRECTIONS_URL&origin=" + encode(stops.first().text()) +
+        "&destination=" + encode(stops.last().text()) +
+        (if (waypoints.isEmpty()) "" else "&waypoints=" + encode(waypoints.joinToString(separator = "|") { it.text() })) +
+        "&travelmode=walking"
+}
+
+private fun RouteStop.text(): String = when (this) {
+    is RouteStop.At -> point.coordinates()
+    is RouteStop.Named -> query
+}
+
 /** Ricerca testuale su Google Maps (es. "nome, indirizzo, città"): scheda del luogo con foto e recensioni. */
 fun googleMapsSearchUrl(query: String): String = "https://www.google.com/maps/search/?api=1&query=" + encode(query)
 

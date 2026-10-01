@@ -50,6 +50,8 @@ data class TripDashboardUiState(
     /** `true` durante un aggiornamento forzato ("Aggiorna" o pull-to-refresh). */
     val isRefreshing: Boolean = false,
     val isDemoMode: Boolean = false,
+    /** Assistente con l'IA attivo (chiave Gemini configurata): itinerario e domande. */
+    val assistantAvailable: Boolean = false,
     /** Viaggio seguito: PartiMo avvisa quando voli o alloggi diventano davvero convenienti. */
     val alertEnabled: Boolean = false,
     /** Ora dell'ultimo caricamento completo delle offerte. */

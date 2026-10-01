@@ -12,6 +12,10 @@ import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.place.Airport
 import com.partimo.domain.model.place.CatalogDestination
 import com.partimo.domain.model.place.CityPlace
+import com.partimo.domain.model.plan.ChatMessage
+import com.partimo.domain.model.plan.TripKnowledge
+import com.partimo.domain.model.plan.TripPlan
+import com.partimo.domain.model.plan.TripPreferences
 import com.partimo.domain.model.poi.PoiArticle
 import com.partimo.domain.model.poi.PoiQuery
 import com.partimo.domain.model.poi.PointOfInterest
@@ -73,6 +77,13 @@ interface TransitDataSource {
 
 interface WeatherDataSource {
     suspend fun currentWeather(location: GeoPoint): Fetched<WeatherSnapshot>
+}
+
+/** Assistente di viaggio basato su un modello linguistico (itinerari e domande). */
+interface TravelAssistantDataSource {
+    suspend fun planTrip(knowledge: TripKnowledge, preferences: TripPreferences, forceRefresh: Boolean): Fetched<TripPlan>
+
+    suspend fun answer(knowledge: TripKnowledge, conversation: List<ChatMessage>): Fetched<String>
 }
 
 interface CitySearchDataSource {

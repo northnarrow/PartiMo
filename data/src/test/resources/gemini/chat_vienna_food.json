@@ -1,0 +1,31 @@
+{
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Ciao! A Vienna la tradizione culinaria è deliziosa. Ecco tre piatti imperdibili con dove gustarli:\n\n• Wiener Schnitzel: la celebre cotoletta di vitello impanata e fritta. Provala da Figlmüller, famoso proprio per questo piatto.\n• Tafelspitz: bollito di manzo tenerissimo servito con salsa di rafano e mele. Ti consiglio Plachutta, il maestro di questa ricetta.\n• Sacher Torte: la torta al cioccolato più famosa al mondo, con uno strato di marmellata di albicocche. Gustala all'Hotel Sacher o al Caffè Central.\n\nPer orari e prenotazioni, ti consiglio di verificare sui loro siti ufficiali. Buon appetito!",
+            "thoughtSignature": "EmAKXgFpFH0TDKS7MbQVyhtB/+zbz8VeK9JDoLkGGcFjA9/3Djuybwbd+es3Y5PKZbsybDBjqPXTjiIeyEtcW5ltNJZ6AAoH/3Q9ZCZGwVQDW8w4e8Vlb60jRRLb6UY33DU="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+    }
+  ],
+  "usageMetadata": {
+    "promptTokenCount": 340,
+    "candidatesTokenCount": 162,
+    "totalTokenCount": 502,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 340
+      }
+    ],
+    "serviceTier": "standard"
+  },
+  "modelVersion": "gemini-3.5-flash-lite",
+  "responseId": "hCS-arSkJ7yF-8YP1e7liA8"
+}

@@ -13,6 +13,10 @@ import com.partimo.domain.model.place.Airport
 import com.partimo.domain.model.place.CatalogDestination
 import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DeparturePoint
+import com.partimo.domain.model.plan.ChatMessage
+import com.partimo.domain.model.plan.TripKnowledge
+import com.partimo.domain.model.plan.TripPlan
+import com.partimo.domain.model.plan.TripPreferences
 import com.partimo.domain.model.poi.PoiArticle
 import com.partimo.domain.model.poi.PoiQuery
 import com.partimo.domain.model.poi.PointOfInterest
@@ -25,6 +29,7 @@ import com.partimo.domain.model.transit.TransitRouteQuery
 import com.partimo.domain.model.weather.WeatherSnapshot
 import com.partimo.domain.repository.AccommodationRepository
 import com.partimo.domain.repository.AirportRepository
+import com.partimo.domain.repository.ChecklistRepository
 import com.partimo.domain.repository.CitySearchRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
 import com.partimo.domain.repository.EventRepository
@@ -36,11 +41,13 @@ import com.partimo.domain.repository.PoiRepository
 import com.partimo.domain.repository.PriceWatchRepository
 import com.partimo.domain.repository.RestaurantRepository
 import com.partimo.domain.repository.TransitRepository
+import com.partimo.domain.repository.TravelAssistantRepository
 import com.partimo.domain.repository.UserPreferencesRepository
 import com.partimo.domain.repository.WeatherRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
 // Fake dei repository condivisi fra i moduli tramite testFixtures: restituiscono un risultato
@@ -251,5 +258,43 @@ class FakePriceWatchRepository(initial: List<PriceWatch> = emptyList()) : PriceW
 
     override suspend fun remove(id: String) {
         state.update { watches -> watches.filterNot { it.id == id } }
+    }
+}
+
+class FakeTravelAssistantRepository(
+    var planResult: DataResult<TripPlan> = DataResult.Success(TripPlan(days = emptyList())),
+    var answerResult: DataResult<String> = DataResult.Success("Risposta dell'assistente"),
+    override var isAvailable: Boolean = true,
+    var delayMillis: Long = 0,
+) : TravelAssistantRepository {
+    /** Richieste di itinerario ricevute: viaggio, preferenze e forceRefresh. */
+    val planRequests = mutableListOf<Triple<TripKnowledge, TripPreferences, Boolean>>()
+    val conversations = mutableListOf<List<ChatMessage>>()
+    val chatKnowledge = mutableListOf<TripKnowledge>()
+
+    override suspend fun planTrip(knowledge: TripKnowledge, preferences: TripPreferences, forceRefresh: Boolean): DataResult<TripPlan> {
+        planRequests += Triple(knowledge, preferences, forceRefresh)
+        if (delayMillis > 0) delay(delayMillis)
+        return planResult
+    }
+
+    override suspend fun answer(knowledge: TripKnowledge, conversation: List<ChatMessage>): DataResult<String> {
+        chatKnowledge += knowledge
+        conversations += conversation
+        if (delayMillis > 0) delay(delayMillis)
+        return answerResult
+    }
+}
+
+class FakeChecklistRepository : ChecklistRepository {
+    private val lists = MutableStateFlow<Map<String, Set<String>>>(emptyMap())
+
+    override fun checkedItems(listId: String): Flow<Set<String>> = lists.map { it[listId].orEmpty() }
+
+    override suspend fun setChecked(listId: String, item: String, checked: Boolean) {
+        lists.update { current ->
+            val items = current[listId].orEmpty()
+            current + (listId to if (checked) items + item else items - item)
+        }
     }
 }

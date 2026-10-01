@@ -28,6 +28,7 @@ object Formatters {
     private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm", locale)
     private val dayMonthFormatter = DateTimeFormatter.ofPattern("d MMM", locale)
     private val dayFormatter = DateTimeFormatter.ofPattern("d", locale)
+    private val weekdayDayMonthFormatter = DateTimeFormatter.ofPattern("EEE d MMM", locale)
 
     /** Importi interi senza decimali ("129 €"), altrimenti con i centesimi ("129,40 €"). */
     fun money(money: Money): String {
@@ -71,6 +72,9 @@ object Formatters {
 
     /** "8 dic", in minuscolo come [dateRange]. */
     fun dayMonth(date: LocalDate): String = date.format(dayMonthFormatter).lowercase(locale)
+
+    /** "mer 10 dic", per i giorni di un itinerario. */
+    fun weekdayDayMonth(date: LocalDate): String = date.format(weekdayDayMonthFormatter).lowercase(locale).replace(".", "")
 
     /** "1 gen" per un giorno che si ripete ogni anno. */
     fun dayMonth(day: MonthDay): String = day.format(dayMonthFormatter).lowercase(locale)

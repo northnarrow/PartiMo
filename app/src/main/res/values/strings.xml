@@ -298,4 +298,69 @@
     <!-- Errori di ricerca -->
     <string name="error_query_too_short">Scrivi almeno due lettere.</string>
     <string name="error_query_no_airport">nessun aeroporto con voli di linea entro 300 km.</string>
+
+    <!-- Assistente di viaggio con l'IA (Google Gemini) -->
+    <string name="assistant_itinerary_chip">Itinerario con l\'IA</string>
+    <string name="assistant_chat_chip">Chiedi a PartiMo</string>
+    <string name="assistant_unavailable">L\'assistente non è attivo: aggiungi la chiave GEMINI_API_KEY in local.properties e ricompila l\'app.</string>
+    <string name="assistant_ai_disclaimer">Proposto dall\'intelligenza artificiale (Google Gemini): verifica orari, aperture e prezzi prima di andare.</string>
+
+    <!-- Itinerario -->
+    <string name="itinerary_title">Itinerario a %1$s</string>
+    <plurals name="itinerary_subtitle">
+        <item quantity="one">%1$s · %2$d giorno</item>
+        <item quantity="many">%1$s · %2$d giorni</item>
+        <item quantity="other">%1$s · %2$d giorni</item>
+    </plurals>
+    <string name="itinerary_pace">Ritmo</string>
+    <string name="pace_relaxed">Rilassato</string>
+    <string name="pace_balanced">Equilibrato</string>
+    <string name="pace_intense">Intenso</string>
+    <string name="itinerary_interests">Interessi</string>
+    <string name="interest_art">Arte e musei</string>
+    <string name="interest_history">Storia</string>
+    <string name="interest_food">Cibo</string>
+    <string name="interest_nature">Natura</string>
+    <string name="interest_shopping">Shopping</string>
+    <string name="interest_nightlife">Vita notturna</string>
+    <string name="interest_family">Con bambini</string>
+    <string name="itinerary_apply_preferences">Aggiorna l\'itinerario</string>
+    <string name="itinerary_regenerate">Rigenera l\'itinerario</string>
+    <string name="itinerary_share">Condividi l\'itinerario</string>
+    <string name="itinerary_loading">PartiMo sta preparando il tuo itinerario…</string>
+    <string name="itinerary_loading_hint">Di solito bastano pochi secondi.</string>
+    <string name="itinerary_tab_days">Programma</string>
+    <string name="itinerary_tab_packing">Valigia</string>
+    <string name="itinerary_tab_tips">Consigli</string>
+    <string name="itinerary_day">Giorno %1$d · %2$s</string>
+    <string name="itinerary_morning">Mattina</string>
+    <string name="itinerary_afternoon">Pomeriggio</string>
+    <string name="itinerary_evening">Sera</string>
+    <string name="itinerary_duration">circa %1$s</string>
+    <string name="itinerary_suggested_by_ai">consigliato dall\'IA</string>
+    <string name="itinerary_walk">Giro a piedi</string>
+    <string name="itinerary_add_to_calendar">Calendario</string>
+    <string name="itinerary_distance">Circa %1$s in linea d\'aria tra le tappe</string>
+    <string name="itinerary_packed_count">%1$d di %2$d già in valigia</string>
+    <string name="itinerary_ask">Hai altre domande? Chiedi a PartiMo</string>
+    <string name="itinerary_share_footer">Creato con PartiMo e l\'IA di Google Gemini</string>
+    <string name="itinerary_share_chooser">Condividi l\'itinerario con…</string>
+    <string name="itinerary_no_calendar">Nessuna app di calendario disponibile.</string>
+    <string name="itinerary_calendar_title">%1$s · Giorno %2$d: %3$s</string>
+
+    <!-- Chiedi a PartiMo -->
+    <string name="chat_title">Chiedi a PartiMo</string>
+    <string name="chat_intro">Ciao! Sono l\'assistente di PartiMo. Chiedimi quello che vuoi sul viaggio a %1$s: cosa mangiare, come muoverti, cosa mettere in valigia…</string>
+    <string name="chat_privacy">Domande e dati del viaggio (città e date) vengono inviati a Google Gemini. Le risposte sono generate dall\'IA e possono contenere errori.</string>
+    <string name="chat_input_hint">Scrivi una domanda</string>
+    <string name="chat_send">Invia la domanda</string>
+    <string name="chat_thinking">PartiMo sta scrivendo…</string>
+    <string name="chat_suggestion_food">Cosa devo assolutamente mangiare a %1$s?</string>
+    <string name="chat_suggestion_airport">Come arrivo in centro dall\'aeroporto?</string>
+    <string name="chat_suggestion_packing">Cosa metto in valigia per questo viaggio?</string>
+    <string name="chat_suggestion_tipping">Come funzionano le mance a %1$s?</string>
+    <string name="chat_suggestion_rain">Cosa fare se piove?</string>
+    <string name="chat_suggestion_free">Cosa si può fare gratis?</string>
+    <string name="chat_copy">Copia la risposta</string>
+    <string name="chat_copied">Risposta copiata</string>
 </resources>

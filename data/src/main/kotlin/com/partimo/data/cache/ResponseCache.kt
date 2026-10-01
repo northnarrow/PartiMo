@@ -98,6 +98,12 @@ internal object CachePolicy {
     val TRANSIT: Duration = Duration.ofMinutes(2)
     val WEATHER: Duration = Duration.ofMinutes(15)
 
+    /**
+     * Itinerari proposti dall'assistente: restano finché l'utente non chiede di rigenerarli o cambia
+     * viaggio o preferenze (che producono un'altra chiave).
+     */
+    val AI_PLAN: Duration = Duration.ofDays(30)
+
     /** I risultati della ricerca città cambiano molto raramente. */
     val GEOCODING: Duration = Duration.ofDays(7)
 

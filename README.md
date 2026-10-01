@@ -29,7 +29,18 @@ l'app mostra delle stime e i pulsanti verso **Google Voli**, **Skyscanner** e **
 con i mezzi), che si aprono con tratta e date del viaggio. I siti si aprono nel **browser interno** di
 PartiMo, senza uscire dall'app; le pagine di Google Maps nell'app Maps.
 
-<img src="docs/search_ideas.png" alt="Schermata iniziale con partenza, mesi e consigli" width="240" /> <img src="docs/departure_picker.png" alt="Scelta dell'aeroporto di partenza" width="240" /> <img src="docs/trip_dashboard.png" alt="Dashboard: sezione Voli con i collegamenti a Google Voli e Skyscanner" width="240" /> <img src="docs/trip_dashboard_stays.png" alt="Dashboard: alloggi reali da OpenStreetMap con Booking.com e Airbnb" width="240" /> <img src="docs/trip_dashboard_explore.png" alt="Dashboard: sezione Da vedere" width="240" /> <img src="docs/place_detail.png" alt="Scheda di un luogo con descrizione, storia e pulsante Naviga" width="240" /> <img src="docs/trip_dashboard_transit.png" alt="Dashboard: trasporti con il percorso reale su Google Maps" width="240" /> <img src="docs/trip_dashboard_restaurants.png" alt="Dashboard: ristoranti reali da OpenStreetMap" width="240" />
+Con una chiave gratuita di **Google Gemini** si attiva l'**assistente con l'IA**, raggiungibile dai
+pulsanti sotto i mesi della dashboard:
+- **Itinerario con l'IA:** il programma giorno per giorno del viaggio, costruito con i luoghi e gli
+  eventi reali di Da vedere (più qualche locale tipico consigliato dall'IA), secondo il ritmo e gli
+  interessi scelti. Ogni giornata ha il **giro a piedi** su Google Maps con le tappe in ordine e si può
+  aggiungere al **calendario**; c'è la **lista per la valigia** da spuntare (resta salvata) e ci sono i
+  **consigli** pratici (mance, trasporti, usanze). L'itinerario si condivide come testo e si rigenera
+  con un tocco.
+- **Chiedi a PartiMo:** domande libere sul viaggio («Cosa mangio a Vienna?», «Come arrivo in centro
+  dall'aeroporto?»), con le risposte che tengono conto di città, date ed eventi del soggiorno.
+
+<img src="docs/search_ideas.png" alt="Schermata iniziale con partenza, mesi e consigli" width="240" /> <img src="docs/departure_picker.png" alt="Scelta dell'aeroporto di partenza" width="240" /> <img src="docs/trip_dashboard.png" alt="Dashboard: sezione Voli con i collegamenti a Google Voli e Skyscanner" width="240" /> <img src="docs/trip_dashboard_stays.png" alt="Dashboard: alloggi reali da OpenStreetMap con Booking.com e Airbnb" width="240" /> <img src="docs/trip_dashboard_explore.png" alt="Dashboard: sezione Da vedere" width="240" /> <img src="docs/place_detail.png" alt="Scheda di un luogo con descrizione, storia e pulsante Naviga" width="240" /> <img src="docs/trip_dashboard_transit.png" alt="Dashboard: trasporti con il percorso reale su Google Maps" width="240" /> <img src="docs/trip_dashboard_restaurants.png" alt="Dashboard: ristoranti reali da OpenStreetMap" width="240" /> <img src="docs/itinerary.png" alt="Itinerario con l'IA giorno per giorno, con giro a piedi e calendario" width="240" /> <img src="docs/itinerary_packing.png" alt="Lista per la valigia dell'itinerario" width="240" /> <img src="docs/chat.png" alt="Chiedi a PartiMo: domande all'assistente sul viaggio" width="240" />
 
 Negli screenshot (generati dai test, senza rete, con dati di esempio) le foto sono segnaposto grigi: nell'app si caricano
 le foto reali dei luoghi.
@@ -47,6 +58,7 @@ le foto reali dei luoghi.
 | Preferenze | DataStore Preferences 1.2 (punto di partenza, viaggi seguiti) |
 | Lavori in background | WorkManager 2.12 (controllo periodico delle offerte) + notifiche |
 | Immagini | Coil 3 |
+| Intelligenza artificiale | [Google Gemini API](https://ai.google.dev/gemini-api/docs) (REST, livello gratuito), risposte JSON con schema |
 | Build | Gradle 9.5.1, AGP 9.3.3, version catalog, `compileSdk`/`targetSdk` 36, `minSdk` 26 |
 | Navigazione | Navigation Compose 2.9 con rotte type-safe (`@Serializable`) |
 | Test | JUnit 4 + kotlin.test, kotlinx-coroutines-test, Turbine, Ktor MockEngine, Robolectric + Compose UI test |
@@ -56,8 +68,10 @@ le foto reali dei luoghi.
 ```
 ┌─────────────────────────────── :app (presentation) ────────────────────────────────┐
 │ NavHost: Search → Dashboard (5 sezioni) → Scheda del luogo · Scelta partenza        │
+│          Dashboard → Itinerario con l'IA · Chiedi a PartiMo                         │
 │            ▲ StateFlow<…UiState> (schermate stateless)                              │
-│ SearchVM · TripDashboardVM · PlaceDetailVM · DeparturePickerVM ── AppContainer      │
+│ SearchVM · TripDashboardVM · PlaceDetailVM · DeparturePickerVM                      │
+│ ItineraryVM · ChatVM ─────────────────────────────────────────────── AppContainer   │
 │ DealCheckWorker (WorkManager) → DealNotifier (notifiche, apertura del viaggio)      │
 └──────────────────────────────────────┬──────────────────────────────────────────────┘
                                        │ casi d'uso
@@ -70,6 +84,7 @@ le foto reali dei luoghi.
 │ DefaultXxxRepository (safeApiCall: eccezioni → DataError, Dispatchers.IO)            │
 │   → DataSource: provider reale (Ktor + ResponseCache/Room) oppure demo               │
 │ Wikipedia (luoghi) · OpenStreetMap (alloggi, ristoranti) · DataStore · DataModule    │
+│ Gemini (itinerari, domande: più modelli in cascata, risposte JSON con schema)        │
 └─────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -99,6 +114,8 @@ le foto reali dei luoghi.
 | Eventi durante il soggiorno | `GetTripEventsUseCase`, `EventTiming`, `SeasonalCalendar` | [Wikidata](https://www.wikidata.org) (SPARQL, gratuito, senza chiave) + [Nager.Date](https://date.nager.at) (festività, gratuito, senza chiave) | Mercatini di Natale, festival e ricorrenze entro 15 km dal centro, con il loro mese (es. Oktoberfest a settembre–ottobre) o giorno (concerto di Capodanno il 1° gennaio); per i mercatini senza date vale il periodo tipico (15 novembre–24 dicembre). Si tengono solo gli eventi tra arrivo e partenza, più le festività nazionali con il nome italiano e quello locale (es. Immacolata Concezione · Mariä Empfängnis) |
 | Scheda del luogo e "Naviga" | `GetPoiDetailsUseCase`, `Excerpt` | Wikipedia (testo, foto, crediti da Wikimedia Commons) + [Google Maps URLs](https://developers.google.com/maps/documentation/urls/get-started) | Tocco su un luogo: foto in alta risoluzione, breve descrizione, storia in capitoli (es. Costruzione → Medioevo → restauri), fonti e licenze. **Naviga** apre l'app Google Maps (o il browser) con il percorso fino al luogo, senza chiave. Per i luoghi di Google la voce si cerca per nome vicino alle coordinate |
 | Trasporti pubblici | `PlanTransitRouteUseCase`, `TransitRoute` (cambi, coincidenze, tempo a piedi) | Google Routes API (`TRANSIT`) + Google Maps URLs | Percorsi multimodali metro/bus/tram/treni, coincidenze impossibili scartate, preferenze di routing. **Apri in Google Maps** mostra lo stesso percorso con linee e orari reali anche senza chiave |
+| Itinerario con l'IA | `PlanTripUseCase`, `LoadTripKnowledgeUseCase`, `PackingChecklistUseCase`, `TripPlan` | [Google Gemini](https://ai.google.dev/gemini-api/docs) (chiave gratuita di AI Studio) + Google Maps URLs | Programma giorno per giorno (mattina, pomeriggio, sera) con i luoghi e gli eventi reali dell'app, ritmo (rilassato, equilibrato, intenso) e interessi a scelta; tocco su una tappa → scheda del luogo o ricerca su Google Maps. **Giro a piedi** della giornata su Google Maps con le tappe in ordine (fino a 9 intermedie), **Calendario** (evento di tutto il giorno, senza permessi), **condivisione** come testo, lista per la valigia salvata sul telefono, consigli pratici |
+| Chiedi a PartiMo | `AskTravelAssistantUseCase` | Google Gemini | Conversazione sul viaggio con domande suggerite; il modello riceve città, date, eventi del soggiorno e luoghi consigliati, più gli ultimi 20 messaggi. Le risposte si possono selezionare e copiare |
 | Ristoranti | `FindBudgetRestaurantsUseCase`, `BudgetDiningCriteria` | Google Places API (New), oppure senza chiave OpenStreetMap (Overpass API) | Con Google: vincolo `price_level` 1–2 e valutazione ≥ 4,3, riapplicato sempre dal dominio. Senza chiave: locali reali vicino al centro (cucina, indirizzo, distanza), prima i più completi e vicini, catene in fondo. Il tocco apre il locale su Google Maps (recensioni, foto, orari) |
 
 ### Quando un'offerta è "davvero conveniente"
@@ -115,7 +132,8 @@ prezzi visti in quel momento diventano il primo riferimento. A ogni controllo:
 `ResponseCache` salva in Room le risposte (già validate) di ogni ricerca, identificate da una chiave
 SHA-256 dei parametri. Il TTL dipende dal tipo di dato: voli 20 minuti, alloggi 1 ora, ristoranti
 12 ore, POI e strutture ricettive 24 ore, meteo 15 minuti, trasporti 2 minuti, ricerca città, voci di Wikipedia ed eventi
-ricorrenti 7 giorni, festività 30 giorni. Se la rete non è
+ricorrenti 7 giorni, festività e itinerari dell'IA 30 giorni (riaprire un itinerario non consuma la
+quota gratuita di Gemini; «Rigenera» ne chiede uno nuovo). Se la rete non è
 disponibile viene servito il dato scaduto, segnalato in UI con il badge "Offline · dati salvati".
 **Aggiorna**, il pull-to-refresh e i controlli in background ignorano le cache ancora valide.
 
@@ -139,6 +157,7 @@ VCS) oppure da variabili d'ambiente (utile in CI), e le inietta in `BuildConfig`
 | Ristoranti | ✅ Locali reali (OpenStreetMap), tocco → Google Maps | Google Places API (`GOOGLE_MAPS_API_KEY`): valutazioni, fasce di prezzo, foto |
 | Voli | Stime + ✅ Google Voli e Skyscanner con tratta e date (prezzi reali sul sito) | Offerte Duffel nell'app (`DUFFEL_ACCESS_TOKEN`) |
 | Trasporti pubblici | Stime + ✅ percorso reale su Google Maps | Percorsi reali nell'app, Google Routes API (`GOOGLE_MAPS_API_KEY`) |
+| Itinerario con l'IA, valigia, Chiedi a PartiMo | Non disponibili (i pulsanti non compaiono) | ✅ Google Gemini (`GEMINI_API_KEY`, gratuita) |
 
 I dati di OpenStreetMap, Wikipedia, Wikidata, Nager.Date e Open-Meteo e i collegamenti ai siti non richiedono chiavi né
 registrazione: per questo quelle funzioni sono reali in qualunque configurazione.
@@ -167,7 +186,20 @@ registrazione: per questo quelle funzioni sono reali in qualunque configurazione
    `X-Android-Cert`, necessarie perché Google accetti una chiave con restrizione Android nelle
    chiamate REST (anche per le foto di Places).
 
-### 3. Inserisci le chiavi in `local.properties`
+### 3. Chiave Google Gemini (assistente con l'IA, gratuita)
+1. Apri [Google AI Studio](https://aistudio.google.com/apikey) con un account Google e scegli
+   **Create API key**: non serve una carta di credito. Con il livello gratuito ogni modello ha un
+   limite di richieste al minuto e al giorno, ampiamente sufficiente per un uso personale (un
+   itinerario costa una richiesta, poi resta in cache).
+2. Consigliato: nella [Google Cloud Console](https://console.cloud.google.com/apis/credentials) del
+   progetto della chiave, in *Restrizioni API* consenti solo la **Generative Language API**. Puoi
+   anche limitarla all'app Android (`com.partimo.app` + impronta SHA-1): PartiMo invia le intestazioni
+   `X-Android-Package` e `X-Android-Cert` anche a Gemini.
+3. **Privacy:** con il livello gratuito Google può usare domande e risposte per migliorare i suoi
+   prodotti ([termini](https://ai.google.dev/gemini-api/terms)). PartiMo invia solo città, date,
+   luoghi ed eventi del viaggio e le domande scritte; non invia la posizione né dati personali.
+
+### 4. Inserisci le chiavi in `local.properties`
 
 Il file si trova nella cartella principale del progetto (Android Studio lo crea con `sdk.dir`):
 
@@ -178,6 +210,8 @@ sdk.dir=C\:\\Android\\Sdk
 DUFFEL_ACCESS_TOKEN=duffel_test_xxx
 # Ristoranti e trasporti (Google Maps Platform: Places API (New) + Routes API)
 GOOGLE_MAPS_API_KEY=AIza...
+# Assistente con l'IA (Google AI Studio, gratuita)
+GEMINI_API_KEY=...
 ```
 
 Nei file `.properties` i commenti vanno su una riga a sé: un `#` scritto dopo il valore farebbe parte
@@ -197,6 +231,8 @@ in una chat, revocala e creane una nuova.
   si possono imitare: la restrizione riduce gli abusi ma non li impedisce. Il token Duffel è una
   credenziale lato server: in produzione le chiamate a Duffel e Google vanno instradate da un proprio
   backend (BFF), che custodisce le chiavi. I `DataSource` sono già isolati per questo passaggio.
+  Lo stesso vale per la chiave Gemini: un APK compilato con la chiave va tenuto per sé, non
+  pubblicato né condiviso.
 
 ## Build e test
 
@@ -210,23 +246,28 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
 ./gradlew :app:assembleDebug        # APK di debug
 ```
 
-315 test unitari:
-- **`:domain` (139):** modelli e validazioni (compresi i dodici mesi di `TravelPeriod` e i periodi
+365 test unitari:
+- **`:domain` (147):** modelli e validazioni (compresi i dodici mesi di `TravelPeriod` e i periodi
   degli eventi, anche a cavallo di Capodanno), servizi di dominio (qualità/prezzo, stagionalità,
   notorietà dei luoghi, scelta degli aeroporti, rilevamento degli affari, estratti brevi di descrizione
-  e storia) e tutti i casi d'uso, compresi ristoranti senza valutazioni, strutture ricettive ed eventi
-  del soggiorno, con fake condivisi tramite `testFixtures`.
-- **`:data` (86):** cache e TTL, mappatura degli errori, client HTTP con risposte JSON simulate
-  (Duffel, Places, Routes, Open-Meteo, Wikipedia, Overpass, Wikidata, Nager.Date), classificazione dei
+  e storia) e tutti i casi d'uso, compresi ristoranti senza valutazioni, strutture ricettive, eventi
+  del soggiorno e assistente con l'IA (pulizia dell'itinerario, conversazione), con fake condivisi
+  tramite `testFixtures`.
+- **`:data` (104):** cache e TTL, mappatura degli errori, client HTTP con risposte JSON simulate
+  (Duffel, Places, Routes, Open-Meteo, Wikipedia, Overpass, Wikidata, Nager.Date), Gemini con risposte
+  **reali** (itinerario di Vienna e risposta a una domanda in `data/src/test/resources/gemini`), cambio
+  di modello se uno è sovraccarico e richieste "di riserva" (tempo virtuale), classificazione dei
   luoghi su risposte **reali** di Wikipedia (Roma, Lisbona, Colosseo in `data/src/test/resources/wikipedia`),
   ristoranti di Vienna e strutture di Matera da risposte **reali** di OpenStreetMap (`data/src/test/resources/osm`),
   eventi di Vienna e Monaco da risposte **reali** di Wikidata e festività 2026 di Austria e Italia,
   cambio di istanza Overpass se sovraccarica, intestazioni per le chiavi Google con restrizione
   Android, dataset aeroporti reale (es. Roma → FCO, Parigi → CDG), catalogo delle mete, repository
-  DataStore e formato di salvataggio, mercato simulato della demo.
-- **`:app` (90):** ViewModel (dashboard con e senza chiavi, eventi del soggiorno, ricerca, scelta della
-  partenza, scheda del luogo), rotte di navigazione, collegamenti a Google Maps, Google Voli, Skyscanner,
-  Booking.com, Airbnb e ricerca degli eventi, browser interno (Custom Tabs), User-Agent delle foto, notifiche (Robolectric), formattazione e test UI Compose con
+  DataStore e formato di salvataggio (anche la valigia), mercato simulato della demo.
+- **`:app` (114):** ViewModel (dashboard con e senza chiavi, eventi del soggiorno, ricerca, scelta della
+  partenza, scheda del luogo, itinerario, domande all'assistente), rotte di navigazione, collegamenti a
+  Google Maps (anche il giro a piedi con le tappe), Google Voli, Skyscanner, Booking.com, Airbnb e
+  ricerca degli eventi, calendario e condivisione dell'itinerario, browser interno (Custom Tabs),
+  User-Agent delle foto, notifiche (Robolectric), formattazione e test UI Compose con
   Robolectric (`app/src/testDebug`), che salvano anche gli screenshot in `app/build/outputs/screenshots/`.
 
 ## Scelte tecniche
@@ -301,6 +342,17 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
 - **Festività:** [Nager.Date](https://date.nager.at) (API v3) per oltre cento paesi; si tengono quelle
   nazionali, perché le regionali dipendono dalla zona in cui si alloggia. Un paese non coperto (404)
   semplicemente non ha festività.
+- **Assistente con Gemini:** l'itinerario si chiede in JSON con uno schema (`responseSchema`), quindi
+  la risposta è sempre interpretabile; luoghi ed eventi dell'app sono indicati al modello con codici
+  brevi (`L3`, `E1`) che l'app riconverte nei luoghi reali, con le loro coordinate e la loro scheda.
+  Il livello gratuito nei momenti di traffico risponde «503 high demand»: PartiMo prova i modelli in
+  cascata (`gemini-flash-lite-latest`, `gemini-3.1-flash-lite`, poi `gemini-flash-latest` con il
+  ragionamento al minimo) e passa subito al successivo se uno è sovraccarico, ha esaurito i limiti, è
+  stato ritirato o restituisce un JSON troncato; se un modello non risponde entro 12 secondi (8 per le
+  domande) parte in parallelo anche il successivo e vince il primo che risponde. La chiave viaggia
+  nell'intestazione `x-goog-api-key`, mai nell'URL né nei log. I modelli a volte usano il markdown
+  anche se chiesto di evitarlo: asterischi e titoli vengono tolti. Ogni schermata ricorda che il testo
+  è generato dall'IA e va verificato.
 - **Trasporti senza chiave:** [Transitous](https://transitous.org) offre percorsi reali senza chiave,
   ma solo per app open source non commerciali e previo contatto con il progetto: per ora non è
   attivo e senza chiave Google il percorso reale si apre in Google Maps.
@@ -319,8 +371,10 @@ domain/src/main/kotlin/com/partimo/domain/
 domain/src/testFixtures/   fake dei repository e dati di test condivisi
 data/src/main/kotlin/com/partimo/data/
   cache/       Room + ResponseCache (TTL, fallback offline)
-  network/     HttpClientFactory, gestione errori, intestazioni per le chiavi Google Android
-  remote/      duffel, places, routes, weather, geocoding, wikipedia, osm (Overpass API), wikidata, holidays
+  network/     HttpClientFactory, gestione errori, intestazioni per le chiavi Google Android,
+               tentativi in cascata con richieste di riserva (Hedging)
+  remote/      duffel, places, routes, weather, geocoding, wikipedia, osm (Overpass API), wikidata, holidays,
+               gemini (client, prompt e schema dell'itinerario)
   local/       dataset aeroporti (asset), catalogo curato delle mete, preferenze (DataStore)
   demo/        catalogo e sorgenti demo (mercato simulato)
   repository/  implementazioni dei repository
@@ -335,6 +389,8 @@ app/src/main/kotlin/com/partimo/app/
   ui/departure/   scelta del punto di partenza
   ui/dashboard/   ViewModel, dashboard a sezioni, componenti, anteprime
   ui/place/       scheda del luogo (descrizione, storia, fonti) e collegamenti a Google Maps
+  ui/itinerary/   itinerario con l'IA (programma, valigia, consigli), calendario e condivisione
+  ui/chat/        "Chiedi a PartiMo"
 app/src/test/        test di ViewModel, notifiche, stati UI e formattazione
 app/src/testDebug/   test UI Compose con Robolectric (+ screenshot)
 docs/                screenshot delle schermate
@@ -342,5 +398,6 @@ data/src/test/resources/wikipedia/  risposte reali di Wikipedia usate nei test
 data/src/test/resources/osm/        risposte reali di OpenStreetMap (Overpass) usate nei test
 data/src/test/resources/wikidata/   risposte reali di Wikidata (eventi di Vienna e Monaco) usate nei test
 data/src/test/resources/holidays/   festività reali 2026 (Nager.Date) usate nei test
+data/src/test/resources/gemini/     risposte reali di Gemini (itinerario di Vienna, domanda sul cibo) usate nei test
 data/src/main/assets/airports.csv   aeroporti con voli di linea (OurAirports, pubblico dominio)
 ```

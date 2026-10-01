@@ -13,6 +13,10 @@ import com.partimo.domain.model.place.Airport
 import com.partimo.domain.model.place.CatalogDestination
 import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DeparturePoint
+import com.partimo.domain.model.plan.ChatMessage
+import com.partimo.domain.model.plan.TripKnowledge
+import com.partimo.domain.model.plan.TripPlan
+import com.partimo.domain.model.plan.TripPreferences
 import com.partimo.domain.model.poi.PoiArticle
 import com.partimo.domain.model.poi.PoiQuery
 import com.partimo.domain.model.poi.PointOfInterest
@@ -96,6 +100,20 @@ interface HolidayRepository {
     suspend fun publicHolidays(countryCode: String, year: Int, forceRefresh: Boolean = false): DataResult<List<TripEvent>>
 }
 
+/**
+ * Assistente di viaggio basato su un modello linguistico: propone l'itinerario giorno per giorno e
+ * risponde alle domande sul viaggio. [isAvailable] è `false` se nessun modello è configurato.
+ */
+interface TravelAssistantRepository {
+    val isAvailable: Boolean
+
+    /** Itinerario per il viaggio descritto da [knowledge], dando priorità ai suoi luoghi ed eventi. */
+    suspend fun planTrip(knowledge: TripKnowledge, preferences: TripPreferences, forceRefresh: Boolean = false): DataResult<TripPlan>
+
+    /** Risposta all'ultimo messaggio di [conversation], che è sempre una domanda dell'utente. */
+    suspend fun answer(knowledge: TripKnowledge, conversation: List<ChatMessage>): DataResult<String>
+}
+
 /** Ricerca di città in tutto il mondo (geocoding). */
 interface CitySearchRepository {
     suspend fun searchCities(query: String, limit: Int = 10): DataResult<List<CityPlace>>
@@ -117,6 +135,13 @@ interface UserPreferencesRepository {
     val departure: Flow<DeparturePoint?>
 
     suspend fun setDeparture(departure: DeparturePoint)
+}
+
+/** Liste di controllo salvate sul dispositivo (es. la valigia di un viaggio): le voci spuntate di ogni lista. */
+interface ChecklistRepository {
+    fun checkedItems(listId: String): Flow<Set<String>>
+
+    suspend fun setChecked(listId: String, item: String, checked: Boolean)
 }
 
 /** Viaggi seguiti per gli avvisi sulle offerte convenienti. */

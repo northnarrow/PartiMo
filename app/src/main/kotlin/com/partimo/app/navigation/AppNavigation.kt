@@ -11,10 +11,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.partimo.app.di.AppContainer
+import com.partimo.app.ui.chat.ChatRoute
+import com.partimo.app.ui.chat.ChatViewModel
 import com.partimo.app.ui.dashboard.TripDashboardRoute
 import com.partimo.app.ui.dashboard.TripDashboardViewModel
 import com.partimo.app.ui.departure.DeparturePickerRoute
 import com.partimo.app.ui.departure.DeparturePickerViewModel
+import com.partimo.app.ui.itinerary.ItineraryRoute
+import com.partimo.app.ui.itinerary.ItineraryViewModel
 import com.partimo.app.ui.place.PlaceDetailRoute
 import com.partimo.app.ui.place.PlaceDetailViewModel
 import com.partimo.app.ui.search.SearchRoute
@@ -198,7 +202,37 @@ fun PartiMoNavHost(
                 onBack = { navController.popBackStack() },
                 onChooseDeparture = { navController.navigate(DeparturePickerDestination) },
                 onOpenPlace = { poi -> navController.navigate(PlaceDetailDestination.from(poi)) },
+                onOpenItinerary = { trip -> navController.navigate(ItineraryDestination(TripArgs.from(trip).toJson())) },
+                onOpenAssistant = { trip -> navController.navigate(AssistantChatDestination(TripArgs.from(trip).toJson())) },
             )
+        }
+        composable<ItineraryDestination> { backStackEntry ->
+            val tripJson = backStackEntry.toRoute<ItineraryDestination>().trip
+            val trip = TripArgs.fromJson(tripJson)
+            if (trip == null) {
+                LaunchedEffect(Unit) { navController.popBackStack() }
+                return@composable
+            }
+            val viewModel: ItineraryViewModel = viewModel(
+                factory = ItineraryViewModel.factory(container, trip.destination(), trip.fromDate(), trip.toDate()),
+            )
+            ItineraryRoute(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+                onOpenPlace = { poi -> navController.navigate(PlaceDetailDestination.from(poi)) },
+                onAskAssistant = { navController.navigate(AssistantChatDestination(tripJson)) },
+            )
+        }
+        composable<AssistantChatDestination> { backStackEntry ->
+            val trip = TripArgs.fromJson(backStackEntry.toRoute<AssistantChatDestination>().trip)
+            if (trip == null) {
+                LaunchedEffect(Unit) { navController.popBackStack() }
+                return@composable
+            }
+            val viewModel: ChatViewModel = viewModel(
+                factory = ChatViewModel.factory(container, trip.destination(), trip.fromDate(), trip.toDate()),
+            )
+            ChatRoute(viewModel = viewModel, onBack = { navController.popBackStack() })
         }
         composable<PlaceDetailDestination> { backStackEntry ->
             val route = backStackEntry.toRoute<PlaceDetailDestination>()

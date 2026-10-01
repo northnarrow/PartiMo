@@ -68,9 +68,10 @@ class TripDashboardViewModel(
     private val destination: Destination,
     initialPeriod: TravelPeriod = TravelPeriod.NextDays,
     isDemoMode: Boolean = false,
+    assistantAvailable: Boolean = false,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(initialState(initialPeriod, isDemoMode))
+    private val _uiState = MutableStateFlow(initialState(initialPeriod, isDemoMode).copy(assistantAvailable = assistantAvailable))
     val uiState: StateFlow<TripDashboardUiState> = _uiState.asStateFlow()
 
     private val sectionJobs = mutableMapOf<DashboardSection, Job>()
@@ -363,6 +364,7 @@ class TripDashboardViewModel(
                     destination = destination,
                     initialPeriod = initialPeriod,
                     isDemoMode = container.isDemoMode,
+                    assistantAvailable = container.planTrip.isAvailable,
                 )
             }
         }

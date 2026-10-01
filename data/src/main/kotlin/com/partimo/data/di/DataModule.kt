@@ -10,6 +10,7 @@ import com.partimo.data.demo.DemoFlightDataSource
 import com.partimo.data.demo.DemoTransitDataSource
 import com.partimo.data.local.BundledAirportsDataSource
 import com.partimo.data.local.CuratedDestinationCatalog
+import com.partimo.data.local.preferences.DataStoreChecklistRepository
 import com.partimo.data.local.preferences.DataStorePriceWatchRepository
 import com.partimo.data.local.preferences.DataStoreUserPreferencesRepository
 import com.partimo.data.local.preferences.createUserDataStore
@@ -17,6 +18,8 @@ import com.partimo.data.network.HttpClientFactory
 import com.partimo.data.remote.duffel.DuffelApi
 import com.partimo.data.remote.duffel.DuffelFlightDataSource
 import com.partimo.data.remote.duffel.DuffelStayDataSource
+import com.partimo.data.remote.gemini.GeminiApi
+import com.partimo.data.remote.gemini.GeminiTravelAssistantDataSource
 import com.partimo.data.remote.geocoding.OpenMeteoGeocodingDataSource
 import com.partimo.data.remote.holidays.NagerHolidayDataSource
 import com.partimo.data.remote.osm.OsmLodgingDataSource
@@ -46,10 +49,12 @@ import com.partimo.data.repository.DefaultPoiArticleRepository
 import com.partimo.data.repository.DefaultPoiRepository
 import com.partimo.data.repository.DefaultRestaurantRepository
 import com.partimo.data.repository.DefaultTransitRepository
+import com.partimo.data.repository.DefaultTravelAssistantRepository
 import com.partimo.data.repository.DefaultWeatherRepository
 import com.partimo.data.source.NoStayOffersDataSource
 import com.partimo.domain.repository.AccommodationRepository
 import com.partimo.domain.repository.AirportRepository
+import com.partimo.domain.repository.ChecklistRepository
 import com.partimo.domain.repository.CitySearchRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
 import com.partimo.domain.repository.EventRepository
@@ -61,6 +66,7 @@ import com.partimo.domain.repository.PoiRepository
 import com.partimo.domain.repository.PriceWatchRepository
 import com.partimo.domain.repository.RestaurantRepository
 import com.partimo.domain.repository.TransitRepository
+import com.partimo.domain.repository.TravelAssistantRepository
 import com.partimo.domain.repository.UserPreferencesRepository
 import com.partimo.domain.repository.WeatherRepository
 import io.ktor.client.HttpClient
@@ -103,6 +109,7 @@ class DataModule(
     private val wikipediaApi by lazy { WikipediaApi(httpClient, config.userAgent) }
     private val overpassApi by lazy { OverpassApi(httpClient, config.userAgent) }
     private val wikidataApi by lazy { WikidataApi(httpClient, config.userAgent) }
+    private val geminiApi by lazy { GeminiApi(httpClient, config.geminiApiKey, androidApp = config.androidApp) }
     private val wikipediaLanguages by lazy { wikipediaLanguages(config.languageCode) }
 
     val flightRepository: FlightRepository by lazy {
@@ -180,6 +187,15 @@ class DataModule(
         DefaultHolidayRepository(NagerHolidayDataSource(httpClient, responseCache, config.userAgent, config.languageCode), ioDispatcher)
     }
 
+    /**
+     * Assistente di viaggio (itinerari e domande) con Google Gemini: disponibile solo se la chiave è
+     * configurata. Il livello gratuito basta per un uso personale.
+     */
+    val travelAssistantRepository: TravelAssistantRepository by lazy {
+        val source = if (config.hasGeminiKey) GeminiTravelAssistantDataSource(geminiApi, responseCache, clock) else null
+        DefaultTravelAssistantRepository(source, ioDispatcher)
+    }
+
     val weatherRepository: WeatherRepository by lazy {
         DefaultWeatherRepository(OpenMeteoWeatherDataSource(httpClient, responseCache), ioDispatcher)
     }
@@ -197,6 +213,9 @@ class DataModule(
 
     /** Preferenze dell'utente (punto di partenza), salvate sul dispositivo. */
     val userPreferencesRepository: UserPreferencesRepository by lazy { DataStoreUserPreferencesRepository(userDataStore) }
+
+    /** Liste di controllo dei viaggi (la valigia), salvate sul dispositivo. */
+    val checklistRepository: ChecklistRepository by lazy { DataStoreChecklistRepository(userDataStore) }
 
     /** Viaggi seguiti per gli avvisi sulle offerte convenienti. */
     val priceWatchRepository: PriceWatchRepository by lazy { DataStorePriceWatchRepository(userDataStore) }

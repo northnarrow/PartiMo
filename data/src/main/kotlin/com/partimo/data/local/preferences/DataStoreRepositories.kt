@@ -7,9 +7,11 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.place.DeparturePoint
+import com.partimo.domain.repository.ChecklistRepository
 import com.partimo.domain.repository.PriceWatchRepository
 import com.partimo.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.flow.Flow
@@ -71,4 +73,25 @@ class DataStorePriceWatchRepository internal constructor(
             preferences[PRICE_WATCHES_KEY] = StoredJson.encodeWatches(transform(current))
         }
     }
+}
+
+/** Liste di controllo (es. la valigia): per ogni lista l'insieme delle voci spuntate. */
+class DataStoreChecklistRepository internal constructor(
+    private val dataStore: DataStore<Preferences>,
+) : ChecklistRepository {
+
+    override fun checkedItems(listId: String): Flow<Set<String>> = dataStore.safeData()
+        .map { preferences -> preferences[keyOf(listId)].orEmpty() }
+        .distinctUntilChanged()
+
+    override suspend fun setChecked(listId: String, item: String, checked: Boolean) {
+        dataStore.edit { preferences ->
+            val key = keyOf(listId)
+            val items = preferences[key].orEmpty()
+            val updated = if (checked) items + item else items - item
+            if (updated.isEmpty()) preferences.remove(key) else preferences[key] = updated
+        }
+    }
+
+    private fun keyOf(listId: String) = stringSetPreferencesKey("checklist:$listId")
 }

@@ -1,0 +1,31 @@
+{
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "{\n  \"days\": [\n    {\n      \"day\": 1,\n      \"title\": \"Arrivo e prime luci nel centro\",\n      \"stops\": [\n        {\n          \"time\": \"AFTERNOON\",\n          \"ref\": \"L1\",\n          \"name\": \"Duomo di Santo Stefano\",\n          \"activity\": \"Visita la splendida cattedrale gotica simbolo di Vienna.\",\n          \"minutes\": 90\n        },\n        {\n          \"time\": \"AFTERNOON\",\n          \"ref\": \"\",\n          \"name\": \"Café Central\",\n          \"activity\": \"Fai una sosta in questo celebre caffè storico per gustare una fetta di torta Sacher.\",\n          \"minutes\": 60\n        },\n        {\n          \"time\": \"EVENING\",\n          \"ref\": \"E2\",\n          \"name\": \"Wiener Christkindlmarkt\",\n          \"activity\": \"Vivi l'atmosfera natalizia di fronte al municipio con luci e vin brulè.\",\n          \"minutes\": 120\n        }\n      ],\n      \"tip\": \"Indossa scarpe comode per camminare nel centro storico acciottolato.\"\n    },\n    {\n      \"day\": 2,\n      \"title\": \"Arte imperiale e mercatini storici\",\n      \"stops\": [\n        {\n          \"time\": \"MORNING\",\n          \"ref\": \"L2\",\n          \"name\": \"Hofburg\",\n          \"activity\": \"Esplora il vasto complesso del palazzo imperiale degli Asburgo.\",\n          \"minutes\": 150\n        },\n        {\n          \"time\": \"AFTERNOON\",\n          \"ref\": \"L5\",\n          \"name\": \"Kunsthistorisches Museum\",\n          \"activity\": \"Ammira i capolavori della pittura europea in un museo straordinario.\",\n          \"minutes\": 150\n        },\n        {\n          \"time\": \"EVENING\",\n          \"ref\": \"E1\",\n          \"name\": \"Weihnachtsmarkt am Spittelberg\",\n          \"activity\": \"Passeggia tra i vicoli del mercatino famoso per l'artigianato locale.\",\n          \"minutes\": 90\n        }\n      ],\n      \"tip\": \"Acquista i biglietti dei musei in anticipo online per evitare le code.\"\n    },\n    {\n      \"day\": 3,\n      \"title\": \"Capolavori barocchi e sapori tipici\",\n      \"stops\": [\n        {\n          \"time\": \"MORNING\",\n          \"ref\": \"L4\",\n          \"name\": \"Belvedere\",\n          \"activity\": \"Visita il museo e ammira opere iconiche come Il Bacio di Klimt.\",\n          \"minutes\": 150\n        },\n        {\n          \"time\": \"AFTERNOON\",\n          \"ref\": \"L8\",\n          \"name\": \"Naschmarkt\",\n          \"activity\": \"Assaggia le specialità gastronomiche locali tra le bancarelle del mercato.\",\n          \"minutes\": 90\n        },\n        {\n          \"time\": \"EVENING\",\n          \"ref\": \"L10\",\n          \"name\": \"Wiener Staatsoper\",\n          \"activity\": \"Osserva la maestosa facciata del teatro dell'opera illuminata la sera.\",\n          \"minutes\": 45\n        }\n      ],\n      \"tip\": \"Al Naschmarkt prova i formaggi austriaci e i falafel caldi.\"\n    },\n    {\n      \"day\": 4,\n      \"title\": \"Residenze imperiali e architetture uniche\",\n      \"stops\": [\n        {\n          \"time\": \"MORNING\",\n          \"ref\": \"L3\",\n          \"name\": \"Castello di Schönbrunn\",\n          \"activity\": \"Visita gli appartamenti reali della residenza estiva degli Asburgo.\",\n          \"minutes\": 150\n        },\n        {\n          \"time\": \"AFTERNOON\",\n          \"ref\": \"E3\",\n          \"name\": \"Weihnachtsmarkt Schloss Schönbrunn\",\n          \"activity\": \"Goditi il mercatino di Natale situato nella splendida corte del castello.\",\n          \"minutes\": 90\n        },\n        {\n          \"time\": \"AFTERNOON\",\n          \"ref\": \"L11\",\n          \"name\": \"Hundertwasserhaus\",\n          \"activity\": \"Fotografa il colorato e irregolare condominio progettato da Hundertwasser.\",\n          \"minutes\": 45\n        }\n      ],\n      \"tip\": \"Prendi la metropolitana per spostarti rapidamente tra Schönbrunn e il centro.\"\n    },\n    {\n      \"day\": 5,\n      \"title\": \"Ultimi sguardi e partenza\",\n      \"stops\": [\n        {\n          \"time\": \"MORNING\",\n          \"ref\": \"L6\",\n          \"name\": \"Albertina\",\n          \"activity\": \"Visita le collezioni di arti grafiche e moderne prima della partenza.\",\n          \"minutes\": 120\n        }\n      ],\n      \"tip\": \"Controlla gli orari dei mezzi per raggiungere l'aeroporto in tempo.\"\n    }\n  ],\n  \"packing\": [\n    {\n      \"category\": \"Abbigliamento invernale\",\n      \"items\": [\n        \"Cappotto pesante\",\n        \"Maglioni di lana\",\n        \"Sciarpa, guanti e berretto\",\n        \"Scarpe impermeabili e comode\"\n      ]\n    },\n    {\n      \"category\": \"Altro\",\n      \"items\": [\n        \"Ombrello compatto\",\n        \"Adattatore per prese elettriche\",\n        \"Documenti di identità\"\n      ]\n    }\n  ],\n  \"tips\": [\n    \"Usa la metropolitana U-Bahn per muoverti in modo efficiente in città.\",\n    \"Nei ristoranti è usanza lasciare una mancia del 5-10% se il servizio è gradito.\",\n    \"Fai attenzione ai tuoi effetti personali nei luoghi affollati come i mercatini di Natale.\"\n  ]\n}",
+            "thoughtSignature": "EmAKXgFpFH0TUG56KfAJMpB/NogEZN4QlBr8yAJw2OowKo5sVTIeP5++9fjfDVoyielb76lj95zHJ5i9TaDUaXXdOrwsT+jLTRqXjcwWHddnDMBg17UpsU3U6pHVGyOwwXc="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+    }
+  ],
+  "usageMetadata": {
+    "promptTokenCount": 613,
+    "candidatesTokenCount": 1415,
+    "totalTokenCount": 2028,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 613
+      }
+    ],
+    "serviceTier": "standard"
+  },
+  "modelVersion": "gemini-3.5-flash-lite",
+  "responseId": "fyS-aoGhPP_4-8YPxInMuQE"
+}

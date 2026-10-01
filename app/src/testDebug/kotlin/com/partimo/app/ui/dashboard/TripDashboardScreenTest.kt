@@ -181,6 +181,7 @@ class TripDashboardScreenTest {
 
         assertTrue(refreshed)
         assertTrue(alertToggled)
+        composeRule.onNodeWithTag(DASHBOARD_LIST_TAG).performScrollToNode(hasText("Prezzi aggiornati alle", substring = true))
         composeRule.onNodeWithText("Prezzi aggiornati alle", substring = true).assertExists()
     }
 
@@ -306,6 +307,24 @@ class TripDashboardScreenTest {
         composeRule.onNodeWithText("Figlmüller").performClick()
 
         assertEquals("https://www.google.com/maps/search/?api=1&query=Figlm%C3%BCller%2C%20Wollzeile%205%2C%20Vienna", opened)
+    }
+
+    @Test
+    fun `con l'assistente attivo la dashboard porta all'itinerario e alle domande`() {
+        var itineraries = 0
+        var chats = 0
+        val state = showDashboard(
+            PreviewData.loadedState(),
+            DashboardActions(onOpenItinerary = { itineraries++ }, onOpenAssistant = { chats++ }),
+        )
+
+        composeRule.onNodeWithText(text(R.string.assistant_itinerary_chip)).performClick()
+        composeRule.onNodeWithText(text(R.string.assistant_chat_chip)).performClick()
+        assertEquals(1, itineraries)
+        assertEquals(1, chats)
+
+        state.value = state.value.copy(assistantAvailable = false)
+        composeRule.onNodeWithText(text(R.string.assistant_chat_chip)).assertDoesNotExist()
     }
 
     @Test

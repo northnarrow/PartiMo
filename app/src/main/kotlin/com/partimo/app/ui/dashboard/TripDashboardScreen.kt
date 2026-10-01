@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -81,6 +82,7 @@ import com.partimo.app.ui.place.ExternalLinks
 import com.partimo.app.ui.place.googleMapsTransitUrl
 import com.partimo.app.ui.theme.PartiMoTheme
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.TripContext
 import com.partimo.domain.model.deal.PriceChange
 import com.partimo.domain.model.poi.PointOfInterest
 import java.time.Instant
@@ -108,6 +110,10 @@ data class DashboardActions(
     val onRetryEvents: () -> Unit = {},
     /** Collegamento: siti di voli e alloggi con le date del viaggio (nel browser interno), Google Maps, fonti dei dati. */
     val onOpenLink: (String) -> Unit = {},
+    /** Itinerario giorno per giorno proposto dall'IA per il viaggio mostrato. */
+    val onOpenItinerary: () -> Unit = {},
+    /** "Chiedi a PartiMo": domande all'assistente sul viaggio mostrato. */
+    val onOpenAssistant: () -> Unit = {},
 )
 
 /**
@@ -121,6 +127,8 @@ fun TripDashboardRoute(
     onChooseDeparture: () -> Unit,
     onOpenPlace: (PointOfInterest) -> Unit,
     modifier: Modifier = Modifier,
+    onOpenItinerary: (TripContext) -> Unit = {},
+    onOpenAssistant: (TripContext) -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -155,6 +163,8 @@ fun TripDashboardRoute(
             onOpenLink = { url ->
                 if (!ExternalLinks.openLink(context, url, toolbarColor)) Toast.makeText(context, noAppForLink, Toast.LENGTH_LONG).show()
             },
+            onOpenItinerary = { onOpenItinerary(state.trip) },
+            onOpenAssistant = { onOpenAssistant(state.trip) },
         ),
         modifier = modifier,
     )
@@ -221,6 +231,9 @@ fun TripDashboardScreen(
                 onSelected = actions.onPeriodSelected,
                 modifier = Modifier.padding(vertical = 8.dp),
             )
+            if (state.assistantAvailable) {
+                AssistantChips(onOpenItinerary = actions.onOpenItinerary, onOpenAssistant = actions.onOpenAssistant)
+            }
             PullToRefreshBox(
                 isRefreshing = state.isRefreshing,
                 onRefresh = actions.onRefresh,
@@ -415,6 +428,26 @@ fun DashboardSection.emoji(): String = when (this) {
     DashboardSection.HIGHLIGHTS -> "📸"
     DashboardSection.TRANSIT -> "🚇"
     DashboardSection.RESTAURANTS -> "🍝"
+}
+
+/** Scorciatoie dell'assistente con l'IA per il viaggio mostrato: itinerario e domande. */
+@Composable
+private fun AssistantChips(onOpenItinerary: () -> Unit, onOpenAssistant: () -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 4.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        AssistChip(
+            onClick = onOpenItinerary,
+            label = { Text(stringResource(R.string.assistant_itinerary_chip)) },
+            leadingIcon = { Text("✨") },
+        )
+        AssistChip(
+            onClick = onOpenAssistant,
+            label = { Text(stringResource(R.string.assistant_chat_chip)) },
+            leadingIcon = { Text("💬") },
+        )
+    }
 }
 
 @Composable

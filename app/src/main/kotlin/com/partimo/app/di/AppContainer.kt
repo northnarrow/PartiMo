@@ -7,6 +7,7 @@ import com.partimo.data.config.ApiConfig
 import com.partimo.app.notifications.DealCheckScheduler
 import com.partimo.app.notifications.DealNotifier
 import com.partimo.data.di.DataModule
+import com.partimo.domain.usecase.AskTravelAssistantUseCase
 import com.partimo.domain.usecase.CheckPriceWatchesUseCase
 import com.partimo.domain.usecase.FindBudgetRestaurantsUseCase
 import com.partimo.domain.usecase.FindDepartureAirportsUseCase
@@ -14,8 +15,11 @@ import com.partimo.domain.usecase.FindLodgingsUseCase
 import com.partimo.domain.usecase.GetPoiDetailsUseCase
 import com.partimo.domain.usecase.GetSeasonalHighlightsUseCase
 import com.partimo.domain.usecase.GetTripEventsUseCase
+import com.partimo.domain.usecase.LoadTripKnowledgeUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObservePriceAlertUseCase
+import com.partimo.domain.usecase.PackingChecklistUseCase
+import com.partimo.domain.usecase.PlanTripUseCase
 import com.partimo.domain.usecase.PlanTransitRouteUseCase
 import com.partimo.domain.usecase.RecommendDestinationsUseCase
 import com.partimo.domain.usecase.ResolveDestinationUseCase
@@ -55,6 +59,12 @@ interface AppContainer {
     val observePriceAlert: ObservePriceAlertUseCase
     val setPriceAlert: SetPriceAlertUseCase
     val checkPriceWatches: CheckPriceWatchesUseCase
+
+    /** Assistente di viaggio con l'IA: itinerario, lista per la valigia e domande. */
+    val loadTripKnowledge: LoadTripKnowledgeUseCase
+    val planTrip: PlanTripUseCase
+    val askTravelAssistant: AskTravelAssistantUseCase
+    val packingChecklist: PackingChecklistUseCase
 }
 
 /**
@@ -73,6 +83,7 @@ class DefaultAppContainer(context: Context) : AppContainer {
         config = ApiConfig(
             duffelAccessToken = BuildConfig.DUFFEL_ACCESS_TOKEN,
             googleMapsApiKey = BuildConfig.GOOGLE_MAPS_API_KEY,
+            geminiApiKey = BuildConfig.GEMINI_API_KEY,
             languageCode = Locale.getDefault().language.ifBlank { DEFAULT_LANGUAGE },
             enableHttpLogging = BuildConfig.DEBUG,
             userAgent = PARTIMO_USER_AGENT,
@@ -139,6 +150,16 @@ class DefaultAppContainer(context: Context) : AppContainer {
     override val checkPriceWatches: CheckPriceWatchesUseCase by lazy {
         CheckPriceWatchesUseCase(dataModule.priceWatchRepository, searchFlights, searchAccommodations, clock = clock)
     }
+
+    override val loadTripKnowledge: LoadTripKnowledgeUseCase by lazy {
+        LoadTripKnowledgeUseCase(getSeasonalHighlights, getTripEvents)
+    }
+
+    override val planTrip: PlanTripUseCase by lazy { PlanTripUseCase(dataModule.travelAssistantRepository, loadTripKnowledge) }
+
+    override val askTravelAssistant: AskTravelAssistantUseCase by lazy { AskTravelAssistantUseCase(dataModule.travelAssistantRepository) }
+
+    override val packingChecklist: PackingChecklistUseCase by lazy { PackingChecklistUseCase(dataModule.checklistRepository) }
 
     /**
      * Attività di avvio non bloccanti: pulizia delle risposte troppo vecchie in cache, canale delle

@@ -3,6 +3,7 @@ package com.partimo.data.local
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
+import com.partimo.data.local.preferences.DataStoreChecklistRepository
 import com.partimo.data.local.preferences.DataStorePriceWatchRepository
 import com.partimo.data.local.preferences.DataStoreUserPreferencesRepository
 import com.partimo.data.local.preferences.StoredJson
@@ -74,6 +75,20 @@ class PreferencesRepositoriesTest {
         repository.update(TestData.priceWatch())
 
         assertTrue(repository.watches.first().isEmpty())
+    }
+
+    @Test
+    fun `le voci della valigia restano spuntate per ciascun viaggio`() = runTest {
+        val repository = DataStoreChecklistRepository(dataStore())
+
+        repository.setChecked("packing:vienna", "Abbigliamento › Cappotto", checked = true)
+        repository.setChecked("packing:vienna", "Documenti › Passaporto", checked = true)
+        repository.setChecked("packing:lisbona", "Mare › Costume", checked = true)
+        repository.setChecked("packing:vienna", "Documenti › Passaporto", checked = false)
+
+        assertEquals(setOf("Abbigliamento › Cappotto"), repository.checkedItems("packing:vienna").first())
+        assertEquals(setOf("Mare › Costume"), repository.checkedItems("packing:lisbona").first())
+        assertEquals(emptySet(), repository.checkedItems("packing:parigi").first())
     }
 }
 
