@@ -274,6 +274,19 @@ class TripDashboardScreenTest {
     }
 
     @Test
+    fun `i mesi mostrano il prezzo più basso e dai voli si apre il calendario dei prezzi`() {
+        var calendars = 0
+        showDashboard(PreviewData.monthPricesState(), DashboardActions(onOpenPriceCalendar = { calendars++ }))
+
+        composeRule.onNodeWithText(" · " + text(R.string.month_price_from, Formatters.money(Money.of(72, "EUR")))).assertExists()
+        composeRule.onNodeWithTag(TRIP_TOOLS_TAG).assertExists()
+        composeRule.onNodeWithText(text(R.string.price_calendar_open)).performClick()
+        saveScreenshot("trip_dashboard_months.png")
+
+        assertEquals(1, calendars)
+    }
+
+    @Test
     fun `per una famiglia i voli mostrano il totale e il prezzo a persona e chi parte si cambia da lì`() {
         val chosen = mutableListOf<Travellers>()
         showDashboard(PreviewData.familyFlightPricesState(), DashboardActions(onTravellersSelected = { chosen += it }))
