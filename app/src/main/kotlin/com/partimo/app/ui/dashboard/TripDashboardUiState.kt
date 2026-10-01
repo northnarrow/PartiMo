@@ -6,6 +6,7 @@ import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.TripContext
 import com.partimo.domain.model.deal.PriceChange
 import com.partimo.domain.model.dining.Restaurant
+import com.partimo.domain.model.event.TripEvents
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.poi.SeasonalHighlights
 import com.partimo.domain.model.stay.AccommodationOffer
@@ -40,6 +41,8 @@ data class TripDashboardUiState(
     /** `false` senza provider di prenotazione: la sezione alloggi mostra [lodgings] invece di [stays]. */
     val stayOffersAvailable: Boolean = true,
     val highlights: UiState<SeasonalHighlights> = UiState.Loading,
+    /** Mercatini, festival e festività dei giorni del soggiorno, in cima a "Da vedere". */
+    val events: UiState<TripEvents> = UiState.Loading,
     val transit: UiState<List<TransitRoute>> = UiState.Loading,
     val restaurants: UiState<List<Restaurant>> = UiState.Loading,
     /** `false` se il provider dei ristoranti non ha valutazioni (OpenStreetMap): niente filtri di qualità. */

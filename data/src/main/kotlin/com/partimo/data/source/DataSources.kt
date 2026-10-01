@@ -5,6 +5,8 @@ import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.dining.RestaurantSearchQuery
+import com.partimo.domain.model.event.EventQuery
+import com.partimo.domain.model.event.TripEvent
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.place.Airport
@@ -49,6 +51,14 @@ interface RestaurantDataSource {
 
 interface LodgingDataSource {
     suspend fun findLodgings(query: LodgingQuery, forceRefresh: Boolean): Fetched<List<Lodging>>
+}
+
+interface EventDataSource {
+    suspend fun recurringEvents(query: EventQuery, forceRefresh: Boolean): Fetched<List<TripEvent>>
+}
+
+interface HolidayDataSource {
+    suspend fun publicHolidays(countryCode: String, year: Int, forceRefresh: Boolean): Fetched<List<TripEvent>>
 }
 
 /** Nessun provider di prenotazione configurato: nessuna offerta con prezzo, l'app mostra le strutture reali. */

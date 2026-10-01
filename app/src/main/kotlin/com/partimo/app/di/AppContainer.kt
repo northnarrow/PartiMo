@@ -13,6 +13,7 @@ import com.partimo.domain.usecase.FindDepartureAirportsUseCase
 import com.partimo.domain.usecase.FindLodgingsUseCase
 import com.partimo.domain.usecase.GetPoiDetailsUseCase
 import com.partimo.domain.usecase.GetSeasonalHighlightsUseCase
+import com.partimo.domain.usecase.GetTripEventsUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObservePriceAlertUseCase
 import com.partimo.domain.usecase.PlanTransitRouteUseCase
@@ -41,6 +42,7 @@ interface AppContainer {
     val searchAccommodations: SearchAccommodationsUseCase
     val findLodgings: FindLodgingsUseCase
     val getSeasonalHighlights: GetSeasonalHighlightsUseCase
+    val getTripEvents: GetTripEventsUseCase
     val getPoiDetails: GetPoiDetailsUseCase
     val planTransitRoute: PlanTransitRouteUseCase
     val findBudgetRestaurants: FindBudgetRestaurantsUseCase
@@ -96,6 +98,10 @@ class DefaultAppContainer(context: Context) : AppContainer {
 
     override val getSeasonalHighlights: GetSeasonalHighlightsUseCase by lazy {
         GetSeasonalHighlightsUseCase(dataModule.poiRepository, dataModule.weatherRepository, clock = clock)
+    }
+
+    override val getTripEvents: GetTripEventsUseCase by lazy {
+        GetTripEventsUseCase(dataModule.eventRepository, dataModule.holidayRepository)
     }
 
     override val getPoiDetails: GetPoiDetailsUseCase by lazy { GetPoiDetailsUseCase(dataModule.poiArticleRepository) }

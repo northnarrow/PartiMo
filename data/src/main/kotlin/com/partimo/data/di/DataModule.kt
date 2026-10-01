@@ -18,6 +18,7 @@ import com.partimo.data.remote.duffel.DuffelApi
 import com.partimo.data.remote.duffel.DuffelFlightDataSource
 import com.partimo.data.remote.duffel.DuffelStayDataSource
 import com.partimo.data.remote.geocoding.OpenMeteoGeocodingDataSource
+import com.partimo.data.remote.holidays.NagerHolidayDataSource
 import com.partimo.data.remote.osm.OsmLodgingDataSource
 import com.partimo.data.remote.osm.OsmRestaurantDataSource
 import com.partimo.data.remote.osm.OverpassApi
@@ -27,6 +28,8 @@ import com.partimo.data.remote.places.GooglePlacesRestaurantDataSource
 import com.partimo.data.remote.routes.GoogleRoutesApi
 import com.partimo.data.remote.routes.GoogleRoutesTransitDataSource
 import com.partimo.data.remote.weather.OpenMeteoWeatherDataSource
+import com.partimo.data.remote.wikidata.WikidataApi
+import com.partimo.data.remote.wikidata.WikidataEventDataSource
 import com.partimo.data.remote.wikipedia.WikipediaApi
 import com.partimo.data.remote.wikipedia.WikipediaArticleDataSource
 import com.partimo.data.remote.wikipedia.WikipediaPoiDataSource
@@ -35,7 +38,9 @@ import com.partimo.data.repository.DefaultAccommodationRepository
 import com.partimo.data.repository.DefaultAirportRepository
 import com.partimo.data.repository.DefaultCitySearchRepository
 import com.partimo.data.repository.DefaultDestinationCatalogRepository
+import com.partimo.data.repository.DefaultEventRepository
 import com.partimo.data.repository.DefaultFlightRepository
+import com.partimo.data.repository.DefaultHolidayRepository
 import com.partimo.data.repository.DefaultLodgingRepository
 import com.partimo.data.repository.DefaultPoiArticleRepository
 import com.partimo.data.repository.DefaultPoiRepository
@@ -47,7 +52,9 @@ import com.partimo.domain.repository.AccommodationRepository
 import com.partimo.domain.repository.AirportRepository
 import com.partimo.domain.repository.CitySearchRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
+import com.partimo.domain.repository.EventRepository
 import com.partimo.domain.repository.FlightRepository
+import com.partimo.domain.repository.HolidayRepository
 import com.partimo.domain.repository.LodgingRepository
 import com.partimo.domain.repository.PoiArticleRepository
 import com.partimo.domain.repository.PoiRepository
@@ -69,7 +76,7 @@ import java.time.Clock
  * (Wikipedia per i luoghi, OpenStreetMap per ristoranti e strutture ricettive) oppure, per voli e
  * trasporti, la sorgente demo. Client HTTP, database, cache e preferenze sono condivisi e creati in
  * modo lazy: DataModule va istanziato una sola volta per processo (DataStore non ammette istanze duplicate).
- * Meteo (Open-Meteo), luoghi, ristoranti e alloggi non richiedono chiavi e sono sempre reali.
+ * Meteo (Open-Meteo), luoghi, eventi, festività, ristoranti e alloggi non richiedono chiavi e sono sempre reali.
  */
 class DataModule(
     context: Context,
@@ -95,6 +102,7 @@ class DataModule(
     private val routesApi by lazy { GoogleRoutesApi(httpClient, config.googleMapsApiKey, androidApp = config.androidApp) }
     private val wikipediaApi by lazy { WikipediaApi(httpClient, config.userAgent) }
     private val overpassApi by lazy { OverpassApi(httpClient, config.userAgent) }
+    private val wikidataApi by lazy { WikidataApi(httpClient, config.userAgent) }
     private val wikipediaLanguages by lazy { wikipediaLanguages(config.languageCode) }
 
     val flightRepository: FlightRepository by lazy {
@@ -160,6 +168,16 @@ class DataModule(
             DemoTransitDataSource(demoCatalog)
         }
         DefaultTransitRepository(source, ioDispatcher)
+    }
+
+    /** Mercatini di Natale, festival e ricorrenze da Wikidata: gratuita e senza chiave, sempre disponibile. */
+    val eventRepository: EventRepository by lazy {
+        DefaultEventRepository(WikidataEventDataSource(wikidataApi, responseCache, config.languageCode), ioDispatcher)
+    }
+
+    /** Festività nazionali da Nager.Date: gratuito e senza chiave. */
+    val holidayRepository: HolidayRepository by lazy {
+        DefaultHolidayRepository(NagerHolidayDataSource(httpClient, responseCache, config.userAgent, config.languageCode), ioDispatcher)
     }
 
     val weatherRepository: WeatherRepository by lazy {

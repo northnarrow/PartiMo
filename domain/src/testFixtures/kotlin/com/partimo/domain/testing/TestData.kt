@@ -8,6 +8,9 @@ import com.partimo.domain.model.deal.PricePoint
 import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.dining.PriceLevel
 import com.partimo.domain.model.dining.Restaurant
+import com.partimo.domain.model.event.EventKind
+import com.partimo.domain.model.event.EventTiming
+import com.partimo.domain.model.event.TripEvent
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightSlice
 import com.partimo.domain.model.place.Airport
@@ -154,6 +157,16 @@ object TestData {
         imageUrl = imageUrl,
         imageCredit = imageCredit,
     )
+
+    fun event(
+        id: String,
+        timing: EventTiming,
+        kind: EventKind = EventKind.RECURRING_EVENT,
+        location: GeoPoint? = VIENNA_CENTER,
+    ): TripEvent = TripEvent(id = id, name = "Evento $id", kind = kind, timing = timing, location = location)
+
+    fun holiday(id: String, date: LocalDate): TripEvent =
+        TripEvent(id = id, name = "Festa $id", kind = EventKind.PUBLIC_HOLIDAY, timing = EventTiming.OnDates(date, date), location = null)
 
     fun lodging(
         id: String,

@@ -76,6 +76,7 @@ import com.partimo.app.ui.dashboard.components.LodgingsSection
 import com.partimo.app.ui.dashboard.components.RestaurantsSection
 import com.partimo.app.ui.dashboard.components.StaysSection
 import com.partimo.app.ui.dashboard.components.TransitSection
+import com.partimo.app.ui.dashboard.components.TripEventsSection
 import com.partimo.app.ui.place.ExternalLinks
 import com.partimo.app.ui.place.googleMapsTransitUrl
 import com.partimo.app.ui.theme.PartiMoTheme
@@ -101,8 +102,10 @@ data class DashboardActions(
     val onRefreshSummaryShown: () -> Unit = {},
     val onMessageShown: () -> Unit = {},
     val onOpenNotificationSettings: () -> Unit = {},
-    /** Tocco su un luogo da vedere: apre la sua scheda (descrizione, storia, "Naviga"). */
+    /** Tocco su un luogo o un evento da vedere: apre la sua scheda (descrizione, storia, "Naviga"). */
     val onOpenPlace: (PointOfInterest) -> Unit = {},
+    /** "Riprova" della sezione eventi. */
+    val onRetryEvents: () -> Unit = {},
     /** Collegamento: siti di voli e alloggi con le date del viaggio (nel browser interno), Google Maps, fonti dei dati. */
     val onOpenLink: (String) -> Unit = {},
 )
@@ -135,6 +138,7 @@ fun TripDashboardRoute(
             onPhotoSpotsOnlyChanged = viewModel::onPhotoSpotsOnlyChanged,
             onRefresh = viewModel::refresh,
             onRetry = viewModel::retry,
+            onRetryEvents = viewModel::retryEvents,
             onToggleAlert = {
                 val enabling = !state.alertEnabled && state.trip.departure != null
                 if (enabling && needsNotificationPermission(context)) {
@@ -275,15 +279,26 @@ private fun LazyListScope.sectionContent(section: DashboardSection, state: TripD
                 )
             }
         }
-        DashboardSection.HIGHLIGHTS -> item(key = "highlights") {
-            HighlightsSection(
-                state = state.highlights,
-                destinationName = state.trip.destination.name,
-                photoSpotsOnly = state.photoSpotsOnly,
-                onPhotoSpotsOnlyChanged = actions.onPhotoSpotsOnlyChanged,
-                onRetry = { actions.onRetry(DashboardSection.HIGHLIGHTS) },
-                onPlaceClick = actions.onOpenPlace,
-            )
+        DashboardSection.HIGHLIGHTS -> {
+            item(key = "events") {
+                TripEventsSection(
+                    state = state.events,
+                    trip = state.trip,
+                    onRetry = actions.onRetryEvents,
+                    onOpenLink = actions.onOpenLink,
+                    onEventClick = actions.onOpenPlace,
+                )
+            }
+            item(key = "highlights") {
+                HighlightsSection(
+                    state = state.highlights,
+                    destinationName = state.trip.destination.name,
+                    photoSpotsOnly = state.photoSpotsOnly,
+                    onPhotoSpotsOnlyChanged = actions.onPhotoSpotsOnlyChanged,
+                    onRetry = { actions.onRetry(DashboardSection.HIGHLIGHTS) },
+                    onPlaceClick = actions.onOpenPlace,
+                )
+            }
         }
         DashboardSection.TRANSIT -> item(key = "transit") {
             val destination = state.trip.destination

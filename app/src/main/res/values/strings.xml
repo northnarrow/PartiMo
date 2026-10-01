@@ -185,6 +185,21 @@
     <string name="weather_unknown">condizioni variabili</string>
     <string name="photo_spots_only">Solo spot fotografici</string>
 
+    <!-- Eventi durante il soggiorno -->
+    <string name="section_events">Eventi durante il soggiorno</string>
+    <string name="section_events_subtitle">%1$s · mercatini, festival e festività</string>
+    <string name="events_none">Nessun evento ricorrente noto in questi giorni: cercane altri con i pulsanti qui sopra.</string>
+    <string name="events_christmas_markets_link">🎄 Mercatini di Natale a %1$s</string>
+    <string name="events_search_link">🔎 Tutti gli eventi di quei giorni</string>
+    <string name="event_usually_between">Di solito dal %1$s al %2$s</string>
+    <string name="event_yearly_between">Ogni anno dal %1$s al %2$s</string>
+    <string name="event_every_year_on">Ogni anno: %1$s</string>
+    <string name="event_every_year_in">Ogni anno a %1$s</string>
+    <string name="event_holiday">%1$s · festa nazionale</string>
+    <string name="event_holiday_note">Negozi, musei e trasporti possono avere orari ridotti.</string>
+    <string name="events_attribution">Eventi ricorrenti da Wikidata · festività da Nager.Date. Verifica date e orari prima di partire.</string>
+    <string name="list_and">%1$s e %2$s</string>
+
     <!-- Etichette dei luoghi -->
     <string name="tag_instagrammable">Instagrammabile</string>
     <string name="tag_panoramic">Panoramico</string>

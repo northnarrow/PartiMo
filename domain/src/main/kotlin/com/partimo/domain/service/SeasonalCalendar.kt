@@ -1,10 +1,14 @@
 package com.partimo.domain.service
 
 import com.partimo.domain.model.Hemisphere
+import com.partimo.domain.model.event.EventTiming
+import com.partimo.domain.model.event.overlaps
 import com.partimo.domain.model.poi.PoiCategory
 import com.partimo.domain.model.poi.Season
 import com.partimo.domain.model.poi.SeasonalTheme
+import java.time.LocalDate
 import java.time.Month
+import java.time.MonthDay
 
 /**
  * Conoscenza di dominio sulla stagionalità: temi di ricerca per mese e periodi di attività
@@ -14,6 +18,16 @@ object SeasonalCalendar {
 
     /** Il Natale segue il calendario, non la stagione: è a dicembre anche nell'emisfero sud. */
     val CHRISTMAS_MONTHS: Set<Month> = setOf(Month.NOVEMBER, Month.DECEMBER, Month.JANUARY)
+
+    /**
+     * Periodo tipico dei mercatini di Natale, per quelli di cui la fonte non indica le date: quasi
+     * tutti aprono tra metà e fine novembre e chiudono la vigilia o poco prima.
+     */
+    val CHRISTMAS_MARKET_SEASON: EventTiming.Yearly =
+        EventTiming.Yearly(MonthDay.of(Month.NOVEMBER, 15), MonthDay.of(Month.DECEMBER, 24))
+
+    /** `true` se il soggiorno cade nel periodo dei mercatini di Natale, anche se nessuna fonte ne conosce in città. */
+    fun isChristmasMarketSeason(from: LocalDate, to: LocalDate): Boolean = CHRISTMAS_MARKET_SEASON.overlaps(from, to)
 
     val CHRISTMAS_KEYWORDS = listOf("natale", "natalizi", "christmas", "weihnacht", "christkindl", "advent", "noël", "navidad")
     val SKI_KEYWORDS = listOf("ski", "sci ", "piste da sci", "impianti sciistici")

@@ -14,6 +14,10 @@ import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.TripContext
 import com.partimo.domain.model.dining.PriceLevel
 import com.partimo.domain.model.dining.Restaurant
+import com.partimo.domain.model.event.EventKind
+import com.partimo.domain.model.event.EventTiming
+import com.partimo.domain.model.event.TripEvent
+import com.partimo.domain.model.event.TripEvents
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightSlice
 import com.partimo.domain.model.place.Airport
@@ -45,6 +49,7 @@ import com.partimo.domain.model.transit.TransitRoute
 import com.partimo.domain.model.transit.TransitStop
 import com.partimo.domain.model.weather.WeatherCondition
 import com.partimo.domain.model.weather.WeatherSnapshot
+import com.partimo.domain.service.SeasonalCalendar
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
@@ -185,6 +190,42 @@ internal object PreviewData {
         Restaurant("2", "Naschmarkt Falafel Corner", PriceLevel.INEXPENSIVE, 4.7, 640, "Mediorientale"),
     )
 
+    /** Mercatini di Natale di Vienna durante il soggiorno (10–14 dicembre). */
+    private val tripEvents = TripEvents(
+        from = LocalDate.of(2026, Month.DECEMBER, 10),
+        to = LocalDate.of(2026, Month.DECEMBER, 14),
+        events = listOf(
+            TripEvent(
+                id = "wikidata:spittelberg",
+                name = "Weihnachtsmarkt am Spittelberg",
+                kind = EventKind.CHRISTMAS_MARKET,
+                timing = SeasonalCalendar.CHRISTMAS_MARKET_SEASON,
+                approximateTiming = true,
+                description = "Mercatino di artigianato tra le case Biedermeier del quartiere Spittelberg",
+                location = GeoPoint(48.2030, 16.3540),
+                venueName = "Spittelberg",
+            ),
+            TripEvent(
+                id = "wikidata:schoenbrunn",
+                name = "Weihnachtsmarkt Schloss Schönbrunn",
+                kind = EventKind.CHRISTMAS_MARKET,
+                timing = SeasonalCalendar.CHRISTMAS_MARKET_SEASON,
+                approximateTiming = true,
+                location = GeoPoint(48.1849, 16.3122),
+                venueName = "Schloss Schönbrunn",
+            ),
+        ),
+    )
+
+    /** Festività nazionale con il nome locale, per anteprime e test della sezione eventi. */
+    val immaculateConception = TripEvent(
+        id = "holiday:AT:2026-12-08",
+        name = "Immacolata Concezione",
+        kind = EventKind.PUBLIC_HOLIDAY,
+        timing = EventTiming.OnDates(LocalDate.of(2026, Month.DECEMBER, 8), LocalDate.of(2026, Month.DECEMBER, 8)),
+        localName = "Mariä Empfängnis",
+    )
+
     fun loadedState() = TripDashboardUiState(
         trip = trip,
         period = DECEMBER,
@@ -193,6 +234,7 @@ internal object PreviewData {
         flights = UiState.Success(flights, DataOrigin.DEMO),
         stays = UiState.Success(stays, DataOrigin.CACHE),
         highlights = UiState.Success(highlights),
+        events = UiState.Success(tripEvents),
         transit = UiState.Success(transit),
         restaurants = UiState.Success(restaurants),
         isDemoMode = true,

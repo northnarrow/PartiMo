@@ -90,6 +90,10 @@ internal object CachePolicy {
     val RESTAURANTS: Duration = Duration.ofHours(12)
     val LODGINGS: Duration = Duration.ofHours(24)
 
+    /** Gli eventi ricorrenti e le festività cambiano pochissimo (e il servizio degli eventi limita le richieste). */
+    val EVENTS: Duration = Duration.ofDays(7)
+    val HOLIDAYS: Duration = Duration.ofDays(30)
+
     /** Orari in tempo reale: cache minima, solo per evitare richieste duplicate ravvicinate. */
     val TRANSIT: Duration = Duration.ofMinutes(2)
     val WEATHER: Duration = Duration.ofMinutes(15)

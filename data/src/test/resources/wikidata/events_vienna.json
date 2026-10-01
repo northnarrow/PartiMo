@@ -1,0 +1,247 @@
+{
+  "head" : {
+    "vars" : [ "item", "itemLabel", "itemDescription", "months", "days", "christmasMarket", "ownLocation", "venueLocation", "areaLocation", "venue", "ended", "picture", "localTitle", "enTitle" ]
+  },
+  "results" : {
+    "bindings" : [ {
+      "item" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q339152"
+      },
+      "itemLabel" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "Concerto di Capodanno di Vienna"
+      },
+      "itemDescription" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "tradizionale concerto annuale della Filarmonica di Vienna"
+      },
+      "months" : {
+        "type" : "literal",
+        "value" : ""
+      },
+      "days" : {
+        "type" : "literal",
+        "value" : "January 1"
+      },
+      "ownLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(16.372739 48.200489)"
+      },
+      "areaLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(16.3725 48.208333333)"
+      },
+      "picture" : {
+        "type" : "uri",
+        "value" : "http://commons.wikimedia.org/wiki/Special:FilePath/The%20New%20Years%20Eve%20Concert%202013%20at%20The%20Wiener%20Musikverein%20%288336464777%29.jpg"
+      },
+      "localTitle" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "Concerto di Capodanno di Vienna"
+      },
+      "enTitle" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Vienna New Year's Concert"
+      }
+    }, {
+      "item" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q609508"
+      },
+      "itemLabel" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "Viennale"
+      },
+      "itemDescription" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "annual film festival held in Vienna, Austria"
+      },
+      "months" : {
+        "type" : "literal",
+        "value" : "Q124"
+      },
+      "days" : {
+        "type" : "literal",
+        "value" : ""
+      },
+      "ownLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(16.3725 48.2083)"
+      },
+      "areaLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(16.3725 48.208333333)"
+      },
+      "picture" : {
+        "type" : "uri",
+        "value" : "http://commons.wikimedia.org/wiki/Special:FilePath/Urania-Eingang.jpg"
+      },
+      "localTitle" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "Viennale"
+      },
+      "enTitle" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Vienna International Film Festival"
+      }
+    }, {
+      "item" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q685504"
+      },
+      "itemLabel" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Vienna Shorts"
+      },
+      "itemDescription" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "annual film festival held in Vienna, Austria"
+      },
+      "months" : {
+        "type" : "literal",
+        "value" : "Q120 Q119"
+      },
+      "days" : {
+        "type" : "literal",
+        "value" : ""
+      },
+      "areaLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(16.395056589 48.216124949)"
+      },
+      "picture" : {
+        "type" : "uri",
+        "value" : "http://commons.wikimedia.org/wiki/Special:FilePath/Vis%20gartenbaukino3.jpg"
+      },
+      "enTitle" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Vienna Shorts"
+      },
+      "venueLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(16.358888888 48.203333333)"
+      },
+      "venue" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "MuseumsQuartier"
+      }
+    }, {
+      "item" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q20183111"
+      },
+      "itemLabel" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Tricky Women"
+      },
+      "itemDescription" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "annual film festival held in Vienna, Austria"
+      },
+      "months" : {
+        "type" : "literal",
+        "value" : "Q110"
+      },
+      "days" : {
+        "type" : "literal",
+        "value" : ""
+      },
+      "areaLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(16.3725 48.208333333)"
+      },
+      "picture" : {
+        "type" : "uri",
+        "value" : "http://commons.wikimedia.org/wiki/Special:FilePath/Tricky%20Women%202015%20Opening%20Gartenbaukino%2002.jpg"
+      }
+    }, {
+      "item" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q101252446"
+      },
+      "itemLabel" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "JAPANNUAL"
+      },
+      "itemDescription" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Event with Japanese films in Vienna, Austria"
+      },
+      "months" : {
+        "type" : "literal",
+        "value" : "Q124"
+      },
+      "days" : {
+        "type" : "literal",
+        "value" : ""
+      },
+      "areaLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(16.3725 48.208333333)"
+      },
+      "enTitle" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Japannual"
+      },
+      "venueLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(16.35985 48.19235)"
+      },
+      "venue" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Filmcasino"
+      }
+    }, {
+      "item" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q118367834"
+      },
+      "itemLabel" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Blue Danube Film Festival"
+      },
+      "months" : {
+        "type" : "literal",
+        "value" : "Q125"
+      },
+      "days" : {
+        "type" : "literal",
+        "value" : ""
+      },
+      "areaLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(16.3725 48.208333333)"
+      }
+    } ]
+  }
+}

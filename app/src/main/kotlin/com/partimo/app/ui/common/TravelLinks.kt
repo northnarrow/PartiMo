@@ -37,6 +37,19 @@ object TravelLinks {
     fun airbnb(place: String, checkIn: LocalDate, checkOut: LocalDate, adults: Int): String =
         "https://www.airbnb.it/s/" + encode(place) + "/homes?checkin=$checkIn&checkout=$checkOut&adults=$adults"
 
+    /**
+     * Ricerca Google degli eventi in città nei giorni del viaggio: concerti, mostre e spettacoli con
+     * date e biglietti, compresi quelli che le fonti aperte non conoscono.
+     */
+    fun googleEvents(city: String, from: LocalDate, to: LocalDate): String {
+        val days = if (from.year == to.year && from.month == to.month) {
+            "dal ${from.dayOfMonth} al ${to.dayOfMonth} ${Formatters.monthName(to.month)} ${to.year}"
+        } else {
+            "dal ${from.dayOfMonth} ${Formatters.monthName(from.month)} ${from.year} al ${to.dayOfMonth} ${Formatters.monthName(to.month)} ${to.year}"
+        }
+        return "https://www.google.com/search?q=" + encode("eventi a $city $days")
+    }
+
     /** Codifica con gli spazi come %20, valida sia nel percorso sia nei parametri. */
     private fun encode(text: String): String = URLEncoder.encode(text, Charsets.UTF_8.name()).replace("+", "%20")
 }

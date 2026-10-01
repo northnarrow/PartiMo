@@ -17,10 +17,13 @@ import androidx.compose.ui.test.performScrollToNode
 import androidx.core.view.drawToBitmap
 import com.partimo.app.R
 import com.partimo.app.ui.common.PERIOD_CHIPS_TAG
+import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.theme.PartiMoTheme
+import com.partimo.domain.common.DataError
 import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.deal.PriceChange
+import com.partimo.domain.model.poi.PoiCategory
 import com.partimo.domain.model.poi.PointOfInterest
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -114,6 +117,57 @@ class TripDashboardScreenTest {
         composeRule.onNodeWithText("Kahlenberg").performClick()
 
         assertEquals("kahlenberg", opened?.id)
+    }
+
+    @Test
+    fun `in cima a da vedere ci sono gli eventi del soggiorno, che si aprono come i luoghi`() {
+        var opened: PointOfInterest? = null
+        val links = mutableListOf<String>()
+        val loaded = PreviewData.loadedState()
+        val trip = (loaded.events as UiState.Success).data
+        showDashboard(
+            loaded.copy(
+                selectedSection = DashboardSection.HIGHLIGHTS,
+                events = UiState.Success(trip.copy(events = trip.events + PreviewData.immaculateConception)),
+            ),
+            DashboardActions(onOpenPlace = { opened = it }, onOpenLink = { links += it }),
+        )
+
+        composeRule.onNodeWithText(text(R.string.section_events), substring = true).assertExists()
+        composeRule.onNodeWithText("Spittelberg · Di solito dal 15 nov al 24 dic").assertExists()
+        composeRule.onNodeWithText("Weihnachtsmarkt am Spittelberg").performClick()
+        assertEquals("wikidata:spittelberg", opened?.id)
+        assertEquals(PoiCategory.SEASONAL_EVENT, opened?.category)
+
+        composeRule.onNodeWithTag(DASHBOARD_LIST_TAG).performScrollToNode(hasText("8 dic · festa nazionale"))
+        composeRule.onNodeWithText("Mariä Empfängnis", substring = true).assertExists()
+
+        composeRule.onNodeWithTag(DASHBOARD_LIST_TAG).performScrollToNode(hasText("Mercatini di Natale a Vienna", substring = true))
+        composeRule.onNodeWithText("Mercatini di Natale a Vienna", substring = true).performClick()
+        composeRule.onNodeWithText(text(R.string.events_search_link)).performClick()
+        assertEquals(
+            listOf(
+                "https://www.google.com/maps/search/?api=1&query=mercatini%20di%20Natale%20Vienna",
+                "https://www.google.com/search?q=eventi%20a%20Vienna%20dal%2010%20al%2014%20dicembre%202026",
+            ),
+            links,
+        )
+    }
+
+    @Test
+    fun `se gli eventi non si caricano restano i pulsanti di ricerca e si può riprovare`() {
+        var retried = false
+        showDashboard(
+            PreviewData.loadedState().copy(selectedSection = DashboardSection.HIGHLIGHTS, events = UiState.Error(DataError.RateLimited)),
+            DashboardActions(onRetryEvents = { retried = true }),
+        )
+
+        composeRule.onNodeWithText("Mercatini di Natale a Vienna", substring = true).assertExists()
+        composeRule.onNodeWithText(text(R.string.events_search_link)).assertExists()
+        composeRule.onNodeWithText(text(R.string.error_rate_limited)).assertExists()
+        composeRule.onAllNodesWithText(text(R.string.action_retry))[0].performClick()
+
+        assertTrue(retried)
     }
 
     @Test

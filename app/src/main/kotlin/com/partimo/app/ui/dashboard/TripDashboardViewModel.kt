@@ -21,6 +21,7 @@ import com.partimo.domain.model.transit.TransitRouteQuery
 import com.partimo.domain.usecase.FindBudgetRestaurantsUseCase
 import com.partimo.domain.usecase.FindLodgingsUseCase
 import com.partimo.domain.usecase.GetSeasonalHighlightsUseCase
+import com.partimo.domain.usecase.GetTripEventsUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObservePriceAlertUseCase
 import com.partimo.domain.usecase.PlanTransitRouteUseCase
@@ -46,9 +47,9 @@ import java.time.LocalDate
 /**
  * ViewModel della dashboard aggregata (MVVM).
  *
- * Espone un unico [StateFlow] immutabile. Le cinque sezioni vengono caricate in parallelo e in
- * modo indipendente: ognuna aggiorna il proprio stato appena pronta e un errore resta confinato
- * alla sua sezione. I voli dipendono dal punto di partenza scelto dall'utente, osservato come Flow:
+ * Espone un unico [StateFlow] immutabile. Le cinque sezioni (più gli eventi del soggiorno) vengono
+ * caricate in parallelo e in modo indipendente: ognuna aggiorna il proprio stato appena pronta e un
+ * errore resta confinato alla sua sezione. I voli dipendono dal punto di partenza scelto dall'utente, osservato come Flow:
  * se lo cambia, i voli si ricaricano da soli.
  */
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -57,6 +58,7 @@ class TripDashboardViewModel(
     private val searchAccommodations: SearchAccommodationsUseCase,
     private val findLodgings: FindLodgingsUseCase,
     private val getSeasonalHighlights: GetSeasonalHighlightsUseCase,
+    private val getTripEvents: GetTripEventsUseCase,
     private val planTransitRoute: PlanTransitRouteUseCase,
     private val findBudgetRestaurants: FindBudgetRestaurantsUseCase,
     private val observeDeparture: ObserveDepartureUseCase,
@@ -72,6 +74,7 @@ class TripDashboardViewModel(
     val uiState: StateFlow<TripDashboardUiState> = _uiState.asStateFlow()
 
     private val sectionJobs = mutableMapOf<DashboardSection, Job>()
+    private var eventsJob: Job? = null
     private var refreshJob: Job? = null
 
     init {
@@ -131,6 +134,11 @@ class TripDashboardViewModel(
         loadSection(section, forceRefresh = true)
     }
 
+    /** "Riprova" della sezione eventi: i luoghi da vedere restano come sono. */
+    fun retryEvents() {
+        loadEvents(forceRefresh = true)
+    }
+
     /**
      * Attiva o disattiva l'avviso sulle offerte convenienti. I prezzi migliori visti adesso diventano
      * il primo riferimento; [notificationsAllowed] indica se il sistema potrà mostrare le notifiche.
@@ -165,7 +173,7 @@ class TripDashboardViewModel(
 
     private fun loadDashboard(forceRefresh: Boolean, onComplete: () -> Unit = {}) {
         _uiState.update { it.copy(isRefreshing = forceRefresh) }
-        val jobs = DashboardSection.entries.map { section -> loadSection(section, forceRefresh) }
+        val jobs = DashboardSection.entries.map { section -> loadSection(section, forceRefresh) } + loadEvents(forceRefresh)
         refreshJob?.cancel()
         refreshJob = viewModelScope.launch {
             jobs.joinAll()
@@ -239,6 +247,23 @@ class TripDashboardViewModel(
             forceRefresh = forceRefresh,
         ).toUiState { it.recommendations.isEmpty() }
         _uiState.update { it.copy(highlights = state) }
+    }
+
+    /**
+     * Eventi tra arrivo e partenza, in cima a "Da vedere" ma con un caricamento proprio: il filtro
+     * degli spot fotografici ricarica solo i luoghi. Anche senza eventi la UI mostra i collegamenti
+     * per cercarne altri.
+     */
+    private fun loadEvents(forceRefresh: Boolean): Job {
+        eventsJob?.cancel()
+        _uiState.update { it.copy(events = UiState.Loading) }
+        val job = viewModelScope.launch {
+            val trip = _uiState.value.trip
+            val state = getTripEvents(trip.destination, trip.departureDate, trip.returnDate, forceRefresh).toUiState()
+            _uiState.update { it.copy(events = state) }
+        }
+        eventsJob = job
+        return job
     }
 
     /** Trasporti in tempo reale: percorso dal nodo di arrivo al centro con partenza adesso. */
@@ -328,6 +353,7 @@ class TripDashboardViewModel(
                     searchAccommodations = container.searchAccommodations,
                     findLodgings = container.findLodgings,
                     getSeasonalHighlights = container.getSeasonalHighlights,
+                    getTripEvents = container.getTripEvents,
                     planTransitRoute = container.planTransitRoute,
                     findBudgetRestaurants = container.findBudgetRestaurants,
                     observeDeparture = container.observeDeparture,

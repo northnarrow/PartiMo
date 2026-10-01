@@ -12,8 +12,13 @@ import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.dining.PriceLevel
 import com.partimo.domain.model.poi.PoiCategory
 import com.partimo.domain.model.place.DeparturePoint
+import com.partimo.domain.model.event.EventKind
+import com.partimo.domain.model.event.EventTiming
+import com.partimo.domain.service.SeasonalCalendar
 import com.partimo.domain.testing.FakeAccommodationRepository
+import com.partimo.domain.testing.FakeEventRepository
 import com.partimo.domain.testing.FakeFlightRepository
+import com.partimo.domain.testing.FakeHolidayRepository
 import com.partimo.domain.testing.FakeLodgingRepository
 import com.partimo.domain.testing.FakePoiRepository
 import com.partimo.domain.testing.FakePriceWatchRepository
@@ -25,6 +30,7 @@ import com.partimo.domain.testing.TestData
 import com.partimo.domain.usecase.FindBudgetRestaurantsUseCase
 import com.partimo.domain.usecase.FindLodgingsUseCase
 import com.partimo.domain.usecase.GetSeasonalHighlightsUseCase
+import com.partimo.domain.usecase.GetTripEventsUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObservePriceAlertUseCase
 import com.partimo.domain.usecase.PlanTransitRouteUseCase
@@ -79,6 +85,17 @@ class TripDashboardViewModelTest {
         ),
     )
     private val weather = FakeWeatherRepository()
+    private val events = FakeEventRepository(
+        DataResult.Success(
+            listOf(
+                TestData.event("mercatino", SeasonalCalendar.CHRISTMAS_MARKET_SEASON, kind = EventKind.CHRISTMAS_MARKET),
+                TestData.event("viennale", EventTiming.InMonths(setOf(Month.OCTOBER))),
+            ),
+        ),
+    )
+    private val holidays = FakeHolidayRepository(
+        default = DataResult.Success(listOf(TestData.holiday("immacolata", LocalDate.of(2026, Month.DECEMBER, 8)))),
+    )
     private val transit = FakeTransitRepository(DataResult.Success(listOf(TestData.simpleRoute())))
     private val restaurants = FakeRestaurantRepository(
         DataResult.Success(
@@ -96,6 +113,7 @@ class TripDashboardViewModelTest {
         searchAccommodations = SearchAccommodationsUseCase(stays, clock = TestData.FIXED_CLOCK),
         findLodgings = FindLodgingsUseCase(lodgings),
         getSeasonalHighlights = GetSeasonalHighlightsUseCase(pois, weather, clock = TestData.FIXED_CLOCK),
+        getTripEvents = GetTripEventsUseCase(events, holidays),
         planTransitRoute = PlanTransitRouteUseCase(transit, TestData.FIXED_CLOCK),
         findBudgetRestaurants = FindBudgetRestaurantsUseCase(restaurants),
         observeDeparture = ObserveDepartureUseCase(preferences),
@@ -153,6 +171,35 @@ class TripDashboardViewModelTest {
     }
 
     @Test
+    fun `gli eventi del soggiorno arrivano con le date del viaggio, senza ricaricarli col filtro foto`() = runTest {
+        val viewModel = createViewModel()
+
+        val trip = viewModel.uiState.value.events.successData()
+        assertEquals(LocalDate.of(2026, Month.DECEMBER, 10), trip.from)
+        assertEquals(LocalDate.of(2026, Month.DECEMBER, 14), trip.to)
+        assertEquals(listOf("mercatino"), trip.events.map { it.id }, "Viennale (ottobre) e Immacolata (8 dicembre) sono fuori dal soggiorno")
+        assertEquals(SampleDestinations.VIENNA.center, events.queries.single().location)
+
+        viewModel.onPhotoSpotsOnlyChanged(true)
+        assertEquals(1, events.queries.size, "Il filtro foto ricarica solo i luoghi")
+
+        viewModel.retryEvents()
+        assertEquals(2, events.queries.size)
+        assertEquals(2, pois.queries.size, "«Riprova» degli eventi non ricarica i luoghi")
+    }
+
+    @Test
+    fun `un errore degli eventi non tocca i luoghi da vedere`() = runTest {
+        events.result = DataResult.Failure(DataError.RateLimited)
+        holidays.default = DataResult.Failure(DataError.NoConnection)
+
+        val state = createViewModel().uiState.value
+
+        assertEquals(UiState.Error(DataError.RateLimited), state.events)
+        assertIs<UiState.Success<*>>(state.highlights)
+    }
+
+    @Test
     fun `si possono scegliere i prossimi giorni e tutti i dodici mesi`() = runTest {
         val periods = createViewModel().uiState.value.periods
 
@@ -169,6 +216,7 @@ class TripDashboardViewModelTest {
             searchAccommodations = SearchAccommodationsUseCase(stays, clock = TestData.FIXED_CLOCK),
             findLodgings = FindLodgingsUseCase(lodgings),
             getSeasonalHighlights = GetSeasonalHighlightsUseCase(pois, weather, clock = TestData.FIXED_CLOCK),
+            getTripEvents = GetTripEventsUseCase(events, holidays),
             planTransitRoute = PlanTransitRouteUseCase(transit, TestData.FIXED_CLOCK),
             findBudgetRestaurants = FindBudgetRestaurantsUseCase(restaurants),
             observeDeparture = ObserveDepartureUseCase(noDeparture),
@@ -363,6 +411,7 @@ class TripDashboardViewModelTest {
             searchAccommodations = SearchAccommodationsUseCase(stays, clock = TestData.FIXED_CLOCK),
             findLodgings = FindLodgingsUseCase(lodgings),
             getSeasonalHighlights = GetSeasonalHighlightsUseCase(pois, weather, clock = TestData.FIXED_CLOCK),
+            getTripEvents = GetTripEventsUseCase(events, holidays),
             planTransitRoute = PlanTransitRouteUseCase(transit, TestData.FIXED_CLOCK),
             findBudgetRestaurants = FindBudgetRestaurantsUseCase(restaurants),
             observeDeparture = ObserveDepartureUseCase(FakeUserPreferencesRepository(initial = null)),

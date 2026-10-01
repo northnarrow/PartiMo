@@ -5,6 +5,8 @@ import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.dining.RestaurantSearchQuery
+import com.partimo.domain.model.event.EventQuery
+import com.partimo.domain.model.event.TripEvent
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.place.Airport
@@ -25,7 +27,9 @@ import com.partimo.domain.repository.AccommodationRepository
 import com.partimo.domain.repository.AirportRepository
 import com.partimo.domain.repository.CitySearchRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
+import com.partimo.domain.repository.EventRepository
 import com.partimo.domain.repository.FlightRepository
+import com.partimo.domain.repository.HolidayRepository
 import com.partimo.domain.repository.LodgingRepository
 import com.partimo.domain.repository.PoiArticleRepository
 import com.partimo.domain.repository.PoiRepository
@@ -141,6 +145,34 @@ class FakeRestaurantRepository(
         queries += query
         if (delayMillis > 0) delay(delayMillis)
         return result
+    }
+}
+
+class FakeEventRepository(
+    var result: DataResult<List<TripEvent>> = DataResult.Success(emptyList()),
+    var delayMillis: Long = 0,
+) : EventRepository {
+    val queries = mutableListOf<EventQuery>()
+    val forceRefreshFlags = mutableListOf<Boolean>()
+
+    override suspend fun recurringEvents(query: EventQuery, forceRefresh: Boolean): DataResult<List<TripEvent>> {
+        queries += query
+        forceRefreshFlags += forceRefresh
+        if (delayMillis > 0) delay(delayMillis)
+        return result
+    }
+}
+
+/** Festività per anno; un anno senza risultato configurato restituisce [default]. */
+class FakeHolidayRepository(
+    var byYear: Map<Int, DataResult<List<TripEvent>>> = emptyMap(),
+    var default: DataResult<List<TripEvent>> = DataResult.Success(emptyList()),
+) : HolidayRepository {
+    val requests = mutableListOf<Pair<String, Int>>()
+
+    override suspend fun publicHolidays(countryCode: String, year: Int, forceRefresh: Boolean): DataResult<List<TripEvent>> {
+        requests += countryCode to year
+        return byYear[year] ?: default
     }
 }
 

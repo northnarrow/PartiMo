@@ -9,6 +9,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Month
+import java.time.MonthDay
 import java.time.YearMonth
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -67,6 +68,12 @@ object Formatters {
         }
         return text.lowercase(locale)
     }
+
+    /** "8 dic", in minuscolo come [dateRange]. */
+    fun dayMonth(date: LocalDate): String = date.format(dayMonthFormatter).lowercase(locale)
+
+    /** "1 gen" per un giorno che si ripete ogni anno. */
+    fun dayMonth(day: MonthDay): String = day.format(dayMonthFormatter).lowercase(locale)
 
     fun rating(value: Double): String = String.format(locale, "%.1f", value)
 

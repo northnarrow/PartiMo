@@ -4,7 +4,9 @@ import com.partimo.data.network.safeApiCall
 import com.partimo.data.source.AirportDataSource
 import com.partimo.data.source.CitySearchDataSource
 import com.partimo.data.source.DestinationCatalogDataSource
+import com.partimo.data.source.EventDataSource
 import com.partimo.data.source.FlightOffersDataSource
+import com.partimo.data.source.HolidayDataSource
 import com.partimo.data.source.LodgingDataSource
 import com.partimo.data.source.PoiArticleDataSource
 import com.partimo.data.source.PoiDataSource
@@ -16,6 +18,8 @@ import com.partimo.domain.common.DataResult
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.dining.RestaurantSearchQuery
+import com.partimo.domain.model.event.EventQuery
+import com.partimo.domain.model.event.TripEvent
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.place.Airport
@@ -35,7 +39,9 @@ import com.partimo.domain.repository.AccommodationRepository
 import com.partimo.domain.repository.AirportRepository
 import com.partimo.domain.repository.CitySearchRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
+import com.partimo.domain.repository.EventRepository
 import com.partimo.domain.repository.FlightRepository
+import com.partimo.domain.repository.HolidayRepository
 import com.partimo.domain.repository.LodgingRepository
 import com.partimo.domain.repository.PoiArticleRepository
 import com.partimo.domain.repository.PoiRepository
@@ -114,6 +120,22 @@ class DefaultLodgingRepository(
 ) : LodgingRepository {
     override suspend fun findLodgings(query: LodgingQuery, forceRefresh: Boolean): DataResult<List<Lodging>> =
         safeApiCall(ioDispatcher) { dataSource.findLodgings(query, forceRefresh) }
+}
+
+class DefaultEventRepository(
+    private val dataSource: EventDataSource,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+) : EventRepository {
+    override suspend fun recurringEvents(query: EventQuery, forceRefresh: Boolean): DataResult<List<TripEvent>> =
+        safeApiCall(ioDispatcher) { dataSource.recurringEvents(query, forceRefresh) }
+}
+
+class DefaultHolidayRepository(
+    private val dataSource: HolidayDataSource,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+) : HolidayRepository {
+    override suspend fun publicHolidays(countryCode: String, year: Int, forceRefresh: Boolean): DataResult<List<TripEvent>> =
+        safeApiCall(ioDispatcher) { dataSource.publicHolidays(countryCode, year, forceRefresh) }
 }
 
 class DefaultCitySearchRepository(

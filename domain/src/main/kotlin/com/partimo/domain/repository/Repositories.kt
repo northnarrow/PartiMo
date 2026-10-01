@@ -5,6 +5,8 @@ import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.dining.RestaurantSearchQuery
+import com.partimo.domain.model.event.EventQuery
+import com.partimo.domain.model.event.TripEvent
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.place.Airport
@@ -79,6 +81,19 @@ interface RestaurantRepository {
 /** Strutture ricettive reali (senza prezzi) attorno a un punto. */
 interface LodgingRepository {
     suspend fun findLodgings(query: LodgingQuery, forceRefresh: Boolean = false): DataResult<List<Lodging>>
+}
+
+/**
+ * Eventi che si ripetono ogni anno attorno a un punto: mercatini di Natale, festival, ricorrenze.
+ * Ognuno ha il suo periodo ([TripEvent.timing]); quali cadono nel soggiorno lo decide il dominio.
+ */
+interface EventRepository {
+    suspend fun recurringEvents(query: EventQuery, forceRefresh: Boolean = false): DataResult<List<TripEvent>>
+}
+
+/** Festività nazionali di un paese (codice ISO 3166-1 alpha-2) in un anno. */
+interface HolidayRepository {
+    suspend fun publicHolidays(countryCode: String, year: Int, forceRefresh: Boolean = false): DataResult<List<TripEvent>>
 }
 
 /** Ricerca di città in tutto il mondo (geocoding). */

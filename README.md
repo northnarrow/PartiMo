@@ -15,6 +15,12 @@ Wikipedia). Toccando un luogo si apre la sua **scheda**: foto, breve descrizione
 divisa in capitoli e, sempre visibile in basso, il pulsante **Naviga** che apre Google Maps con il
 percorso dalla posizione attuale fino al luogo.
 
+In cima a **Da vedere** ci sono gli **eventi durante il soggiorno**, anche questi senza chiavi:
+mercatini di Natale, festival e ricorrenze della città (da Wikidata) e festività nazionali (da
+Nager.Date), solo quelli che cadono tra arrivo e partenza. Gli eventi con un luogo si aprono come gli
+altri luoghi, con storia e Naviga. Nel periodo dei mercatini c'è anche il pulsante «Mercatini di Natale
+a …» (Google Maps), e sempre «Tutti gli eventi di quei giorni» (ricerca Google con le date).
+
 Anche **alloggi** e **ristoranti** sono reali senza chiavi: le strutture ricettive e i locali attorno
 al centro arrivano da **OpenStreetMap**. Ogni struttura ha **Vedi prezzi**, che apre Booking.com con
 nome e date del viaggio già compilati; ogni ristorante si apre su Google Maps con recensioni, foto e
@@ -25,7 +31,7 @@ PartiMo, senza uscire dall'app; le pagine di Google Maps nell'app Maps.
 
 <img src="docs/search_ideas.png" alt="Schermata iniziale con partenza, mesi e consigli" width="240" /> <img src="docs/departure_picker.png" alt="Scelta dell'aeroporto di partenza" width="240" /> <img src="docs/trip_dashboard.png" alt="Dashboard: sezione Voli con i collegamenti a Google Voli e Skyscanner" width="240" /> <img src="docs/trip_dashboard_stays.png" alt="Dashboard: alloggi reali da OpenStreetMap con Booking.com e Airbnb" width="240" /> <img src="docs/trip_dashboard_explore.png" alt="Dashboard: sezione Da vedere" width="240" /> <img src="docs/place_detail.png" alt="Scheda di un luogo con descrizione, storia e pulsante Naviga" width="240" /> <img src="docs/trip_dashboard_transit.png" alt="Dashboard: trasporti con il percorso reale su Google Maps" width="240" /> <img src="docs/trip_dashboard_restaurants.png" alt="Dashboard: ristoranti reali da OpenStreetMap" width="240" />
 
-Negli screenshot (generati dai test, senza rete) le foto sono segnaposto grigi: nell'app si caricano
+Negli screenshot (generati dai test, senza rete, con dati di esempio) le foto sono segnaposto grigi: nell'app si caricano
 le foto reali dei luoghi.
 
 ## Stack
@@ -90,6 +96,7 @@ le foto reali dei luoghi.
 | Aggiorna (last minute) | `TripDashboardViewModel.refresh`, `PriceChange` | – | Ricarica tutto ignorando la cache e riassume la variazione dei prezzi migliori (es. "🔥 Volo sceso a 89 € (−12 €)") |
 | Avvisi sulle offerte | `SetPriceAlertUseCase`, `CheckPriceWatchesUseCase`, `DealDetector` | WorkManager + notifiche | Controllo ogni 6 ore con rete disponibile; notifica se volo o alloggio (ben recensito) costa almeno il 15% in meno del solito; tocco sulla notifica → dashboard del viaggio |
 | Da vedere (esplorazione stagionale) | `GetSeasonalHighlightsUseCase`, `SeasonalPoiFilter`, `SeasonalCalendar`, `PhotoSpotTagger` | [Wikipedia](https://www.mediawiki.org/wiki/API:Main_page) (gratuita, senza chiave) oppure Google Places API (New), + [Open-Meteo](https://open-meteo.com) | Senza chiave: luoghi e foto reali da Wikipedia, dal più noto al meno noto, senza città, enti, stazioni, eventi storici ed edifici scomparsi. Con la chiave Google anche valutazioni e temi del mese (es. mercatini di Natale a dicembre). Stagioni invertite nell'emisfero sud, tag Instagrammabile/Panoramico/Tramonto/Chicca nascosta |
+| Eventi durante il soggiorno | `GetTripEventsUseCase`, `EventTiming`, `SeasonalCalendar` | [Wikidata](https://www.wikidata.org) (SPARQL, gratuito, senza chiave) + [Nager.Date](https://date.nager.at) (festività, gratuito, senza chiave) | Mercatini di Natale, festival e ricorrenze entro 15 km dal centro, con il loro mese (es. Oktoberfest a settembre–ottobre) o giorno (concerto di Capodanno il 1° gennaio); per i mercatini senza date vale il periodo tipico (15 novembre–24 dicembre). Si tengono solo gli eventi tra arrivo e partenza, più le festività nazionali con il nome italiano e quello locale (es. Immacolata Concezione · Mariä Empfängnis) |
 | Scheda del luogo e "Naviga" | `GetPoiDetailsUseCase`, `Excerpt` | Wikipedia (testo, foto, crediti da Wikimedia Commons) + [Google Maps URLs](https://developers.google.com/maps/documentation/urls/get-started) | Tocco su un luogo: foto in alta risoluzione, breve descrizione, storia in capitoli (es. Costruzione → Medioevo → restauri), fonti e licenze. **Naviga** apre l'app Google Maps (o il browser) con il percorso fino al luogo, senza chiave. Per i luoghi di Google la voce si cerca per nome vicino alle coordinate |
 | Trasporti pubblici | `PlanTransitRouteUseCase`, `TransitRoute` (cambi, coincidenze, tempo a piedi) | Google Routes API (`TRANSIT`) + Google Maps URLs | Percorsi multimodali metro/bus/tram/treni, coincidenze impossibili scartate, preferenze di routing. **Apri in Google Maps** mostra lo stesso percorso con linee e orari reali anche senza chiave |
 | Ristoranti | `FindBudgetRestaurantsUseCase`, `BudgetDiningCriteria` | Google Places API (New), oppure senza chiave OpenStreetMap (Overpass API) | Con Google: vincolo `price_level` 1–2 e valutazione ≥ 4,3, riapplicato sempre dal dominio. Senza chiave: locali reali vicino al centro (cucina, indirizzo, distanza), prima i più completi e vicini, catene in fondo. Il tocco apre il locale su Google Maps (recensioni, foto, orari) |
@@ -107,7 +114,8 @@ prezzi visti in quel momento diventano il primo riferimento. A ogni controllo:
 ### Cache delle ricerche
 `ResponseCache` salva in Room le risposte (già validate) di ogni ricerca, identificate da una chiave
 SHA-256 dei parametri. Il TTL dipende dal tipo di dato: voli 20 minuti, alloggi 1 ora, ristoranti
-12 ore, POI e strutture ricettive 24 ore, meteo 15 minuti, trasporti 2 minuti, ricerca città e voci di Wikipedia 7 giorni. Se la rete non è
+12 ore, POI e strutture ricettive 24 ore, meteo 15 minuti, trasporti 2 minuti, ricerca città, voci di Wikipedia ed eventi
+ricorrenti 7 giorni, festività 30 giorni. Se la rete non è
 disponibile viene servito il dato scaduto, segnalato in UI con il badge "Offline · dati salvati".
 **Aggiorna**, il pull-to-refresh e i controlli in background ignorano le cache ancora valide.
 
@@ -124,6 +132,7 @@ VCS) oppure da variabili d'ambiente (utile in CI), e le inietta in `BuildConfig`
 | Funzione | Senza chiavi | Con le chiavi |
 |---|---|---|
 | Da vedere: luoghi, foto, descrizione, storia | ✅ Reale (Wikipedia) | ✅ Reale (Google Places + storia da Wikipedia) |
+| Eventi durante il soggiorno e festività | ✅ Reali (Wikidata, Nager.Date) + ricerca Google degli eventi | ✅ Reali, in più i temi del mese da Google Places in Da vedere |
 | Naviga (Google Maps) | ✅ Reale, non serve chiave | ✅ Reale |
 | Ricerca città, aeroporti, Consigliami, meteo | ✅ Reale | ✅ Reale |
 | Alloggi | ✅ Strutture reali (OpenStreetMap) + Booking.com e Airbnb con le date del viaggio | Offerte con prezzo di Duffel Stays (`DUFFEL_ACCESS_TOKEN`) |
@@ -131,7 +140,7 @@ VCS) oppure da variabili d'ambiente (utile in CI), e le inietta in `BuildConfig`
 | Voli | Stime + ✅ Google Voli e Skyscanner con tratta e date (prezzi reali sul sito) | Offerte Duffel nell'app (`DUFFEL_ACCESS_TOKEN`) |
 | Trasporti pubblici | Stime + ✅ percorso reale su Google Maps | Percorsi reali nell'app, Google Routes API (`GOOGLE_MAPS_API_KEY`) |
 
-I dati di OpenStreetMap, Wikipedia e Open-Meteo e i collegamenti ai siti non richiedono chiavi né
+I dati di OpenStreetMap, Wikipedia, Wikidata, Nager.Date e Open-Meteo e i collegamenti ai siti non richiedono chiavi né
 registrazione: per questo quelle funzioni sono reali in qualunque configurazione.
 
 ### 1. Token Duffel (voli e alloggi)
@@ -201,21 +210,23 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
 ./gradlew :app:assembleDebug        # APK di debug
 ```
 
-293 test unitari:
-- **`:domain` (130):** modelli e validazioni (compresi i dodici mesi di `TravelPeriod`), servizi di
-  dominio (qualità/prezzo, stagionalità, notorietà dei luoghi, scelta degli aeroporti, rilevamento
-  degli affari, estratti brevi di descrizione e storia) e tutti i casi d'uso, compresi ristoranti
-  senza valutazioni e strutture ricettive, con fake condivisi tramite `testFixtures`.
-- **`:data` (77):** cache e TTL, mappatura degli errori, client HTTP con risposte JSON simulate
-  (Duffel, Places, Routes, Open-Meteo, Wikipedia, Overpass), classificazione dei luoghi su risposte
-  **reali** di Wikipedia (Roma, Lisbona, Colosseo in `data/src/test/resources/wikipedia`), ristoranti
-  di Vienna e strutture di Matera da risposte **reali** di OpenStreetMap (`data/src/test/resources/osm`),
+315 test unitari:
+- **`:domain` (139):** modelli e validazioni (compresi i dodici mesi di `TravelPeriod` e i periodi
+  degli eventi, anche a cavallo di Capodanno), servizi di dominio (qualità/prezzo, stagionalità,
+  notorietà dei luoghi, scelta degli aeroporti, rilevamento degli affari, estratti brevi di descrizione
+  e storia) e tutti i casi d'uso, compresi ristoranti senza valutazioni, strutture ricettive ed eventi
+  del soggiorno, con fake condivisi tramite `testFixtures`.
+- **`:data` (86):** cache e TTL, mappatura degli errori, client HTTP con risposte JSON simulate
+  (Duffel, Places, Routes, Open-Meteo, Wikipedia, Overpass, Wikidata, Nager.Date), classificazione dei
+  luoghi su risposte **reali** di Wikipedia (Roma, Lisbona, Colosseo in `data/src/test/resources/wikipedia`),
+  ristoranti di Vienna e strutture di Matera da risposte **reali** di OpenStreetMap (`data/src/test/resources/osm`),
+  eventi di Vienna e Monaco da risposte **reali** di Wikidata e festività 2026 di Austria e Italia,
   cambio di istanza Overpass se sovraccarica, intestazioni per le chiavi Google con restrizione
   Android, dataset aeroporti reale (es. Roma → FCO, Parigi → CDG), catalogo delle mete, repository
   DataStore e formato di salvataggio, mercato simulato della demo.
-- **`:app` (86):** ViewModel (dashboard con e senza chiavi, ricerca, scelta della partenza, scheda del
-  luogo), rotte di navigazione, collegamenti a Google Maps, Google Voli, Skyscanner, Booking.com e
-  Airbnb, browser interno (Custom Tabs), User-Agent delle foto, notifiche (Robolectric), formattazione e test UI Compose con
+- **`:app` (90):** ViewModel (dashboard con e senza chiavi, eventi del soggiorno, ricerca, scelta della
+  partenza, scheda del luogo), rotte di navigazione, collegamenti a Google Maps, Google Voli, Skyscanner,
+  Booking.com, Airbnb e ricerca degli eventi, browser interno (Custom Tabs), User-Agent delle foto, notifiche (Robolectric), formattazione e test UI Compose con
   Robolectric (`app/src/testDebug`), che salvano anche gli screenshot in `app/build/outputs/screenshots/`.
 
 ## Scelte tecniche
@@ -278,6 +289,18 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
   che condivide accessi e cookie del browser (consenso di Google, account Booking). Le pagine di
   Google Maps si aprono nell'app Maps se installata. I prezzi restano sul sito: PartiMo non legge le
   pagine (lo vietano i termini d'uso dei siti di viaggio).
+- **Eventi da Wikidata:** una sola query SPARQL (al servizio pubblico `query.wikidata.org`) cerca gli
+  elementi con un mese (P2922) o un giorno dell'anno (P837) e i mercatini di Natale (Q57607) che si
+  trovano entro 15 km dal centro, con le coordinate proprie, del luogo che li ospita (P276) o della
+  città (P131). Si scartano gli eventi chiusi (data di fine), le singole edizioni (anno nel nome), le
+  fiere commerciali e gli incontri quasi mensili. Il servizio è lento (fino a decine di secondi) e
+  limita le richieste ripetute: niente tentativi automatici, cache di 7 giorni anche con «Aggiorna», e
+  la sezione eventi si carica per conto suo, senza rallentare i luoghi. Wikidata non conosce tutti gli
+  eventi (a Vienna, per esempio, mancano i mercatini): per questo ci sono i pulsanti verso Google Maps
+  e Google. I dati di Wikidata sono di pubblico dominio (CC0).
+- **Festività:** [Nager.Date](https://date.nager.at) (API v3) per oltre cento paesi; si tengono quelle
+  nazionali, perché le regionali dipendono dalla zona in cui si alloggia. Un paese non coperto (404)
+  semplicemente non ha festività.
 - **Trasporti senza chiave:** [Transitous](https://transitous.org) offre percorsi reali senza chiave,
   ma solo per app open source non commerciali e previo contatto con il progetto: per ora non è
   attivo e senza chiave Google il percorso reale si apre in Google Maps.
@@ -287,7 +310,7 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
 ```
 domain/src/main/kotlin/com/partimo/domain/
   common/      DataResult, DataError
-  model/       flight, stay, poi, weather, transit, dining, place (città, aeroporti, partenza, mete),
+  model/       flight, stay, poi, event, weather, transit, dining, place (città, aeroporti, partenza, mete),
                deal (viaggi seguiti, affari), TravelPeriod, Trip, Money, GeoPoint
   repository/  interfacce dei repository
   service/     ValueForMoneyScorer, SeasonalPoiFilter, SeasonalCalendar, PhotoSpotTagger,
@@ -297,7 +320,7 @@ domain/src/testFixtures/   fake dei repository e dati di test condivisi
 data/src/main/kotlin/com/partimo/data/
   cache/       Room + ResponseCache (TTL, fallback offline)
   network/     HttpClientFactory, gestione errori, intestazioni per le chiavi Google Android
-  remote/      duffel, places, routes, weather, geocoding, wikipedia, osm (Overpass API)
+  remote/      duffel, places, routes, weather, geocoding, wikipedia, osm (Overpass API), wikidata, holidays
   local/       dataset aeroporti (asset), catalogo curato delle mete, preferenze (DataStore)
   demo/        catalogo e sorgenti demo (mercato simulato)
   repository/  implementazioni dei repository
@@ -317,5 +340,7 @@ app/src/testDebug/   test UI Compose con Robolectric (+ screenshot)
 docs/                screenshot delle schermate
 data/src/test/resources/wikipedia/  risposte reali di Wikipedia usate nei test
 data/src/test/resources/osm/        risposte reali di OpenStreetMap (Overpass) usate nei test
+data/src/test/resources/wikidata/   risposte reali di Wikidata (eventi di Vienna e Monaco) usate nei test
+data/src/test/resources/holidays/   festività reali 2026 (Nager.Date) usate nei test
 data/src/main/assets/airports.csv   aeroporti con voli di linea (OurAirports, pubblico dominio)
 ```
