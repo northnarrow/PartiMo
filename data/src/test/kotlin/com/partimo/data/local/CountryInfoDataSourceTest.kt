@@ -23,6 +23,7 @@ class CountryInfoDataSourceTest {
         assertEquals("euro", austria.currencyName?.lowercase())
         assertEquals("€", austria.currencySymbol)
         assertEquals(listOf("tedesco"), austria.languages)
+        assertEquals(listOf("de"), austria.languageCodes)
         assertEquals("+43", austria.callingCode)
         assertEquals(DrivingSide.RIGHT, austria.drivingSide)
         assertTrue(austria.power!!.fitsItalianPlugs)
@@ -55,6 +56,8 @@ class CountryInfoDataSourceTest {
         assertNull(bhutan.power)
         assertNull(bhutan.emergency)
         assertNull(bhutan.callingCode)
+        assertEquals(bhutan.languages.size, bhutan.languageCodes.size, "Una lingua per codice")
+        assertTrue(bhutan.languageCodes.all { it.length in 2..3 && it.all(Char::isLowerCase) }, bhutan.languageCodes.toString())
     }
 
     @Test

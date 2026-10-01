@@ -136,6 +136,23 @@ interface CountryInfoRepository {
     suspend fun countryInfo(countryCode: String): DataResult<CountryInfo>
 }
 
+/**
+ * Traduttore sul telefono: ogni lingua richiede un pacchetto scaricato una volta, poi traduce anche
+ * senza Internet. Le lingue sono codici ISO 639-1 (es. "de").
+ */
+interface TranslatorRepository {
+    /** Lingue che il traduttore conosce. */
+    val supportedLanguages: Set<String>
+
+    /** Lingue con il pacchetto già sul telefono. */
+    suspend fun downloadedLanguages(): DataResult<Set<String>>
+
+    /** Scarica, se mancano, i pacchetti per tradurre da [from] a [to]. */
+    suspend fun download(from: String, to: String): DataResult<Unit>
+
+    suspend fun translate(text: String, from: String, to: String): DataResult<String>
+}
+
 /** Tassi di cambio aggiornati una volta al giorno. */
 interface ExchangeRateRepository {
     suspend fun latestRates(base: String, forceRefresh: Boolean = false): DataResult<ExchangeRates>

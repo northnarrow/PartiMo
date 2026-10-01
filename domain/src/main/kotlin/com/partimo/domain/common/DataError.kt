@@ -42,4 +42,5 @@ enum class QueryIssue {
     STAY_TOO_LONG,
     QUERY_TOO_SHORT,
     NO_AIRPORT_NEARBY,
+    TEXT_TOO_LONG,
 }

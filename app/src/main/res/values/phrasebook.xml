@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Frasario del traduttore: frasi nella lingua dell'app, tradotte sul telefono nella lingua del posto. -->
+<resources>
+    <string name="phrases_basics">Essenziali</string>
+    <string-array name="phrases_basics_items">
+        <item>Buongiorno</item>
+        <item>Buonasera</item>
+        <item>Grazie mille</item>
+        <item>Per favore</item>
+        <item>Mi scusi</item>
+        <item>Non capisco</item>
+        <item>Parla inglese?</item>
+        <item>Può ripetere più lentamente, per favore?</item>
+    </string-array>
+
+    <string name="phrases_restaurant">Al ristorante</string>
+    <string-array name="phrases_restaurant_items">
+        <item>Un tavolo per due, per favore</item>
+        <item>Posso vedere il menù?</item>
+        <item>Che cosa mi consiglia?</item>
+        <item>Sono vegetariano</item>
+        <item>Sono allergico alla frutta a guscio</item>
+        <item>Senza glutine, per favore</item>
+        <item>Una bottiglia d\'acqua naturale, per favore</item>
+        <item>Il conto, per favore</item>
+        <item>Posso pagare con la carta?</item>
+    </string-array>
+
+    <string name="phrases_transport">Spostamenti</string>
+    <string-array name="phrases_transport_items">
+        <item>Dov\'è la stazione?</item>
+        <item>Dov\'è la fermata dell\'autobus?</item>
+        <item>Un biglietto per il centro, per favore</item>
+        <item>Quanto costa il biglietto?</item>
+        <item>A che ora parte il prossimo treno?</item>
+        <item>Questo autobus va in centro?</item>
+        <item>Mi può chiamare un taxi?</item>
+        <item>Mi porti a questo indirizzo, per favore</item>
+    </string-array>
+
+    <string name="phrases_hotel">In albergo</string>
+    <string-array name="phrases_hotel_items">
+        <item>Ho una prenotazione</item>
+        <item>A che ora è la colazione?</item>
+        <item>A che ora devo lasciare la camera?</item>
+        <item>Qual è la password del Wi-Fi?</item>
+        <item>Posso lasciare qui i bagagli?</item>
+    </string-array>
+
+    <string name="phrases_shopping">Acquisti</string>
+    <string-array name="phrases_shopping_items">
+        <item>Quanto costa?</item>
+        <item>Sto solo guardando, grazie</item>
+        <item>Avete una taglia più grande?</item>
+        <item>Posso avere lo scontrino?</item>
+    </string-array>
+
+    <string name="phrases_emergency">Emergenze</string>
+    <string-array name="phrases_emergency_items">
+        <item>Aiuto!</item>
+        <item>Chiamate un\'ambulanza!</item>
+        <item>Chiamate la polizia!</item>
+        <item>Dov\'è l\'ospedale più vicino?</item>
+        <item>Dov\'è la farmacia più vicina?</item>
+        <item>Ho perso il passaporto</item>
+        <item>Mi hanno rubato il portafoglio</item>
+        <item>Mi sono perso</item>
+    </string-array>
+</resources>

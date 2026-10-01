@@ -22,7 +22,7 @@ internal class BundledCountryInfoDataSource(private val languageCode: String = "
         val region = Locale("", code)
         val facts = CountryFactsCatalog.factsFor(code)
         val currency = runCatching { Currency.getInstance(region) }.getOrNull()
-        val languages = facts?.languages?.map { language -> languageName(language) } ?: systemLanguages(code)
+        val languageCodes = facts?.languages ?: systemLanguageCodes(code)
         val info = CountryInfo(
             countryCode = code,
             countryCode3 = runCatching { region.isO3Country }.getOrNull()?.takeIf { it.isNotBlank() },
@@ -30,7 +30,8 @@ internal class BundledCountryInfoDataSource(private val languageCode: String = "
             currencyCode = currency?.currencyCode,
             currencyName = currency?.getDisplayName(displayLocale),
             currencySymbol = currency?.let { symbolOf(it, facts?.languages?.firstOrNull(), code) },
-            languages = languages.distinct(),
+            languages = languageCodes.map(::languageName).distinct(),
+            languageCodes = languageCodes,
             callingCode = facts?.callingCode,
             drivingSide = facts?.drivingSide,
             power = facts?.power,
@@ -42,13 +43,15 @@ internal class BundledCountryInfoDataSource(private val languageCode: String = "
     private fun languageName(language: String): String =
         Locale.forLanguageTag(language).getDisplayLanguage(displayLocale).ifBlank { language }
 
-    /** Per i paesi fuori dal catalogo: le lingue per cui il sistema ha dati regionali, al massimo due. */
-    private fun systemLanguages(countryCode: String): List<String> = Locale.getAvailableLocales()
-        .filter { it.country == countryCode && it.variant.isEmpty() && it.script.isEmpty() }
-        .map { it.getDisplayLanguage(displayLocale) }
-        .filter { it.isNotBlank() }
+    /**
+     * Per i paesi fuori dal catalogo: le lingue per cui il sistema ha dati regionali (al massimo due, in
+     * ordine alfabetico), come codici ISO 639-1 aggiornati (es. "he", non il vecchio "iw").
+     */
+    private fun systemLanguageCodes(countryCode: String): List<String> = Locale.getAvailableLocales()
+        .filter { it.country == countryCode && it.variant.isEmpty() && it.script.isEmpty() && it.language.isNotEmpty() }
+        .map { Locale(it.language).toLanguageTag() }
         .distinct()
-        .sorted()
+        .sortedBy(::languageName)
         .take(MAX_SYSTEM_LANGUAGES)
 
     /** Simbolo come lo scrivono nel paese ("€", "Kč", "¥"), non il codice ISO. */

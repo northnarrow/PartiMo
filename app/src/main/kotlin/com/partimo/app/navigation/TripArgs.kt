@@ -102,3 +102,7 @@ data class FavoritesDestination(val trip: String)
  */
 @Serializable
 data class MapDestination(val trip: String, val favoritesOnly: Boolean = false)
+
+/** Traduttore del viaggio, con la lingua del paese della meta. [trip] è un [TripArgs] in JSON. */
+@Serializable
+data class TranslatorDestination(val trip: String)

@@ -1,5 +1,7 @@
 package com.partimo.domain.testing
 
+import com.partimo.domain.common.DataError
+import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
@@ -51,6 +53,7 @@ import com.partimo.domain.repository.PriceWatchRepository
 import com.partimo.domain.repository.RestaurantRepository
 import com.partimo.domain.repository.SavedTripRepository
 import com.partimo.domain.repository.TransitRepository
+import com.partimo.domain.repository.TranslatorRepository
 import com.partimo.domain.repository.TravelAssistantRepository
 import com.partimo.domain.repository.TravelGuideRepository
 import com.partimo.domain.repository.TripWeatherRepository
@@ -368,3 +371,36 @@ class FakeSavedTripRepository(initial: List<SavedTrip> = emptyList()) : SavedTri
         state.update(transform)
     }
 }
+
+/**
+ * Traduttore finto: "traduce" scrivendo la lingua di arrivo tra parentesi quadre (es. "[de] Grazie")
+ * e simula i pacchetti lingua scaricati.
+ */
+class FakeTranslatorRepository(
+    override val supportedLanguages: Set<String> = setOf("en", "it", "de", "fr", "es", "cs", "pt"),
+    downloaded: Set<String> = setOf("en"),
+    var translateResult: ((String, String, String) -> DataResult<String>)? = null,
+    var downloadResult: DataResult<Unit> = DataResult.Success(Unit),
+    var delayMillis: Long = 0,
+) : TranslatorRepository {
+    val downloaded = downloaded.toMutableSet()
+    val downloads = mutableListOf<Pair<String, String>>()
+    val translations = mutableListOf<Triple<String, String, String>>()
+
+    override suspend fun downloadedLanguages(): DataResult<Set<String>> = DataResult.Success(downloaded.toSet(), DataOrigin.LOCAL)
+
+    override suspend fun download(from: String, to: String): DataResult<Unit> {
+        if (delayMillis > 0) delay(delayMillis)
+        downloads += from to to
+        if (downloadResult is DataResult.Success) downloaded += setOf(from, to)
+        return downloadResult
+    }
+
+    override suspend fun translate(text: String, from: String, to: String): DataResult<String> {
+        if (delayMillis > 0) delay(delayMillis)
+        translations += Triple(text, from, to)
+        translateResult?.let { return it(text, from, to) }
+        return if (from in downloaded && to in downloaded) DataResult.Success("[$to] $text", DataOrigin.LOCAL) else DataResult.Failure(DataError.Unknown("Pacchetto mancante"))
+    }
+}
+

@@ -39,9 +39,10 @@ android {
         // Assistente di viaggio (itinerari e domande): Google Gemini, livello gratuito.
         buildConfigField("String", "GEMINI_API_KEY", "\"${secret("GEMINI_API_KEY")}\"")
 
-        // Librerie native (mappa, traduttore): telefoni a 64 e 32 bit ed emulatori x86_64.
+        // Librerie native (mappa, traduttore) per i telefoni ARM a 64 e 32 bit: gli emulatori recenti le
+        // eseguono con la traduzione ARM, e senza x86 l'APK pesa circa 10 MB in meno.
         ndk {
-            abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64")
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
         }
     }
 

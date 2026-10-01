@@ -47,6 +47,7 @@ private fun QueryIssue.messageRes(): Int = when (this) {
     QueryIssue.STAY_TOO_LONG -> R.string.error_query_stay_too_long
     QueryIssue.QUERY_TOO_SHORT -> R.string.error_query_too_short
     QueryIssue.NO_AIRPORT_NEARBY -> R.string.error_query_no_airport
+    QueryIssue.TEXT_TOO_LONG -> R.string.error_query_text_too_long
 }
 
 @StringRes

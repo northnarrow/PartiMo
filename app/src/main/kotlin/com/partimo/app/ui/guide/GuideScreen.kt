@@ -36,6 +36,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -92,13 +93,15 @@ data class GuideActions(
     val onOpenLink: (String) -> Unit = {},
     /** Compone un numero (di emergenza) nell'app del telefono, senza chiamare. */
     val onDial: (String) -> Unit = {},
+    /** Traduttore con la lingua del posto. */
+    val onOpenTranslator: () -> Unit = {},
 )
 
 /** Scheda del paese su Viaggiare Sicuri, il sito della Farnesina (codice ISO a tre lettere). */
 fun viaggiareSicuriUrl(countryCode3: String): String = "https://www.viaggiaresicuri.it/find-country/country/$countryCode3"
 
 @Composable
-fun GuideRoute(viewModel: GuideViewModel, onBack: () -> Unit, modifier: Modifier = Modifier) {
+fun GuideRoute(viewModel: GuideViewModel, onBack: () -> Unit, modifier: Modifier = Modifier, onOpenTranslator: () -> Unit = {}) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val toolbarColor = MaterialTheme.colorScheme.surface.toArgb()
@@ -124,6 +127,7 @@ fun GuideRoute(viewModel: GuideViewModel, onBack: () -> Unit, modifier: Modifier
                     Toast.makeText(context, noDialer, Toast.LENGTH_LONG).show()
                 }
             },
+            onOpenTranslator = onOpenTranslator,
         ),
         modifier = modifier,
     )
@@ -172,7 +176,7 @@ fun GuideScreen(state: GuideUiState, actions: GuideActions, modifier: Modifier =
         ) {
             item(key = "weather") { WeatherCard(state, actions) }
             country?.let { info ->
-                item(key = "basics") { BasicsCard(info, state.timeDifferenceMinutes) }
+                item(key = "basics") { BasicsCard(info, state.timeDifferenceMinutes, actions.onOpenTranslator) }
                 info.emergency?.takeUnless { it.isEmpty }?.let { numbers ->
                     item(key = "emergency") { EmergencyCard(numbers, actions.onDial) }
                 }
@@ -288,9 +292,12 @@ private fun SunTimesText(sun: SunTimes) {
 // ---- In breve ------------------------------------------------------------------------------------
 
 @Composable
-private fun BasicsCard(country: CountryInfo, timeDifferenceMinutes: Int) {
+private fun BasicsCard(country: CountryInfo, timeDifferenceMinutes: Int, onOpenTranslator: () -> Unit) {
     GuideCard(title = "🧭 " + stringResource(R.string.guide_basics_title)) {
-        if (country.languages.isNotEmpty()) FactRow(stringResource(R.string.guide_language), country.languages.joinToString(", "))
+        if (country.languages.isNotEmpty()) {
+            FactRow(stringResource(R.string.guide_language), country.languages.joinToString(", "))
+            TextButton(onClick = onOpenTranslator) { Text("🗣️ " + stringResource(R.string.guide_open_translator)) }
+        }
         country.currencyCode?.let { code ->
             val name = country.currencyName?.let { "$it ($code)" } ?: code
             FactRow(stringResource(R.string.guide_currency), listOfNotNull(name, country.currencySymbol?.takeIf { it != code }).joinToString(" · "))

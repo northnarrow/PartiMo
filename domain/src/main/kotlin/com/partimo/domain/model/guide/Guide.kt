@@ -50,6 +50,8 @@ data class CountryInfo(
     val currencySymbol: String?,
     /** Lingue principali, nella lingua dell'app (es. "tedesco"). */
     val languages: List<String> = emptyList(),
+    /** Le stesse lingue come codici ISO 639-1 (es. "de"), la prima è la più diffusa: servono al traduttore. */
+    val languageCodes: List<String> = emptyList(),
     /** Prefisso telefonico internazionale (es. "+43"). */
     val callingCode: String? = null,
     val drivingSide: DrivingSide? = null,

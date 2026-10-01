@@ -12,6 +12,9 @@ import com.partimo.app.ui.map.MapUiState
 import com.partimo.app.ui.place.PlaceDetailUiState
 import com.partimo.app.ui.place.googleMapsSearchUrl
 import com.partimo.app.ui.search.SearchUiState
+import com.partimo.app.ui.translator.LanguagePackState
+import com.partimo.app.ui.translator.TranslatedText
+import com.partimo.app.ui.translator.TranslatorUiState
 import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.model.GeoPoint
@@ -668,4 +671,38 @@ internal object PreviewData {
         )
         return if (selectFirst) state.copy(selectedKey = state.points.first().key) else state
     }
+
+    // ---- Traduttore -------------------------------------------------------------------------------
+
+    /** Traduttore per Vienna con il pacchetto tedesco pronto, una traduzione e il frasario aperto. */
+    fun translatorState() = TranslatorUiState(
+        destination = SampleDestinations.VIENNA,
+        userLanguage = "it",
+        foreignLanguage = "de",
+        countryLanguages = listOf("de"),
+        supportedLanguages = listOf("de", "en", "es", "fr", "it"),
+        packs = LanguagePackState.Ready,
+        input = "Dov'è la fermata del tram per lo Schönbrunn?",
+        result = UiState.Success(
+            TranslatedText(
+                source = "Dov'è la fermata del tram per lo Schönbrunn?",
+                translation = "Wo ist die Straßenbahnhaltestelle nach Schönbrunn?",
+                language = "de",
+            ),
+        ),
+        phraseTranslations = mapOf(
+            TranslatorUiState.phraseKey("de", "Buongiorno") to "Guten Morgen",
+            TranslatorUiState.phraseKey("de", "Buonasera") to "Guten Abend",
+            TranslatorUiState.phraseKey("de", "Grazie mille") to "Vielen Dank",
+            TranslatorUiState.phraseKey("de", "Per favore") to "Bitte",
+        ),
+    )
+
+    /** Primo uso: i pacchetti italiano e tedesco sono ancora da scaricare. */
+    fun translatorMissingPackState() = translatorState().copy(
+        packs = LanguagePackState.Missing(setOf("it", "de")),
+        input = "",
+        result = null,
+        phraseTranslations = emptyMap(),
+    )
 }

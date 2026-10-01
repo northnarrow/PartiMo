@@ -470,4 +470,36 @@
     <string name="map_no_favorites">Nessun preferito con una posizione: tocca ☆ su luoghi, eventi, ristoranti e alloggi.</string>
     <string name="map_attribution">© OpenFreeMap © OpenMapTiles © OpenStreetMap</string>
     <string name="map_schematic_note">Schema dei punti: la mappa non è disponibile su questo dispositivo.</string>
+
+    <!-- Traduttore -->
+    <!-- Lingua in cui sono scritti i testi dell'app e il frasario (ISO 639-1): il traduttore parte da qui. -->
+    <string name="translator_user_language" translatable="false">it</string>
+    <string name="translator_chip">Traduttore</string>
+    <string name="guide_open_translator">Apri il traduttore</string>
+    <string name="translator_title">Traduttore</string>
+    <string name="translator_swap">Inverti le lingue</string>
+    <string name="translator_choose_language">Scegli la lingua</string>
+    <string name="translator_country_languages">Lingue del posto</string>
+    <string name="translator_all_languages">Tutte le lingue</string>
+    <string name="translator_checking">Controllo i pacchetti lingua…</string>
+    <string name="translator_pack_missing">Per tradurre anche senza Internet serve il pacchetto per: %1$s. Si scarica una volta sola (circa 30 MB per lingua, meglio con il Wi-Fi).</string>
+    <string name="translator_download">Scarica il pacchetto</string>
+    <string name="translator_downloading">Scarico il pacchetto lingua…</string>
+    <string name="translator_download_failed">Pacchetto non scaricato: %1$s</string>
+    <string name="translator_ready">✅ Funziona anche senza Internet</string>
+    <string name="translator_input_label">Testo in %1$s</string>
+    <string name="translator_translate">Traduci</string>
+    <string name="translator_clear">Cancella il testo</string>
+    <string name="translator_listen">Ascolta</string>
+    <string name="translator_listen_description">Ascolta la pronuncia di %1$s</string>
+    <string name="translator_no_voice">Nessuna voce installata per questa lingua: aggiungila nelle impostazioni di sintesi vocale del telefono.</string>
+    <string name="translator_copy">Copia</string>
+    <string name="translator_copied">Traduzione copiata</string>
+    <string name="translator_show_big">Mostra in grande</string>
+    <string name="translator_google">Google Traduttore</string>
+    <string name="translator_close">Chiudi</string>
+    <string name="translator_phrases">Frasi utili</string>
+    <string name="translator_phrases_hint">Tocca una categoria: le frasi si traducono sul telefono, anche offline.</string>
+    <string name="translator_failed">Traduzione non riuscita: %1$s</string>
+    <string name="error_query_text_too_long">Testo troppo lungo: traducilo un pezzo alla volta.</string>
 </resources>

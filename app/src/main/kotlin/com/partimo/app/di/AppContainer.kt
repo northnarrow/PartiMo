@@ -19,6 +19,7 @@ import com.partimo.domain.usecase.GetSeasonalHighlightsUseCase
 import com.partimo.domain.usecase.GetTravelGuideUseCase
 import com.partimo.domain.usecase.GetTripEventsUseCase
 import com.partimo.domain.usecase.GetTripWeatherUseCase
+import com.partimo.domain.usecase.LanguagePacksUseCase
 import com.partimo.domain.usecase.LoadTripKnowledgeUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObservePriceAlertUseCase
@@ -36,6 +37,7 @@ import com.partimo.domain.usecase.SearchFlightsUseCase
 import com.partimo.domain.usecase.SetPriceAlertUseCase
 import com.partimo.domain.usecase.SetTripSavedUseCase
 import com.partimo.domain.usecase.ToggleFavoriteUseCase
+import com.partimo.domain.usecase.TranslateTextUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -79,6 +81,10 @@ interface AppContainer {
     val getExchangeRate: GetExchangeRateUseCase
     val getTravelGuide: GetTravelGuideUseCase
     val getTripWeather: GetTripWeatherUseCase
+
+    /** Traduttore sul telefono, anche offline. */
+    val translateText: TranslateTextUseCase
+    val languagePacks: LanguagePacksUseCase
 
     /** Viaggi salvati e preferiti. */
     val observeSavedTrips: ObserveSavedTripsUseCase
@@ -182,6 +188,10 @@ class DefaultAppContainer(context: Context) : AppContainer {
     override val getTravelGuide: GetTravelGuideUseCase by lazy { GetTravelGuideUseCase(dataModule.travelGuideRepository) }
 
     override val getTripWeather: GetTripWeatherUseCase by lazy { GetTripWeatherUseCase(dataModule.tripWeatherRepository, clock) }
+
+    override val translateText: TranslateTextUseCase by lazy { TranslateTextUseCase(dataModule.translatorRepository) }
+
+    override val languagePacks: LanguagePacksUseCase by lazy { LanguagePacksUseCase(dataModule.translatorRepository) }
 
     override val observeSavedTrips: ObserveSavedTripsUseCase by lazy { ObserveSavedTripsUseCase(dataModule.savedTripRepository, clock) }
 

@@ -347,20 +347,25 @@ class TripDashboardScreenTest {
     }
 
     @Test
-    fun `mappa e guida del viaggio si aprono sempre, anche senza assistente`() {
+    fun `mappa, guida e traduttore si aprono sempre, anche senza assistente`() {
         var guides = 0
         var maps = 0
+        var translators = 0
         val state = showDashboard(
             PreviewData.loadedState().copy(assistantAvailable = false),
-            DashboardActions(onOpenGuide = { guides++ }, onOpenMap = { maps++ }),
+            DashboardActions(onOpenGuide = { guides++ }, onOpenMap = { maps++ }, onOpenTranslator = { translators++ }),
         )
 
         composeRule.onNodeWithText(text(R.string.guide_chip)).performClick()
         composeRule.onNodeWithText(text(R.string.map_chip)).performClick()
+        composeRule.onNodeWithTag(TRIP_TOOLS_TAG).performScrollToNode(hasText(text(R.string.translator_chip)))
+        composeRule.onNodeWithText(text(R.string.translator_chip)).performClick()
         assertEquals(1, guides)
         assertEquals(1, maps)
+        assertEquals(1, translators)
         composeRule.onNodeWithText(text(R.string.assistant_itinerary_chip)).assertDoesNotExist()
         state.value = state.value.copy(assistantAvailable = true)
+        composeRule.onNodeWithTag(TRIP_TOOLS_TAG).performScrollToNode(hasText(text(R.string.assistant_itinerary_chip)))
         composeRule.onNodeWithText(text(R.string.assistant_itinerary_chip)).assertExists()
     }
 

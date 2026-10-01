@@ -22,6 +22,7 @@ androidxTestCore = "1.7.0"
 datastore = "1.2.1"
 work = "2.12.0"
 maplibre = "13.6.1"
+mlkitTranslate = "17.0.3"
 
 [libraries]
 # AndroidX
@@ -71,6 +72,9 @@ kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 
 # Mappa (MapLibre Native, variante OpenGL ES 3 compatibile con quasi tutti i telefoni, con le mappe di OpenFreeMap, senza chiave)
 maplibre-android = { group = "org.maplibre.gl", name = "android-sdk-opengl", version.ref = "maplibre" }
+
+# Traduttore sul telefono (ML Kit: pacchetti lingua gratuiti scaricati una volta, poi offline)
+mlkit-translate = { group = "com.google.mlkit", name = "translate", version.ref = "mlkitTranslate" }
 
 # Immagini
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }

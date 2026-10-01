@@ -40,6 +40,9 @@ dependencies {
     // Preferenze dell'utente e viaggi seguiti
     implementation(libs.androidx.datastore.preferences)
 
+    // Traduttore offline
+    implementation(libs.mlkit.translate)
+
     testImplementation(testFixtures(project(":domain")))
     testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.kotlinx.coroutines.test)

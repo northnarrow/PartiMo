@@ -62,6 +62,7 @@ import com.partimo.data.repository.DefaultTravelGuideRepository
 import com.partimo.data.repository.DefaultTripWeatherRepository
 import com.partimo.data.repository.DefaultWeatherRepository
 import com.partimo.data.source.NoStayOffersDataSource
+import com.partimo.data.translate.MlKitTranslatorRepository
 import com.partimo.domain.repository.AccommodationRepository
 import com.partimo.domain.repository.AirportRepository
 import com.partimo.domain.repository.ChecklistRepository
@@ -79,6 +80,7 @@ import com.partimo.domain.repository.PriceWatchRepository
 import com.partimo.domain.repository.RestaurantRepository
 import com.partimo.domain.repository.SavedTripRepository
 import com.partimo.domain.repository.TransitRepository
+import com.partimo.domain.repository.TranslatorRepository
 import com.partimo.domain.repository.TravelAssistantRepository
 import com.partimo.domain.repository.TravelGuideRepository
 import com.partimo.domain.repository.TripWeatherRepository
@@ -216,6 +218,9 @@ class DataModule(
     val countryInfoRepository: CountryInfoRepository by lazy {
         DefaultCountryInfoRepository(BundledCountryInfoDataSource(config.languageCode), ioDispatcher)
     }
+
+    /** Traduttore sul telefono (ML Kit): pacchetti lingua gratuiti, poi funziona senza Internet. */
+    val translatorRepository: TranslatorRepository by lazy { MlKitTranslatorRepository() }
 
     /** Tassi di cambio da ExchangeRate-API (accesso aperto, senza chiave). */
     val exchangeRateRepository: ExchangeRateRepository by lazy {

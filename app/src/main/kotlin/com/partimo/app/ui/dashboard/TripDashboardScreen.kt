@@ -131,6 +131,8 @@ data class DashboardActions(
     val onOpenFavorites: () -> Unit = {},
     /** Mappa del viaggio: luoghi, eventi, ristoranti e alloggi. */
     val onOpenMap: () -> Unit = {},
+    /** Traduttore con la lingua del posto, anche offline. */
+    val onOpenTranslator: () -> Unit = {},
 )
 
 /**
@@ -149,6 +151,7 @@ fun TripDashboardRoute(
     onOpenGuide: (TripArgs) -> Unit = {},
     onOpenFavorites: (TripArgs) -> Unit = {},
     onOpenMap: (TripArgs) -> Unit = {},
+    onOpenTranslator: (TripArgs) -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -190,6 +193,7 @@ fun TripDashboardRoute(
             onToggleFavorite = viewModel::onToggleFavorite,
             onOpenFavorites = { onOpenFavorites(TripArgs.from(state.trip, state.period)) },
             onOpenMap = { onOpenMap(TripArgs.from(state.trip, state.period)) },
+            onOpenTranslator = { onOpenTranslator(TripArgs.from(state.trip, state.period)) },
         ),
         modifier = modifier,
     )
@@ -264,6 +268,7 @@ fun TripDashboardScreen(
                 onOpenAssistant = actions.onOpenAssistant,
                 onOpenFavorites = actions.onOpenFavorites,
                 onOpenMap = actions.onOpenMap,
+                onOpenTranslator = actions.onOpenTranslator,
             )
             PullToRefreshBox(
                 isRefreshing = state.isRefreshing,
@@ -485,8 +490,8 @@ fun DashboardSection.emoji(): String = when (this) {
 const val TRIP_TOOLS_TAG = "trip_tools"
 
 /**
- * Strumenti del viaggio mostrato: i preferiti (se ce ne sono), la mappa e la guida (sempre) e, con
- * la chiave Gemini, l'itinerario e le domande all'assistente con l'IA.
+ * Strumenti del viaggio mostrato: i preferiti (se ce ne sono), la mappa, la guida e il traduttore
+ * (sempre) e, con la chiave Gemini, l'itinerario e le domande all'assistente con l'IA.
  */
 @Composable
 private fun TripToolChips(
@@ -497,6 +502,7 @@ private fun TripToolChips(
     onOpenAssistant: () -> Unit,
     onOpenFavorites: () -> Unit,
     onOpenMap: () -> Unit,
+    onOpenTranslator: () -> Unit,
 ) {
     LazyRow(
         modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp).testTag(TRIP_TOOLS_TAG),
@@ -508,12 +514,7 @@ private fun TripToolChips(
                 AssistChip(onClick = onOpenFavorites, label = { Text(stringResource(R.string.favorites_chip, favoriteCount)) }, leadingIcon = { Text("⭐") })
             }
         }
-        item(key = "map") {
-            AssistChip(onClick = onOpenMap, label = { Text(stringResource(R.string.map_chip)) }, leadingIcon = { Text("🗺️") })
-        }
-        item(key = "guide") {
-            AssistChip(onClick = onOpenGuide, label = { Text(stringResource(R.string.guide_chip)) }, leadingIcon = { Text("📖") })
-        }
+        // Prima gli strumenti con l'IA, i più utili per organizzare il viaggio; la riga scorre.
         if (assistantAvailable) {
             item(key = "itinerary") {
                 AssistChip(onClick = onOpenItinerary, label = { Text(stringResource(R.string.assistant_itinerary_chip)) }, leadingIcon = { Text("✨") })
@@ -521,6 +522,15 @@ private fun TripToolChips(
             item(key = "assistant") {
                 AssistChip(onClick = onOpenAssistant, label = { Text(stringResource(R.string.assistant_chat_chip)) }, leadingIcon = { Text("💬") })
             }
+        }
+        item(key = "map") {
+            AssistChip(onClick = onOpenMap, label = { Text(stringResource(R.string.map_chip)) }, leadingIcon = { Text("🗺️") })
+        }
+        item(key = "guide") {
+            AssistChip(onClick = onOpenGuide, label = { Text(stringResource(R.string.guide_chip)) }, leadingIcon = { Text("📖") })
+        }
+        item(key = "translator") {
+            AssistChip(onClick = onOpenTranslator, label = { Text(stringResource(R.string.translator_chip)) }, leadingIcon = { Text("🗣️") })
         }
     }
 }

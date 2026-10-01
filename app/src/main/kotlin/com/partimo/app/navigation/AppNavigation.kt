@@ -5,11 +5,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.partimo.app.R
 import com.partimo.app.di.AppContainer
 import com.partimo.app.ui.chat.ChatRoute
 import com.partimo.app.ui.chat.ChatViewModel
@@ -29,6 +31,8 @@ import com.partimo.app.ui.place.PlaceDetailRoute
 import com.partimo.app.ui.place.PlaceDetailViewModel
 import com.partimo.app.ui.search.SearchRoute
 import com.partimo.app.ui.search.SearchViewModel
+import com.partimo.app.ui.translator.TranslatorRoute
+import com.partimo.app.ui.translator.TranslatorViewModel
 import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.TravelPeriod
@@ -218,7 +222,18 @@ fun PartiMoNavHost(
                 onOpenGuide = { trip -> navController.navigate(GuideDestination(trip.toJson())) },
                 onOpenFavorites = { trip -> navController.navigate(FavoritesDestination(trip.toJson())) },
                 onOpenMap = { trip -> navController.navigate(MapDestination(trip.toJson())) },
+                onOpenTranslator = { trip -> navController.navigate(TranslatorDestination(trip.toJson())) },
             )
+        }
+        composable<TranslatorDestination> { backStackEntry ->
+            val trip = TripArgs.fromJson(backStackEntry.toRoute<TranslatorDestination>().trip)
+            if (trip == null) {
+                LaunchedEffect(Unit) { navController.popBackStack() }
+                return@composable
+            }
+            val userLanguage = stringResource(R.string.translator_user_language)
+            val viewModel: TranslatorViewModel = viewModel(factory = TranslatorViewModel.factory(container, trip.destination(), userLanguage))
+            TranslatorRoute(viewModel = viewModel, onBack = { navController.popBackStack() })
         }
         composable<MapDestination> { backStackEntry ->
             val route = backStackEntry.toRoute<MapDestination>()
@@ -263,7 +278,11 @@ fun PartiMoNavHost(
             val viewModel: GuideViewModel = viewModel(
                 factory = GuideViewModel.factory(container, trip.destination(), trip.fromDate(), trip.toDate()),
             )
-            GuideRoute(viewModel = viewModel, onBack = { navController.popBackStack() })
+            GuideRoute(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+                onOpenTranslator = { navController.navigate(TranslatorDestination(trip.toJson())) },
+            )
         }
         composable<ItineraryDestination> { backStackEntry ->
             val tripJson = backStackEntry.toRoute<ItineraryDestination>().trip
