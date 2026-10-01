@@ -7,6 +7,7 @@ import com.partimo.data.source.CountryInfoDataSource
 import com.partimo.data.source.DestinationCatalogDataSource
 import com.partimo.data.source.EventDataSource
 import com.partimo.data.source.ExchangeRateDataSource
+import com.partimo.data.source.FlightInsightsDataSource
 import com.partimo.data.source.FlightOffersDataSource
 import com.partimo.data.source.HolidayDataSource
 import com.partimo.data.source.LodgingDataSource
@@ -20,6 +21,7 @@ import com.partimo.data.source.TravelGuideDataSource
 import com.partimo.data.source.TripWeatherDataSource
 import com.partimo.data.source.WeatherDataSource
 import com.partimo.domain.common.DataError
+import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
@@ -27,6 +29,9 @@ import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.dining.RestaurantSearchQuery
 import com.partimo.domain.model.event.EventQuery
 import com.partimo.domain.model.event.TripEvent
+import com.partimo.domain.model.flight.AnywhereQuery
+import com.partimo.domain.model.flight.CheapDestination
+import com.partimo.domain.model.flight.FareSnapshot
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightPriceSource
 import com.partimo.domain.model.flight.FlightSearchQuery
@@ -59,6 +64,7 @@ import com.partimo.domain.repository.CountryInfoRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
 import com.partimo.domain.repository.EventRepository
 import com.partimo.domain.repository.ExchangeRateRepository
+import com.partimo.domain.repository.FlightInsightsRepository
 import com.partimo.domain.repository.FlightRepository
 import com.partimo.domain.repository.HolidayRepository
 import com.partimo.domain.repository.LodgingRepository
@@ -73,6 +79,7 @@ import com.partimo.domain.repository.WeatherRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import java.time.LocalDate
+import java.time.YearMonth
 
 // Implementazioni dei repository di dominio: eseguono la sorgente dati sul dispatcher di I/O e
 // convertono ogni eccezione in DataError (safeApiCall), così i casi d'uso non gestiscono eccezioni.
@@ -84,6 +91,37 @@ class DefaultFlightRepository(
 ) : FlightRepository {
     override suspend fun searchFlights(query: FlightSearchQuery, forceRefresh: Boolean): DataResult<List<FlightOffer>> =
         safeApiCall(ioDispatcher) { dataSource.searchOffers(query, forceRefresh) }
+}
+
+/** Prezzi di mesi, giorni e mete; senza sorgente (nessun token) le funzioni non sono disponibili. */
+class DefaultFlightInsightsRepository(
+    private val dataSource: FlightInsightsDataSource?,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+) : FlightInsightsRepository {
+    override val isAvailable: Boolean get() = dataSource != null
+
+    override suspend fun cheapestByMonth(
+        originIata: String,
+        destinationIata: String,
+        stayNights: LongRange,
+        forceRefresh: Boolean,
+    ): DataResult<Map<YearMonth, FareSnapshot>> = dataSource?.let { source ->
+        safeApiCall(ioDispatcher) { source.cheapestByMonth(originIata, destinationIata, stayNights, forceRefresh) }
+    } ?: DataResult.Success(emptyMap(), DataOrigin.LOCAL)
+
+    override suspend fun cheapestByDay(
+        originIata: String,
+        destinationIata: String,
+        month: YearMonth,
+        stayNights: LongRange,
+        forceRefresh: Boolean,
+    ): DataResult<Map<LocalDate, FareSnapshot>> = dataSource?.let { source ->
+        safeApiCall(ioDispatcher) { source.cheapestByDay(originIata, destinationIata, month, stayNights, forceRefresh) }
+    } ?: DataResult.Success(emptyMap(), DataOrigin.LOCAL)
+
+    override suspend fun cheapestDestinations(query: AnywhereQuery, forceRefresh: Boolean): DataResult<List<CheapDestination>> =
+        dataSource?.let { source -> safeApiCall(ioDispatcher) { source.cheapestDestinations(query, forceRefresh) } }
+            ?: DataResult.Success(emptyList(), DataOrigin.LOCAL)
 }
 
 class DefaultAccommodationRepository(

@@ -5,6 +5,7 @@ import com.partimo.domain.common.DataError
 import com.partimo.domain.model.Destination
 import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.Travellers
+import com.partimo.domain.model.flight.CheapDestination
 import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DeparturePoint
 import com.partimo.domain.model.place.DestinationSuggestion
@@ -32,7 +33,23 @@ data class SearchUiState(
     val preparationError: PreparationError? = null,
     /** Viaggi salvati, da riaprire con un tocco (prima quelli in arrivo). */
     val savedTrips: List<SavedTrip> = emptyList(),
-)
+    /** `true` se si possono cercare le mete più economiche (token di Travelpayouts). */
+    val anywhereAvailable: Boolean = false,
+    /** Mete più economiche dalla città di partenza («Ovunque»); `null` finché non si tocca il pulsante. */
+    val anywhere: UiState<List<CheapDestination>>? = null,
+    /** Prezzo massimo a persona scelto per «Ovunque»; `null` = tutte le mete. */
+    val anywhereMaxPrice: Int? = null,
+) {
+    /** Mete di «Ovunque» entro il prezzo massimo scelto. */
+    val anywhereShown: List<CheapDestination>
+        get() = (anywhere as? UiState.Success)?.data.orEmpty()
+            .filter { destination -> anywhereMaxPrice == null || destination.fare.price.amount <= anywhereMaxPrice.toBigDecimal() }
+
+    companion object {
+        /** Prezzi massimi proposti per «Ovunque», in euro a persona. */
+        val ANYWHERE_PRICE_STEPS = listOf(50, 100, 200)
+    }
+}
 
 data class PendingNavigation(val destination: Destination, val period: TravelPeriod)
 

@@ -234,6 +234,9 @@ internal data class TravelpayoutsPricesResponse(
 /** Tariffa trovata dalle ricerche dei viaggiatori; orari locali degli aeroporti, con il loro scostamento da UTC. */
 @Serializable
 internal data class TravelpayoutsFareDto(
+    /** Codici delle città (es. "MIL", "LON"). */
+    val origin: String? = null,
+    val destination: String? = null,
     @SerialName("origin_airport") val originAirport: String,
     @SerialName("destination_airport") val destinationAirport: String,
     @SerialName("departure_at") val departureAt: String,

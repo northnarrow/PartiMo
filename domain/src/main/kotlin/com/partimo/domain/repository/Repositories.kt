@@ -11,6 +11,9 @@ import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.dining.RestaurantSearchQuery
 import com.partimo.domain.model.event.EventQuery
 import com.partimo.domain.model.event.TripEvent
+import com.partimo.domain.model.flight.AnywhereQuery
+import com.partimo.domain.model.flight.CheapDestination
+import com.partimo.domain.model.flight.FareSnapshot
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightPriceSource
 import com.partimo.domain.model.flight.FlightSearchQuery
@@ -41,6 +44,7 @@ import com.partimo.domain.model.weather.WeatherSnapshot
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 import java.time.LocalDate
+import java.time.YearMonth
 
 // Contratti del dominio verso il data layer. Le implementazioni decidono provider, cache e
 // threading; il parametro forceRefresh permette di ignorare una cache ancora valida.
@@ -51,6 +55,35 @@ interface FlightRepository {
         get() = FlightPriceSource.LIVE_OFFERS
 
     suspend fun searchFlights(query: FlightSearchQuery, forceRefresh: Boolean = false): DataResult<List<FlightOffer>>
+}
+
+/**
+ * Prezzi raccolti dalle ricerche dei viaggiatori (Aviasales), per una persona, andata e ritorno: il mese e il
+ * giorno più convenienti di una tratta e le mete più convenienti da una città. [isAvailable] è `false` senza
+ * il token: queste funzioni non compaiono.
+ */
+interface FlightInsightsRepository {
+    val isAvailable: Boolean
+
+    /** Tariffa più bassa di ogni mese con prezzi, per soggiorni di [stayNights] notti. */
+    suspend fun cheapestByMonth(
+        originIata: String,
+        destinationIata: String,
+        stayNights: LongRange,
+        forceRefresh: Boolean = false,
+    ): DataResult<Map<YearMonth, FareSnapshot>>
+
+    /** Tariffa più bassa per ogni giorno di partenza di [month], per soggiorni di [stayNights] notti. */
+    suspend fun cheapestByDay(
+        originIata: String,
+        destinationIata: String,
+        month: YearMonth,
+        stayNights: LongRange,
+        forceRefresh: Boolean = false,
+    ): DataResult<Map<LocalDate, FareSnapshot>>
+
+    /** Mete più economiche per la ricerca «Ovunque», dalla più conveniente. */
+    suspend fun cheapestDestinations(query: AnywhereQuery, forceRefresh: Boolean = false): DataResult<List<CheapDestination>>
 }
 
 interface AccommodationRepository {

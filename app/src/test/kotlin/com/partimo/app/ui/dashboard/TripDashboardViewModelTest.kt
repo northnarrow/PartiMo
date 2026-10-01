@@ -21,6 +21,7 @@ import com.partimo.domain.model.saved.FavoriteKind
 import com.partimo.domain.service.SeasonalCalendar
 import com.partimo.domain.testing.FakeAccommodationRepository
 import com.partimo.domain.testing.FakeEventRepository
+import com.partimo.domain.testing.FakeFlightInsightsRepository
 import com.partimo.domain.testing.FakeFlightRepository
 import com.partimo.domain.testing.FakeHolidayRepository
 import com.partimo.domain.testing.FakeLodgingRepository
@@ -34,6 +35,8 @@ import com.partimo.domain.testing.FakeWeatherRepository
 import com.partimo.domain.testing.TestData
 import com.partimo.domain.usecase.FindBudgetRestaurantsUseCase
 import com.partimo.domain.usecase.FindLodgingsUseCase
+import com.partimo.domain.usecase.GetMonthPricesUseCase
+import com.partimo.domain.usecase.GetPriceCalendarUseCase
 import com.partimo.domain.usecase.GetSeasonalHighlightsUseCase
 import com.partimo.domain.usecase.GetTripEventsUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
@@ -121,9 +124,25 @@ class TripDashboardViewModelTest {
 
     private val savedTrips = FakeSavedTripRepository()
 
+    private val insights = FakeFlightInsightsRepository(
+        months = DataResult.Success(
+            mapOf(
+                YearMonth.of(2026, Month.OCTOBER) to TestData.fare("33", LocalDate.of(2026, Month.OCTOBER, 14)),
+                YearMonth.of(2026, Month.DECEMBER) to TestData.fare("72", LocalDate.of(2026, Month.DECEMBER, 7)),
+            ),
+        ),
+        days = DataResult.Success(
+            mapOf(
+                LocalDate.of(2026, Month.DECEMBER, 7) to TestData.fare("72", LocalDate.of(2026, Month.DECEMBER, 7), LocalDate.of(2026, Month.DECEMBER, 10)),
+                LocalDate.of(2026, Month.DECEMBER, 11) to TestData.fare("92", LocalDate.of(2026, Month.DECEMBER, 11), LocalDate.of(2026, Month.DECEMBER, 13)),
+            ),
+        ),
+    )
+
     private fun createViewModel(
         initialPeriod: TravelPeriod = december,
         flightRepository: FakeFlightRepository = flights,
+        insightsRepository: FakeFlightInsightsRepository = insights,
     ) = TripDashboardViewModel(
         searchFlights = SearchFlightsUseCase(flightRepository, clock = TestData.FIXED_CLOCK),
         searchAccommodations = SearchAccommodationsUseCase(stays, clock = TestData.FIXED_CLOCK),
@@ -143,7 +162,56 @@ class TripDashboardViewModelTest {
         toggleFavorite = ToggleFavoriteUseCase(savedTrips, TestData.FIXED_CLOCK),
         observeTravellers = ObserveTravellersUseCase(preferences),
         saveTravellers = SaveTravellersUseCase(preferences),
+        getMonthPrices = GetMonthPricesUseCase(insightsRepository),
+        getPriceCalendar = GetPriceCalendarUseCase(insightsRepository),
     )
+
+    @Test
+    fun `i mesi hanno il prezzo più basso e il calendario porta le date del giorno toccato`() = runTest {
+        val viewModel = createViewModel()
+        val start = viewModel.uiState.value
+        assertEquals(Triple("MXP", "VIE", TravelPeriod.FLEXIBLE_STAY_NIGHTS), insights.monthRequests.single())
+        assertEquals(YearMonth.of(2026, Month.OCTOBER), start.cheapestMonth)
+        assertEquals(Money.of(72, "EUR"), start.monthPrices.getValue(YearMonth.of(2026, Month.DECEMBER)).price)
+        assertTrue(start.priceCalendarAvailable)
+
+        viewModel.onOpenPriceCalendar()
+        advanceUntilIdle()
+        val calendar = assertNotNull(viewModel.uiState.value.priceCalendar)
+        assertEquals(YearMonth.of(2026, Month.DECEMBER), calendar.month, "Si apre sul mese mostrato")
+        assertEquals(YearMonth.of(2026, Month.OCTOBER), calendar.firstMonth)
+        assertEquals(2, calendar.calendar.successData().fares.size)
+
+        viewModel.onPriceCalendarMonthChanged(1)
+        advanceUntilIdle()
+        assertEquals(YearMonth.of(2027, Month.JANUARY), viewModel.uiState.value.priceCalendar?.month)
+        viewModel.onPriceCalendarMonthChanged(-1)
+        advanceUntilIdle()
+        assertEquals(listOf(Month.DECEMBER, Month.JANUARY, Month.DECEMBER), insights.dayRequests.map { it.first.month })
+
+        val fare = calendar.calendar.successData().fares.getValue(LocalDate.of(2026, Month.DECEMBER, 11))
+        viewModel.onPriceCalendarDaySelected(fare)
+        advanceUntilIdle()
+
+        val state = viewModel.uiState.value
+        assertNull(state.priceCalendar)
+        assertEquals(TravelPeriod.Dates(LocalDate.of(2026, Month.DECEMBER, 11), LocalDate.of(2026, Month.DECEMBER, 13)), state.period)
+        assertEquals(LocalDate.of(2026, Month.DECEMBER, 11), flights.queries.last().departureDate, "I voli di quelle date")
+    }
+
+    @Test
+    fun `senza token niente prezzi dei mesi né calendario`() = runTest {
+        val unavailable = FakeFlightInsightsRepository(isAvailable = false)
+        val viewModel = createViewModel(insightsRepository = unavailable)
+
+        viewModel.onOpenPriceCalendar()
+        advanceUntilIdle()
+
+        val state = viewModel.uiState.value
+        assertFalse(state.priceCalendarAvailable)
+        assertTrue(state.monthPrices.isEmpty())
+        assertTrue(unavailable.monthRequests.isEmpty())
+    }
 
     @Test
     fun `i viaggiatori scelti valgono per voli e alloggi e cambiandoli i prezzi si ricaricano`() = runTest {

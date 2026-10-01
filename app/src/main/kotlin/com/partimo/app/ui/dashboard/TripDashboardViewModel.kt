@@ -9,12 +9,14 @@ import com.partimo.app.di.AppContainer
 import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.common.toListUiState
 import com.partimo.app.ui.common.toUiState
+import com.partimo.domain.common.getOrNull
 import com.partimo.domain.model.Destination
 import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.TripContext
 import com.partimo.domain.model.deal.PriceChange
+import com.partimo.domain.model.flight.FareSnapshot
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.poi.PoiTag
 import com.partimo.domain.model.saved.Favorite
@@ -22,6 +24,8 @@ import com.partimo.domain.model.stay.AccommodationSearchQuery
 import com.partimo.domain.model.transit.TransitRouteQuery
 import com.partimo.domain.usecase.FindBudgetRestaurantsUseCase
 import com.partimo.domain.usecase.FindLodgingsUseCase
+import com.partimo.domain.usecase.GetMonthPricesUseCase
+import com.partimo.domain.usecase.GetPriceCalendarUseCase
 import com.partimo.domain.usecase.GetSeasonalHighlightsUseCase
 import com.partimo.domain.usecase.GetTripEventsUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
@@ -53,6 +57,7 @@ import java.time.Clock
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.YearMonth
 
 /**
  * ViewModel della dashboard aggregata (MVVM).
@@ -86,12 +91,16 @@ class TripDashboardViewModel(
     /** Chi parte: senza, i prezzi sono per una persona. */
     private val observeTravellers: ObserveTravellersUseCase? = null,
     private val saveTravellers: SaveTravellersUseCase? = null,
+    /** Prezzi di Aviasales per mese e per giorno: facoltativi (senza, niente prezzi sui mesi né calendario). */
+    private val getMonthPrices: GetMonthPricesUseCase? = null,
+    private val getPriceCalendar: GetPriceCalendarUseCase? = null,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
         initialState(initialPeriod, isDemoMode).copy(
             assistantAvailable = assistantAvailable,
             favoritesEnabled = observeSavedTrip != null && setTripSaved != null && toggleFavorite != null,
+            priceCalendarAvailable = getPriceCalendar?.isAvailable == true,
         ),
     )
     val uiState: StateFlow<TripDashboardUiState> = _uiState.asStateFlow()
@@ -99,6 +108,8 @@ class TripDashboardViewModel(
     private val sectionJobs = mutableMapOf<DashboardSection, Job>()
     private var eventsJob: Job? = null
     private var refreshJob: Job? = null
+    private var monthPricesJob: Job? = null
+    private var calendarJob: Job? = null
 
     init {
         viewModelScope.launch {
@@ -110,8 +121,10 @@ class TripDashboardViewModel(
                 if (firstLoad) {
                     firstLoad = false
                     loadDashboard(forceRefresh = false)
+                    loadMonthPrices(forceRefresh = false)
                     return@collect
                 }
+                if (departure != previous.departure) loadMonthPrices(forceRefresh = false)
                 // Partenza e viaggiatori cambiano i prezzi dei voli; i viaggiatori anche quelli degli alloggi.
                 if (departure != previous.departure || people != previous.travellers) loadSection(DashboardSection.FLIGHTS, forceRefresh = false)
                 if (people != previous.travellers && _uiState.value.stayOffersAvailable) loadSection(DashboardSection.STAYS, forceRefresh = false)
@@ -149,6 +162,44 @@ class TripDashboardViewModel(
         viewModelScope.launch { save(travellers) }
     }
 
+    /** Apre il calendario dei prezzi sul mese del periodo mostrato. */
+    fun onOpenPriceCalendar() {
+        if (getPriceCalendar == null || _uiState.value.trip.departure == null) return
+        val state = _uiState.value
+        val months = state.periods.filterIsInstance<TravelPeriod.InMonth>().map { it.month }
+        val first = YearMonth.from(state.today.plusDays(1))
+        val last = months.maxOrNull()?.takeIf { it.isAfter(first) } ?: first.plusMonths(TravelPeriod.SELECTABLE_MONTHS.toLong())
+        val month = when (val period = state.period) {
+            is TravelPeriod.InMonth -> period.month
+            is TravelPeriod.Dates -> YearMonth.from(period.departure)
+            TravelPeriod.NextDays -> first
+        }.coerceIn(first, last)
+        _uiState.update { it.copy(priceCalendar = PriceCalendarState(month, first, last)) }
+        loadCalendar(month)
+    }
+
+    /** Mese precedente ([delta] = -1) o successivo (+1) nel calendario. */
+    fun onPriceCalendarMonthChanged(delta: Int) {
+        val calendar = _uiState.value.priceCalendar ?: return
+        val month = calendar.month.plusMonths(delta.toLong()).coerceIn(calendar.firstMonth, calendar.lastMonth)
+        if (month == calendar.month) return
+        _uiState.update { it.copy(priceCalendar = calendar.copy(month = month, calendar = UiState.Loading)) }
+        loadCalendar(month)
+    }
+
+    fun onPriceCalendarDismissed() {
+        calendarJob?.cancel()
+        _uiState.update { it.copy(priceCalendar = null) }
+    }
+
+    /** Giorno scelto nel calendario: le date della sua tariffa diventano quelle del viaggio. */
+    fun onPriceCalendarDaySelected(fare: FareSnapshot) {
+        val nights = GetPriceCalendarUseCase.stayNightsFor(_uiState.value.period).first
+        val returning = fare.returnDate ?: fare.departureDate.plusDays(nights)
+        onPriceCalendarDismissed()
+        onPeriodSelected(TravelPeriod.Dates(fare.departureDate, returning))
+    }
+
     fun onSectionSelected(section: DashboardSection) {
         _uiState.update { it.copy(selectedSection = section) }
     }
@@ -164,6 +215,7 @@ class TripDashboardViewModel(
      * Al termine confronta i prezzi migliori con quelli di prima e ne riassume la variazione.
      */
     fun refresh() {
+        loadMonthPrices(forceRefresh = true)
         val before = bestPrices()
         loadDashboard(forceRefresh = true) {
             val after = bestPrices()
@@ -231,6 +283,28 @@ class TripDashboardViewModel(
 
     fun onMessageShown() {
         _uiState.update { it.copy(message = null) }
+    }
+
+    /** Prezzo più basso di ogni mese per i chip: serve la città di partenza. */
+    private fun loadMonthPrices(forceRefresh: Boolean) {
+        val load = getMonthPrices?.takeIf { it.isAvailable } ?: return
+        val origin = _uiState.value.trip.originIata ?: return
+        monthPricesJob?.cancel()
+        monthPricesJob = viewModelScope.launch {
+            // Senza prezzi (rete assente o errore) i chip restano come sono: non è un errore da mostrare.
+            val prices = load(origin, destination.airportIata, forceRefresh).getOrNull().orEmpty()
+            _uiState.update { it.copy(monthPrices = prices) }
+        }
+    }
+
+    private fun loadCalendar(month: YearMonth) {
+        val load = getPriceCalendar ?: return
+        val origin = _uiState.value.trip.originIata ?: return
+        calendarJob?.cancel()
+        calendarJob = viewModelScope.launch {
+            val result = load(origin, destination.airportIata, month, _uiState.value.period).toUiState { it.fares.isEmpty() }
+            _uiState.update { state -> state.priceCalendar?.takeIf { it.month == month }?.let { state.copy(priceCalendar = it.copy(calendar = result)) } ?: state }
+        }
     }
 
     private fun loadDashboard(forceRefresh: Boolean, onComplete: () -> Unit = {}) {
@@ -443,6 +517,8 @@ class TripDashboardViewModel(
                     observeSavedTrip = container.observeSavedTrip,
                     observeTravellers = container.observeTravellers,
                     saveTravellers = container.saveTravellers,
+                    getMonthPrices = container.getMonthPrices,
+                    getPriceCalendar = container.getPriceCalendar,
                     setTripSaved = container.setTripSaved,
                     toggleFavorite = container.toggleFavorite,
                 )

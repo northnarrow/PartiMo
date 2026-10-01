@@ -1,6 +1,5 @@
 package com.partimo.app.ui.translator
 
-import android.app.Application
 import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
@@ -18,6 +17,7 @@ import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
 import androidx.core.view.drawToBitmap
 import com.partimo.app.R
+import com.partimo.app.testing.UiTestApplication
 import com.partimo.app.ui.dashboard.PreviewData
 import com.partimo.app.ui.theme.PartiMoTheme
 import org.junit.Rule
@@ -33,7 +33,7 @@ import kotlin.test.assertTrue
 /** Test UI del traduttore, sulla JVM con Robolectric. */
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(sdk = [34], application = Application::class, qualifiers = "w412dp-h915dp-xxhdpi")
+@Config(sdk = [34], application = UiTestApplication::class, qualifiers = "w412dp-h915dp-xxhdpi")
 class TranslatorScreenTest {
 
     @get:Rule

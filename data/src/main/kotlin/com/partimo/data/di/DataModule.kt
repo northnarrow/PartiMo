@@ -38,6 +38,7 @@ import com.partimo.data.remote.places.GooglePlacesRestaurantDataSource
 import com.partimo.data.remote.routes.GoogleRoutesApi
 import com.partimo.data.remote.routes.GoogleRoutesTransitDataSource
 import com.partimo.data.remote.travelpayouts.TravelpayoutsFlightDataSource
+import com.partimo.data.remote.travelpayouts.TravelpayoutsInsightsDataSource
 import com.partimo.data.remote.weather.OpenMeteoTripWeatherDataSource
 import com.partimo.data.remote.weather.OpenMeteoWeatherDataSource
 import com.partimo.data.remote.wikidata.WikidataApi
@@ -55,6 +56,7 @@ import com.partimo.data.repository.DefaultCountryInfoRepository
 import com.partimo.data.repository.DefaultDestinationCatalogRepository
 import com.partimo.data.repository.DefaultEventRepository
 import com.partimo.data.repository.DefaultExchangeRateRepository
+import com.partimo.data.repository.DefaultFlightInsightsRepository
 import com.partimo.data.repository.DefaultFlightRepository
 import com.partimo.data.repository.DefaultHolidayRepository
 import com.partimo.data.repository.DefaultLodgingRepository
@@ -78,6 +80,7 @@ import com.partimo.domain.repository.CountryInfoRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
 import com.partimo.domain.repository.EventRepository
 import com.partimo.domain.repository.ExchangeRateRepository
+import com.partimo.domain.repository.FlightInsightsRepository
 import com.partimo.domain.repository.FlightRepository
 import com.partimo.domain.repository.HolidayRepository
 import com.partimo.domain.repository.LodgingRepository
@@ -132,6 +135,7 @@ class DataModule(
         BundledFlightCodes(
             openAirports = { appContext.assets.open(AIRPORT_CITIES_ASSET) },
             openAirlines = { appContext.assets.open(AIRLINES_ASSET) },
+            openCities = { appContext.assets.open(CITIES_ASSET) },
         )
     }
 
@@ -160,6 +164,19 @@ class DataModule(
             )
             else -> DefaultFlightRepository(DemoFlightDataSource(demoCatalog), ioDispatcher, priceSource = FlightPriceSource.ESTIMATES)
         }
+    }
+
+    /**
+     * Mese e giorno più convenienti di una tratta e mete più economiche («Ovunque»), dai prezzi di Aviasales:
+     * solo con il token di Travelpayouts (anche se i voli arrivano da Duffel).
+     */
+    val flightInsightsRepository: FlightInsightsRepository by lazy {
+        val source = if (config.hasTravelpayoutsToken) {
+            TravelpayoutsInsightsDataSource(httpClient, responseCache, config.travelpayoutsToken, flightCodes)
+        } else {
+            null
+        }
+        DefaultFlightInsightsRepository(source, ioDispatcher)
     }
 
     /**
@@ -313,5 +330,6 @@ class DataModule(
         const val AIRPORTS_ASSET = "airports.csv"
         const val AIRPORT_CITIES_ASSET = "airport_cities.csv"
         const val AIRLINES_ASSET = "airlines.csv"
+        const val CITIES_ASSET = "cities.csv"
     }
 }

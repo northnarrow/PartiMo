@@ -7,8 +7,10 @@ import com.partimo.domain.model.TripContext
 import com.partimo.domain.model.deal.PriceChange
 import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.event.TripEvents
+import com.partimo.domain.model.flight.FareSnapshot
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightPriceSource
+import com.partimo.domain.model.flight.PriceCalendar
 import com.partimo.domain.model.poi.SeasonalHighlights
 import com.partimo.domain.model.saved.SavedTrip
 import com.partimo.domain.model.stay.AccommodationOffer
@@ -19,6 +21,7 @@ import com.partimo.domain.service.ModeFootprint
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.YearMonth
 
 /** Sezioni della dashboard: ognuna ha il suo pulsante nella barra in basso e si carica in modo indipendente. */
 enum class DashboardSection { FLIGHTS, STAYS, HIGHLIGHTS, TRANSIT, RESTAURANTS }
@@ -28,6 +31,17 @@ enum class DashboardMessage { ALERT_ENABLED, ALERT_ENABLED_WITHOUT_NOTIFICATIONS
 
 /** Esito di "Aggiorna": variazione dei prezzi migliori rispetto al caricamento precedente. */
 data class RefreshSummary(val flight: PriceChange?, val stay: PriceChange?)
+
+/** Calendario dei prezzi aperto sul mese [month], tra quelli che si possono scegliere. */
+data class PriceCalendarState(
+    val month: YearMonth,
+    val firstMonth: YearMonth,
+    val lastMonth: YearMonth,
+    val calendar: UiState<PriceCalendar> = UiState.Loading,
+) {
+    val hasPrevious: Boolean get() = month.isAfter(firstMonth)
+    val hasNext: Boolean get() = month.isBefore(lastMonth)
+}
 
 /** Stato aggregato della dashboard di viaggio: ogni modulo ha il proprio [UiState]. */
 data class TripDashboardUiState(
@@ -75,7 +89,16 @@ data class TripDashboardUiState(
     /** Da mostrare una sola volta; la UI lo consuma e lo notifica al ViewModel. */
     val refreshSummary: RefreshSummary? = null,
     val message: DashboardMessage? = null,
+    /** Prezzo più basso a persona di ogni mese (Aviasales), per i chip dei mesi; vuoto se non disponibile. */
+    val monthPrices: Map<YearMonth, FareSnapshot> = emptyMap(),
+    /** `true` se si può aprire il calendario dei prezzi (token di Travelpayouts). */
+    val priceCalendarAvailable: Boolean = false,
+    /** Calendario dei prezzi aperto; `null` se chiuso. */
+    val priceCalendar: PriceCalendarState? = null,
 ) {
+    /** Mese più conveniente tra quelli con un prezzo: il suo chip lo segnala. */
+    val cheapestMonth: YearMonth? get() = monthPrices.minByOrNull { it.value.price.amount }?.key
+
     /** Emissioni per raggiungere la meta con i diversi mezzi, a persona; vuoto senza partenza o con la meta vicina. */
     val footprint: List<ModeFootprint>
         get() = trip.departure?.let { CarbonFootprint.roundTrip(it.airport.location, trip.destination.center, trip.travellers.total) }.orEmpty()

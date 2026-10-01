@@ -18,11 +18,14 @@ import com.partimo.domain.usecase.CheckPriceWatchesUseCase
 import com.partimo.domain.usecase.EditTripBudgetUseCase
 import com.partimo.domain.usecase.ExportUserDataUseCase
 import com.partimo.domain.usecase.FindBudgetRestaurantsUseCase
+import com.partimo.domain.usecase.FindCheapDestinationsUseCase
 import com.partimo.domain.usecase.FindDepartureAirportsUseCase
 import com.partimo.domain.usecase.FindLodgingsUseCase
 import com.partimo.domain.usecase.GetCountryInfoUseCase
 import com.partimo.domain.usecase.GetExchangeRateUseCase
+import com.partimo.domain.usecase.GetMonthPricesUseCase
 import com.partimo.domain.usecase.GetPoiDetailsUseCase
+import com.partimo.domain.usecase.GetPriceCalendarUseCase
 import com.partimo.domain.usecase.GetSeasonalHighlightsUseCase
 import com.partimo.domain.usecase.GetTravelGuideUseCase
 import com.partimo.domain.usecase.GetTripEventsUseCase
@@ -86,6 +89,11 @@ interface AppContainer {
     /** Chi parte (adulti e bambini), per tutti i viaggi. */
     val observeTravellers: ObserveTravellersUseCase
     val saveTravellers: SaveTravellersUseCase
+
+    /** Prezzi di Aviasales per scegliere quando e dove andare: mesi, calendario, «Ovunque». */
+    val getMonthPrices: GetMonthPricesUseCase
+    val getPriceCalendar: GetPriceCalendarUseCase
+    val findCheapDestinations: FindCheapDestinationsUseCase
     val observePriceAlert: ObservePriceAlertUseCase
     val setPriceAlert: SetPriceAlertUseCase
     val checkPriceWatches: CheckPriceWatchesUseCase
@@ -210,6 +218,14 @@ class DefaultAppContainer(context: Context) : AppContainer {
     override val observeTravellers: ObserveTravellersUseCase by lazy { ObserveTravellersUseCase(dataModule.userPreferencesRepository) }
 
     override val saveTravellers: SaveTravellersUseCase by lazy { SaveTravellersUseCase(dataModule.userPreferencesRepository) }
+
+    override val getMonthPrices: GetMonthPricesUseCase by lazy { GetMonthPricesUseCase(dataModule.flightInsightsRepository) }
+
+    override val getPriceCalendar: GetPriceCalendarUseCase by lazy { GetPriceCalendarUseCase(dataModule.flightInsightsRepository) }
+
+    override val findCheapDestinations: FindCheapDestinationsUseCase by lazy {
+        FindCheapDestinationsUseCase(dataModule.flightInsightsRepository, clock)
+    }
 
     override val observePriceAlert: ObservePriceAlertUseCase by lazy { ObservePriceAlertUseCase(dataModule.priceWatchRepository) }
 

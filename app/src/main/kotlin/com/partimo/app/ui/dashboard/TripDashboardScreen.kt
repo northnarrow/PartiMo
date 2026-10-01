@@ -85,6 +85,8 @@ import com.partimo.app.ui.dashboard.components.GETTING_THERE_TAG
 import com.partimo.app.ui.dashboard.components.GettingThereCard
 import com.partimo.app.ui.dashboard.components.HighlightsSection
 import com.partimo.app.ui.dashboard.components.LodgingsSection
+import com.partimo.app.ui.dashboard.components.PriceCalendarActions
+import com.partimo.app.ui.dashboard.components.PriceCalendarDialog
 import com.partimo.app.ui.dashboard.components.RestaurantsSection
 import com.partimo.app.ui.dashboard.components.StaysSection
 import com.partimo.app.ui.dashboard.components.TransitSection
@@ -145,6 +147,9 @@ data class DashboardActions(
     val onOpenBudget: () -> Unit = {},
     /** Nuovi viaggiatori (adulti e bambini) scelti nella sezione dei voli. */
     val onTravellersSelected: (Travellers) -> Unit = {},
+    /** Calendario dei prezzi: apertura, mese, giorno scelto, chiusura. */
+    val onOpenPriceCalendar: () -> Unit = {},
+    val priceCalendar: PriceCalendarActions = PriceCalendarActions(),
 )
 
 /**
@@ -219,6 +224,12 @@ fun TripDashboardRoute(
             onOpenTranslator = { onOpenTranslator(TripArgs.from(state.trip, state.period)) },
             onOpenBudget = { onOpenBudget(TripArgs.from(state.trip, state.period)) },
             onTravellersSelected = viewModel::onTravellersSelected,
+            onOpenPriceCalendar = viewModel::onOpenPriceCalendar,
+            priceCalendar = PriceCalendarActions(
+                onMonthChanged = viewModel::onPriceCalendarMonthChanged,
+                onDaySelected = viewModel::onPriceCalendarDaySelected,
+                onDismiss = viewModel::onPriceCalendarDismissed,
+            ),
         ),
         modifier = modifier,
     )
@@ -271,6 +282,7 @@ fun TripDashboardScreen(
         }
     }
 
+    state.priceCalendar?.let { calendar -> PriceCalendarDialog(calendar, actions.priceCalendar) }
     Scaffold(
         modifier = modifier,
         topBar = { DashboardTopBar(state = state, actions = actions) },
@@ -284,6 +296,8 @@ fun TripDashboardScreen(
                 today = state.today,
                 onSelected = actions.onPeriodSelected,
                 modifier = Modifier.padding(vertical = 8.dp),
+                monthPrices = state.monthPrices.mapValues { it.value.price },
+                cheapestMonth = state.cheapestMonth,
             )
             TripToolChips(
                 assistantAvailable = state.assistantAvailable,
@@ -332,6 +346,7 @@ private fun LazyListScope.sectionContent(section: DashboardSection, state: TripD
                         exactDates = state.period is TravelPeriod.Dates,
                         onOpenLink = actions.onOpenLink,
                         onTravellersSelected = actions.onTravellersSelected,
+                        onOpenPriceCalendar = actions.onOpenPriceCalendar.takeIf { state.priceCalendarAvailable },
                     )
                 }
             }

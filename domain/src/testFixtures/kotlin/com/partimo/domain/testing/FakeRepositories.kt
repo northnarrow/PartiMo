@@ -13,6 +13,9 @@ import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.dining.RestaurantSearchQuery
 import com.partimo.domain.model.event.EventQuery
 import com.partimo.domain.model.event.TripEvent
+import com.partimo.domain.model.flight.AnywhereQuery
+import com.partimo.domain.model.flight.CheapDestination
+import com.partimo.domain.model.flight.FareSnapshot
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightPriceSource
 import com.partimo.domain.model.flight.FlightSearchQuery
@@ -49,6 +52,7 @@ import com.partimo.domain.repository.CountryInfoRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
 import com.partimo.domain.repository.EventRepository
 import com.partimo.domain.repository.ExchangeRateRepository
+import com.partimo.domain.repository.FlightInsightsRepository
 import com.partimo.domain.repository.FlightRepository
 import com.partimo.domain.repository.HolidayRepository
 import com.partimo.domain.repository.LodgingRepository
@@ -74,6 +78,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import java.time.Instant
 import java.time.LocalDate
+import java.time.YearMonth
 
 // Fake dei repository condivisi fra i moduli tramite testFixtures: restituiscono un risultato
 // configurabile, registrano le richieste ricevute e possono simulare latenza (tempo virtuale).
@@ -468,4 +473,42 @@ class FakeUserDataRepository(initial: UserData = UserData()) : UserDataRepositor
     override fun encode(data: UserData, exportedAt: Instant): String = "backup-${files.size}@$exportedAt".also { files[it] = data }
 
     override fun decode(content: String): UserData? = files[content]
+}
+
+/** Prezzi di Aviasales in memoria: mesi, giorni e mete configurabili; registra le richieste. */
+class FakeFlightInsightsRepository(
+    var months: DataResult<Map<YearMonth, FareSnapshot>> = DataResult.Success(emptyMap()),
+    var days: DataResult<Map<LocalDate, FareSnapshot>> = DataResult.Success(emptyMap()),
+    var destinations: DataResult<List<CheapDestination>> = DataResult.Success(emptyList()),
+    override val isAvailable: Boolean = true,
+) : FlightInsightsRepository {
+    val monthRequests = mutableListOf<Triple<String, String, LongRange>>()
+    val dayRequests = mutableListOf<Pair<YearMonth, LongRange>>()
+    val destinationQueries = mutableListOf<AnywhereQuery>()
+
+    override suspend fun cheapestByMonth(
+        originIata: String,
+        destinationIata: String,
+        stayNights: LongRange,
+        forceRefresh: Boolean,
+    ): DataResult<Map<YearMonth, FareSnapshot>> {
+        monthRequests += Triple(originIata, destinationIata, stayNights)
+        return months
+    }
+
+    override suspend fun cheapestByDay(
+        originIata: String,
+        destinationIata: String,
+        month: YearMonth,
+        stayNights: LongRange,
+        forceRefresh: Boolean,
+    ): DataResult<Map<LocalDate, FareSnapshot>> {
+        dayRequests += month to stayNights
+        return days
+    }
+
+    override suspend fun cheapestDestinations(query: AnywhereQuery, forceRefresh: Boolean): DataResult<List<CheapDestination>> {
+        destinationQueries += query
+        return destinations
+    }
 }

@@ -3,6 +3,7 @@ package com.partimo.app.ui.search
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,10 +36,12 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -56,6 +59,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -81,8 +85,10 @@ import com.partimo.app.ui.common.phrase
 import com.partimo.app.ui.dashboard.PreviewData
 import com.partimo.app.ui.theme.PartiMoTheme
 import com.partimo.domain.model.Destination
+import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.Travellers
+import com.partimo.domain.model.flight.CheapDestination
 import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DeparturePoint
 import com.partimo.domain.model.place.DestinationSuggestion
@@ -115,6 +121,10 @@ data class SearchActions(
     val onRemoveSavedTrip: (SavedTrip) -> Unit = {},
     /** Fonti, licenze e privacy. */
     val onOpenAbout: () -> Unit = {},
+    /** «Ovunque»: mete più economiche dalla città di partenza, filtro sul prezzo e meta scelta. */
+    val onAnywhere: () -> Unit = {},
+    val onAnywhereMaxPrice: (Int?) -> Unit = {},
+    val onCheapDestinationSelected: (CheapDestination) -> Unit = {},
 )
 
 /** Collega il ViewModel alla schermata e apre la dashboard quando la meta è pronta. */
@@ -153,6 +163,9 @@ fun SearchRoute(
             onSavedTripSelected = viewModel::onSavedTripSelected,
             onRemoveSavedTrip = viewModel::onRemoveSavedTrip,
             onOpenAbout = onOpenAbout,
+            onAnywhere = viewModel::onAnywhere,
+            onAnywhereMaxPrice = viewModel::onAnywhereMaxPrice,
+            onCheapDestinationSelected = viewModel::onCheapDestinationSelected,
         ),
         modifier = modifier,
     )
@@ -253,6 +266,17 @@ fun SearchScreen(
                 }
                 state.recommendations?.let { recommendations ->
                     recommendationItems(recommendations, state, selectSuggestion, actions)
+                }
+                if (state.anywhereAvailable) {
+                    item(key = "anywhere") {
+                        AnywhereSection(
+                            departure = state.departure,
+                            isLoading = state.anywhere == UiState.Loading,
+                            onAnywhere = actions.onAnywhere,
+                            onChooseDeparture = actions.onChooseDeparture,
+                        )
+                    }
+                    state.anywhere?.let { anywhere -> anywhereItems(anywhere, state, actions) }
                 }
             } else {
                 searchResultItems(results, query, state.preparingCityId, selectCity, actions.onRetrySearch)
@@ -400,6 +424,122 @@ private fun LazyListScope.searchResultItems(
         is UiState.Success -> items(results.data, key = { it.id }) { city ->
             CityResultItem(city = city, isPreparing = city.id == preparingCityId, onClick = { onCitySelected(city) })
             HorizontalDivider(modifier = Modifier.padding(start = 76.dp, end = 16.dp))
+        }
+    }
+}
+
+/** «Ovunque»: pulsante per le mete più economiche dalla città di partenza (che va scelta prima). */
+@Composable
+private fun AnywhereSection(departure: DeparturePoint?, isLoading: Boolean, onAnywhere: () -> Unit, onChooseDeparture: () -> Unit) {
+    Column(modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 16.dp)) {
+        OutlinedButton(
+            onClick = if (departure != null) onAnywhere else onChooseDeparture,
+            enabled = !isLoading,
+            modifier = Modifier.fillMaxWidth().height(56.dp),
+            shape = RoundedCornerShape(28.dp),
+        ) {
+            Text(
+                text = "🌍  " + if (departure != null) stringResource(R.string.anywhere_button, departure.cityName) else stringResource(R.string.anywhere_button_no_departure),
+                style = MaterialTheme.typography.titleMedium,
+            )
+        }
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text = stringResource(R.string.anywhere_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 8.dp),
+        )
+    }
+}
+
+private fun LazyListScope.anywhereItems(anywhere: UiState<List<CheapDestination>>, state: SearchUiState, actions: SearchActions) {
+    item(key = "anywhere-title") {
+        SectionTitle(stringResource(R.string.anywhere_title, state.departure?.cityName.orEmpty(), state.period.phrase(state.today)))
+    }
+    when (anywhere) {
+        UiState.Loading -> item(key = "anywhere-loading") { SectionLoading() }
+        UiState.Empty -> item(key = "anywhere-empty") { SectionMessage(stringResource(R.string.anywhere_empty)) }
+        is UiState.Error -> item(key = "anywhere-error") { SectionError(error = anywhere.error, onRetry = actions.onAnywhere) }
+        is UiState.Success -> {
+            item(key = "anywhere-prices") { AnywherePriceChips(selected = state.anywhereMaxPrice, onSelected = actions.onAnywhereMaxPrice) }
+            val shown = state.anywhereShown
+            if (shown.isEmpty()) {
+                item(key = "anywhere-none") { SectionMessage(stringResource(R.string.anywhere_none_in_budget)) }
+            }
+            items(shown, key = { "anywhere-" + it.cityCode }) { destination ->
+                CheapDestinationItem(
+                    destination = destination,
+                    isPreparing = destination.city.id == state.preparingCityId,
+                    onClick = { actions.onCheapDestinationSelected(destination) },
+                )
+                HorizontalDivider(modifier = Modifier.padding(start = 76.dp, end = 16.dp))
+            }
+        }
+    }
+}
+
+/** Prezzo massimo a persona: tutte le mete, fino a 50, 100 o 200 €. */
+@Composable
+private fun AnywherePriceChips(selected: Int?, onSelected: (Int?) -> Unit) {
+    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        item(key = "all") {
+            FilterChip(selected = selected == null, onClick = { onSelected(null) }, label = { Text(stringResource(R.string.anywhere_all_prices)) })
+        }
+        items(SearchUiState.ANYWHERE_PRICE_STEPS, key = { it }) { price ->
+            FilterChip(
+                selected = selected == price,
+                onClick = { onSelected(price) },
+                label = { Text(stringResource(R.string.anywhere_max_price, Formatters.money(Money.of(price, "EUR")))) },
+            )
+        }
+    }
+}
+
+/** Meta di «Ovunque»: bandiera, città e paese, date e notti del volo più economico, prezzo a persona. */
+@Composable
+private fun CheapDestinationItem(destination: CheapDestination, isPreparing: Boolean, onClick: () -> Unit) {
+    val fare = destination.fare
+    val details = buildList {
+        destination.city.country?.let { add(it) }
+        fare.returnDate?.let { back -> add(Formatters.dateRange(fare.departureDate, back)) }
+        fare.stayNights?.let { nights -> add(pluralStringResource(R.plurals.flight_stay_nights, nights.toInt(), nights.toInt())) }
+        add(if (fare.stops == 0) stringResource(R.string.flight_direct) else pluralStringResource(R.plurals.flight_stops, fare.stops, fare.stops))
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(enabled = !isPreparing, onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(text = flagEmoji(destination.city.countryCode), style = MaterialTheme.typography.headlineMedium)
+        Spacer(Modifier.width(16.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(text = destination.city.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            Text(
+                text = details.joinToString(" · "),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        Spacer(Modifier.width(8.dp))
+        if (isPreparing) {
+            CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+        } else {
+            Column(horizontalAlignment = Alignment.End) {
+                Text(
+                    text = Formatters.money(fare.price),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                Text(
+                    text = stringResource(R.string.anywhere_per_person),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
     }
 }

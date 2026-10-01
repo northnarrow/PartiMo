@@ -88,6 +88,8 @@ fun FlightsSection(
     onOpenLink: (String) -> Unit = {},
     /** Nuovi viaggiatori scelti dall'intestazione; `null` = nessun pulsante per cambiarli. */
     onTravellersSelected: ((Travellers) -> Unit)? = null,
+    /** Apre il calendario dei prezzi; `null` se non è disponibile. */
+    onOpenPriceCalendar: (() -> Unit)? = null,
 ) {
     val departure = trip.departure
     val links = flightLinks(trip)
@@ -126,6 +128,9 @@ fun FlightsSection(
                                 Text("👥 " + trip.travellers.label() + " · " + stringResource(R.string.flights_change_travellers))
                             }
                         }
+                    }
+                    onOpenPriceCalendar?.let { open ->
+                        PriceCalendarCard(onOpen = open, modifier = Modifier.padding(bottom = 8.dp))
                     }
                     links?.let { flightLinks ->
                         ExternalLinksCard(
@@ -251,6 +256,25 @@ fun FlightCard(
                     // La freccia indica che si apre un'altra pagina: decorativa, i lettori di schermo la ignorano.
                     Text(text = " ↗", modifier = Modifier.clearAndSetSemantics {})
                 }
+            }
+        }
+    }
+}
+
+/** Invito al calendario dei prezzi, sopra i voli: per scegliere il giorno di partenza più conveniente. */
+@Composable
+private fun PriceCalendarCard(onOpen: () -> Unit, modifier: Modifier = Modifier) {
+    OutlinedCard(onClick = onOpen, modifier = modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "📅", style = MaterialTheme.typography.titleLarge)
+            Spacer(Modifier.width(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(text = stringResource(R.string.price_calendar_open), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                Text(
+                    text = stringResource(R.string.price_calendar_open_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
         }
     }

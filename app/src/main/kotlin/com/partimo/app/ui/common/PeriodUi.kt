@@ -2,22 +2,29 @@ package com.partimo.app.ui.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.partimo.app.R
+import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
 import java.time.LocalDate
 import java.time.Month
+import java.time.YearMonth
 import java.util.Locale
 
 /** Tag della riga dei periodi, usato dai test UI per lo scroll orizzontale. */
@@ -70,6 +77,10 @@ fun PeriodChips(
     today: LocalDate,
     onSelected: (TravelPeriod) -> Unit,
     modifier: Modifier = Modifier,
+    /** Prezzo più basso a persona di ogni mese («da 72 €»), se noto. */
+    monthPrices: Map<YearMonth, Money> = emptyMap(),
+    /** Mese più conveniente: il suo prezzo è evidenziato. */
+    cheapestMonth: YearMonth? = null,
 ) {
     val listState = rememberLazyListState()
     LaunchedEffect(Unit) {
@@ -86,8 +97,25 @@ fun PeriodChips(
             FilterChip(
                 selected = period == selected,
                 onClick = { onSelected(period) },
-                label = { Text(period.emoji() + " " + period.label(today)) },
+                label = {
+                    val month = (period as? TravelPeriod.InMonth)?.month
+                    val price = month?.let { monthPrices[it] }
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(period.emoji() + " " + period.label(today))
+                        if (price != null) {
+                            val cheapest = month == cheapestMonth
+                            Text(
+                                text = " · " + stringResource(R.string.month_price_from, Formatters.money(price)),
+                                color = if (cheapest) CheapestPriceColor else MaterialTheme.colorScheme.onSurfaceVariant,
+                                fontWeight = if (cheapest) FontWeight.Bold else FontWeight.Normal,
+                            )
+                        }
+                    }
+                },
             )
         }
     }
 }
+
+/** Verde del mese più conveniente, leggibile nei temi chiaro e scuro. */
+private val CheapestPriceColor = Color(0xFF2E9D4A)

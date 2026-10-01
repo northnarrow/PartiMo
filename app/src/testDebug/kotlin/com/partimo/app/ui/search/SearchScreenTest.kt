@@ -1,6 +1,5 @@
 package com.partimo.app.ui.search
 
-import android.app.Application
 import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
@@ -19,11 +18,14 @@ import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextReplacement
 import androidx.core.view.drawToBitmap
 import com.partimo.app.R
+import com.partimo.app.testing.UiTestApplication
+import com.partimo.app.ui.common.Formatters
 import com.partimo.app.ui.common.PERIOD_CHIPS_TAG
 import com.partimo.app.ui.common.TRAVELLERS_TAG
 import com.partimo.app.ui.common.TravellersDialog
 import com.partimo.app.ui.dashboard.PreviewData
 import com.partimo.app.ui.theme.PartiMoTheme
+import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.place.CityPlace
@@ -44,7 +46,7 @@ import kotlin.test.assertTrue
 /** Test UI della schermata iniziale "Dove vuoi andare?", eseguiti sulla JVM con Robolectric. */
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(sdk = [34], application = Application::class, qualifiers = "w411dp-h1500dp-xxhdpi")
+@Config(sdk = [34], application = UiTestApplication::class, qualifiers = "w411dp-h1500dp-xxhdpi")
 class SearchScreenTest {
 
     @get:Rule
@@ -257,6 +259,51 @@ class SearchScreenTest {
         composeRule.onNodeWithText(text(R.string.search_dates_confirm)).performClick()
 
         assertEquals(listOf(Travellers(adults = 2, childAges = listOf(1, 1))), chosen)
+    }
+
+    @Test
+    fun `ovunque mostra le mete più economiche con prezzo e date e le filtra per prezzo`() {
+        var searched = 0
+        val budgets = mutableListOf<Int?>()
+        val chosen = mutableListOf<String>()
+        composeRule.setContent {
+            PartiMoTheme {
+                SearchScreen(
+                    PreviewData.searchAnywhereState(),
+                    query = "",
+                    actions = SearchActions(
+                        onAnywhere = { searched++ },
+                        onAnywhereMaxPrice = { budgets += it },
+                        onCheapDestinationSelected = { chosen += it.city.name },
+                    ),
+                )
+            }
+        }
+
+        composeRule.onNodeWithTag(SEARCH_LIST_TAG).performScrollToNode(hasText("🌍  " + text(R.string.anywhere_button, "Milano")))
+        composeRule.onNodeWithText("🌍  " + text(R.string.anywhere_button, "Milano")).performClick()
+        composeRule.onNodeWithTag(SEARCH_LIST_TAG).performScrollToNode(hasText("Palermo"))
+        composeRule.onNodeWithText("Palermo").assertExists()
+        composeRule.onNodeWithText(text(R.string.anywhere_max_price, Formatters.money(Money.of(50, "EUR")))).performClick()
+        composeRule.onNodeWithText("Palermo").performClick()
+
+        assertEquals(1, searched)
+        assertEquals(listOf<Int?>(50), budgets)
+        assertEquals(listOf("Palermo"), chosen)
+    }
+
+    @Test
+    fun `salva lo screenshot di ovunque`() {
+        composeRule.setContent {
+            PartiMoTheme { SearchScreen(PreviewData.searchAnywhereState(), query = "", actions = SearchActions()) }
+        }
+        composeRule.onNodeWithTag(SEARCH_LIST_TAG).performScrollToNode(hasText("Bucarest"))
+        composeRule.waitForIdle()
+
+        val bitmap = composeRule.activity.window.decorView.rootView.drawToBitmap()
+        val screenshot = File("build/outputs/screenshots/search_anywhere.png").apply { parentFile?.mkdirs() }
+        screenshot.outputStream().use { stream -> bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream) }
+        assertTrue(screenshot.length() > 0, "Screenshot non generato")
     }
 
     @Test

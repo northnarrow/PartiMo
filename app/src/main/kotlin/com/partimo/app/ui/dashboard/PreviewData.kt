@@ -36,9 +36,12 @@ import com.partimo.domain.model.event.EventKind
 import com.partimo.domain.model.event.EventTiming
 import com.partimo.domain.model.event.TripEvent
 import com.partimo.domain.model.event.TripEvents
+import com.partimo.domain.model.flight.CheapDestination
+import com.partimo.domain.model.flight.FareSnapshot
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightPriceSource
 import com.partimo.domain.model.flight.FlightSlice
+import com.partimo.domain.model.flight.PriceCalendar
 import com.partimo.domain.model.guide.CountryInfo
 import com.partimo.domain.model.guide.DrivingSide
 import com.partimo.domain.model.guide.EmergencyNumbers
@@ -432,6 +435,40 @@ internal object PreviewData {
         ),
     )
 
+    /** Prezzi più bassi a persona per mese (Milano–Vienna, andata e ritorno di 2–7 notti, da Aviasales). */
+    val monthPrices: Map<YearMonth, FareSnapshot> = listOf(
+        YearMonth.of(2026, 10) to "33",
+        YearMonth.of(2026, 11) to "39",
+        YearMonth.of(2026, 12) to "72",
+        YearMonth.of(2027, 1) to "76",
+        YearMonth.of(2027, 2) to "50",
+    ).associate { (month, price) -> month to FareSnapshot(Money.of(price, "EUR"), month.atDay(7), month.atDay(10), carrierIata = "FR") }
+
+    /** Calendario di dicembre: tariffe reali per giorno di partenza (Milano–Vienna). */
+    val decemberCalendar = PriceCalendar(
+        month = YearMonth.of(2026, 12),
+        stayNights = TravelPeriod.FLEXIBLE_STAY_NIGHTS,
+        fares = listOf(4 to "148" to 7, 5 to "146" to 9, 6 to "132" to 9, 7 to "72" to 10, 11 to "92" to 13, 18 to "84" to 22, 19 to "125" to 23, 20 to "96" to 24, 27 to "165" to 30, 28 to "168" to 30)
+            .associate { (dayAndPrice, back) ->
+                val (day, price) = dayAndPrice
+                val departure = LocalDate.of(2026, 12, day)
+                departure to FareSnapshot(Money.of(price, "EUR"), departure, LocalDate.of(2026, 12, back), carrierIata = "FR")
+            },
+    )
+
+    /** Voli di Aviasales con i prezzi dei mesi e il calendario disponibile. */
+    fun monthPricesState() = recentFlightPricesState().copy(monthPrices = monthPrices, priceCalendarAvailable = true)
+
+    /** Calendario dei prezzi aperto su dicembre. */
+    fun priceCalendarState() = monthPricesState().copy(
+        priceCalendar = PriceCalendarState(
+            month = YearMonth.of(2026, 12),
+            firstMonth = YearMonth.of(2026, 10),
+            lastMonth = YearMonth.of(2027, 9),
+            calendar = UiState.Success(decemberCalendar, DataOrigin.REMOTE),
+        ),
+    )
+
     fun noDepartureState() = loadedState().copy(trip = trip.copy(departure = null), flights = UiState.Empty, alertEnabled = false)
 
     fun mixedStates() = loadedState().copy(
@@ -501,6 +538,48 @@ internal object PreviewData {
         today = TODAY,
         departure = SampleDestinations.MILAN_DEPARTURE,
         recommendations = UiState.Success(suggestions),
+    )
+
+    /** Mete di «Ovunque» da Milano a dicembre: tariffe reali trovate su Aviasales. */
+    private val cheapDestinations = listOf(
+        cheap("PMO", "Palermo", "Italia", "IT", 38.1157, 13.3615, "Europe/Rome", "29", 10, 15),
+        cheap("TIA", "Tirana", "Albania", "AL", 41.3275, 19.8187, "Europe/Tirane", "30", 10, 13),
+        cheap("BUH", "Bucarest", "Romania", "RO", 44.4377, 26.0974, "Europe/Bucharest", "32", 13, 18, airport = "OTP"),
+        cheap("BCN", "Barcellona", "Spagna", "ES", 41.3879, 2.1699, "Europe/Madrid", "33", 10, 12),
+        cheap("ALC", "Alicante", "Spagna", "ES", 38.3452, -0.481, "Europe/Madrid", "34", 14, 19),
+        cheap("WAW", "Varsavia", "Polonia", "PL", 52.2297, 21.0122, "Europe/Warsaw", "36", 9, 14),
+        cheap("SVQ", "Siviglia", "Spagna", "ES", 37.3826, -5.9963, "Europe/Madrid", "37", 12, 14),
+        cheap("STO", "Stoccolma", "Svezia", "SE", 59.3328, 18.0645, "Europe/Stockholm", "48", 11, 13, airport = "ARN"),
+        cheap("PRG", "Praga", "Cechia", "CZ", 50.0755, 14.4378, "Europe/Prague", "55", 21, 23),
+        cheap("HRG", "Hurghada", "Egitto", "EG", 27.2579, 33.8116, "Africa/Cairo", "63", 15, 20),
+    )
+
+    @Suppress("LongParameterList")
+    private fun cheap(
+        code: String,
+        name: String,
+        country: String,
+        countryCode: String,
+        latitude: Double,
+        longitude: Double,
+        zone: String,
+        price: String,
+        from: Int,
+        to: Int,
+        airport: String = code,
+    ) = CheapDestination(
+        city = CityPlace("tp:$code", name, countryCode, GeoPoint(latitude, longitude), ZoneId.of(zone), country = country),
+        cityCode = code,
+        airportIata = airport,
+        fare = FareSnapshot(Money.of(price, "EUR"), LocalDate.of(2026, 12, from), LocalDate.of(2026, 12, to), carrierIata = "W4"),
+        bookingUrl = "https://www.aviasales.com/search/MIL${"%02d".format(from)}12$code${"%02d".format(to)}121",
+    )
+
+    /** «Ovunque» da Milano a dicembre, con le mete più economiche. */
+    fun searchAnywhereState() = searchIdleState().copy(
+        period = DECEMBER,
+        anywhereAvailable = true,
+        anywhere = UiState.Success(cheapDestinations, DataOrigin.REMOTE),
     )
 
     // ---- Scelta della partenza ------------------------------------------------------------------

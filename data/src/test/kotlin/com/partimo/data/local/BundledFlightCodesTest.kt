@@ -5,6 +5,7 @@ import java.io.File
 import java.time.ZoneId
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -13,7 +14,27 @@ class BundledFlightCodesTest {
     private val codes = BundledFlightCodes(
         openAirports = { File("src/main/assets/airport_cities.csv").inputStream() },
         openAirlines = { File("src/main/assets/airlines.csv").inputStream() },
+        openCities = { File("src/main/assets/cities.csv").inputStream() },
     )
+
+    @Test
+    fun `le città dei voli hanno il nome italiano, il paese, le coordinate e il fuso`() = runTest {
+        val london = assertNotNull(codes.city("LON"))
+        assertEquals("Londra", london.name)
+        assertEquals("GB", london.countryCode)
+        assertEquals(ZoneId.of("Europe/London"), london.timeZone)
+        assertEquals(51.5074, london.location.latitude, 0.001)
+        assertEquals("Barcellona", codes.city("bcn")?.name)
+        assertNull(codes.city("XXX"))
+    }
+
+    @Test
+    fun `ogni città degli aeroporti ha il suo nome`() {
+        val cities = parseFlightCities(File("src/main/assets/cities.csv").readLines().asSequence())
+        val cityCodes = parseAirportCodes(File("src/main/assets/airport_cities.csv").readLines().asSequence()).values.map { it.cityCode }.toSet()
+
+        assertEquals(emptySet(), cityCodes - cities.keys)
+    }
 
     @Test
     fun `gli aeroporti delle grandi città hanno il codice della città e il loro fuso`() = runTest {

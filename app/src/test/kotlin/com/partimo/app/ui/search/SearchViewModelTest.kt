@@ -16,10 +16,12 @@ import com.partimo.domain.service.SeasonalCalendar
 import com.partimo.domain.testing.FakeAirportRepository
 import com.partimo.domain.testing.FakeCitySearchRepository
 import com.partimo.domain.testing.FakeDestinationCatalogRepository
+import com.partimo.domain.testing.FakeFlightInsightsRepository
 import com.partimo.domain.testing.FakeUserPreferencesRepository
 import com.partimo.domain.testing.FakeWeatherRepository
 import com.partimo.domain.testing.TestData
 import com.partimo.domain.testing.TestData.catalogDestination
+import com.partimo.domain.usecase.FindCheapDestinationsUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObserveTravellersUseCase
 import com.partimo.domain.usecase.RecommendDestinationsUseCase
@@ -76,6 +78,15 @@ class SearchViewModelTest {
     private val preferences = FakeUserPreferencesRepository()
     private val december = TravelPeriod.InMonth(YearMonth.of(2026, Month.DECEMBER))
 
+    private val insights = FakeFlightInsightsRepository(
+        destinations = DataResult.Success(
+            listOf(
+                TestData.cheapDestination("PMO", "Palermo", "29", LocalDate.of(2026, Month.DECEMBER, 10), LocalDate.of(2026, Month.DECEMBER, 15)),
+                TestData.cheapDestination("BCN", "Barcellona", "120", LocalDate.of(2026, Month.DECEMBER, 10), LocalDate.of(2026, Month.DECEMBER, 12)),
+            ),
+        ),
+    )
+
     private fun createViewModel() = SearchViewModel(
         searchCities = SearchCitiesUseCase(cities),
         resolveDestination = ResolveDestinationUseCase(airports),
@@ -84,7 +95,49 @@ class SearchViewModelTest {
         clock = TestData.FIXED_CLOCK,
         observeTravellers = ObserveTravellersUseCase(preferences),
         saveTravellers = SaveTravellersUseCase(preferences),
+        findCheapDestinations = FindCheapDestinationsUseCase(insights, TestData.FIXED_CLOCK),
     )
+
+    @Test
+    fun `ovunque trova le mete più economiche dalla città di partenza, filtra per prezzo e apre le date del volo`() = runTest {
+        preferences.setDeparture(TestData.departure("Milano", "MXP"))
+        airports.result = DataResult.Success(listOf(TestData.airport("PMO", location = TestData.city("Palermo").location)))
+        val viewModel = createViewModel()
+        viewModel.onPeriodSelected(december)
+        assertTrue(viewModel.uiState.value.anywhereAvailable)
+
+        viewModel.onAnywhere()
+        advanceUntilIdle()
+
+        assertEquals("MXP", insights.destinationQueries.single().originIata)
+        assertEquals(LocalDate.of(2026, Month.DECEMBER, 1)..LocalDate.of(2026, Month.DECEMBER, 31), insights.destinationQueries.single().departures)
+        assertEquals(listOf("Palermo", "Barcellona"), viewModel.uiState.value.anywhereShown.map { it.city.name })
+
+        viewModel.onAnywhereMaxPrice(100)
+        assertEquals(listOf("Palermo"), viewModel.uiState.value.anywhereShown.map { it.city.name })
+
+        viewModel.onCheapDestinationSelected(viewModel.uiState.value.anywhereShown.first())
+        advanceUntilIdle()
+        val navigation = assertNotNull(viewModel.uiState.value.pendingNavigation)
+        assertEquals("Palermo", navigation.destination.name)
+        assertEquals(TravelPeriod.Dates(LocalDate.of(2026, Month.DECEMBER, 10), LocalDate.of(2026, Month.DECEMBER, 15)), navigation.period)
+
+        viewModel.onPeriodSelected(TravelPeriod.NextDays)
+        advanceUntilIdle()
+        assertEquals(2, insights.destinationQueries.size, "Cambiando periodo le mete si ricercano")
+        assertTrue(viewModel.uiState.value.anywhereShown.isEmpty(), "Le tariffe di dicembre non valgono per i prossimi giorni")
+    }
+
+    @Test
+    fun `senza città di partenza ovunque non cerca nulla`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.onAnywhere()
+        advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.anywhere)
+        assertTrue(insights.destinationQueries.isEmpty())
+    }
 
     private fun SearchViewModel.recommendedNames(): List<String> =
         assertNotNull(uiState.value.recommendations).successData().map { it.destination.city.name }

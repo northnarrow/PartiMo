@@ -11,6 +11,8 @@ import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.event.EventKind
 import com.partimo.domain.model.event.EventTiming
 import com.partimo.domain.model.event.TripEvent
+import com.partimo.domain.model.flight.CheapDestination
+import com.partimo.domain.model.flight.FareSnapshot
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightSlice
 import com.partimo.domain.model.place.Airport
@@ -298,6 +300,26 @@ object TestData {
         createdAt = NOW,
         flightPrices = flightPrices.map { PricePoint(Money.of(it, "EUR"), NOW) },
         stayPrices = stayPrices.map { PricePoint(Money.of(it, "EUR"), NOW) },
+    )
+
+    /** Tariffa di andata e ritorno a persona, in euro. */
+    fun fare(price: String, departure: LocalDate, returning: LocalDate? = departure.plusDays(3), stops: Int = 0): FareSnapshot =
+        FareSnapshot(Money.of(price, "EUR"), departure, returning, stops, carrierIata = "FR")
+
+    /** Meta di «Ovunque» con il volo più economico. */
+    fun cheapDestination(
+        cityCode: String,
+        name: String,
+        price: String,
+        departure: LocalDate,
+        returning: LocalDate? = departure.plusDays(3),
+        airportIata: String = cityCode,
+    ): CheapDestination = CheapDestination(
+        city = city(name, id = "tp:$cityCode"),
+        cityCode = cityCode,
+        airportIata = airportIata,
+        fare = fare(price, departure, returning),
+        bookingUrl = "https://www.aviasales.com/search/MIL${departure.dayOfMonth}${cityCode}1",
     )
 
     /** Percorso semplice: a piedi → mezzo → a piedi. */

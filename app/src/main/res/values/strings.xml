@@ -326,6 +326,31 @@
         <item quantity="one">totale per %d posto</item>
         <item quantity="other">totale per %d posti</item>
     </plurals>
+    <string name="month_price_from">da %1$s</string>
+    <string name="price_calendar_open">Calendario dei prezzi</string>
+    <string name="price_calendar_open_hint">Il giorno di partenza più conveniente, mese per mese</string>
+    <string name="price_calendar_title">Prezzi per giorno di partenza</string>
+    <string name="price_calendar_previous">Mese precedente</string>
+    <string name="price_calendar_next">Mese successivo</string>
+    <string name="price_calendar_close">Chiudi</string>
+    <string name="price_calendar_empty">Nessun prezzo trovato di recente per questo mese: prova un altro mese o i siti dei voli.</string>
+    <string name="price_calendar_day">%1$s: da %2$s</string>
+    <string name="price_calendar_day_empty">%1$s: nessun prezzo</string>
+    <string name="price_calendar_note">Prezzo più basso in euro a persona, andata e ritorno (%1$s), trovato negli ultimi giorni su Aviasales. In verde i giorni più convenienti: tocca un giorno per vedere i voli di quelle date.</string>
+    <string name="price_calendar_nights_range">soggiorni da %1$d a %2$d notti</string>
+    <plurals name="price_calendar_nights">
+        <item quantity="one">soggiorno di %d notte</item>
+        <item quantity="other">soggiorni di %d notti</item>
+    </plurals>
+    <string name="anywhere_button">Ovunque da %1$s</string>
+    <string name="anywhere_button_no_departure">Ovunque: scegli da dove parti</string>
+    <string name="anywhere_hint">Le mete più economiche per il periodo scelto, con i prezzi trovati negli ultimi giorni su Aviasales.</string>
+    <string name="anywhere_title">Da %1$s per %2$s</string>
+    <string name="anywhere_empty">Nessun volo trovato di recente da questa città per il periodo scelto: prova un altro mese.</string>
+    <string name="anywhere_none_in_budget">Nessuna meta entro questo prezzo: prova un limite più alto.</string>
+    <string name="anywhere_all_prices">Tutte</string>
+    <string name="anywhere_max_price">fino a %1$s</string>
+    <string name="anywhere_per_person">a persona</string>
     <string name="search_dates_hint">Oppure scegli le date esatte: i voli di quei giorni vengono prima.</string>
     <string name="search_departure_date">🛫 Andata</string>
     <string name="search_return_date">🛬 Ritorno</string>
