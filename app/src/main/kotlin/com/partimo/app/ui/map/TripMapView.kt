@@ -75,6 +75,10 @@ data class MapContent(
     val fitRequest: Int = 0,
     val onPointSelected: (String?) -> Unit = {},
     val onOpenLink: (String) -> Unit = {},
+    /** Posizione dell'utente, se nota. */
+    val myLocation: GeoPoint? = null,
+    /** Cresce a ogni richiesta di centrare la mappa sull'utente. */
+    val locateRequest: Int = 0,
 )
 
 /** Colore dei punti di ogni tipo, lo stesso sulla mappa e nei filtri che fanno da legenda. */
@@ -115,6 +119,13 @@ internal object MapLibreSupport {
 private const val LIGHT_STYLE_URL = "https://tiles.openfreemap.org/styles/liberty"
 private const val DARK_STYLE_URL = "https://tiles.openfreemap.org/styles/dark"
 private const val SOURCE_ID = "partimo-points"
+private const val ME_SOURCE_ID = "partimo-me"
+private const val ME_LAYER_ID = "partimo-me-dot"
+private const val ME_HALO_LAYER_ID = "partimo-me-halo"
+private const val LOCATE_ZOOM = 15.0
+
+/** Azzurro del punto "sei qui", come nelle app di mappe. */
+private val MyLocationBlue = Color(0xFF1A73E8)
 private const val CIRCLE_LAYER_ID = "partimo-points-circles"
 private const val LABEL_LAYER_ID = "partimo-points-labels"
 private const val PROPERTY_KEY = "key"
@@ -214,7 +225,8 @@ private fun MapLibreTripMap(content: MapContent, modifier: Modifier) {
             val styleBuilder = Style.Builder()
                 .fromUri(if (darkMap) DARK_STYLE_URL else LIGHT_STYLE_URL)
                 .withSource(GeoJsonSource(SOURCE_ID))
-                .withLayers(circleLayer(), labelLayer(labelColor, haloColor))
+                .withSource(GeoJsonSource(ME_SOURCE_ID))
+                .withLayers(circleLayer(), labelLayer(labelColor, haloColor), *myLocationLayers())
             mapLibreMap.setStyle(styleBuilder) { loaded -> style = loaded }
             map = mapLibreMap
         }
@@ -223,6 +235,24 @@ private fun MapLibreTripMap(content: MapContent, modifier: Modifier) {
     // Punti, preferiti e selezione: la sorgente GeoJSON si aggiorna a ogni cambiamento.
     LaunchedEffect(style, content.points, content.favoriteKeys, content.selectedKey) {
         style?.getSourceAs<GeoJsonSource>(SOURCE_ID)?.setGeoJson(featureCollection(content))
+    }
+
+    // "Sei qui": un punto azzurro con l'alone, sopra gli altri.
+    LaunchedEffect(style, content.myLocation) {
+        val me = content.myLocation
+        val source = style?.getSourceAs<GeoJsonSource>(ME_SOURCE_ID) ?: return@LaunchedEffect
+        source.setGeoJson(FeatureCollection.fromFeatures(listOfNotNull(me?.let { Feature.fromGeometry(Point.fromLngLat(it.longitude, it.latitude)) })))
+    }
+
+    // "Dove sono": la mappa si centra sull'utente (una volta per richiesta).
+    var handledLocateRequest by rememberSaveable { mutableIntStateOf(0) }
+    LaunchedEffect(map, content.locateRequest) {
+        val mapLibreMap = map ?: return@LaunchedEffect
+        val me = content.myLocation ?: return@LaunchedEffect
+        if (content.locateRequest > handledLocateRequest) {
+            handledLocateRequest = content.locateRequest
+            mapLibreMap.easeCamera(CameraUpdateFactory.newLatLngZoom(me.toLatLng(), LOCATE_ZOOM), CAMERA_ANIMATION_MS)
+        }
     }
 
     // A fine caricamento e con "Inquadra tutto" la mappa mostra tutti i punti visibili (una volta per richiesta).
@@ -298,6 +328,19 @@ private fun circleLayer(): CircleLayer = CircleLayer(CIRCLE_LAYER_ID, SOURCE_ID)
     ),
 )
 
+private fun myLocationLayers(): Array<CircleLayer> = arrayOf(
+    CircleLayer(ME_HALO_LAYER_ID, ME_SOURCE_ID).withProperties(
+        PropertyFactory.circleColor(MyLocationBlue.copy(alpha = 0.2f).toArgb()),
+        PropertyFactory.circleRadius(18f),
+    ),
+    CircleLayer(ME_LAYER_ID, ME_SOURCE_ID).withProperties(
+        PropertyFactory.circleColor(MyLocationBlue.toArgb()),
+        PropertyFactory.circleRadius(7f),
+        PropertyFactory.circleStrokeColor(Color.White.toArgb()),
+        PropertyFactory.circleStrokeWidth(3f),
+    ),
+)
+
 /** Nomi sotto i punti, dallo zoom di quartiere in su; quelli che si sovrapporrebbero vengono omessi. */
 private fun labelLayer(textColor: Color, haloColor: Color): SymbolLayer = SymbolLayer(LABEL_LAYER_ID, SOURCE_ID)
     .withProperties(
@@ -368,6 +411,14 @@ private fun SchematicTripMap(content: MapContent, modifier: Modifier) {
                 y += step
             }
             val projection = SchematicProjection.of(content, size.width, size.height, 32.dp.toPx())
+            content.myLocation?.let { me ->
+                val offset = projection.offsetOf(me)
+                if (offset.x in 0f..size.width && offset.y in 0f..size.height) {
+                    drawCircle(MyLocationBlue.copy(alpha = 0.2f), 18.dp.toPx(), offset)
+                    drawCircle(MyLocationBlue, 7.dp.toPx(), offset)
+                    drawCircle(Color.White, 7.dp.toPx(), offset, style = Stroke(width = 3.dp.toPx()))
+                }
+            }
             content.points.sortedBy { it.key == content.selectedKey }.forEach { point ->
                 val offset = projection.offsetOf(point.location)
                 val selected = point.key == content.selectedKey

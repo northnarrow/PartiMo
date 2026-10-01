@@ -68,7 +68,14 @@ data class MapUiState(
     val selectedKey: String? = null,
     /** Cresce a ogni richiesta di inquadrare i punti visibili: a fine caricamento e con "Inquadra tutto". */
     val fitRequest: Int = 0,
+    /** Posizione dell'utente, se l'ha chiesta con "Dove sono". */
+    val myLocation: GeoPoint? = null,
+    /** Cresce a ogni richiesta di centrare la mappa sull'utente. */
+    val locateRequest: Int = 0,
 ) {
+    /** Distanza in metri tra l'utente e il punto selezionato, se si conoscono entrambi. */
+    val selectedDistanceMeters: Double? get() = myLocation?.let { me -> selected?.location?.distanceTo(me) }
+
     val favoriteKeys: Set<String> get() = favorites.mapTo(HashSet()) { it.key }
 
     /** Punti caricati più i preferiti salvati che non sono tra questi (es. un luogo trovato in un altro mese). */
@@ -157,6 +164,11 @@ class MapViewModel(
     /** Tocco su un punto della mappa; `null` per un tocco fuori dai punti, che chiude la scheda. */
     fun onPointSelected(key: String?) {
         _uiState.update { it.copy(selectedKey = key) }
+    }
+
+    /** Posizione dell'utente appena letta: la mappa la mostra e la centra. */
+    fun onMyLocation(location: GeoPoint) {
+        _uiState.update { it.copy(myLocation = location, locateRequest = it.locateRequest + 1) }
     }
 
     fun onFitAll() {

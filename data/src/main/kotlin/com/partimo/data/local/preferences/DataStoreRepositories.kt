@@ -16,11 +16,13 @@ import com.partimo.domain.model.saved.SavedTrip
 import com.partimo.domain.repository.BudgetRepository
 import com.partimo.domain.repository.ChecklistRepository
 import com.partimo.domain.repository.PriceWatchRepository
+import com.partimo.domain.repository.ReminderLogRepository
 import com.partimo.domain.repository.SavedTripRepository
 import com.partimo.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
@@ -136,5 +138,21 @@ class DataStoreBudgetRepository internal constructor(
     }
 
     private fun keyOf(tripId: String) = stringPreferencesKey("budget:$tripId")
+}
+
+/** Promemoria dei viaggi già mostrati: chiavi in un insieme, una per viaggio e tipo di promemoria. */
+class DataStoreReminderLogRepository internal constructor(
+    private val dataStore: DataStore<Preferences>,
+) : ReminderLogRepository {
+
+    override suspend fun sentReminders(): Set<String> = dataStore.safeData().first()[SENT_REMINDERS_KEY].orEmpty()
+
+    override suspend fun markSent(keys: Collection<String>) {
+        dataStore.edit { preferences -> preferences[SENT_REMINDERS_KEY] = preferences[SENT_REMINDERS_KEY].orEmpty() + keys }
+    }
+
+    private companion object {
+        val SENT_REMINDERS_KEY = stringSetPreferencesKey("sent_reminders")
+    }
 }
 

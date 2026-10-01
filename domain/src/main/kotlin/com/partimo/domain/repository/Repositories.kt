@@ -154,6 +154,13 @@ interface TranslatorRepository {
     suspend fun translate(text: String, from: String, to: String): DataResult<String>
 }
 
+/** Promemoria dei viaggi già mostrati, per non ripeterli. */
+interface ReminderLogRepository {
+    suspend fun sentReminders(): Set<String>
+
+    suspend fun markSent(keys: Collection<String>)
+}
+
 /** Budget e spese dei viaggi, salvati sul telefono (un budget per viaggio, cioè meta e periodo). */
 interface BudgetRepository {
     fun budget(tripId: String): Flow<TripBudget>

@@ -41,6 +41,13 @@
     <string name="notification_channel_deals_description">Avvisi quando voli e alloggi dei viaggi seguiti costano molto meno del solito.</string>
     <string name="notification_title_month">🔥 %1$s a %2$s: offerta davvero conveniente</string>
     <string name="notification_title_next_days">🔥 %1$s nei prossimi giorni: offerta davvero conveniente</string>
+    <string name="notification_channel_reminders">Promemoria dei viaggi</string>
+    <string name="notification_channel_reminders_description">Una settimana prima e il giorno prima della partenza dei viaggi salvati.</string>
+    <string name="reminder_title_days">🧳 %1$s tra %2$d giorni</string>
+    <string name="reminder_title_tomorrow">✈️ Domani si parte per %1$s!</string>
+    <string name="reminder_title_today">✈️ Oggi si parte per %1$s!</string>
+    <string name="reminder_text_week">Controlla documenti e meteo nella Guida, prepara la valigia e scarica il traduttore per l\'uso offline.</string>
+    <string name="reminder_text_day">Meteo, valuta, numeri di emergenza e i tuoi preferiti sono nell\'app, pronti anche senza rete.</string>
     <string name="notification_flight">✈️ Volo %1$s → %2$s a %3$s (−%4$d%% rispetto al solito)</string>
     <string name="notification_stay">🏨 %1$s a %2$s a notte (−%3$d%% rispetto al solito)</string>
 
@@ -437,7 +444,7 @@
     <string name="favorite_state_off">Non nei preferiti</string>
     <string name="trip_save">Salva il viaggio</string>
     <string name="trip_unsave">Togli il viaggio dai salvati</string>
-    <string name="trip_saved_message">Viaggio salvato: lo ritrovi nella schermata iniziale.</string>
+    <string name="trip_saved_message">Viaggio salvato: lo ritrovi nella schermata iniziale e, con il Wi-Fi, si prepara per l\'uso senza rete.</string>
     <string name="trip_removed_message">Viaggio tolto dai salvati.</string>
     <string name="favorites_chip">Preferiti (%1$d)</string>
     <string name="favorites_title">I preferiti di %1$s</string>
@@ -469,6 +476,10 @@
     <string name="map_empty">Nessun punto da mostrare con questi filtri.</string>
     <string name="map_no_favorites">Nessun preferito con una posizione: tocca ☆ su luoghi, eventi, ristoranti e alloggi.</string>
     <string name="map_attribution">© OpenFreeMap © OpenMapTiles © OpenStreetMap</string>
+    <string name="map_locate_me">Mostra dove sono</string>
+    <string name="map_distance_from_you">a %1$s da te</string>
+    <string name="map_location_unavailable">Posizione non disponibile: controlla che la localizzazione sia attiva.</string>
+    <string name="map_location_denied">Senza il permesso di posizione la mappa non può mostrare dove sei.</string>
     <string name="map_schematic_note">Schema dei punti: la mappa non è disponibile su questo dispositivo.</string>
 
     <!-- Traduttore -->

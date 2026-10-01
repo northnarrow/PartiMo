@@ -72,6 +72,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.partimo.app.R
 import com.partimo.app.navigation.TripArgs
+import com.partimo.app.notifications.TripWorkScheduler
 import com.partimo.app.ui.common.Formatters
 import com.partimo.app.ui.common.PeriodChips
 import com.partimo.app.ui.common.TravelLinks
@@ -168,6 +169,8 @@ fun TripDashboardRoute(
     val notificationPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         viewModel.onAlertToggled(notificationsAllowed = granted)
     }
+    // Salvando un viaggio si chiedono le notifiche per i promemoria: la risposta non cambia nulla qui.
+    val reminderPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
     TripDashboardScreen(
         state = state,
         actions = DashboardActions(
@@ -197,7 +200,15 @@ fun TripDashboardRoute(
             onOpenItinerary = { onOpenItinerary(TripArgs.from(state.trip, state.period)) },
             onOpenAssistant = { onOpenAssistant(TripArgs.from(state.trip, state.period)) },
             onOpenGuide = { onOpenGuide(TripArgs.from(state.trip, state.period)) },
-            onToggleTripSaved = viewModel::onToggleTripSaved,
+            onToggleTripSaved = {
+                val saving = state.savedTrip == null
+                viewModel.onToggleTripSaved()
+                if (saving) {
+                    // Con il Wi-Fi il viaggio si prepara per l'uso offline; i promemoria arrivano come notifiche.
+                    TripWorkScheduler(context).prefetchNow()
+                    if (needsNotificationPermission(context)) reminderPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            },
             onToggleFavorite = viewModel::onToggleFavorite,
             onOpenFavorites = { onOpenFavorites(TripArgs.from(state.trip, state.period)) },
             onOpenMap = { onOpenMap(TripArgs.from(state.trip, state.period)) },

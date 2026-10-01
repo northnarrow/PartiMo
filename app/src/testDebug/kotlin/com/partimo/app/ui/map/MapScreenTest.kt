@@ -115,6 +115,24 @@ class MapScreenTest {
     }
 
     @Test
+    fun `dove sono chiede la posizione e la scheda dice la distanza`() {
+        var locates = 0
+        composeRule.setContent {
+            PartiMoTheme {
+                MapScreen(
+                    PreviewData.mapState(selectFirst = true).copy(myLocation = GeoPoint(48.2085, 16.3731), locateRequest = 1),
+                    MapActions(onLocateMe = { locates++ }),
+                )
+            }
+        }
+
+        composeRule.onNodeWithContentDescription(text(R.string.map_locate_me)).performClick()
+        // Dal Duomo al Christkindlmarkt sono circa 1,2 km.
+        composeRule.onNodeWithText("📍 " + text(R.string.map_distance_from_you, "1,2 km")).assertExists()
+        assertEquals(1, locates)
+    }
+
+    @Test
     fun `con solo preferiti e nessun preferito spiega come aggiungerli`() {
         composeRule.setContent {
             PartiMoTheme { MapScreen(PreviewData.mapState().copy(favorites = emptyList(), favoritesOnly = true), MapActions()) }

@@ -52,6 +52,7 @@ import com.partimo.domain.repository.LodgingRepository
 import com.partimo.domain.repository.PoiArticleRepository
 import com.partimo.domain.repository.PoiRepository
 import com.partimo.domain.repository.PriceWatchRepository
+import com.partimo.domain.repository.ReminderLogRepository
 import com.partimo.domain.repository.RestaurantRepository
 import com.partimo.domain.repository.SavedTripRepository
 import com.partimo.domain.repository.TransitRepository
@@ -417,6 +418,17 @@ class FakeBudgetRepository : BudgetRepository {
 
     override suspend fun update(tripId: String, transform: (TripBudget) -> TripBudget) {
         state.update { budgets -> budgets + (tripId to transform(budgets[tripId] ?: TripBudget(tripId))) }
+    }
+}
+
+/** Promemoria già mostrati, in memoria. */
+class FakeReminderLogRepository(sent: Set<String> = emptySet()) : ReminderLogRepository {
+    val sent = sent.toMutableSet()
+
+    override suspend fun sentReminders(): Set<String> = sent.toSet()
+
+    override suspend fun markSent(keys: Collection<String>) {
+        sent += keys
     }
 }
 

@@ -14,6 +14,7 @@ import com.partimo.data.local.CuratedDestinationCatalog
 import com.partimo.data.local.preferences.DataStoreBudgetRepository
 import com.partimo.data.local.preferences.DataStoreChecklistRepository
 import com.partimo.data.local.preferences.DataStorePriceWatchRepository
+import com.partimo.data.local.preferences.DataStoreReminderLogRepository
 import com.partimo.data.local.preferences.DataStoreSavedTripRepository
 import com.partimo.data.local.preferences.DataStoreUserPreferencesRepository
 import com.partimo.data.local.preferences.createUserDataStore
@@ -79,6 +80,7 @@ import com.partimo.domain.repository.LodgingRepository
 import com.partimo.domain.repository.PoiArticleRepository
 import com.partimo.domain.repository.PoiRepository
 import com.partimo.domain.repository.PriceWatchRepository
+import com.partimo.domain.repository.ReminderLogRepository
 import com.partimo.domain.repository.RestaurantRepository
 import com.partimo.domain.repository.SavedTripRepository
 import com.partimo.domain.repository.TransitRepository
@@ -259,6 +261,9 @@ class DataModule(
 
     /** Viaggi salvati e preferiti, sul dispositivo. */
     val savedTripRepository: SavedTripRepository by lazy { DataStoreSavedTripRepository(userDataStore) }
+
+    /** Promemoria dei viaggi già mostrati. */
+    val reminderLogRepository: ReminderLogRepository by lazy { DataStoreReminderLogRepository(userDataStore) }
 
     /** Budget e spese dei viaggi, salvati sul dispositivo. */
     val budgetRepository: BudgetRepository by lazy { DataStoreBudgetRepository(userDataStore) }

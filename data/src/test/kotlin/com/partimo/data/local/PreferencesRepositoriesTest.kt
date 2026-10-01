@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import com.partimo.data.local.preferences.DataStoreBudgetRepository
 import com.partimo.data.local.preferences.DataStoreChecklistRepository
 import com.partimo.data.local.preferences.DataStorePriceWatchRepository
+import com.partimo.data.local.preferences.DataStoreReminderLogRepository
 import com.partimo.data.local.preferences.DataStoreSavedTripRepository
 import com.partimo.data.local.preferences.DataStoreUserPreferencesRepository
 import com.partimo.data.local.preferences.StoredJson
@@ -121,6 +122,17 @@ class SavedTripRepositoryTest {
 
         repository.update("CZ:Praga:2026-12") { it.copy(limit = null, expenses = emptyList()) }
         assertTrue(store.data.first().asMap().isEmpty(), "Un budget vuoto non occupa spazio")
+    }
+
+    @Test
+    fun `i promemoria mostrati si ricordano`() = runTest {
+        val repository = DataStoreReminderLogRepository(InMemoryPreferencesDataStoreForTrips())
+        assertTrue(repository.sentReminders().isEmpty())
+
+        repository.markSent(listOf("AT:Vienna:2026-12:WEEK_BEFORE"))
+        repository.markSent(listOf("AT:Vienna:2026-12:DAY_BEFORE"))
+
+        assertEquals(setOf("AT:Vienna:2026-12:WEEK_BEFORE", "AT:Vienna:2026-12:DAY_BEFORE"), repository.sentReminders())
     }
 
     @Test

@@ -212,4 +212,21 @@ class MapViewModelTest {
         assertFalse(viewModel.uiState.value.hasErrors)
         assertEquals(5, viewModel.uiState.value.points.size)
     }
+
+    @Test
+    fun `dove sono mostra la posizione, centra la mappa e dice la distanza dal punto scelto`() = runTest {
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        viewModel.onPointSelected("LODGING:sacher")
+        assertNull(viewModel.uiState.value.selectedDistanceMeters)
+
+        val stephansplatz = GeoPoint(48.2085, 16.3731)
+        viewModel.onMyLocation(stephansplatz)
+
+        val state = viewModel.uiState.value
+        assertEquals(stephansplatz, state.myLocation)
+        assertEquals(1, state.locateRequest)
+        assertEquals(GeoPoint(48.2039, 16.3694).distanceTo(stephansplatz), state.selectedDistanceMeters!!, 0.001)
+    }
 }
+

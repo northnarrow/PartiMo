@@ -5,6 +5,8 @@ import android.util.Log
 import com.partimo.app.BuildConfig
 import com.partimo.app.notifications.DealCheckScheduler
 import com.partimo.app.notifications.DealNotifier
+import com.partimo.app.notifications.TripReminderNotifier
+import com.partimo.app.notifications.TripWorkScheduler
 import com.partimo.data.config.ApiConfig
 import com.partimo.data.di.DataModule
 import com.partimo.domain.usecase.AskTravelAssistantUseCase
@@ -30,6 +32,7 @@ import com.partimo.domain.usecase.ObserveTripBudgetUseCase
 import com.partimo.domain.usecase.PackingChecklistUseCase
 import com.partimo.domain.usecase.PlanTransitRouteUseCase
 import com.partimo.domain.usecase.PlanTripUseCase
+import com.partimo.domain.usecase.PrefetchTripUseCase
 import com.partimo.domain.usecase.RecommendDestinationsUseCase
 import com.partimo.domain.usecase.ResolveDestinationUseCase
 import com.partimo.domain.usecase.SaveDepartureUseCase
@@ -41,6 +44,7 @@ import com.partimo.domain.usecase.SetTripSavedUseCase
 import com.partimo.domain.usecase.SummarizeBudgetUseCase
 import com.partimo.domain.usecase.ToggleFavoriteUseCase
 import com.partimo.domain.usecase.TranslateTextUseCase
+import com.partimo.domain.usecase.TripRemindersUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -93,6 +97,10 @@ interface AppContainer {
     val observeTripBudget: ObserveTripBudgetUseCase
     val editTripBudget: EditTripBudgetUseCase
     val summarizeBudget: SummarizeBudgetUseCase
+
+    /** Promemoria e preparazione offline dei viaggi salvati. */
+    val tripReminders: TripRemindersUseCase
+    val prefetchTrip: PrefetchTripUseCase
 
     /** Viaggi salvati e preferiti. */
     val observeSavedTrips: ObserveSavedTripsUseCase
@@ -207,6 +215,23 @@ class DefaultAppContainer(context: Context) : AppContainer {
 
     override val summarizeBudget: SummarizeBudgetUseCase by lazy { SummarizeBudgetUseCase(dataModule.exchangeRateRepository) }
 
+    override val tripReminders: TripRemindersUseCase by lazy {
+        TripRemindersUseCase(dataModule.savedTripRepository, dataModule.reminderLogRepository, clock)
+    }
+
+    override val prefetchTrip: PrefetchTripUseCase by lazy {
+        PrefetchTripUseCase(
+            getSeasonalHighlights = getSeasonalHighlights,
+            getTripEvents = getTripEvents,
+            findBudgetRestaurants = findBudgetRestaurants,
+            findLodgings = findLodgings,
+            getTravelGuide = getTravelGuide,
+            getTripWeather = getTripWeather,
+            getCountryInfo = getCountryInfo,
+            getExchangeRate = getExchangeRate,
+        )
+    }
+
     override val observeSavedTrips: ObserveSavedTripsUseCase by lazy { ObserveSavedTripsUseCase(dataModule.savedTripRepository, clock) }
 
     override val observeSavedTrip: ObserveSavedTripUseCase by lazy { ObserveSavedTripUseCase(dataModule.savedTripRepository) }
@@ -228,6 +253,18 @@ class DefaultAppContainer(context: Context) : AppContainer {
     fun onAppStart() {
         runSafely("Pulizia della cache non riuscita") { dataModule.trimCache() }
         runSafely("Creazione del canale delle notifiche non riuscita") { DealNotifier(appContext).ensureChannel() }
+        runSafely("Creazione del canale dei promemoria non riuscita") { TripReminderNotifier(appContext).ensureChannel() }
+        runSafely("Pianificazione dei promemoria e dell'uso offline non riuscita") {
+            // Promemoria finché c'è un viaggio salvato con una data futura; preparazione offline finché c'è un viaggio salvato.
+            val scheduler = TripWorkScheduler(appContext)
+            dataModule.savedTripRepository.trips
+                .map { trips -> trips.isNotEmpty() to tripReminders.hasUpcoming() }
+                .distinctUntilChanged()
+                .collect { (anyTrip, upcoming) ->
+                    if (upcoming) scheduler.scheduleReminders() else scheduler.cancelReminders()
+                    if (anyTrip) scheduler.schedulePrefetch() else scheduler.cancelPrefetch()
+                }
+        }
         runSafely("Pianificazione del controllo delle offerte non riuscita") {
             val scheduler = DealCheckScheduler(appContext)
             dataModule.priceWatchRepository.watches

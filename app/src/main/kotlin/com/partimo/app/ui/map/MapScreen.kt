@@ -47,6 +47,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -86,6 +88,8 @@ data class MapActions(
     val onOpenLink: (String) -> Unit = {},
     val onNavigate: (GeoPoint) -> Unit = {},
     val onToggleFavorite: (MapPoint) -> Unit = {},
+    /** "Dove sono": chiede il permesso, se serve, e la posizione del telefono. */
+    val onLocateMe: () -> Unit = {},
 )
 
 /** Disegna la mappa: nell'app MapLibre, nei test e nelle anteprime lo schema dei punti. */
@@ -97,6 +101,8 @@ fun MapRoute(viewModel: MapViewModel, onBack: () -> Unit, onOpenPlace: (PointOfI
     val context = LocalContext.current
     val toolbarColor = MaterialTheme.colorScheme.surface.toArgb()
     val noApp = stringResource(R.string.place_no_browser)
+    val locate = rememberMyLocation(onLocation = viewModel::onMyLocation)
+    val locateMe = { locate() }
     MapScreen(
         state = state,
         actions = MapActions(
@@ -112,6 +118,7 @@ fun MapRoute(viewModel: MapViewModel, onBack: () -> Unit, onOpenPlace: (PointOfI
                 if (!ExternalLinks.openNavigation(context, point, toolbarColor)) Toast.makeText(context, noApp, Toast.LENGTH_LONG).show()
             },
             onToggleFavorite = viewModel::onToggleFavorite,
+            onLocateMe = locateMe,
         ),
         modifier = modifier,
     )
@@ -190,6 +197,8 @@ fun MapScreen(
                         fitRequest = state.fitRequest,
                         onPointSelected = actions.onPointSelected,
                         onOpenLink = actions.onOpenLink,
+                        myLocation = state.myLocation,
+                        locateRequest = state.locateRequest,
                     ),
                     Modifier.fillMaxSize(),
                 )
@@ -204,15 +213,27 @@ fun MapScreen(
                             .padding(12.dp),
                     )
                 }
-                SmallFloatingActionButton(
-                    onClick = actions.onFitAll,
+                Column(
                     modifier = Modifier.align(Alignment.BottomEnd).padding(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    Icon(Icons.Default.Place, contentDescription = stringResource(R.string.map_fit_all))
+                    val locateDescription = stringResource(R.string.map_locate_me)
+                    SmallFloatingActionButton(onClick = actions.onLocateMe, modifier = Modifier.semantics { contentDescription = locateDescription }) {
+                        Text("📍")
+                    }
+                    SmallFloatingActionButton(onClick = actions.onFitAll) {
+                        Icon(Icons.Default.Place, contentDescription = stringResource(R.string.map_fit_all))
+                    }
                 }
             }
             selected?.let { point ->
-                SelectedPointCard(point = point, isFavorite = point.key in state.favoriteKeys, favoritesEnabled = state.favoritesEnabled, actions = actions)
+                SelectedPointCard(
+                    point = point,
+                    isFavorite = point.key in state.favoriteKeys,
+                    favoritesEnabled = state.favoritesEnabled,
+                    distanceMeters = state.selectedDistanceMeters,
+                    actions = actions,
+                )
             }
         }
     }
@@ -251,7 +272,7 @@ private fun MapFilters(state: MapUiState, actions: MapActions) {
 }
 
 @Composable
-private fun SelectedPointCard(point: MapPoint, isFavorite: Boolean, favoritesEnabled: Boolean, actions: MapActions) {
+private fun SelectedPointCard(point: MapPoint, isFavorite: Boolean, favoritesEnabled: Boolean, distanceMeters: Double?, actions: MapActions) {
     val item = point.item
     Card(
         modifier = Modifier.fillMaxWidth().padding(12.dp).testTag(MAP_SELECTED_CARD_TAG),
@@ -288,6 +309,13 @@ private fun SelectedPointCard(point: MapPoint, isFavorite: Boolean, favoritesEna
                     )
                     (item.subtitle ?: item.description)?.let { text ->
                         Text(text = text, style = MaterialTheme.typography.bodySmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                    }
+                    distanceMeters?.let { meters ->
+                        Text(
+                            text = "📍 " + stringResource(R.string.map_distance_from_you, Formatters.distance(meters)),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
                     }
                 }
                 if (favoritesEnabled) {
