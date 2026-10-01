@@ -455,4 +455,19 @@
     <string name="saved_trip_past">passato</string>
     <string name="saved_trip_favorites">★ %1$d</string>
     <string name="saved_trip_remove">Togli %1$s dai viaggi salvati</string>
+    <string name="favorites_map">Vedi sulla mappa</string>
+
+    <!-- Mappa del viaggio -->
+    <string name="map_chip">Mappa</string>
+    <string name="map_title">Mappa di %1$s</string>
+    <string name="map_favorites_only">Solo preferiti</string>
+    <string name="map_fit_all">Inquadra tutti i punti</string>
+    <string name="map_open_details">Apri la scheda</string>
+    <string name="map_open_page">Apri la pagina</string>
+    <string name="map_close_point">Chiudi la scheda del punto</string>
+    <string name="map_partial_error">Alcuni punti non sono stati caricati.</string>
+    <string name="map_empty">Nessun punto da mostrare con questi filtri.</string>
+    <string name="map_no_favorites">Nessun preferito con una posizione: tocca ☆ su luoghi, eventi, ristoranti e alloggi.</string>
+    <string name="map_attribution">© OpenFreeMap © OpenMapTiles © OpenStreetMap</string>
+    <string name="map_schematic_note">Schema dei punti: la mappa non è disponibile su questo dispositivo.</string>
 </resources>

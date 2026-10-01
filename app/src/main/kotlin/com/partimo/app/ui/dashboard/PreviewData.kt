@@ -6,6 +6,9 @@ import com.partimo.app.ui.departure.DeparturePickerUiState
 import com.partimo.app.ui.favorites.FavoritesUiState
 import com.partimo.app.ui.guide.GuideUiState
 import com.partimo.app.ui.itinerary.ItineraryUiState
+import com.partimo.app.ui.map.MapPoints
+import com.partimo.app.ui.map.MapSource
+import com.partimo.app.ui.map.MapUiState
 import com.partimo.app.ui.place.PlaceDetailUiState
 import com.partimo.app.ui.place.googleMapsSearchUrl
 import com.partimo.app.ui.search.SearchUiState
@@ -644,4 +647,25 @@ internal object PreviewData {
             Instant.parse("2026-09-29T08:00:00Z"),
         ),
     )
+
+    // ---- Mappa ------------------------------------------------------------------------------------
+
+    /** Mappa di Vienna a dicembre con luoghi, mercatini, ristoranti, alloggi e preferiti. */
+    fun mapState(selectFirst: Boolean = false): MapUiState {
+        val state = MapUiState(
+            destination = SampleDestinations.VIENNA,
+            from = LocalDate.of(2026, Month.DECEMBER, 10),
+            to = LocalDate.of(2026, Month.DECEMBER, 14),
+            sources = mapOf(
+                MapSource.HIGHLIGHTS to UiState.Success(MapPoints.places(highlights)),
+                MapSource.EVENTS to UiState.Success(MapPoints.events(tripEvents)),
+                MapSource.RESTAURANTS to UiState.Success(MapPoints.restaurants(openDataRestaurants)),
+                MapSource.LODGINGS to UiState.Success(MapPoints.lodgings(lodgings, SampleDestinations.VIENNA.name)),
+            ),
+            favoritesEnabled = true,
+            favorites = favorites,
+            fitRequest = 1,
+        )
+        return if (selectFirst) state.copy(selectedKey = state.points.first().key) else state
+    }
 }

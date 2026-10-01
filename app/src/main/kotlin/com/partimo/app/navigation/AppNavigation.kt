@@ -23,6 +23,8 @@ import com.partimo.app.ui.guide.GuideRoute
 import com.partimo.app.ui.guide.GuideViewModel
 import com.partimo.app.ui.itinerary.ItineraryRoute
 import com.partimo.app.ui.itinerary.ItineraryViewModel
+import com.partimo.app.ui.map.MapRoute
+import com.partimo.app.ui.map.MapViewModel
 import com.partimo.app.ui.place.PlaceDetailRoute
 import com.partimo.app.ui.place.PlaceDetailViewModel
 import com.partimo.app.ui.search.SearchRoute
@@ -215,6 +217,23 @@ fun PartiMoNavHost(
                 onOpenAssistant = { trip -> navController.navigate(AssistantChatDestination(trip.toJson())) },
                 onOpenGuide = { trip -> navController.navigate(GuideDestination(trip.toJson())) },
                 onOpenFavorites = { trip -> navController.navigate(FavoritesDestination(trip.toJson())) },
+                onOpenMap = { trip -> navController.navigate(MapDestination(trip.toJson())) },
+            )
+        }
+        composable<MapDestination> { backStackEntry ->
+            val route = backStackEntry.toRoute<MapDestination>()
+            val trip = TripArgs.fromJson(route.trip)
+            if (trip == null) {
+                LaunchedEffect(Unit) { navController.popBackStack() }
+                return@composable
+            }
+            val viewModel: MapViewModel = viewModel(
+                factory = MapViewModel.factory(container, trip.destination(), trip.fromDate(), trip.toDate(), trip.travelPeriod(), route.favoritesOnly),
+            )
+            MapRoute(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+                onOpenPlace = { poi -> navController.navigate(PlaceDetailDestination.from(poi, trip)) },
             )
         }
         composable<FavoritesDestination> { backStackEntry ->
@@ -232,6 +251,7 @@ fun PartiMoNavHost(
                 viewModel = viewModel,
                 onBack = { navController.popBackStack() },
                 onOpenPlace = { poi -> navController.navigate(PlaceDetailDestination.from(poi, trip)) },
+                onOpenMap = { navController.navigate(MapDestination(tripJson, favoritesOnly = true)) },
             )
         }
         composable<GuideDestination> { backStackEntry ->

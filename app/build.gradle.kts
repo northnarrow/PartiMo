@@ -38,6 +38,11 @@ android {
         buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${secret("GOOGLE_MAPS_API_KEY")}\"")
         // Assistente di viaggio (itinerari e domande): Google Gemini, livello gratuito.
         buildConfigField("String", "GEMINI_API_KEY", "\"${secret("GEMINI_API_KEY")}\"")
+
+        // Librerie native (mappa, traduttore): telefoni a 64 e 32 bit ed emulatori x86_64.
+        ndk {
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64")
+        }
     }
 
     buildTypes {
@@ -63,6 +68,10 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+        // Librerie native compresse nell'APK: file da scaricare molto più leggero (Android le estrae all'installazione).
+        jniLibs {
+            useLegacyPackaging = true
         }
     }
 
@@ -97,6 +106,9 @@ dependencies {
 
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+
+    // Mappa dei luoghi del viaggio
+    implementation(libs.maplibre.android)
 
     testImplementation(testFixtures(project(":domain")))
     testImplementation(libs.kotlin.test.junit)

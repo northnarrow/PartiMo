@@ -36,15 +36,16 @@ class FavoritesScreenTest {
     private fun text(@StringRes id: Int, vararg args: Any): String = composeRule.activity.getString(id, *args)
 
     @Test
-    fun `i preferiti si aprono, si tolgono e diventano un giro a piedi`() {
+    fun `i preferiti si aprono, si tolgono e diventano una mappa e un giro a piedi`() {
         val places = mutableListOf<PointOfInterest>()
         val links = mutableListOf<String>()
         val removed = mutableListOf<Favorite>()
+        var maps = 0
         composeRule.setContent {
             PartiMoTheme {
                 FavoritesScreen(
                     PreviewData.favoritesState(),
-                    FavoritesActions(onOpenPlace = { places += it }, onOpenLink = { links += it }, onRemove = { removed += it }),
+                    FavoritesActions(onOpenPlace = { places += it }, onOpenLink = { links += it }, onRemove = { removed += it }, onOpenMap = { maps++ }),
                 )
             }
         }
@@ -55,10 +56,12 @@ class FavoritesScreenTest {
         composeRule.onNodeWithText("Figlmüller").performClick()
         composeRule.onNodeWithContentDescription(text(R.string.favorite_remove, "Weihnachtsmarkt am Spittelberg")).performClick()
         composeRule.onNodeWithText("🚶 " + text(R.string.favorites_walk)).performClick()
+        composeRule.onNodeWithText("🗺️ " + text(R.string.favorites_map)).performClick()
 
         assertEquals(listOf("wikipedia:it:83456"), places.map { it.id })
         assertEquals("https://www.google.com/maps/search/?api=1&query=Figlm%C3%BCller%2C%20Wollzeile%205%2C%20Vienna", links.first())
         assertEquals(listOf("Weihnachtsmarkt am Spittelberg"), removed.map { it.name })
+        assertEquals(1, maps)
         // Dal Duomo il più vicino è Figlmüller, poi il mercatino dello Spittelberg.
         assertEquals(
             "https://www.google.com/maps/dir/?api=1&origin=48.208500%2C16.373100&destination=48.203000%2C16.354000" +

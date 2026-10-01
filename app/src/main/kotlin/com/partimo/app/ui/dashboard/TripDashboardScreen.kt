@@ -129,6 +129,8 @@ data class DashboardActions(
     val onToggleFavorite: (Favorite) -> Unit = {},
     /** Elenco dei preferiti del viaggio. */
     val onOpenFavorites: () -> Unit = {},
+    /** Mappa del viaggio: luoghi, eventi, ristoranti e alloggi. */
+    val onOpenMap: () -> Unit = {},
 )
 
 /**
@@ -146,6 +148,7 @@ fun TripDashboardRoute(
     onOpenAssistant: (TripArgs) -> Unit = {},
     onOpenGuide: (TripArgs) -> Unit = {},
     onOpenFavorites: (TripArgs) -> Unit = {},
+    onOpenMap: (TripArgs) -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -186,6 +189,7 @@ fun TripDashboardRoute(
             onToggleTripSaved = viewModel::onToggleTripSaved,
             onToggleFavorite = viewModel::onToggleFavorite,
             onOpenFavorites = { onOpenFavorites(TripArgs.from(state.trip, state.period)) },
+            onOpenMap = { onOpenMap(TripArgs.from(state.trip, state.period)) },
         ),
         modifier = modifier,
     )
@@ -259,6 +263,7 @@ fun TripDashboardScreen(
                 onOpenItinerary = actions.onOpenItinerary,
                 onOpenAssistant = actions.onOpenAssistant,
                 onOpenFavorites = actions.onOpenFavorites,
+                onOpenMap = actions.onOpenMap,
             )
             PullToRefreshBox(
                 isRefreshing = state.isRefreshing,
@@ -480,8 +485,8 @@ fun DashboardSection.emoji(): String = when (this) {
 const val TRIP_TOOLS_TAG = "trip_tools"
 
 /**
- * Strumenti del viaggio mostrato: la guida (sempre) e, con la chiave Gemini, l'itinerario e le
- * domande all'assistente con l'IA.
+ * Strumenti del viaggio mostrato: i preferiti (se ce ne sono), la mappa e la guida (sempre) e, con
+ * la chiave Gemini, l'itinerario e le domande all'assistente con l'IA.
  */
 @Composable
 private fun TripToolChips(
@@ -491,6 +496,7 @@ private fun TripToolChips(
     onOpenItinerary: () -> Unit,
     onOpenAssistant: () -> Unit,
     onOpenFavorites: () -> Unit,
+    onOpenMap: () -> Unit,
 ) {
     LazyRow(
         modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp).testTag(TRIP_TOOLS_TAG),
@@ -501,6 +507,9 @@ private fun TripToolChips(
             item(key = "favorites") {
                 AssistChip(onClick = onOpenFavorites, label = { Text(stringResource(R.string.favorites_chip, favoriteCount)) }, leadingIcon = { Text("⭐") })
             }
+        }
+        item(key = "map") {
+            AssistChip(onClick = onOpenMap, label = { Text(stringResource(R.string.map_chip)) }, leadingIcon = { Text("🗺️") })
         }
         item(key = "guide") {
             AssistChip(onClick = onOpenGuide, label = { Text(stringResource(R.string.guide_chip)) }, leadingIcon = { Text("📖") })

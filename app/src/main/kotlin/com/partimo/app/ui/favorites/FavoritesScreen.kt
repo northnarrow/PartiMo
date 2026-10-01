@@ -8,6 +8,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -71,10 +73,18 @@ data class FavoritesActions(
     val onOpenLink: (String) -> Unit = {},
     val onRemove: (Favorite) -> Unit = {},
     val onShare: (List<Favorite>) -> Unit = {},
+    /** Mappa del viaggio con i soli preferiti. */
+    val onOpenMap: () -> Unit = {},
 )
 
 @Composable
-fun FavoritesRoute(viewModel: FavoritesViewModel, onBack: () -> Unit, onOpenPlace: (PointOfInterest) -> Unit, modifier: Modifier = Modifier) {
+fun FavoritesRoute(
+    viewModel: FavoritesViewModel,
+    onBack: () -> Unit,
+    onOpenPlace: (PointOfInterest) -> Unit,
+    modifier: Modifier = Modifier,
+    onOpenMap: () -> Unit = {},
+) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val toolbarColor = MaterialTheme.colorScheme.surface.toArgb()
@@ -89,6 +99,7 @@ fun FavoritesRoute(viewModel: FavoritesViewModel, onBack: () -> Unit, onOpenPlac
             },
             onRemove = viewModel::onRemove,
             onShare = { favorites -> context.startActivity(shareIntent(context, state.destination.name, favorites)) },
+            onOpenMap = onOpenMap,
         ),
         modifier = modifier,
     )
@@ -96,9 +107,9 @@ fun FavoritesRoute(viewModel: FavoritesViewModel, onBack: () -> Unit, onOpenPlac
 
 /**
  * Preferiti di un viaggio, divisi per tipo: ogni elemento riapre la sua scheda o Google Maps, la
- * stella lo toglie. In fondo il giro a piedi tra i preferiti e la condivisione dell'elenco.
+ * stella lo toglie. In fondo la mappa dei preferiti, il giro a piedi tra loro e la condivisione dell'elenco.
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun FavoritesScreen(state: FavoritesUiState, actions: FavoritesActions, modifier: Modifier = Modifier) {
     Scaffold(
@@ -163,10 +174,18 @@ fun FavoritesScreen(state: FavoritesUiState, actions: FavoritesActions, modifier
                     items(group, key = { it.key }) { favorite -> FavoriteRow(favorite, actions) }
                 }
             }
-            favoritesWalkingRouteUrl(state.favorites)?.let { url ->
-                item(key = "walk") {
-                    FilledTonalButton(onClick = { actions.onOpenLink(url) }, modifier = Modifier.padding(16.dp)) {
-                        Text("🚶 " + stringResource(R.string.favorites_walk))
+            val walkUrl = favoritesWalkingRouteUrl(state.favorites)
+            if (state.favorites.any { it.location != null }) {
+                item(key = "routes") {
+                    FlowRow(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        FilledTonalButton(onClick = actions.onOpenMap) { Text("🗺️ " + stringResource(R.string.favorites_map)) }
+                        walkUrl?.let { url ->
+                            FilledTonalButton(onClick = { actions.onOpenLink(url) }) { Text("🚶 " + stringResource(R.string.favorites_walk)) }
+                        }
                     }
                 }
             }
@@ -241,7 +260,7 @@ fun FavoriteKind.emoji(): String = when (this) {
     FavoriteKind.LODGING -> "🏨"
 }
 
-private fun FavoriteKind.titleRes(): Int = when (this) {
+fun FavoriteKind.titleRes(): Int = when (this) {
     FavoriteKind.PLACE -> R.string.favorites_places
     FavoriteKind.EVENT -> R.string.favorites_events
     FavoriteKind.RESTAURANT -> R.string.favorites_restaurants

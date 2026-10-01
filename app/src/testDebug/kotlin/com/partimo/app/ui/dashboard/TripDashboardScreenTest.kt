@@ -320,6 +320,8 @@ class TripDashboardScreenTest {
         )
 
         composeRule.onNodeWithText(text(R.string.assistant_itinerary_chip)).performClick()
+        // La riga degli strumenti scorre in orizzontale: "Chiedi" è l'ultimo.
+        composeRule.onNodeWithTag(TRIP_TOOLS_TAG).performScrollToNode(hasText(text(R.string.assistant_chat_chip)))
         composeRule.onNodeWithText(text(R.string.assistant_chat_chip)).performClick()
         assertEquals(1, itineraries)
         assertEquals(1, chats)
@@ -345,12 +347,18 @@ class TripDashboardScreenTest {
     }
 
     @Test
-    fun `la guida del viaggio si apre sempre, anche senza assistente`() {
+    fun `mappa e guida del viaggio si aprono sempre, anche senza assistente`() {
         var guides = 0
-        val state = showDashboard(PreviewData.loadedState().copy(assistantAvailable = false), DashboardActions(onOpenGuide = { guides++ }))
+        var maps = 0
+        val state = showDashboard(
+            PreviewData.loadedState().copy(assistantAvailable = false),
+            DashboardActions(onOpenGuide = { guides++ }, onOpenMap = { maps++ }),
+        )
 
         composeRule.onNodeWithText(text(R.string.guide_chip)).performClick()
+        composeRule.onNodeWithText(text(R.string.map_chip)).performClick()
         assertEquals(1, guides)
+        assertEquals(1, maps)
         composeRule.onNodeWithText(text(R.string.assistant_itinerary_chip)).assertDoesNotExist()
         state.value = state.value.copy(assistantAvailable = true)
         composeRule.onNodeWithText(text(R.string.assistant_itinerary_chip)).assertExists()

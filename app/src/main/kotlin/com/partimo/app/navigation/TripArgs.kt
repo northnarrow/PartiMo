@@ -95,3 +95,10 @@ data class GuideDestination(val trip: String)
 /** Preferiti di un viaggio salvato. [trip] è un [TripArgs] in JSON, con il periodo. */
 @Serializable
 data class FavoritesDestination(val trip: String)
+
+/**
+ * Mappa del viaggio con luoghi, eventi, ristoranti e alloggi. [trip] è un [TripArgs] in JSON;
+ * [favoritesOnly] la apre con i soli preferiti (dalla schermata dei preferiti).
+ */
+@Serializable
+data class MapDestination(val trip: String, val favoritesOnly: Boolean = false)
