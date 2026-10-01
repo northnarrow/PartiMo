@@ -14,8 +14,14 @@ import com.partimo.domain.repository.RestaurantRepository
  *
  * I criteri vengono passati al provider come pre-filtro per ridurre i dati scaricati, ma sono
  * sempre riapplicati qui: il vincolo resta garantito anche se il provider lo ignora o lo approssima.
+ * Con un provider senza valutazioni (OpenStreetMap) i criteri non sono verificabili: i locali reali
+ * restano nell'ordine del provider (vicinanza al centro e completezza dei dati).
  */
 class FindBudgetRestaurantsUseCase(private val repository: RestaurantRepository) {
+
+    /** `true` se i locali hanno valutazioni e fasce di prezzo, quindi rispettano i criteri di qualità. */
+    val ratingsAvailable: Boolean
+        get() = repository.providesRatings
 
     suspend operator fun invoke(
         location: GeoPoint,
@@ -33,6 +39,7 @@ class FindBudgetRestaurantsUseCase(private val repository: RestaurantRepository)
             areaName = areaName,
         )
         return repository.searchRestaurants(query, forceRefresh).map { restaurants ->
+            if (!ratingsAvailable) return@map restaurants
             restaurants
                 .filter(criteria::matches)
                 .sortedWith(

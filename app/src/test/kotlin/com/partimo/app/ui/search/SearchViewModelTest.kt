@@ -9,24 +9,31 @@ import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.common.QueryIssue
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.place.TravelExperience
 import com.partimo.domain.model.place.TravelTheme
 import com.partimo.domain.service.SeasonalCalendar
 import com.partimo.domain.testing.FakeAirportRepository
 import com.partimo.domain.testing.FakeCitySearchRepository
 import com.partimo.domain.testing.FakeDestinationCatalogRepository
+import com.partimo.domain.testing.FakeFlightInsightsRepository
 import com.partimo.domain.testing.FakeUserPreferencesRepository
 import com.partimo.domain.testing.FakeWeatherRepository
 import com.partimo.domain.testing.TestData
 import com.partimo.domain.testing.TestData.catalogDestination
+import com.partimo.domain.usecase.FindCheapDestinationsUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
+import com.partimo.domain.usecase.ObserveTravellersUseCase
 import com.partimo.domain.usecase.RecommendDestinationsUseCase
 import com.partimo.domain.usecase.ResolveDestinationUseCase
+import com.partimo.domain.usecase.SaveTravellersUseCase
 import com.partimo.domain.usecase.SearchCitiesUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
+import java.time.LocalDate
 import java.time.Month
 import java.time.YearMonth
 import java.time.ZoneOffset
@@ -71,16 +78,82 @@ class SearchViewModelTest {
     private val preferences = FakeUserPreferencesRepository()
     private val december = TravelPeriod.InMonth(YearMonth.of(2026, Month.DECEMBER))
 
+    private val insights = FakeFlightInsightsRepository(
+        destinations = DataResult.Success(
+            listOf(
+                TestData.cheapDestination("PMO", "Palermo", "29", LocalDate.of(2026, Month.DECEMBER, 10), LocalDate.of(2026, Month.DECEMBER, 15)),
+                TestData.cheapDestination("BCN", "Barcellona", "120", LocalDate.of(2026, Month.DECEMBER, 10), LocalDate.of(2026, Month.DECEMBER, 12)),
+            ),
+        ),
+    )
+
     private fun createViewModel() = SearchViewModel(
         searchCities = SearchCitiesUseCase(cities),
         resolveDestination = ResolveDestinationUseCase(airports),
         recommendDestinations = RecommendDestinationsUseCase(catalog, FakeWeatherRepository()),
         observeDeparture = ObserveDepartureUseCase(preferences),
         clock = TestData.FIXED_CLOCK,
+        observeTravellers = ObserveTravellersUseCase(preferences),
+        saveTravellers = SaveTravellersUseCase(preferences),
+        findCheapDestinations = FindCheapDestinationsUseCase(insights, TestData.FIXED_CLOCK),
     )
+
+    @Test
+    fun `ovunque trova le mete più economiche dalla città di partenza, filtra per prezzo e apre le date del volo`() = runTest {
+        preferences.setDeparture(TestData.departure("Milano", "MXP"))
+        airports.result = DataResult.Success(listOf(TestData.airport("PMO", location = TestData.city("Palermo").location)))
+        val viewModel = createViewModel()
+        viewModel.onPeriodSelected(december)
+        assertTrue(viewModel.uiState.value.anywhereAvailable)
+
+        viewModel.onAnywhere()
+        advanceUntilIdle()
+
+        assertEquals("MXP", insights.destinationQueries.single().originIata)
+        assertEquals(LocalDate.of(2026, Month.DECEMBER, 1)..LocalDate.of(2026, Month.DECEMBER, 31), insights.destinationQueries.single().departures)
+        assertEquals(listOf("Palermo", "Barcellona"), viewModel.uiState.value.anywhereShown.map { it.city.name })
+
+        viewModel.onAnywhereMaxPrice(100)
+        assertEquals(listOf("Palermo"), viewModel.uiState.value.anywhereShown.map { it.city.name })
+
+        viewModel.onCheapDestinationSelected(viewModel.uiState.value.anywhereShown.first())
+        advanceUntilIdle()
+        val navigation = assertNotNull(viewModel.uiState.value.pendingNavigation)
+        assertEquals("Palermo", navigation.destination.name)
+        assertEquals(TravelPeriod.Dates(LocalDate.of(2026, Month.DECEMBER, 10), LocalDate.of(2026, Month.DECEMBER, 15)), navigation.period)
+
+        viewModel.onPeriodSelected(TravelPeriod.NextDays)
+        advanceUntilIdle()
+        assertEquals(2, insights.destinationQueries.size, "Cambiando periodo le mete si ricercano")
+        assertTrue(viewModel.uiState.value.anywhereShown.isEmpty(), "Le tariffe di dicembre non valgono per i prossimi giorni")
+    }
+
+    @Test
+    fun `senza città di partenza ovunque non cerca nulla`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.onAnywhere()
+        advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.anywhere)
+        assertTrue(insights.destinationQueries.isEmpty())
+    }
 
     private fun SearchViewModel.recommendedNames(): List<String> =
         assertNotNull(uiState.value.recommendations).successData().map { it.destination.city.name }
+
+    @Test
+    fun `chi parte si sceglie una volta e resta salvato`() = runTest {
+        val viewModel = createViewModel()
+        assertEquals(Travellers.SOLO, viewModel.uiState.value.travellers)
+
+        val family = Travellers(adults = 2, childAges = listOf(10, 4))
+        viewModel.onTravellersSelected(family)
+        advanceUntilIdle()
+
+        assertEquals(family, viewModel.uiState.value.travellers)
+        assertEquals(family, preferences.travellers.first())
+    }
 
     @Test
     fun `un testo troppo corto non avvia la ricerca`() = runTest {
@@ -222,6 +295,21 @@ class SearchViewModelTest {
     }
 
     @Test
+    fun `le date di andata e ritorno diventano il periodo del viaggio`() = runTest {
+        val viewModel = createViewModel()
+        val dates = TravelPeriod.Dates(LocalDate.of(2026, Month.DECEMBER, 10), LocalDate.of(2026, Month.DECEMBER, 14))
+
+        viewModel.onDatesSelected(dates.departure, dates.returning)
+        assertEquals(dates, viewModel.uiState.value.period)
+
+        viewModel.onDatesSelected(LocalDate.of(2026, Month.DECEMBER, 20), LocalDate.of(2026, Month.DECEMBER, 18))
+        assertEquals(dates, viewModel.uiState.value.period, "Un ritorno prima dell'andata si ignora")
+
+        viewModel.onPeriodSelected(december)
+        assertEquals(december, viewModel.uiState.value.period, "Un mese sostituisce le date")
+    }
+
+    @Test
     fun `scegliere un consiglio apre la sua città`() = runTest {
         val viewModel = createViewModel()
         viewModel.onRecommend()
@@ -245,6 +333,13 @@ class DashboardDestinationTest {
 
         assertEquals(SampleDestinations.VIENNA, route.toDestination())
         assertEquals(july, route.tripPeriod())
+    }
+
+    @Test
+    fun `la rotta conserva anche le date di andata e ritorno`() {
+        val dates = TravelPeriod.Dates(LocalDate.of(2026, Month.DECEMBER, 10), LocalDate.of(2026, Month.DECEMBER, 14))
+
+        assertEquals(dates, DashboardDestination.from(SampleDestinations.VIENNA, dates).tripPeriod())
     }
 
     @Test

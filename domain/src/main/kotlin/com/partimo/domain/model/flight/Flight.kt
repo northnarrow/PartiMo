@@ -2,11 +2,14 @@ package com.partimo.domain.model.flight
 
 import com.partimo.domain.common.QueryIssue
 import com.partimo.domain.model.Money
+import com.partimo.domain.model.Travellers
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 enum class CabinClass { ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST }
 
@@ -16,12 +19,19 @@ data class FlightSearchQuery(
     val destinationIata: String,
     val departureDate: LocalDate,
     val returnDate: LocalDate? = null,
-    val adults: Int = 1,
+    /** Chi parte: i prezzi sono il totale per tutti (i neonati viaggiano in braccio). */
+    val travellers: Travellers = Travellers.SOLO,
     val cabinClass: CabinClass = CabinClass.ECONOMY,
     /** Numero massimo di scali per tratta richiesto al provider. */
     val maxConnections: Int = 1,
     /** Valuta preferita: il ranking confronta solo prezzi nella stessa valuta. */
     val currencyCode: String = "EUR",
+    /**
+     * Date flessibili: oltre alle date indicate vanno bene altre partenze e altri soggiorni. Le usano i
+     * provider che raccolgono i prezzi di molte date (Aviasales); quelli che cercano in tempo reale
+     * restano sulle date indicate. `null` = solo quelle.
+     */
+    val flexibleDates: FlexibleDates? = null,
 ) {
     /** Restituisce il primo problema di validazione, oppure `null` se la ricerca è valida. */
     fun validate(today: LocalDate): QueryIssue? = when {
@@ -29,16 +39,36 @@ data class FlightSearchQuery(
         originIata.equals(destinationIata, ignoreCase = true) -> QueryIssue.SAME_ORIGIN_AND_DESTINATION
         departureDate.isBefore(today) -> QueryIssue.DATE_IN_THE_PAST
         returnDate != null && returnDate.isBefore(departureDate) -> QueryIssue.RETURN_BEFORE_DEPARTURE
-        adults !in 1..MAX_PASSENGERS -> QueryIssue.INVALID_TRAVELLER_COUNT
+        !travellers.infantsHaveLaps -> QueryIssue.INVALID_TRAVELLER_COUNT
         else -> null
     }
 
-    private fun String.isIataCode(): Boolean = length == 3 && all(Char::isLetter)
-
-    companion object {
-        const val MAX_PASSENGERS = 9
+    /** `true` se un volo che parte e torna in questi giorni risponde alla ricerca (vedi [flexibleDates]). */
+    fun matchesDates(departure: LocalDate, returning: LocalDate?): Boolean {
+        if (departure == departureDate && returning == returnDate) return true
+        val flexible = flexibleDates ?: return false
+        if (departure !in flexible.departures) return false
+        if (returnDate == null || returning == null) return returnDate == null && returning == null
+        return ChronoUnit.DAYS.between(departure, returning) in flexible.stayNights
     }
+
+    /** `true` se il volo parte e torna proprio nei giorni della ricerca. */
+    fun isOnTripDates(offer: FlightOffer): Boolean =
+        offer.outbound.departureTime.toLocalDate() == departureDate && offer.inbound?.departureTime?.toLocalDate() == returnDate
+
+    private fun String.isIataCode(): Boolean = length == 3 && all(Char::isLetter)
 }
+
+/**
+ * Date flessibili di una ricerca voli: partenze in [departures] con un soggiorno di [stayNights] notti
+ * (le regole per ogni tipo di periodo sono in `TravelPeriod.flexibleDates`).
+ */
+data class FlexibleDates(
+    val departures: ClosedRange<LocalDate>,
+    val stayNights: LongRange,
+    /** Date scelte dall'utente: i voli proprio in quei giorni vengono prima degli altri. */
+    val exactDatesFirst: Boolean = false,
+)
 
 /** Tratta (andata o ritorno), eventualmente composta da più segmenti con scalo. */
 data class FlightSlice(
@@ -65,10 +95,24 @@ data class FlightOffer(
     val expiresAt: Instant? = null,
     val co2EmissionsKg: Int? = null,
     val refundable: Boolean? = null,
+    /** Pagina del provider con questo volo, per verificarne il prezzo e prenotarlo; `null` se non c'è. */
+    val bookingUrl: String? = null,
+    /**
+     * Giorno in cui il prezzo è stato trovato, per le tariffe raccolte dalle ricerche dei viaggiatori
+     * (Aviasales): nel frattempo può essere cambiato. `null` per le offerte in tempo reale e per le stime.
+     */
+    val priceFoundOn: LocalDate? = null,
+    /** Posti pagati compresi in [totalPrice] (tutti i viaggiatori tranne i neonati in braccio). */
+    val passengers: Int = 1,
 ) {
     init {
         require(slices.isNotEmpty()) { "Un'offerta deve contenere almeno una tratta" }
+        require(passengers >= 1) { "Un'offerta è per almeno un passeggero" }
     }
+
+    /** Prezzo di un posto: il totale diviso tra i passeggeri. */
+    val pricePerPassenger: Money
+        get() = if (passengers == 1) totalPrice else Money.of(totalPrice.amount.divide(passengers.toBigDecimal(), 2, RoundingMode.HALF_UP), totalPrice.currencyCode)
 
     val outbound: FlightSlice get() = slices.first()
     val inbound: FlightSlice? get() = slices.getOrNull(1)
@@ -78,6 +122,10 @@ data class FlightOffer(
 
     /** Numero di scali della tratta peggiore. */
     val maxStops: Int get() = slices.maxOf { it.stops }
+
+    /** Notti tra la partenza dell'andata e quella del ritorno; `null` per i voli di sola andata. */
+    val stayNights: Int?
+        get() = inbound?.let { ChronoUnit.DAYS.between(outbound.departureTime.toLocalDate(), it.departureTime.toLocalDate()).toInt() }
 }
 
 /** Filtri opzionali applicati alle offerte dopo la ricerca. */
@@ -95,3 +143,18 @@ data class FlightFilter(
 }
 
 enum class FlightSortOption { BEST_VALUE, CHEAPEST, FASTEST }
+
+/** Da dove arrivano i prezzi dei voli: cambia come l'app li presenta. */
+enum class FlightPriceSource {
+    /** Offerte prenotabili cercate in tempo reale sulle date del viaggio (Duffel). */
+    LIVE_OFFERS,
+
+    /**
+     * Prezzi trovati negli ultimi giorni dalle ricerche dei viaggiatori (Aviasales, tramite Travelpayouts):
+     * reali ma da verificare, su date flessibili nel periodo del viaggio.
+     */
+    RECENT_SEARCHES,
+
+    /** Stime calcolate sul telefono, senza chiavi API. */
+    ESTIMATES,
+}

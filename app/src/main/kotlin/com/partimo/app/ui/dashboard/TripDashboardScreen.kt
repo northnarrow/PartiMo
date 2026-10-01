@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Build
 import android.provider.Settings
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
@@ -22,12 +23,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -54,6 +59,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -65,17 +71,37 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.partimo.app.R
+import com.partimo.app.navigation.TripArgs
+import com.partimo.app.notifications.TripWorkScheduler
 import com.partimo.app.ui.common.Formatters
 import com.partimo.app.ui.common.PeriodChips
+import com.partimo.app.ui.common.TravelLinks
 import com.partimo.app.ui.common.flagEmoji
+import com.partimo.app.ui.common.toFavorite
+import com.partimo.app.ui.dashboard.components.ExternalLink
+import com.partimo.app.ui.dashboard.components.ExternalLinksCard
 import com.partimo.app.ui.dashboard.components.FlightsSection
+import com.partimo.app.ui.dashboard.components.GETTING_THERE_TAG
+import com.partimo.app.ui.dashboard.components.GettingThereCard
 import com.partimo.app.ui.dashboard.components.HighlightsSection
+import com.partimo.app.ui.dashboard.components.LodgingsSection
+import com.partimo.app.ui.dashboard.components.PriceCalendarActions
+import com.partimo.app.ui.dashboard.components.PriceCalendarDialog
 import com.partimo.app.ui.dashboard.components.RestaurantsSection
 import com.partimo.app.ui.dashboard.components.StaysSection
 import com.partimo.app.ui.dashboard.components.TransitSection
+import com.partimo.app.ui.dashboard.components.TripEventsSection
+import com.partimo.app.ui.dashboard.components.lodgingMapsUrl
+import com.partimo.app.ui.place.ExternalLinks
+import com.partimo.app.ui.place.googleMapsTransitUrl
 import com.partimo.app.ui.theme.PartiMoTheme
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
+import com.partimo.domain.model.TripContext
 import com.partimo.domain.model.deal.PriceChange
+import com.partimo.domain.model.flight.FlightPriceSource
+import com.partimo.domain.model.poi.PointOfInterest
+import com.partimo.domain.model.saved.Favorite
 import java.time.Instant
 import java.time.ZoneId
 
@@ -95,6 +121,37 @@ data class DashboardActions(
     val onRefreshSummaryShown: () -> Unit = {},
     val onMessageShown: () -> Unit = {},
     val onOpenNotificationSettings: () -> Unit = {},
+    /** Tocco su un luogo o un evento da vedere: apre la sua scheda (descrizione, storia, "Naviga"). */
+    val onOpenPlace: (PointOfInterest) -> Unit = {},
+    /** "Riprova" della sezione eventi. */
+    val onRetryEvents: () -> Unit = {},
+    /** Collegamento: siti di voli e alloggi con le date del viaggio (nel browser interno), Google Maps, fonti dei dati. */
+    val onOpenLink: (String) -> Unit = {},
+    /** Itinerario giorno per giorno proposto dall'IA per il viaggio mostrato. */
+    val onOpenItinerary: () -> Unit = {},
+    /** "Chiedi a PartiMo": domande all'assistente sul viaggio mostrato. */
+    val onOpenAssistant: () -> Unit = {},
+    /** Guida del viaggio: meteo per le date, paese, valuta, emergenze, Wikivoyage. */
+    val onOpenGuide: () -> Unit = {},
+    /** Segnalibro: salva il viaggio o lo toglie dai salvati. */
+    val onToggleTripSaved: () -> Unit = {},
+    /** Stella su un luogo, evento, ristorante o alloggio. */
+    val onToggleFavorite: (Favorite) -> Unit = {},
+    /** Elenco dei preferiti del viaggio. */
+    val onOpenFavorites: () -> Unit = {},
+    /** Mappa del viaggio: luoghi, eventi, ristoranti e alloggi. */
+    val onOpenMap: () -> Unit = {},
+    /** Traduttore con la lingua del posto, anche offline. */
+    val onOpenTranslator: () -> Unit = {},
+    /** Budget e spese del viaggio. */
+    val onOpenBudget: () -> Unit = {},
+    /** Prenotazioni delle date del viaggio (voli, alloggi, treni...). */
+    val onOpenBookings: () -> Unit = {},
+    /** Nuovi viaggiatori (adulti e bambini) scelti nella sezione dei voli. */
+    val onTravellersSelected: (Travellers) -> Unit = {},
+    /** Calendario dei prezzi: apertura, mese, giorno scelto, chiusura. */
+    val onOpenPriceCalendar: () -> Unit = {},
+    val priceCalendar: PriceCalendarActions = PriceCalendarActions(),
 )
 
 /**
@@ -106,13 +163,26 @@ fun TripDashboardRoute(
     viewModel: TripDashboardViewModel,
     onBack: () -> Unit,
     onChooseDeparture: () -> Unit,
+    onOpenPlace: (PointOfInterest, TripArgs) -> Unit,
     modifier: Modifier = Modifier,
+    onOpenItinerary: (TripArgs) -> Unit = {},
+    onOpenAssistant: (TripArgs) -> Unit = {},
+    onOpenGuide: (TripArgs) -> Unit = {},
+    onOpenFavorites: (TripArgs) -> Unit = {},
+    onOpenMap: (TripArgs) -> Unit = {},
+    onOpenTranslator: (TripArgs) -> Unit = {},
+    onOpenBudget: (TripArgs) -> Unit = {},
+    onOpenBookings: (TripArgs) -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val noAppForLink = stringResource(R.string.place_no_browser)
+    val toolbarColor = MaterialTheme.colorScheme.surface.toArgb()
     val notificationPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         viewModel.onAlertToggled(notificationsAllowed = granted)
     }
+    // Salvando un viaggio si chiedono le notifiche per i promemoria: la risposta non cambia nulla qui.
+    val reminderPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
     TripDashboardScreen(
         state = state,
         actions = DashboardActions(
@@ -122,6 +192,7 @@ fun TripDashboardRoute(
             onPhotoSpotsOnlyChanged = viewModel::onPhotoSpotsOnlyChanged,
             onRefresh = viewModel::refresh,
             onRetry = viewModel::retry,
+            onRetryEvents = viewModel::retryEvents,
             onToggleAlert = {
                 val enabling = !state.alertEnabled && state.trip.departure != null
                 if (enabling && needsNotificationPermission(context)) {
@@ -134,6 +205,35 @@ fun TripDashboardRoute(
             onRefreshSummaryShown = viewModel::onRefreshSummaryShown,
             onMessageShown = viewModel::onMessageShown,
             onOpenNotificationSettings = { context.startActivity(notificationSettingsIntent(context)) },
+            onOpenPlace = { poi -> onOpenPlace(poi, TripArgs.from(state.trip, state.period)) },
+            onOpenLink = { url ->
+                if (!ExternalLinks.openLink(context, url, toolbarColor)) Toast.makeText(context, noAppForLink, Toast.LENGTH_LONG).show()
+            },
+            onOpenItinerary = { onOpenItinerary(TripArgs.from(state.trip, state.period)) },
+            onOpenAssistant = { onOpenAssistant(TripArgs.from(state.trip, state.period)) },
+            onOpenGuide = { onOpenGuide(TripArgs.from(state.trip, state.period)) },
+            onToggleTripSaved = {
+                val saving = state.savedTrip == null
+                viewModel.onToggleTripSaved()
+                if (saving) {
+                    // Con il Wi-Fi il viaggio si prepara per l'uso offline; i promemoria arrivano come notifiche.
+                    TripWorkScheduler(context).prefetchNow()
+                    if (needsNotificationPermission(context)) reminderPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            },
+            onToggleFavorite = viewModel::onToggleFavorite,
+            onOpenFavorites = { onOpenFavorites(TripArgs.from(state.trip, state.period)) },
+            onOpenMap = { onOpenMap(TripArgs.from(state.trip, state.period)) },
+            onOpenTranslator = { onOpenTranslator(TripArgs.from(state.trip, state.period)) },
+            onOpenBudget = { onOpenBudget(TripArgs.from(state.trip, state.period)) },
+            onOpenBookings = { onOpenBookings(TripArgs.from(state.trip, state.period)) },
+            onTravellersSelected = viewModel::onTravellersSelected,
+            onOpenPriceCalendar = viewModel::onOpenPriceCalendar,
+            priceCalendar = PriceCalendarActions(
+                onMonthChanged = viewModel::onPriceCalendarMonthChanged,
+                onDaySelected = viewModel::onPriceCalendarDaySelected,
+                onDismiss = viewModel::onPriceCalendarDismissed,
+            ),
         ),
         modifier = modifier,
     )
@@ -186,6 +286,7 @@ fun TripDashboardScreen(
         }
     }
 
+    state.priceCalendar?.let { calendar -> PriceCalendarDialog(calendar, actions.priceCalendar) }
     Scaffold(
         modifier = modifier,
         topBar = { DashboardTopBar(state = state, actions = actions) },
@@ -199,6 +300,20 @@ fun TripDashboardScreen(
                 today = state.today,
                 onSelected = actions.onPeriodSelected,
                 modifier = Modifier.padding(vertical = 8.dp),
+                monthPrices = state.monthPrices.mapValues { it.value.price },
+                cheapestMonth = state.cheapestMonth,
+            )
+            TripToolChips(
+                assistantAvailable = state.assistantAvailable,
+                favoriteCount = state.savedTrip?.favorites?.size ?: 0,
+                onOpenGuide = actions.onOpenGuide,
+                onOpenItinerary = actions.onOpenItinerary,
+                onOpenAssistant = actions.onOpenAssistant,
+                onOpenFavorites = actions.onOpenFavorites,
+                onOpenMap = actions.onOpenMap,
+                onOpenTranslator = actions.onOpenTranslator,
+                onOpenBudget = actions.onOpenBudget,
+                onOpenBookings = actions.onOpenBookings,
             )
             PullToRefreshBox(
                 isRefreshing = state.isRefreshing,
@@ -222,7 +337,7 @@ fun TripDashboardScreen(
 private fun LazyListScope.sectionContent(section: DashboardSection, state: TripDashboardUiState, actions: DashboardActions) {
     when (section) {
         DashboardSection.FLIGHTS -> {
-            if (state.isDemoMode) item(key = "demo") { DemoBanner() }
+            if (state.isDemoMode) item(key = "demo") { DemoBanner(flightsEstimated = state.flightPriceSource == FlightPriceSource.ESTIMATES) }
             item(key = "flights") {
                 if (state.trip.departure == null) {
                     DeparturePromptCard(onChoose = actions.onChooseDeparture)
@@ -232,34 +347,113 @@ private fun LazyListScope.sectionContent(section: DashboardSection, state: TripD
                         trip = state.trip,
                         onRetry = { actions.onRetry(DashboardSection.FLIGHTS) },
                         onChangeDeparture = actions.onChooseDeparture,
+                        priceSource = state.flightPriceSource,
+                        exactDates = state.period is TravelPeriod.Dates,
+                        onOpenLink = actions.onOpenLink,
+                        onTravellersSelected = actions.onTravellersSelected,
+                        onOpenPriceCalendar = actions.onOpenPriceCalendar.takeIf { state.priceCalendarAvailable },
                     )
                 }
             }
             state.pricesUpdatedAt?.let { updatedAt -> item(key = "updated") { PricesUpdatedNote(updatedAt) } }
         }
-        DashboardSection.STAYS -> {
-            item(key = "stays") { StaysSection(state = state.stays, onRetry = { actions.onRetry(DashboardSection.STAYS) }) }
+        DashboardSection.STAYS -> if (state.stayOffersAvailable) {
+            item(key = "stays") {
+                StaysSection(
+                    state = state.stays,
+                    trip = state.trip,
+                    onRetry = { actions.onRetry(DashboardSection.STAYS) },
+                    onOpenLink = actions.onOpenLink,
+                )
+            }
             state.pricesUpdatedAt?.let { updatedAt -> item(key = "updated") { PricesUpdatedNote(updatedAt) } }
+        } else {
+            item(key = "lodgings") {
+                LodgingsSection(
+                    state = state.lodgings,
+                    trip = state.trip,
+                    onRetry = { actions.onRetry(DashboardSection.STAYS) },
+                    onOpenLink = actions.onOpenLink,
+                    favoriteKeys = state.favoriteKeys,
+                    onToggleFavorite = { lodging -> actions.onToggleFavorite(lodging.toFavorite(lodgingMapsUrl(lodging, state.trip.destination.name))) },
+                )
+            }
         }
-        DashboardSection.HIGHLIGHTS -> item(key = "highlights") {
-            HighlightsSection(
-                state = state.highlights,
-                destinationName = state.trip.destination.name,
-                photoSpotsOnly = state.photoSpotsOnly,
-                onPhotoSpotsOnlyChanged = actions.onPhotoSpotsOnlyChanged,
-                onRetry = { actions.onRetry(DashboardSection.HIGHLIGHTS) },
-            )
+        DashboardSection.HIGHLIGHTS -> {
+            item(key = "events") {
+                TripEventsSection(
+                    state = state.events,
+                    trip = state.trip,
+                    onRetry = actions.onRetryEvents,
+                    onOpenLink = actions.onOpenLink,
+                    onEventClick = actions.onOpenPlace,
+                    favoriteKeys = state.favoriteKeys,
+                    onToggleFavorite = { event -> actions.onToggleFavorite(event.toFavorite()) },
+                )
+            }
+            item(key = "highlights") {
+                HighlightsSection(
+                    state = state.highlights,
+                    destinationName = state.trip.destination.name,
+                    photoSpotsOnly = state.photoSpotsOnly,
+                    onPhotoSpotsOnlyChanged = actions.onPhotoSpotsOnlyChanged,
+                    onRetry = { actions.onRetry(DashboardSection.HIGHLIGHTS) },
+                    onPlaceClick = actions.onOpenPlace,
+                    favoriteKeys = state.favoriteKeys,
+                    onToggleFavorite = { poi -> actions.onToggleFavorite(poi.toFavorite()) },
+                )
+            }
+            item(key = "tickets") {
+                val city = state.trip.destination.name
+                ExternalLinksCard(
+                    title = stringResource(R.string.tickets_title),
+                    lines = listOf(stringResource(R.string.tickets_text, city)),
+                    links = listOf(ExternalLink(stringResource(R.string.tickets_tiqets), TravelLinks.tiqets(city))),
+                    onOpenLink = actions.onOpenLink,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                )
+            }
         }
-        DashboardSection.TRANSIT -> item(key = "transit") {
-            TransitSection(
-                state = state.transit,
-                hubName = state.trip.destination.arrivalHubName,
-                timeZone = state.trip.destination.timeZone,
-                onRetry = { actions.onRetry(DashboardSection.TRANSIT) },
-            )
+        DashboardSection.TRANSIT -> {
+            // Prima come arrivare dalla città di partenza (treni, pullman, voli e CO₂), poi come muoversi in città.
+            state.trip.departure?.let { departure ->
+                if (departure.cityName != state.trip.destination.name) {
+                    item(key = "getting-there") {
+                        GettingThereCard(
+                            fromCity = departure.cityName,
+                            toCity = state.trip.destination.name,
+                            footprint = state.footprint,
+                            travellers = state.trip.travellers.total,
+                            onOpenLink = actions.onOpenLink,
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp).testTag(GETTING_THERE_TAG),
+                        )
+                    }
+                }
+            }
+            item(key = "transit") {
+                val destination = state.trip.destination
+                TransitSection(
+                    state = state.transit,
+                    hubName = destination.arrivalHubName,
+                    timeZone = destination.timeZone,
+                    onRetry = { actions.onRetry(DashboardSection.TRANSIT) },
+                    mapsUrl = googleMapsTransitUrl(origin = destination.arrivalHub, destination = destination.center),
+                    onOpenLink = actions.onOpenLink,
+                )
+            }
         }
         DashboardSection.RESTAURANTS -> item(key = "restaurants") {
-            RestaurantsSection(state = state.restaurants, onRetry = { actions.onRetry(DashboardSection.RESTAURANTS) })
+            RestaurantsSection(
+                state = state.restaurants,
+                onRetry = { actions.onRetry(DashboardSection.RESTAURANTS) },
+                ratingsAvailable = state.restaurantRatingsAvailable,
+                center = state.trip.destination.center,
+                onOpenLink = actions.onOpenLink,
+                hoursWeekOf = state.trip.departureDate,
+                nowAtDestination = state.nowAtDestination,
+                favoriteKeys = state.favoriteKeys,
+                onToggleFavorite = { restaurant -> actions.onToggleFavorite(restaurant.toFavorite()) },
+            )
         }
     }
 }
@@ -296,6 +490,16 @@ private fun DashboardTopBar(state: TripDashboardUiState, actions: DashboardActio
             }
         },
         actions = {
+            if (state.favoritesEnabled) {
+                val saved = state.savedTrip != null
+                IconButton(onClick = actions.onToggleTripSaved) {
+                    Icon(
+                        imageVector = if (saved) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        contentDescription = stringResource(if (saved) R.string.trip_unsave else R.string.trip_save),
+                        tint = if (saved) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
             IconButton(onClick = actions.onToggleAlert) {
                 Icon(
                     imageVector = if (state.alertEnabled) Icons.Filled.Notifications else Icons.Outlined.Notifications,
@@ -358,6 +562,63 @@ fun DashboardSection.emoji(): String = when (this) {
     DashboardSection.RESTAURANTS -> "🍝"
 }
 
+/** Tag della riga degli strumenti del viaggio, scorrevole in orizzontale. */
+const val TRIP_TOOLS_TAG = "trip_tools"
+
+/**
+ * Strumenti del viaggio mostrato: i preferiti (se ce ne sono), la mappa, la guida, il traduttore, il
+ * budget e le prenotazioni (sempre) e, con la chiave Gemini, l'itinerario e le domande all'assistente con l'IA.
+ */
+@Composable
+private fun TripToolChips(
+    assistantAvailable: Boolean,
+    favoriteCount: Int,
+    onOpenGuide: () -> Unit,
+    onOpenItinerary: () -> Unit,
+    onOpenAssistant: () -> Unit,
+    onOpenFavorites: () -> Unit,
+    onOpenMap: () -> Unit,
+    onOpenTranslator: () -> Unit,
+    onOpenBudget: () -> Unit,
+    onOpenBookings: () -> Unit,
+) {
+    LazyRow(
+        modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp).testTag(TRIP_TOOLS_TAG),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        if (favoriteCount > 0) {
+            item(key = "favorites") {
+                AssistChip(onClick = onOpenFavorites, label = { Text(stringResource(R.string.favorites_chip, favoriteCount)) }, leadingIcon = { Text("⭐") })
+            }
+        }
+        // Prima gli strumenti con l'IA, i più utili per organizzare il viaggio; la riga scorre.
+        if (assistantAvailable) {
+            item(key = "itinerary") {
+                AssistChip(onClick = onOpenItinerary, label = { Text(stringResource(R.string.assistant_itinerary_chip)) }, leadingIcon = { Text("✨") })
+            }
+            item(key = "assistant") {
+                AssistChip(onClick = onOpenAssistant, label = { Text(stringResource(R.string.assistant_chat_chip)) }, leadingIcon = { Text("💬") })
+            }
+        }
+        item(key = "map") {
+            AssistChip(onClick = onOpenMap, label = { Text(stringResource(R.string.map_chip)) }, leadingIcon = { Text("🗺️") })
+        }
+        item(key = "guide") {
+            AssistChip(onClick = onOpenGuide, label = { Text(stringResource(R.string.guide_chip)) }, leadingIcon = { Text("📖") })
+        }
+        item(key = "translator") {
+            AssistChip(onClick = onOpenTranslator, label = { Text(stringResource(R.string.translator_chip)) }, leadingIcon = { Text("🗣️") })
+        }
+        item(key = "budget") {
+            AssistChip(onClick = onOpenBudget, label = { Text(stringResource(R.string.budget_chip)) }, leadingIcon = { Text("💶") })
+        }
+        item(key = "bookings") {
+            AssistChip(onClick = onOpenBookings, label = { Text(stringResource(R.string.bookings_chip)) }, leadingIcon = { Text("🎫") })
+        }
+    }
+}
+
 @Composable
 private fun DeparturePromptCard(onChoose: () -> Unit) {
     Card(
@@ -391,8 +652,9 @@ private fun PricesUpdatedNote(updatedAt: Instant) {
     )
 }
 
+/** Con i prezzi reali dei voli restano stimati solo i trasporti: l'avviso parla solo di quelli. */
 @Composable
-private fun DemoBanner() {
+private fun DemoBanner(flightsEstimated: Boolean) {
     Card(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer),
@@ -401,7 +663,7 @@ private fun DemoBanner() {
             Icon(Icons.Default.Info, contentDescription = null, tint = MaterialTheme.colorScheme.onTertiaryContainer)
             Spacer(Modifier.width(12.dp))
             Text(
-                text = stringResource(R.string.demo_banner),
+                text = stringResource(if (flightsEstimated) R.string.demo_banner else R.string.demo_banner_transit),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onTertiaryContainer,
             )
@@ -436,6 +698,8 @@ private fun messageText(message: DashboardMessage, destinationName: String): Str
     DashboardMessage.ALERT_ENABLED_WITHOUT_NOTIFICATIONS -> stringResource(R.string.alert_enabled_without_notifications)
     DashboardMessage.ALERT_DISABLED -> stringResource(R.string.alert_disabled)
     DashboardMessage.ALERT_NEEDS_DEPARTURE -> stringResource(R.string.alert_needs_departure)
+    DashboardMessage.TRIP_SAVED -> stringResource(R.string.trip_saved_message)
+    DashboardMessage.TRIP_REMOVED -> stringResource(R.string.trip_removed_message)
 }
 
 // ---- Anteprime ---------------------------------------------------------------------------------
@@ -452,6 +716,12 @@ private fun TripDashboardDarkPreview() {
     PartiMoTheme(darkTheme = true) {
         TripDashboardScreen(PreviewData.loadedState().copy(selectedSection = DashboardSection.HIGHLIGHTS), DashboardActions())
     }
+}
+
+@Preview(name = "Dashboard · alloggi reali senza chiavi", showBackground = true, heightDp = 900)
+@Composable
+private fun TripDashboardOpenDataPreview() {
+    PartiMoTheme { TripDashboardScreen(PreviewData.openDataState().copy(selectedSection = DashboardSection.STAYS), DashboardActions()) }
 }
 
 @Preview(name = "Dashboard · senza partenza", showBackground = true, heightDp = 900)

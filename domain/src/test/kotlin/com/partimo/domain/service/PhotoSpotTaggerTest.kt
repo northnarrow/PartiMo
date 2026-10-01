@@ -44,6 +44,15 @@ class PhotoSpotTaggerTest {
     }
 
     @Test
+    fun `un monumento famoso senza recensioni è comunque instagrammabile`() {
+        val famous = poi("colosseo", "Colosseo", category = PoiCategory.MONUMENT, rating = null, reviewCount = null, popularity = 0.9)
+        val lesserKnown = famous.copy(id = "arco", name = "Arco di Druso", popularity = 0.3)
+
+        assertTrue(PoiTag.INSTAGRAMMABLE in tagger.inferTags(famous))
+        assertTrue(tagger.inferTags(lesserKnown).isEmpty())
+    }
+
+    @Test
     fun `un luogo al chiuso non è uno spot per il tramonto`() {
         val indoorView = poi("sky-bar", "Sky bar panoramico", category = PoiCategory.OTHER, isIndoor = true)
 

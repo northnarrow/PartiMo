@@ -8,6 +8,11 @@ import com.partimo.domain.model.deal.PricePoint
 import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.dining.PriceLevel
 import com.partimo.domain.model.dining.Restaurant
+import com.partimo.domain.model.event.EventKind
+import com.partimo.domain.model.event.EventTiming
+import com.partimo.domain.model.event.TripEvent
+import com.partimo.domain.model.flight.CheapDestination
+import com.partimo.domain.model.flight.FareSnapshot
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightSlice
 import com.partimo.domain.model.place.Airport
@@ -16,10 +21,16 @@ import com.partimo.domain.model.place.CatalogDestination
 import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DeparturePoint
 import com.partimo.domain.model.place.TravelExperience
+import com.partimo.domain.model.poi.ArticleSection
+import com.partimo.domain.model.poi.ImageCredit
+import com.partimo.domain.model.poi.PoiArticle
 import com.partimo.domain.model.poi.PoiCategory
 import com.partimo.domain.model.poi.PoiTag
 import com.partimo.domain.model.poi.PointOfInterest
+import com.partimo.domain.model.poi.WikipediaPage
 import com.partimo.domain.model.stay.AccommodationOffer
+import com.partimo.domain.model.stay.Lodging
+import com.partimo.domain.model.stay.LodgingType
 import com.partimo.domain.model.transit.TransitLeg
 import com.partimo.domain.model.transit.TransitLine
 import com.partimo.domain.model.transit.TransitMode
@@ -105,6 +116,9 @@ object TestData {
         activeMonths: Set<Month> = emptySet(),
         tags: Set<PoiTag> = emptySet(),
         location: GeoPoint = VIENNA_CENTER,
+        photoUrl: String? = null,
+        popularity: Double? = null,
+        wikipediaPage: WikipediaPage? = null,
     ): PointOfInterest = PointOfInterest(
         id = id,
         name = name,
@@ -113,10 +127,55 @@ object TestData {
         rating = rating,
         reviewCount = reviewCount,
         description = description,
+        photoUrl = photoUrl,
         isIndoor = isIndoor,
         activeMonths = activeMonths,
         tags = tags,
+        popularity = popularity,
+        wikipediaPage = wikipediaPage,
     )
+
+    /** Voce enciclopedica di esempio, con introduzione e storia divisa in capitoli. */
+    fun article(
+        title: String = "Duomo di Santo Stefano",
+        introduction: List<String> = listOf(
+            "Il duomo di Santo Stefano è la cattedrale di Vienna, capolavoro del gotico austriaco.",
+            "Con la sua torre sud di 136 metri domina il centro storico della città.",
+        ),
+        history: List<ArticleSection> = listOf(
+            ArticleSection(title = "Origini", paragraphs = listOf("La prima chiesa fu consacrata nel 1147 fuori dalle mura della città.")),
+            ArticleSection(title = "Età moderna", paragraphs = listOf("Durante l'assedio del 1683 la torre sud fu il posto di comando della difesa.")),
+        ),
+        imageUrl: String? = "https://upload.test/stephansdom.jpg",
+        imageCredit: ImageCredit? = ImageCredit(author = "Mario Rossi", license = "CC BY-SA 4.0", sourceUrl = "https://commons.test/File:Stephansdom.jpg"),
+        language: String = "it",
+    ): PoiArticle = PoiArticle(
+        title = title,
+        language = language,
+        url = "https://$language.wikipedia.org/wiki/" + title.replace(' ', '_'),
+        shortDescription = "cattedrale di Vienna",
+        introduction = introduction,
+        history = history,
+        imageUrl = imageUrl,
+        imageCredit = imageCredit,
+    )
+
+    fun event(
+        id: String,
+        timing: EventTiming,
+        kind: EventKind = EventKind.RECURRING_EVENT,
+        location: GeoPoint? = VIENNA_CENTER,
+    ): TripEvent = TripEvent(id = id, name = "Evento $id", kind = kind, timing = timing, location = location)
+
+    fun holiday(id: String, date: LocalDate): TripEvent =
+        TripEvent(id = id, name = "Festa $id", kind = EventKind.PUBLIC_HOLIDAY, timing = EventTiming.OnDates(date, date), location = null)
+
+    fun lodging(
+        id: String,
+        type: LodgingType = LodgingType.HOTEL,
+        location: GeoPoint = VIENNA_CENTER,
+        stars: Int? = null,
+    ): Lodging = Lodging(id = id, name = "Struttura $id", type = type, location = location, starRating = stars)
 
     fun restaurant(
         id: String,
@@ -241,6 +300,26 @@ object TestData {
         createdAt = NOW,
         flightPrices = flightPrices.map { PricePoint(Money.of(it, "EUR"), NOW) },
         stayPrices = stayPrices.map { PricePoint(Money.of(it, "EUR"), NOW) },
+    )
+
+    /** Tariffa di andata e ritorno a persona, in euro. */
+    fun fare(price: String, departure: LocalDate, returning: LocalDate? = departure.plusDays(3), stops: Int = 0): FareSnapshot =
+        FareSnapshot(Money.of(price, "EUR"), departure, returning, stops, carrierIata = "FR")
+
+    /** Meta di «Ovunque» con il volo più economico. */
+    fun cheapDestination(
+        cityCode: String,
+        name: String,
+        price: String,
+        departure: LocalDate,
+        returning: LocalDate? = departure.plusDays(3),
+        airportIata: String = cityCode,
+    ): CheapDestination = CheapDestination(
+        city = city(name, id = "tp:$cityCode"),
+        cityCode = cityCode,
+        airportIata = airportIata,
+        fare = fare(price, departure, returning),
+        bookingUrl = "https://www.aviasales.com/search/MIL${departure.dayOfMonth}${cityCode}1",
     )
 
     /** Percorso semplice: a piedi → mezzo → a piedi. */

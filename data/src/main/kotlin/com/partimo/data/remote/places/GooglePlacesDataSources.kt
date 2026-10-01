@@ -6,10 +6,10 @@ import com.partimo.data.cache.ResponseCache
 import com.partimo.data.network.Fetched
 import com.partimo.data.network.NetworkJson
 import com.partimo.data.network.bestEffort
+import com.partimo.data.network.combinedOrigin
 import com.partimo.data.network.mapNotNullSafely
 import com.partimo.data.source.PoiDataSource
 import com.partimo.data.source.RestaurantDataSource
-import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.dining.RestaurantSearchQuery
 import com.partimo.domain.model.poi.PoiQuery
@@ -144,12 +144,3 @@ class GooglePlacesPoiDataSource internal constructor(
 /** Aggiunge il nome della zona alla ricerca testuale (es. "ristoranti a Lisbona"). */
 internal fun withArea(textQuery: String, areaName: String?): String =
     if (areaName.isNullOrBlank()) textQuery else "$textQuery a ${areaName.trim()}"
-
-/** Provenienza complessiva di più risposte: basta un dato "stale" perché la UI lo segnali. */
-internal fun combinedOrigin(origins: List<DataOrigin>): DataOrigin = when {
-    origins.isEmpty() -> DataOrigin.REMOTE
-    DataOrigin.STALE_CACHE in origins -> DataOrigin.STALE_CACHE
-    origins.all { it == DataOrigin.CACHE } -> DataOrigin.CACHE
-    origins.all { it == DataOrigin.DEMO } -> DataOrigin.DEMO
-    else -> DataOrigin.REMOTE
-}

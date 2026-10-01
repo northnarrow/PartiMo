@@ -7,6 +7,7 @@ kotlin = "2.3.21"
 ksp = "2.3.12"
 coreKtx = "1.18.0"
 activityCompose = "1.13.0"
+browser = "1.10.0"
 lifecycle = "2.10.0"
 navigationCompose = "2.9.8"
 composeBom = "2026.06.01"
@@ -20,11 +21,19 @@ robolectric = "4.17"
 androidxTestCore = "1.7.0"
 datastore = "1.2.1"
 work = "2.12.0"
+maplibre = "13.6.1"
+mlkitTranslate = "17.0.3"
+mlkitTextRecognition = "19.0.1"
+mlkitTextRecognitionScripts = "16.0.1"
+exifinterface = "1.4.2"
+glance = "1.2.0"
+leakcanary = "2.14"
 
 [libraries]
 # AndroidX
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
@@ -65,6 +74,25 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
+
+# Mappa (MapLibre Native, variante OpenGL ES 3 compatibile con quasi tutti i telefoni, con le mappe di OpenFreeMap, senza chiave)
+maplibre-android = { group = "org.maplibre.gl", name = "android-sdk-opengl", version.ref = "maplibre" }
+
+# Rilevamento delle perdite di memoria, solo nelle build di debug
+leakcanary-android = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
+
+# Widget della schermata Home (Jetpack Glance)
+glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }
+glance-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "glance" }
+
+# Traduttore sul telefono (ML Kit: pacchetti lingua gratuiti scaricati una volta, poi offline)
+mlkit-translate = { group = "com.google.mlkit", name = "translate", version.ref = "mlkitTranslate" }
+androidx-exifinterface = { group = "androidx.exifinterface", name = "exifinterface", version.ref = "exifinterface" }
+mlkit-text-recognition = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition", version.ref = "mlkitTextRecognition" }
+mlkit-text-recognition-chinese = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition-chinese", version.ref = "mlkitTextRecognitionScripts" }
+mlkit-text-recognition-devanagari = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition-devanagari", version.ref = "mlkitTextRecognitionScripts" }
+mlkit-text-recognition-japanese = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition-japanese", version.ref = "mlkitTextRecognitionScripts" }
+mlkit-text-recognition-korean = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition-korean", version.ref = "mlkitTextRecognitionScripts" }
 
 # Immagini
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }

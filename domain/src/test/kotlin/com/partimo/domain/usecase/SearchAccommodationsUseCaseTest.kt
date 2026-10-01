@@ -37,6 +37,15 @@ class SearchAccommodationsUseCaseTest {
     )
 
     @Test
+    fun `indica se il provider offre prezzi prenotabili`() {
+        assertTrue(useCase.offersAvailable)
+
+        repository.providesOffers = false
+
+        assertEquals(false, useCase.offersAvailable)
+    }
+
+    @Test
     fun `ordina gli alloggi per rapporto qualità prezzo`() = runTest {
         assertEquals("smart", useCase(query).successData().first().offer.id)
     }

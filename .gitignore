@@ -15,3 +15,5 @@ build/
 local.properties
 *.keystore
 *.jks
+# Chiave di firma di PartiMo (vedi README, «Firma dell'app»)
+keystore/

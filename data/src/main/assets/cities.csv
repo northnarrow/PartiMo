@@ -1,0 +1,3078 @@
+# Fonte: dati per gli sviluppatori di Travelpayouts (https://api.travelpayouts.com/data/it/cities.json).
+# Città con un aeroporto di airports.csv, con il nome in italiano: per mostrare le mete trovate per codice
+# (es. «Ovunque»). Formato: codice;nome;paese;lat;lon;fuso
+AAA;Anaa;PF;-17.05;-145.4167;Pacific/Tahiti
+AAC;Al-Arish;EG;31.1321;33.8033;Africa/Cairo
+AAE;Annaba;DZ;36.9142;7.7427;Africa/Algiers
+AAL;Aalborg;DK;57.0488;9.9217;Europe/Copenhagen
+AAN;Al-'Ayn;AE;24.1302;55.8023;Asia/Dubai
+AAP;Samarinda;ID;-0.5016;117.1265;Asia/Makassar
+AAR;Arhus;DK;56.1629;10.2039;Europe/Copenhagen
+AAT;Altay;CN;47.8273;88.1318;Asia/Urumqi
+AAX;Araxá;BR;-19.5906;-46.9442;America/Sao_Paulo
+AAY;Al-Ghayda;YE;16.196;52.1733;Asia/Aden
+ABA;Abakan;RU;53.7176;91.4293;Asia/Krasnoyarsk
+ABB;Asaba;NG;6.2059;6.6959;Africa/Lagos
+ABD;Abadan;IR;30.3473;48.2934;Asia/Tehran
+ABE;Allentown;US;40.6023;-75.4714;America/New_York
+ABI;Abilene;US;32.4487;-99.7331;America/Chicago
+ABJ;Abidjan;CI;5.36;-4.0083;Africa/Abidjan
+ABK;Gabredarre;ET;6.7339;44.2661;Africa/Addis_Ababa
+ABL;Ambler;US;67.0875;-157.8458;America/Anchorage
+ABQ;Albuquerque;US;35.0844;-106.6504;America/Denver
+ABR;Aberdeen;US;45.4525;-98.4261;America/Chicago
+ABS;Abu Simbel;EG;22.3676;31.6098;Africa/Cairo
+ABT;Al-Bāha;SA;20.0217;41.4713;Asia/Riyadh
+ABV;Abuja;NG;9.0765;7.3986;Africa/Lagos
+ABX;Albury;AU;-36.0696;146.9545;Australia/Sydney
+ABY;Albany;US;31.5785;-84.1557;America/New_York
+ABZ;Aberdeen;GB;57.1475;-2.0954;Europe/London
+ACA;Acapulco;MX;16.8531;-99.8237;America/Mexico_City
+ACC;Accra;GH;5.6037;-0.187;Africa/Accra
+ACE;Arrecife;ES;28.9652;-13.555;Atlantic/Canary
+ACH;Altenrhein;CH;47.4833;9.5667;Europe/Zurich
+ACI;Alderney;GB;49.7093;-2.2154;Europe/Guernsey
+ACK;Nantucket;US;41.2567;-70.0597;America/New_York
+ACT;Waco;US;31.5493;-97.1467;America/Chicago
+ACV;Arcata;US;40.9709;-124.1069;America/Los_Angeles
+ACX;Xingyi;CN;25.0856;104.9594;Asia/Shanghai
+ACY;Atlantic City;US;39.36;-74.4572;America/New_York
+ADD;Addis Abeba;ET;8.9806;38.7578;Africa/Addis_Ababa
+ADE;Aden;YE;12.7855;45.0187;Asia/Aden
+ADF;Adıyaman;TR;37.7636;38.2773;Europe/Istanbul
+ADK;Adak Island;US;51.8828;-176.6447;America/Adak
+ADL;Adelaide;AU;-34.9286;138.6;Australia/Adelaide
+ADQ;Kodiak;US;57.79;-152.4072;America/Anchorage
+ADU;Ardabil;IR;38.2537;48.3;Asia/Tehran
+ADZ;San Andrés;CO;12.586;-81.7022;America/Bogota
+AEB;Baise;CN;23.7195;106.9678;Asia/Shanghai
+AER;Adler;RU;43.4343;39.9339;Europe/Moscow
+AES;Alesund;NO;62.5596;6.1166;Europe/Oslo
+AEU;Abu Musa;IR;25.8875;55.0417;Asia/Tehran
+AEX;Alexandria;US;31.3113;-92.4451;America/Chicago
+AEY;Akureyri;IS;65.6546;-18.0751;Atlantic/Reykjavik
+AFA;San Rafael;AR;-34.6129;-68.3391;America/Argentina/Mendoza
+AFL;Alta Floresta;BR;-9.8725;-56.1048;America/Cuiaba
+AFZ;Sabzevar;IR;36.2152;57.6678;Asia/Tehran
+AGA;Agadir;MA;30.4278;-9.5981;Africa/Casablanca
+AGH;Angelholm;SE;56.2432;12.8615;Europe/Stockholm
+AGP;Málaga;ES;36.7196;-4.42;Europe/Madrid
+AGR;Agra;IN;27.1767;78.0081;Asia/Kolkata
+AGS;Augusta;US;33.4742;-82.0097;America/New_York
+AGT;Ciudad Del Este;PY;-25.4987;-54.6637;America/Asuncion
+AGU;Aguascalientes;MX;21.8853;-102.2916;America/Mexico_City
+AGX;Agatti Island;IN;10.829;72.1799;Asia/Kolkata
+AHB;Abha;SA;18.2465;42.5117;Asia/Riyadh
+AHE;Ahetze;PF;-14.4833;-146.3167;Pacific/Tahiti
+AHO;Alghero;IT;40.6304;8.2959;Europe/Rome
+AHU;Al-Hoseyma;MA;35.2446;-3.9317;Africa/Casablanca
+AIA;Alliance;US;42.0517;-102.8067;America/Denver
+AIN;Wainwright;US;70.6333;-160.0333;America/Anchorage
+AJA;Ajaccio;FR;41.9192;8.7386;Europe/Paris
+AJF;Skaka;SA;29.878;40.1043;Asia/Riyadh
+AJI;Agri.;TR;39.7191;43.0506;Europe/Istanbul
+AJL;Aizawl;IN;23.7307;92.7173;Asia/Kolkata
+AJN;Anjouan;KM;-12.1264;44.4297;Indian/Comoro
+AJR;comune di Arvidsjaur;SE;65.5914;19.2856;Europe/Stockholm
+AJU;Aracaju;BR;-10.9472;-37.0731;America/Maceio
+AKF;Kufrah;LY;24.2;23.3333;Africa/Tripoli
+AKJ;Asahikawa;JP;43.7709;142.365;Asia/Tokyo
+AKL;Auckland;NZ;-36.8485;174.7633;Pacific/Auckland
+AKN;King Salmon;US;58.6827;-156.669;America/Anchorage
+AKP;Anaktuvuk;US;68.1375;-151.74;America/Anchorage
+AKR;Akure;NG;7.2571;5.2058;Africa/Lagos
+AKU;Aksu;CN;41.1675;80.2634;Asia/Shanghai
+AKX;Aqtöbe;KZ;50.2839;57.167;Asia/Aqtobe
+AKY;Sittwe;MM;20.1528;92.8677;Asia/Yangon
+ALA;Almaty;KZ;43.222;76.8512;Asia/Almaty
+ALB;Albany;US;42.6526;-73.7562;America/New_York
+ALC;Alicante;ES;38.3452;-0.481;Europe/Madrid
+ALF;Alta;NO;69.9772;23.3558;Europe/Oslo
+ALG;Algeri;DZ;36.7538;3.0588;Africa/Algiers
+ALH;Albany;AU;-34.945;117.804;Australia/Perth
+ALO;Waterloo;US;42.5561;-92.3997;America/Chicago
+ALP;Aleppo;SY;36.2021;37.1343;Asia/Damascus
+ALS;Alamosa;US;37.4367;-105.8667;America/Denver
+ALW;Walla Walla;US;46.0947;-118.2911;America/Los_Angeles
+ALY;Alessandria d'Egitto;EG;31.2001;29.9187;Africa/Cairo
+AMA;Amarillo;US;35.222;-101.8313;America/Chicago
+AMD;Ahmedabad;IN;23.0225;72.5714;Asia/Kolkata
+AMH;Arba Minch;ET;6.0206;37.5641;Africa/Addis_Ababa
+AMM;Amman;JO;31.9539;35.9106;Asia/Amman
+AMQ;Ambon;ID;-3.6387;128.1689;Asia/Jayapura
+AMS;Amsterdam;NL;52.3731;4.8922;Europe/Amsterdam
+AMV;Amderma;RU;69.7667;61.55;Europe/Moscow
+ANC;Anchorage;US;61.2181;-149.9003;America/Anchorage
+ANF;Antofagasta;CL;-23.6509;-70.3975;America/Santiago
+ANI;Aniak;US;61.5744;-159.537;America/Anchorage
+ANK;Ankara;TR;39.9334;32.8597;Europe/Istanbul
+ANR;Anversa;BE;51.2199;4.3963;Europe/Brussels
+ANU;Saint John's;AG;17.1083;-61.7639;America/Antigua
+ANV;Anvik;US;62.6478;-160.1889;America/Anchorage
+ANX;Andenes;NO;69.3049;16.1333;Europe/Oslo
+AOG;Anshan;CN;41.1086;122.9943;Asia/Shanghai
+AOI;Ancona;IT;43.6158;13.5189;Europe/Rome
+AOJ;Aomori;JP;40.8222;140.7474;Asia/Tokyo
+AOK;Pigadia;GR;35.4207;27.1467;Europe/Athens
+AOO;Altoona;US;40.51;-78.4;America/New_York
+AOR;Alor Setar;MY;6.1263;100.3672;Asia/Kuala_Lumpur
+APL;Nampula;MZ;-15.1266;39.2687;Africa/Maputo
+APN;Alpena;US;45.0817;-83.5558;America/Detroit
+APO;Apartadó;CO;7.8828;-76.6247;America/Bogota
+APW;Apia;WS;-13.8333;-171.7667;Pacific/Apia
+AQA;Araraquara;BR;-21.7848;-48.1786;America/Sao_Paulo
+AQG;Anqing;CN;30.5319;117.1151;Asia/Shanghai
+AQI;al-Qaysūma;SA;28.3344;46.1213;Asia/Riyadh
+AQJ;Aqaba;JO;29.5321;35.0063;Asia/Amman
+AQP;Arequipa;PE;-16.409;-71.5375;America/Lima
+ARC;Arctic Village;US;68.1375;-145.5244;America/Anchorage
+ARH;Arcangelo;RU;64.5473;40.5602;Europe/Moscow
+ARI;Arica;CL;-18.4783;-70.3126;America/Santiago
+ARK;Arusha;TZ;-3.3869;36.683;Africa/Dar_es_Salaam
+ARM;Armidale;AU;-30.5323;151.6149;Australia/Sydney
+ART;Watertown;US;43.9908;-76.0214;America/New_York
+ARU;Araçatuba;BR;-21.2029;-50.4537;America/Sao_Paulo
+ARW;Arad;RO;46.1866;21.3123;Europe/Bucharest
+ASB;Aşgabat;TM;37.9601;58.3261;Asia/Ashgabat
+ASD;Andros Town;BS;24.6978;-77.7961;America/Nassau
+ASE;Aspen;US;39.2197;-106.8647;America/Denver
+ASF;Astrachan';RU;46.3588;48.0599;Europe/Samara
+ASI;Georgetown;SH;-7.9667;-14.4;Atlantic/St_Helena
+ASJ;Amami O Shima;JP;28.4315;129.7079;Asia/Tokyo
+ASM;Asmara;ER;15.3229;38.9251;Africa/Asmara
+ASO;Asosa;ET;10.0472;34.5367;Africa/Addis_Ababa
+ASP;Alice Springs;AU;-23.7002;133.8806;Australia/Darwin
+ASR;Cesarea in Cappadocia;TR;38.7205;35.4826;Europe/Istanbul
+ASU;Asunción;PY;-25.2637;-57.5759;America/Asuncion
+ASV;Amboseli;KE;-2.6333;37.25;Africa/Nairobi
+ASW;Assuan;EG;24.0889;32.8998;Africa/Cairo
+ATC;Arthur's Town;BS;24.6286;-75.6714;America/Nassau
+ATH;Atene;GR;37.9838;23.7275;Europe/Athens
+ATK;Atqasuk;US;70.5;-157.3333;America/Anchorage
+ATL;Atlanta;US;33.749;-84.388;America/New_York
+ATM;Altamira;BR;-3.2;-52.2167;America/Santarem
+ATQ;Amritsar;IN;31.634;74.8723;Asia/Kolkata
+ATW;Appleton;US;44.2619;-88.4154;America/Chicago
+ATY;Watertown;US;44.9089;-97.1542;America/Chicago
+ATZ;Asyūṭ;EG;27.1783;31.1859;Africa/Cairo
+AUA;Oranjestad;AW;12.5022;-70.0139;America/Aruba
+AUC;Arauca;CO;7.0762;-70.7105;America/Bogota
+AUG;Augusta;US;44.3181;-69.7967;America/New_York
+AUH;Abu Dhabi;AE;24.4539;54.3773;Asia/Dubai
+AUQ;Atuona;PF;-9.7693;-139.0098;Pacific/Marquesas
+AUR;Aurillac;FR;44.8975;2.4181;Europe/Paris
+AUS;Austin;US;30.2672;-97.7431;America/Chicago
+AUW;Wausau;US;44.9233;-89.6231;America/Chicago
+AUX;Araguaína;BR;-7.2;-48.2;America/Araguaina
+AVA;An Shun;CN;26.2531;105.9476;Asia/Shanghai
+AVK;Arvajhėėr;MN;46.2667;102.7833;Asia/Ulaanbaatar
+AVL;Asheville;US;35.5951;-82.5515;America/New_York
+AVN;Avignone;FR;43.9493;4.8055;Europe/Paris
+AVP;Scranton;US;41.2459;-75.8813;America/New_York
+AWA;Auasa;ET;7.0611;38.4875;Africa/Addis_Ababa
+AWK;Wake Island;UM;19.2833;166.6333;Pacific/Wake
+AWZ;Ahvaz;IR;31.3183;48.6706;Asia/Tehran
+AXA;Anguilla;AI;18.2167;-63.0667;America/Anguilla
+AXD;Alessandropoli;GR;40.8457;25.874;Europe/Athens
+AXM;Armenia;CO;4.4529;-75.768;America/Bogota
+AXP;Spring Point;BS;22.45;-73.9667;America/Nassau
+AXR;Arutua;PF;-15.25;-146.75;Pacific/Tahiti
+AXT;Akita;JP;39.72;140.1035;Asia/Tokyo
+AXU;Axum;ET;14.1208;38.7167;Africa/Addis_Ababa
+AYJ;Ayodhya;IN;26.7992;82.2044;Asia/Kolkata
+AYP;Ayacucho;PE;-13.1639;-74.2236;America/Lima
+AYQ;Ayers Rock;AU;-25.1909;130.9766;Australia/Darwin
+AYT;Adalia;TR;36.8969;30.7133;Europe/Istanbul
+AZD;Yazd;IR;31.8974;54.3569;Asia/Tehran
+AZN;Andizhan;UZ;40.8154;72.2837;Asia/Tashkent
+AZO;Kalamazoo;US;42.2917;-85.5872;America/Detroit
+AZR;Adrar;DZ;27.8833;-0.2833;Africa/Algiers
+AZS;Sanchez;DO;19.2706;-69.7369;America/Santo_Domingo
+BAH;Manama;BH;26.2235;50.5876;Asia/Bahrain
+BAK;Baku;AZ;40.4093;49.8671;Asia/Baku
+BAL;Batman;TR;37.8895;41.1293;Europe/Istanbul
+BAQ;Barranquilla;CO;11.0041;-74.807;America/Bogota
+BAR;Qionghai;CN;19.2583;110.4746;Asia/Shanghai
+BAV;Baotou;CN;40.658;109.8403;Asia/Shanghai
+BAX;Barnaul;RU;53.3497;83.7836;Asia/Barnaul
+BAY;Baia Mare;RO;47.6567;23.585;Europe/Bucharest
+BBA;Balmaceda;CL;-45.9167;-71.695;America/Santiago
+BBI;Bhubaneswar;IN;20.2961;85.8245;Asia/Kolkata
+BBK;Kasane;BW;-17.8167;25.15;Africa/Gaborone
+BBM;Battambang;KH;13.0957;103.2022;Asia/Phnom_Penh
+BBN;Bario;MY;3.6833;115.4667;Asia/Kuching
+BBO;Berbera;SO;10.4348;45.014;Africa/Mogadishu
+BBQ;Barbuda;AG;17.5556;-61.765;America/Antigua
+BCA;Baracoa;CU;20.35;-74.5;America/Havana
+BCD;Bacolod;PH;10.684;122.9563;Asia/Manila
+BCH;Baucau;TL;-8.4917;126.3997;Asia/Dili
+BCI;Barcaldine;AU;-23.5592;145.3019;Australia/Brisbane
+BCM;Bacău;RO;46.567;26.9146;Europe/Bucharest
+BCN;Barcellona;ES;41.3879;2.1699;Europe/Madrid
+BCO;Jinka;ET;5.7833;36.55;Africa/Addis_Ababa
+BCU;Bauchi;NG;10.301;9.8237;Africa/Lagos
+BDA;Hamilton;BM;32.3583;-64.6807;Atlantic/Bermuda
+BDB;Bundaberg;AU;-24.8987;152.3219;Australia/Brisbane
+BDH;Bandar Lengeh;IR;26.5295;54.8291;Asia/Tehran
+BDJ;Banjarmasin;ID;-3.3186;114.5944;Asia/Makassar
+BDL;Hartford;US;41.9295;-72.6847;America/New_York
+BDO;Bandung;ID;-6.9175;107.6191;Asia/Jakarta
+BDQ;Vadodara;IN;22.3072;73.1812;Asia/Kolkata
+BDS;Aeroporto di Brindisi-Papola Casale;IT;40.6362;17.939;Europe/Rome
+BDT;Gbadolite;CD;4.0833;22.45;Africa/Kinshasa
+BDU;Bardufoss;NO;69.0561;18.54;Europe/Oslo
+BEB;Benbecula;GB;57.4734;-7.376;Europe/London
+BED;Bedford;US;42.4708;-71.29;America/New_York
+BEF;Bluefields;NI;11.9969;-83.7686;America/Managua
+BEG;Belgrado;RS;44.7866;20.4489;Europe/Belgrade
+BEJ;Tanjung Redep;ID;2.1667;117.7;Asia/Makassar
+BEK;Bareilly;IN;28.364;79.415;Asia/Kolkata
+BEL;Belém;BR;-1.4557;-48.4902;America/Belem
+BEN;Bengasi;LY;32.1194;20.0868;Africa/Tripoli
+BER;Berlino;DE;52.5234;13.4114;Europe/Berlin
+BES;Brest;FR;48.3904;-4.4861;Europe/Paris
+BET;Bethel;US;60.7922;-161.7558;America/Anchorage
+BEU;Bedourie;AU;-24.23;139.445;Australia/Brisbane
+BEW;Beira;MZ;-19.8316;34.837;Africa/Maputo
+BEY;Beirut;LB;33.8938;35.5018;Asia/Beirut
+BFD;City of Bradford;US;41.8022;-78.6394;America/New_York
+BFF;Scottsbluff;US;41.8753;-103.6011;America/Denver
+BFJ;Bijie;CN;27.284;105.2916;Asia/Shanghai
+BFL;Bakersfield;US;35.3733;-119.0187;America/Los_Angeles
+BFN;Bloemfontein;ZA;-29.0852;26.1596;Africa/Johannesburg
+BFS;Belfast;GB;54.5973;-5.9301;Europe/London
+BFV;Buriram;TH;15.2269;103.2553;Asia/Bangkok
+BGA;Bucaramanga;CO;7.1193;-73.1227;America/Bogota
+BGC;Bragança;PT;41.8167;-6.75;Europe/Lisbon
+BGF;Bangui;CF;4.3947;18.5582;Africa/Bangui
+BGG;Bingöl;TR;38.8861;40.5017;Europe/Istanbul
+BGI;Bridgetown;BB;13.106;-59.6132;America/Barbados
+BGM;Binghamton;US;42.2085;-75.9829;America/New_York
+BGO;Bergen;NO;60.3913;5.3221;Europe/Oslo
+BGR;Bangor;US;44.8123;-68.821;America/New_York
+BGW;Baghdad;IQ;33.3152;44.3661;Asia/Baghdad
+BHB;Bar Harbor;US;44.4489;-68.3617;America/New_York
+BHE;Blenheim;NZ;-41.5136;173.8676;Pacific/Auckland
+BHH;Bisham;SA;19.9764;42.5902;Asia/Riyadh
+BHI;Bahía Blanca;AR;-38.7183;-62.2663;America/Argentina/Buenos_Aires
+BHJ;Bhuj;IN;23.242;69.6669;Asia/Kolkata
+BHK;Bukhara;UZ;39.7681;64.4556;Asia/Samarkand
+BHM;Birmingham;US;33.5186;-86.8104;America/Chicago
+BHO;Bhopal;IN;23.2599;77.4126;Asia/Kolkata
+BHQ;Broken Hill;AU;-31.999;141.4686;Australia/Broken_Hill
+BHS;Bathurst;AU;-33.4139;149.6552;Australia/Sydney
+BHU;Bhavnagar;IN;21.7645;72.1519;Asia/Kolkata
+BHV;Bahawalpur;PK;29.3544;71.6911;Asia/Karachi
+BHX;Birmingham;GB;52.483;-1.8936;Europe/London
+BHY;Beihai;CN;21.4813;109.1202;Asia/Shanghai
+BHZ;Belo Horizonte;BR;-19.9191;-43.9386;America/Sao_Paulo
+BIA;Bastia;FR;42.5476;9.4801;Europe/Paris
+BIH;Bishop;US;37.3733;-118.365;America/Los_Angeles
+BIK;Biak;ID;-1.1919;136.1058;Asia/Jayapura
+BIL;Billings;US;45.7833;-108.5007;America/Denver
+BIM;Bimini;BS;25.7428;-79.2508;America/Nassau
+BIO;Bilbao;ES;43.257;-2.9234;Europe/Madrid
+BIQ;Biarritz;FR;43.4724;-1.5312;Europe/Paris
+BIR;Biratnagar;NP;26.4525;87.2718;Asia/Kathmandu
+BIS;Bismarck;US;46.8083;-100.7837;America/Chicago
+BJA;Bijaya;DZ;36.7515;5.0557;Africa/Algiers
+BJB;Bojnurd;IR;37.4702;57.3143;Asia/Tehran
+BJC;Broomfield;US;39.9205;-105.0867;America/Denver
+BJF;Berlevag;NO;70.6;29.6667;Europe/Oslo
+BJL;Banjul;GM;13.3441;-16.6522;Africa/Banjul
+BJM;Bujumbura;BI;-3.3614;29.3599;Africa/Bujumbura
+BJR;Bahir Dar;ET;11.5742;37.3614;Africa/Addis_Ababa
+BJS;Pechino;CN;39.9042;116.4074;Asia/Shanghai
+BJV;Bodrum;TR;37.25;27.66;Europe/Istanbul
+BJX;Leon;MX;21.125;-101.686;America/Mexico_City
+BJZ;Badajoz;ES;38.8794;-6.9707;Europe/Madrid
+BKG;Branson;US;36.5321;-93.2006;America/Chicago
+BKI;Kota Kinabalu;MY;5.9804;116.0735;Asia/Kuching
+BKK;Bangkok;TH;13.7563;100.5018;Asia/Bangkok
+BKN;Balkanabat;TM;39.5239;54.336;Asia/Ashgabat
+BKO;Bamako;ML;12.6392;-8.0029;Africa/Bamako
+BKQ;Blackall;AU;-24.4342;145.4283;Australia/Brisbane
+BKS;Bengkulu;ID;-3.7928;102.2608;Asia/Jakarta
+BKW;Beckley (East Sussex);US;37.7819;-81.1242;America/New_York
+BLA;Barcelona;VE;10.1446;-64.6777;America/Caracas
+BLE;Borlange;SE;60.4856;15.4363;Europe/Stockholm
+BLI;Bellingham (Northumberland);US;48.7519;-122.4787;America/Los_Angeles
+BLJ;Batna;DZ;35.5667;6.1833;Africa/Algiers
+BLL;Billund;DK;55.7474;9.1479;Europe/Copenhagen
+BLQ;Bologna;IT;44.4942;11.3465;Europe/Rome
+BLR;Bangalore;IN;12.9716;77.5946;Asia/Kolkata
+BLV;Belleville;US;38.6518;-89.8518;America/Chicago
+BLZ;Blantyre;MW;-15.7667;35.0168;Africa/Blantyre
+BME;Broome;AU;-17.9526;122.2343;Australia/Perth
+BMI;Bloomington-Normal;US;40.484;-88.9148;America/Chicago
+BMU;Bima;ID;-8.4643;118.7449;Asia/Makassar
+BMV;Buon Ma Thuot;VN;12.6667;108.05;Asia/Ho_Chi_Minh
+BMW;Bordj Badji Mokhtar;DZ;21.3167;1.0333;Africa/Algiers
+BNA;Nashville;US;36.1627;-86.7816;America/Chicago
+BND;Bandar Abbas;IR;27.1832;56.2666;Asia/Tehran
+BNE;Brisbane;AU;-27.4709;153.0235;Australia/Brisbane
+BNI;Benin City;NG;6.335;5.6037;Africa/Lagos
+BNK;Ballina;AU;-28.8376;153.5564;Australia/Sydney
+BNN;Brønnøysund;NO;65.4617;12.2158;Europe/Oslo
+BNS;Barinas;VE;8.6231;-70.2371;America/Caracas
+BNX;Banja Luka;BA;44.7722;17.191;Europe/Sarajevo
+BOB;Vaitape;PF;-16.5011;-151.74;Pacific/Tahiti
+BOC;Bocas Del Toro;PA;9.34;-82.2519;America/Panama
+BOD;Bordeaux;FR;44.8378;-0.5792;Europe/Paris
+BOG;Bogotá;CO;4.711;-74.0721;America/Bogota
+BOH;Bournemouth;GB;50.7192;-1.8808;Europe/London
+BOI;Boise;US;43.615;-116.2023;America/Boise
+BOJ;Burgas;BG;42.5048;27.4626;Europe/Sofia
+BOM;Mumbai;IN;19.076;72.8777;Asia/Kolkata
+BON;Kralendijk;BQ;12.1334;-68.2769;America/Kralendijk
+BOO;Bodø;NO;67.2726;14.3678;Europe/Oslo
+BOS;Boston;US;42.3584;-71.0598;America/New_York
+BOY;Bobo-Dioulasso;BF;11.1649;-4.3052;Africa/Ouagadougou
+BPE;Qinhuangdao;CN;39.9406;119.5951;Asia/Shanghai
+BPL;Bole;CN;44.9042;82.0242;Asia/Shanghai
+BPN;Balikpapan;ID;-1.2379;116.8529;Asia/Makassar
+BPS;Porto Seguro;BR;-16.4412;-39.0811;America/Bahia
+BPT;Beaumont;US;30.0802;-94.1266;America/Chicago
+BPX;Bangda;CN;30.5558;97.1067;Asia/Shanghai
+BPY;Besalampy;MG;-16.75;44.4833;Indian/Antananarivo
+BQL;Bouliac;AU;-22.9;139.9;Australia/Brisbane
+BQN;Aguadilla;PR;18.4958;-67.13;America/Puerto_Rico
+BQS;Blagoveščensk;RU;50.2728;127.5404;Asia/Yakutsk
+BQT;Brėst;BY;52.0997;23.7637;Europe/Minsk
+BQU;Bequia;VC;12.9867;-61.2642;America/St_Vincent
+BRC;San Carlos de Bariloche;AR;-41.1335;-71.3103;America/Argentina/Salta
+BRD;Brainerd;US;46.3972;-94.1375;America/Chicago
+BRE;Brema;DE;53.0793;8.8017;Europe/Berlin
+BRI;Bari;IT;41.126;16.8684;Europe/Rome
+BRK;Bourke;AU;-30.0833;145.9333;Australia/Sydney
+BRL;Burlington;US;40.7861;-91.1233;America/Chicago
+BRM;Barquisimeto;VE;10.0678;-69.3474;America/Caracas
+BRN;Bern;CH;46.9479;7.4446;Europe/Zurich
+BRO;Brownsville;US;25.9017;-97.4975;America/Chicago
+BRQ;Brno;CZ;49.191;16.6115;Europe/Prague
+BRR;Barras;GB;57.0233;-7.4403;Europe/London
+BRS;Bristol;GB;51.4545;-2.5879;Europe/London
+BRU;Bruxelles;BE;50.8503;4.3517;Europe/Brussels
+BRW;Barrow-in-Furness;US;71.2886;-156.7758;America/Anchorage
+BRX;Santa Cruz de Barahona;DO;18.2121;-71.1024;America/Santo_Domingo
+BSA;Bosaso;SO;11.2755;49.1879;Africa/Mogadishu
+BSB;Brasilia;BR;-15.8267;-47.9218;America/Sao_Paulo
+BSC;Bahía Solano;CO;6.1833;-77.4;America/Bogota
+BSD;Baoshan;CN;25.0552;99.1614;Asia/Shanghai
+BSG;Bata;GQ;1.9067;9.8022;Africa/Malabo
+BSK;Biskra;DZ;34.8449;5.7249;Africa/Algiers
+BSO;Basco;PH;20.4531;121.9778;Asia/Manila
+BSR;Bàssora;IQ;30.5258;47.7738;Asia/Baghdad
+BSZ;Biškek;KG;42.8746;74.5698;Asia/Bishkek
+BTC;Batticaloa;LK;7.731;81.6747;Asia/Colombo
+BTH;Batam;ID;1.1236;104.1153;Asia/Jakarta
+BTI;Barter Island;US;70.1347;-143.5783;America/Anchorage
+BTJ;Banda Aceh;ID;5.5483;95.3238;Asia/Jakarta
+BTK;Bratsk;RU;56.2928;101.7121;Asia/Irkutsk
+BTM;Butte;US;45.9511;-112.4939;America/Denver
+BTR;Baton Rouge;US;30.4515;-91.1871;America/Chicago
+BTS;Bratislava;SK;48.1486;17.1077;Europe/Bratislava
+BTU;Bintulu;MY;3.1718;113.0435;Asia/Kuching
+BTV;Burlington;US;44.469;-73.1553;America/New_York
+BUA;Buka;PG;-5.4224;154.6729;Pacific/Bougainville
+BUD;Buda;HU;47.4984;19.0408;Europe/Budapest
+BUE;Buenos Aires;AR;-34.6084;-58.3732;America/Argentina/Buenos_Aires
+BUF;Buffalo;US;42.8864;-78.8784;America/New_York
+BUH;Bucarest;RO;44.4377;26.0974;Europe/Bucharest
+BUN;Buenaventura;CO;3.883;-77.0197;America/Bogota
+BUQ;Bulawayo;ZW;-20.1325;28.6265;Africa/Harare
+BUS;Batumi;GE;41.6168;41.6367;Asia/Tbilisi
+BUX;Bunia;CD;1.5743;30.2397;Africa/Lubumbashi
+BUZ;Bushehr;IR;28.9234;50.8203;Asia/Tehran
+BVB;Boa Vista;BR;2.8333;-60.6667;America/Boa_Vista
+BVC;Boa Vista;CV;16.0833;-22.8333;Atlantic/Cape_Verde
+BVE;Brive-la-Gaillarde;FR;45.1667;1.5333;Europe/Paris
+BVG;Berlevåg;NO;70.8667;29;Europe/Oslo
+BVH;Vilhena;BR;-12.7167;-60.1167;America/Porto_Velho
+BVI;Birdsville;AU;-25.8983;139.3433;Australia/Brisbane
+BVJ;Bovanenkovo;RU;70.2;68.4;Asia/Yekaterinburg
+BWA;Bhairawa;NP;27.5042;83.42;Asia/Kathmandu
+BWI;Baltimora;US;39.2864;-76.615;America/New_York
+BWK;Bol;HR;43.2833;16.6833;Europe/Zagreb
+BWN;Bandar Seri Begawan;BN;4.9031;114.9398;Asia/Brunei
+BWO;Balakovo;RU;52.0246;47.7807;Europe/Volgograd
+BWT;Burnie;AU;-40.9931;145.7251;Australia/Hobart
+BXH;Balqaş;KZ;46.8665;74.9587;Asia/Almaty
+BXR;Bam;IR;29.0801;58.4494;Asia/Tehran
+BXU;Butuan City;PH;8.9475;125.5406;Asia/Manila
+BXY;Bajkonur;KZ;45.6167;63.3167;Asia/Qyzylorda
+BYK;Bouaké;CI;7.6905;-5.0391;Africa/Abidjan
+BYM;Bayamo;CU;20.3719;-76.6297;America/Havana
+BYN;Bajanhongor;MN;46.1;100.6833;Asia/Ulaanbaatar
+BZE;Belize;BZ;17.4977;-88.1867;America/Belize
+BZG;Bydgoszcz;PL;53.1235;18.0084;Europe/Warsaw
+BZI;Balıkesir;TR;39.6533;27.8903;Europe/Istanbul
+BZL;Barisal;BD;22.701;90.3535;Asia/Dhaka
+BZN;Bozeman;US;45.7777;-111.1603;America/Denver
+BZO;Bolzano;IT;46.4967;11.358;Europe/Rome
+BZR;Béziers;FR;43.3242;3.3544;Europe/Paris
+BZV;Brazzaville;CG;-4.2589;15.2511;Africa/Brazzaville
+BZX;Bazhong;CN;31.868;106.748;Asia/Shanghai
+CAB;Cabinda;AO;-5.5833;12.2;Africa/Luanda
+CAC;Cascavel;BR;-24.95;-53.4667;America/Sao_Paulo
+CAE;Università Columbia;US;34.0007;-81.0348;America/New_York
+CAG;Cagliari;IT;39.2238;9.1217;Europe/Rome
+CAH;Ca Mau;VN;8.9624;105.1259;Asia/Ho_Chi_Minh
+CAI;Il Cairo;EG;30.0444;31.2357;Africa/Cairo
+CAJ;Canaima;VE;6.25;-62.8333;America/Caracas
+CAK;Akron;US;41.0814;-81.519;America/New_York
+CAL;Campbeltown;GB;55.4364;-5.6867;Europe/London
+CAN;Canton;CN;23.1291;113.2644;Asia/Shanghai
+CAP;Cap-Haïtien;HT;19.7328;-72.195;America/Port-au-Prince
+CAT;Cascais;PT;38.7;-9.4167;Europe/Lisbon
+CAW;Campos dos Goytacazes;BR;-21.7587;-41.3267;America/Sao_Paulo
+CAY;Caienna;GF;4.9224;-52.3135;America/Cayenne
+CAZ;Cobar;AU;-31.535;145.7933;Australia/Sydney
+CBB;Cochabamba;BO;-17.414;-66.1789;America/La_Paz
+CBH;Bechar;DZ;31.6238;-2.2162;Africa/Algiers
+CBO;Città di Cotabato;PH;7.1083;125.0388;Asia/Manila
+CBQ;Calabar;NG;4.9689;8.3474;Africa/Lagos
+CBR;Canberra;AU;-35.2809;149.13;Australia/Sydney
+CBT;Catumbela;AO;-12.4833;13.4833;Africa/Luanda
+CCC;Cayo Coco;CU;22.5125;-78.5083;America/Havana
+CCF;Carcassonne;FR;43.2167;2.3167;Europe/Paris
+CCJ;Kozhikode;IN;11.2588;75.7804;Asia/Kolkata
+CCK;Cocos Islands;CC;-12.1667;96.9167;Indian/Cocos
+CCP;Concepción;CL;-36.8201;-73.0444;America/Santiago
+CCR;Concord;US;37.978;-122.0311;America/Los_Angeles
+CCS;Caracas;VE;10.4806;-66.9036;America/Caracas
+CCU;Colcata;IN;22.5726;88.3639;Asia/Kolkata
+CCZ;Chub Cay;BS;25.4175;-77.8814;America/Nassau
+CDB;Cold Bay;US;55.2046;-162.7177;America/Nome
+CDC;Cedar City;US;37.7025;-113.0961;America/Denver
+CDE;Chengde;CN;40.953;117.963;Asia/Shanghai
+CDP;Kadapa;IN;14.4673;78.8242;Asia/Kolkata
+CDR;Chadron;US;42.835;-103.0978;America/Denver
+CDT;Castellón de la Plana;ES;39.9864;-0.0513;Europe/Madrid
+CDV;Cordova;US;60.5387;-145.7006;America/Anchorage
+CEB;Cebu;PH;10.3133;123.9828;Asia/Manila
+CEC;Crescent City;US;41.78;-124.2358;America/Los_Angeles
+CED;Ceduna;AU;-32.1238;133.7012;Australia/Adelaide
+CEE;Čerepovec;RU;59.1323;37.9092;Europe/Moscow
+CEI;Chiang Rai;TH;19.9105;99.8406;Asia/Bangkok
+CEK;Čeljabinsk;RU;55.1644;61.4368;Asia/Yekaterinburg
+CEN;Ciudad Obregón;MX;27.4828;-109.9304;America/Hermosillo
+CEZ;Cortez;US;37.3028;-108.6272;America/Denver
+CFE;Clermont-Ferrand;FR;45.7772;3.087;Europe/Paris
+CFG;Cienfuegos;CU;22.16;-80.4438;America/Havana
+CFK;Chlef;DZ;36.158;1.3373;Africa/Algiers
+CFN;Carrickfinn;IE;55.0417;-8.3403;Europe/Dublin
+CFR;Caen;FR;49.1829;-0.3707;Europe/Paris
+CFS;Coffs Harbour;AU;-30.3229;153.1153;Australia/Sydney
+CFU;Corfù;GR;39.6078;19.9146;Europe/Athens
+CGB;Cuiabá;BR;-15.6009;-56.0968;America/Cuiaba
+CGD;Changde;CN;29.0317;111.6988;Asia/Shanghai
+CGI;Cape Girardeau;US;37.2236;-89.5717;America/Chicago
+CGM;Mambajao;PH;9.25;124.72;Asia/Manila
+CGN;Colonia;DE;50.9407;6.9599;Europe/Berlin
+CGO;Zhengzhou;CN;34.7466;113.6253;Asia/Shanghai
+CGP;Chittagong;BD;22.3569;91.7832;Asia/Dhaka
+CGQ;Changchun;CN;43.8171;125.3235;Asia/Shanghai
+CGR;Campo Grande;BR;-20.4697;-54.6201;America/Campo_Grande
+CGY;Cagayan De Oro;PH;8.4542;124.6319;Asia/Manila
+CHA;Chattanooga;US;35.0456;-85.3097;America/New_York
+CHC;Christchurch;NZ;-43.5321;172.6362;Pacific/Auckland
+CHG;Chaoyang;CN;41.5451;120.4372;Asia/Shanghai
+CHH;Chachapoyas;PE;-6.2167;-77.85;America/Lima
+CHI;Chicago;US;41.8781;-87.6298;America/Chicago
+CHM;Chimbote;PE;-9.0633;-78.589;America/Lima
+CHO;Charlottesville;US;38.1394;-78.4493;America/New_York
+CHQ;La Canea;GR;35.5138;24.018;Europe/Athens
+CHS;Charleston;US;32.7765;-79.9311;America/New_York
+CHT;Chatham Island;NZ;-43.8;-176.35;Pacific/Chatham
+CHX;Changuinola;PA;9.45;-82.45;America/Panama
+CID;Cedar Rapids;US;41.9779;-91.6656;America/Chicago
+CIF;Chifeng;CN;42.2578;118.8869;Asia/Shanghai
+CIJ;Cobija;BO;-11.0264;-68.7528;America/La_Paz
+CIT;Shimkent;KZ;42.3417;69.5901;Asia/Almaty
+CIW;Canouan Island;VC;12.7;-61.3167;America/St_Vincent
+CIX;Chiclayo;PE;-6.7701;-79.855;America/Lima
+CIY;Aeroporto di Comiso;IT;36.9917;14.6069;Europe/Rome
+CJA;Cajamarca;PE;-7.1617;-78.5128;America/Lima
+CJB;Coimbatore;IN;11.0168;76.9558;Asia/Kolkata
+CJC;Calama;CL;-22.4544;-68.9294;America/Santiago
+CJJ;Cheongju;KR;36.6424;127.489;Asia/Seoul
+CJL;Chitral;PK;35.8861;71.7944;Asia/Karachi
+CJM;Chumphon;TH;10.493;99.18;Asia/Bangkok
+CJS;Ciudad Juárez;MX;31.6904;-106.4245;America/Ciudad_Juarez
+CJU;Jeju;KR;33.489;126.4983;Asia/Seoul
+CKB;Clarksburg;US;39.2956;-80.2294;America/New_York
+CKG;Chongqing;CN;29.4316;106.9123;Asia/Shanghai
+CKH;Chokurdah;RU;70.6333;147.8833;Asia/Magadan
+CKS;Carajas;BR;-6.1147;-50.0019;America/Belem
+CKY;Conakry;GN;9.6412;-13.5784;Africa/Conakry
+CKZ;Çanakkale;TR;40.1467;26.4086;Europe/Istanbul
+CLE;Cleveland;US;41.4995;-81.6954;America/New_York
+CLJ;Cluj Napoca;RO;46.7712;23.6236;Europe/Bucharest
+CLL;College Station;US;30.628;-96.3344;America/Chicago
+CLO;Cali;CO;3.4516;-76.532;America/Bogota
+CLQ;Colima;MX;19.2452;-103.7241;America/Mexico_City
+CLT;Charlotte;US;35.2271;-80.8431;America/New_York
+CLY;Calvi;FR;42.5278;8.7917;Europe/Paris
+CMA;Cunnamulla;AU;-28.0314;145.6161;Australia/Brisbane
+CMB;Colombo;LK;6.9275;79.8484;Asia/Colombo
+CME;Ciudad Del Carmen;MX;18.651;-91.8027;America/Merida
+CMF;Chambéry;FR;45.638;5.8844;Europe/Paris
+CMG;Corumbá;BR;-19.0082;-57.6516;America/Campo_Grande
+CMH;Columbus;US;39.9612;-82.9988;America/New_York
+CMI;Champaign;US;40.1164;-88.2434;America/Chicago
+CMN;Casablanca;MA;33.5333;-7.5833;Africa/Casablanca
+CMU;Kundiawa;PG;-5.9939;144.9744;Pacific/Port_Moresby
+CMW;Camagüey;CU;21.3926;-77.9053;America/Havana
+CMX;Hancock;US;47.1678;-88.4864;America/Detroit
+CNB;Coonamble;AU;-30.9808;148.3783;Australia/Sydney
+CND;Costanza;RO;44.1598;28.6348;Europe/Bucharest
+CNJ;Cloncurry;AU;-20.6689;140.5085;Australia/Brisbane
+CNM;Carlsbad;US;32.3372;-104.2628;America/Denver
+CNN;Kannur;IN;11.8745;75.3704;Asia/Kolkata
+CNP;Neerlerit Inaat;GL;70.7431;-22.6583;America/Scoresbysund
+CNQ;Corrientes;AR;-27.4692;-58.8306;America/Argentina/Cordoba
+CNS;Cairns;AU;-16.9186;145.7781;Australia/Brisbane
+CNX;Chiang Mai;TH;18.7953;98.962;Asia/Bangkok
+CNY;Moab;US;38.7594;-109.7461;America/Denver
+COD;Cody;US;44.5158;-109.0275;America/Denver
+COK;Kochi;IN;9.9312;76.2673;Asia/Kolkata
+COO;Cotonou;BJ;6.3703;2.3912;Africa/Porto-Novo
+COQ;Choibalsan;MN;48.1333;114.9;Asia/Choibalsan
+COR;Córdoba;AR;-31.4201;-64.1888;America/Argentina/Cordoba
+COS;Colorado Springs;US;38.8339;-104.8214;America/Denver
+COU;Columbia;US;38.8136;-92.2192;America/Chicago
+COV;Mersina;TR;36.9165;34.8951;Europe/Istanbul
+CPC;San Martin DeLos Andes;AR;-40.0667;-71.1333;America/Argentina/Salta
+CPD;Coober Pedy;AU;-29.0444;134.7528;Australia/Adelaide
+CPE;San Francisco de Campeche;MX;19.8301;-90.5349;America/Merida
+CPH;Copenaghen;DK;55.6761;12.5683;Europe/Copenhagen
+CPO;Copiapó;CL;-27.3666;-70.3322;America/Santiago
+CPR;Casper;US;42.9086;-106.4625;America/Denver
+CPT;Città del Capo;ZA;-33.9249;18.4241;Africa/Johannesburg
+CPV;Campina Grande;BR;-7.2291;-35.8808;America/Fortaleza
+CPX;Culebra;PR;18.3;-65.3167;America/Puerto_Rico
+CRA;Craiova;RO;44.3302;23.7949;Europe/Bucharest
+CRD;Comodoro Rivadavia;AR;-45.8656;-67.4822;America/Argentina/Catamarca
+CRI;Crooked Island;BS;22.75;-74.15;America/Nassau
+CRK;City of Angeles;PH;15.1472;120.5847;Asia/Manila
+CRM;Catarman;PH;12.4833;124.5833;Asia/Manila
+CRP;Corpus Christi;US;27.8006;-97.3964;America/Chicago
+CRV;Crotone;IT;39;17.0833;Europe/Rome
+CRW;Charleston;US;38.3703;-81.5965;America/New_York
+CRZ;Türkmenabat;TM;39.0041;63.5688;Asia/Ashgabat
+CSG;Columbus;US;32.4667;-84.9833;America/New_York
+CSK;Cap Skirring;SN;12.4;-16.75;Africa/Dakar
+CSW;Colorado do Oeste;BR;-13.0194;-61.1681;America/Porto_Velho
+CSX;Changsha;CN;28.2282;112.9388;Asia/Shanghai
+CSY;Čeboksary;RU;56.1168;47.2628;Europe/Moscow
+CTA;Catania;IT;37.5079;15.083;Europe/Rome
+CTC;San Fernando del Valle de Catamarca;AR;-28.4696;-65.7795;America/Argentina/Catamarca
+CTD;Chitré;PA;7.9667;-80.4333;America/Panama
+CTG;Cartagena de Indias;CO;10.391;-75.4794;America/Bogota
+CTL;Charleville-Mézières;AU;-26.4133;146.2584;Australia/Brisbane
+CTM;Chetumal;MX;18.5002;-88.2961;America/Cancun
+CTN;Cooktown;AU;-15.4433;145.1833;Australia/Brisbane
+CTU;Chengdu;CN;30.5728;104.0668;Asia/Shanghai
+CUC;Cúcuta;CO;7.8891;-72.4967;America/Bogota
+CUE;Cuenca;EC;-2.9001;-79.0059;America/Guayaquil
+CUF;Cuneo;IT;44.5353;7.6175;Europe/Rome
+CUK;Caye Caulker;BZ;17.7667;-88;America/Belize
+CUL;Culiacán;MX;24.8091;-107.394;America/Mazatlan
+CUM;Cumaná;VE;10.4319;-64.1833;America/Caracas
+CUN;Cancún;MX;21.1619;-86.8515;America/Cancun
+CUP;Carúpano;VE;10.643;-63.2562;America/Caracas
+CUQ;Coen;AU;-13.7639;143.1133;Australia/Brisbane
+CUR;Willemstad;CW;12.1846;-68.9571;America/Curacao
+CUU;Chihuahua;MX;28.633;-106.0691;America/Chihuahua
+CUZ;Cusco;PE;-13.5384;-71.9437;America/Lima
+CVG;Cincinnati;US;39.1031;-84.512;America/New_York
+CVM;Ciudad Victoria;MX;23.7369;-99.1411;America/Monterrey
+CVN;Clovis;US;34.4048;-103.2052;America/Denver
+CVQ;Carnarvon;AU;-24.8834;113.6636;Australia/Perth
+CWB;Curitiba;BR;-25.4809;-49.3044;America/Sao_Paulo
+CWL;Cardiff;GB;51.4816;-3.1791;Europe/London
+CXB;Cox's Bazar;BD;21.4272;92.0058;Asia/Dhaka
+CXI;Christmas Island;KI;1.9667;-157.45;Pacific/Kiritimati
+CXJ;Caxias do Sul;BR;-29.1667;-51.1833;America/Sao_Paulo
+CXP;Cilacap;ID;-7.7333;109;Asia/Jakarta
+CYA;Les Cayes;HT;18.2043;-73.7537;America/Port-au-Prince
+CYB;Cayman Brac;KY;19.6902;-79.8794;America/Cayman
+CYC;Caye Chapel;BZ;17.6958;-88.0425;America/Belize
+CYI;Chiayi;TW;23.4667;120.3833;Asia/Taipei
+CYO;Cayo Largo Del Sur;CU;21.6167;-81.5167;America/Havana
+CYP;Calbayog;PH;12.0758;124.543;Asia/Manila
+CYS;Cheyenne;US;41.14;-104.8202;America/Denver
+CYX;Čerskij;RU;68.75;161.35;Asia/Magadan
+CYZ;Cauayan;PH;16.93;121.7558;Asia/Manila
+CZE;Coro;VE;11.3946;-69.681;America/Caracas
+CZH;Corozal Town;BZ;18.3833;-88.4167;America/Belize
+CZL;Costantina;DZ;36.3602;6.6424;Africa/Algiers
+CZM;San Miguel de Cozumel;MX;20.423;-86.9223;America/Cancun
+CZS;Cruzeiro Do Sul;BR;-7.5833;-72.7833;America/Eirunepe
+CZU;Corozal Town;CO;9.3375;-75.2828;America/Bogota
+CZX;Changzhou;CN;31.8112;119.9741;Asia/Shanghai
+DAB;Daytona Beach;US;29.2108;-81.0228;America/New_York
+DAC;Dacca;BD;23.8103;90.4125;Asia/Dhaka
+DAD;Da Nang;VN;16.0554;108.203;Asia/Ho_Chi_Minh
+DAM;Damasco;SY;33.5138;36.2765;Asia/Damascus
+DAR;Dar Es Salaam;TZ;-6.7924;39.2083;Africa/Dar_es_Salaam
+DAT;Datong;CN;40.0768;113.3001;Asia/Shanghai
+DAU;Daru;PG;-9.0835;143.2061;Pacific/Port_Moresby
+DAV;David;PA;8.4007;-82.4428;America/Panama
+DAY;Dayton;US;39.7589;-84.1916;America/New_York
+DBB;Dabaa City;EG;30.9244;28.4614;Africa/Cairo
+DBO;Dubbo;AU;-32.2188;148.5696;Australia/Sydney
+DBQ;Dubuque;US;42.5023;-90.6655;America/Chicago
+DBR;Darbhanga;IN;26.17;85.9;Asia/Kolkata
+DBV;Ragusa;HR;42.5607;18.2606;Europe/Zagreb
+DCM;Castres;FR;43.5558;2.2842;Europe/Paris
+DCY;Daocheng;CN;29.0379;100.2974;Asia/Shanghai
+DDC;Dodge City;US;37.7617;-99.965;America/Chicago
+DDG;Dandong;CN;40.0008;124.3544;Asia/Shanghai
+DEA;Dera Ghazi Khan;PK;30.0489;70.6455;Asia/Karachi
+DEB;Debrecen;HU;47.5316;21.6273;Europe/Budapest
+DEC;Decatur;US;39.8342;-88.8686;America/Chicago
+DED;Dehra Dun;IN;30.3167;78.0333;Asia/Kolkata
+DEF;Dezful;IR;32.4388;48.3847;Asia/Tehran
+DEL;Nuova Delhi;IN;28.6139;77.209;Asia/Kolkata
+DEN;Denver;US;39.7392;-104.9847;America/Denver
+DFW;Dallas;US;32.7767;-96.797;America/Chicago
+DGA;Dangriga;BZ;17.1833;-88.5667;America/Belize
+DGO;Comune di Durango;MX;24.0277;-104.6532;America/Monterrey
+DGT;Dumaguete;PH;9.3068;123.3054;Asia/Manila
+DHM;Dharamsala;IN;32.3;76.2667;Asia/Kolkata
+DHN;Dothan;US;31.2232;-85.3905;America/Chicago
+DIB;Dibrugarh;IN;27.4728;94.912;Asia/Kolkata
+DIE;Antsiranana;MG;-12.3231;49.2943;Indian/Antananarivo
+DIG;Diqing;CN;27.7897;99.6778;Asia/Shanghai
+DIK;Dickinson;US;46.8333;-102.9;America/Denver
+DIL;Dili;TL;-8.5569;125.5603;Asia/Dili
+DIN;Dien Bien Phu;VN;21.3833;103;Asia/Ho_Chi_Minh
+DIR;Dire Daua;ET;9.6009;41.8501;Africa/Addis_Ababa
+DIY;Diyarbakır;TR;37.925;40.211;Europe/Istanbul
+DJE;Djerba;TN;33.8712;10.7751;Africa/Tunis
+DJG;Djanet;DZ;24.4653;9.4889;Africa/Algiers
+DJJ;Jayapura;ID;-2.5916;140.669;Asia/Jayapura
+DKA;Katsina;NG;12.9816;7.6223;Africa/Lagos
+DKR;Dakar;SN;14.7167;-17.4677;Africa/Dakar
+DLA;Douala;CM;4.0511;9.7679;Africa/Douala
+DLC;Dalian;CN;38.914;121.6147;Asia/Shanghai
+DLE;Dole;FR;47.05;5.4333;Europe/Paris
+DLG;Dillingham;US;59.0425;-158.5147;America/Anchorage
+DLH;Duluth;US;46.7867;-92.1005;America/Chicago
+DLI;Da Lat;VN;11.9404;108.4583;Asia/Ho_Chi_Minh
+DLM;Dalaman;TR;36.7167;28.7833;Europe/Istanbul
+DLU;distretto di Dali;CN;25.6065;100.2676;Asia/Shanghai
+DLZ;Dalanzadgad;MN;43.9667;104.6833;Asia/Ulaanbaatar
+DMB;Taraz;KZ;42.9;71.3667;Asia/Almaty
+DMM;Dammam;SA;26.4207;50.0888;Asia/Riyadh
+DMU;Dimapur;IN;25.9091;93.7266;Asia/Kolkata
+DND;Dundee;GB;56.4614;-2.9681;Europe/London
+DNH;Dunhuang;CN;40.2;94.6833;Asia/Shanghai
+DNZ;Denizli;TR;37.7872;29.7033;Europe/Istanbul
+DOD;Dodoma;TZ;-6.1667;35.7503;Africa/Dar_es_Salaam
+DOG;Dongola;SD;19.1833;30.45;Africa/Khartoum
+DOH;Doha;QA;25.2854;51.531;Asia/Qatar
+DOL;Deauville;FR;49.3628;0.1642;Europe/Paris
+DOM;Marigot;DM;15.415;-61.371;America/Dominica
+DOY;Dongying;CN;37.434;118.6746;Asia/Shanghai
+DPL;Dipolog;PH;8.5143;123.3374;Asia/Manila
+DPO;Devonport;AU;-41.1721;146.4275;Australia/Hobart
+DPS;Denpasar (Bali);ID;-8.6705;115.2126;Asia/Makassar
+DRG;Deering;US;66.0712;-162.7599;America/Nome
+DRO;Comune di Durango;US;37.2753;-107.8801;America/Denver
+DRP;Legazpi City;PH;13.1391;123.7438;Asia/Manila
+DRS;Dresda;DE;51.0504;13.7373;Europe/Berlin
+DRW;Darwin;AU;-12.4628;130.8418;Australia/Darwin
+DSI;Destin;US;30.3833;-86.5;America/Chicago
+DSM;Des Moines;US;41.5868;-93.625;America/Chicago
+DSN;Dongsheng;CN;39.8225;109.9633;Asia/Shanghai
+DSO;Sondok;KP;39.9167;127.5333;Asia/Pyongyang
+DTM;Dortmund;DE;51.5136;7.4653;Europe/Berlin
+DTT;Detroit;US;42.3314;-83.0458;America/Detroit
+DUB;Dublino;IE;53.3498;-6.2603;Europe/Dublin
+DUD;Dunedin;NZ;-45.8788;170.5028;Pacific/Auckland
+DUE;Dundo;AO;-7.4;20.8167;Africa/Luanda
+DUJ;Dubois;US;41.1783;-78.8989;America/New_York
+DUM;Dumai;ID;1.6666;101.4002;Asia/Jakarta
+DUR;Durban;ZA;-29.8579;31.0276;Africa/Johannesburg
+DUS;Düsseldorf;DE;51.2249;6.7757;Europe/Berlin
+DUT;Dutch Harbor;US;53.8945;-166.5422;America/Adak
+DVL;Devils Lake;US;48.1131;-98.9075;America/Chicago
+DVO;Davao;PH;7.1907;125.4553;Asia/Manila
+DWD;Dawadmi;SA;24.4455;44.1287;Asia/Riyadh
+DXB;Dubai;AE;25.2048;55.2708;Asia/Dubai
+DYG;Dayong;CN;29.1071;110.4457;Asia/Shanghai
+DYR;Anadyr';RU;64.7333;177.75;Asia/Anadyr
+DYU;Dušanbe;TJ;38.5598;68.787;Asia/Dushanbe
+DZA;Mamoudzou;YT;-12.7809;45.2279;Indian/Mayotte
+DZN;Zhezqazghan;KZ;47.7964;67.702;Asia/Almaty
+EAM;Nejran;SA;17.5656;44.2289;Asia/Riyadh
+EAP;Basilea;CH;47.5547;7.5906;Europe/Zurich
+EAR;Kearney;US;40.7283;-98.9989;America/Chicago
+EAS;San Sebastian;ES;43.3208;-1.9844;Europe/Madrid
+EAT;Wenatchee;US;47.3997;-120.2078;America/Los_Angeles
+EAU;Eau Claire;US;44.8113;-91.4985;America/Chicago
+EBA;Rio nell'Elba;IT;42.7667;10.2833;Europe/Rome
+EBB;Entebbe;UG;0.0512;32.4637;Africa/Kampala
+EBD;Al-Ubayyid;SD;13.1782;30.2167;Africa/Khartoum
+EBJ;Esbjerg;DK;55.4765;8.4594;Europe/Copenhagen
+EBL;Arbil;IQ;36.1901;43.993;Asia/Baghdad
+ECN;Ercan;NY;35.1581;33.5031;Asia/Nicosia
+ECP;Panama;US;30.1588;-85.6602;America/Chicago
+EDI;Edimburgo;GB;55.9502;-3.1875;Europe/London
+EDL;Eldoret;KE;0.5143;35.2698;Africa/Nairobi
+EDO;Edremit;TR;39.5833;27.0333;Europe/Istanbul
+EFL;Kefallinia;GR;38.1181;20.5056;Europe/Athens
+EGC;Bergerac;FR;44.85;0.4833;Europe/Paris
+EGE;Vail;US;39.6403;-106.3742;America/Denver
+EGS;Egilsstaðir;IS;65.2778;-14.4028;Atlantic/Reykjavik
+EGX;Egegik;US;58.2078;-157.3703;America/Anchorage
+EIE;Enisejsk;RU;58.4667;92.1167;Asia/Krasnoyarsk
+EIN;Eindhoven;NL;51.4416;5.4697;Europe/Amsterdam
+EIS;Beef Island;VG;18.4439;-64.5428;America/Tortola
+EJA;Barrancabermeja;CO;7.0617;-73.8519;America/Bogota
+EJH;Wedjh;SA;26.2077;36.4748;Asia/Riyadh
+EKO;Elko;US;40.8239;-115.7897;America/Los_Angeles
+ELC;Elcho Island;AU;-12.0198;135.5698;Australia/Darwin
+ELD;El Dorado;US;33.2206;-92.8147;America/Chicago
+ELF;El Fasher;SD;13.6198;25.3549;Africa/Khartoum
+ELG;El Golea;DZ;30.5675;2.8647;Africa/Algiers
+ELH;North Eleuthera;BS;25.4769;-76.6819;America/Nassau
+ELM;Corning;US;42.163;-76.8959;America/New_York
+ELP;El Paso;US;31.7587;-106.4869;America/Denver
+ELQ;Buraydah;SA;26.3592;43.9818;Asia/Riyadh
+ELS;East London;ZA;-33.0292;27.8546;Africa/Johannesburg
+ELU;El Oued;DZ;33.3678;6.8517;Africa/Algiers
+EMD;Emerald;AU;-23.5686;148.1744;Australia/Brisbane
+EMK;Emmonak;US;62.7769;-164.5208;America/Nome
+ENA;Kenai;US;60.5652;-151.2464;America/Anchorage
+ENF;Enontekiö;FI;68.35;23.4167;Europe/Helsinki
+ENH;Enshi;CN;30.2722;109.4882;Asia/Shanghai
+ENO;Encarnación;PY;-27.2523;-55.9136;America/Asuncion
+ENU;Enugu;NG;6.4584;7.5464;Africa/Lagos
+ENY;Yan'an;CN;36.6394;109.5515;Asia/Shanghai
+EOI;Eday;GB;59.1833;-2.7833;Europe/London
+EPR;Esperance;AU;-33.6825;121.8304;Australia/Perth
+EPU;Pärnu;EE;58.4189;24.4728;Europe/Tallinn
+EQS;Esquel;AR;-42.9097;-71.1425;America/Argentina/Catamarca
+ERC;Erzincam;TR;39.7468;39.4911;Europe/Istanbul
+ERF;Erfurt;DE;50.9737;11.0224;Europe/Berlin
+ERH;Al-Rashidiyya;MA;31.9272;-4.4285;Africa/Casablanca
+ERI;Erie;US;42.1292;-80.0851;America/New_York
+ERL;Erenhot;CN;43.4267;112.0984;Asia/Shanghai
+ERZ;Erzurum;TR;39.9055;41.2658;Europe/Istanbul
+ESC;Escanaba;US;45.7206;-87.0867;America/Detroit
+ESD;Eastsound;US;48.7083;-122.9125;America/Los_Angeles
+ESK;Eskişehir;TR;39.7667;30.5256;Europe/Istanbul
+ESL;Ėlista;RU;46.3155;44.2794;Europe/Moscow
+ESM;Esmeraldas;EC;0.9682;-79.6517;America/Guayaquil
+ESR;El Salvador;CL;-26.3153;-69.7653;America/Santiago
+ESU;Essaouira;MA;31.5085;-9.7595;Africa/Casablanca
+ETM;Eilat;IL;29.5556;34.9536;Asia/Jerusalem
+ETR;Santa Rosa;EC;-3.4522;-79.9617;America/Guayaquil
+ETZ;Metz;FR;49.1197;6.1769;Europe/Paris
+EUG;Eugene;US;44.0521;-123.0868;America/Los_Angeles
+EUN;El Ayun;EH;27.1333;-13.2167;Africa/Casablanca
+EUX;St Eustatius;NL;17.4931;-62.9778;America/Kralendijk
+EVE;Harstad;NO;68.4967;16.6797;Europe/Oslo
+EVN;Jerevan;AM;40.1872;44.5152;Asia/Yerevan
+EVV;Evansville;US;37.9716;-87.5711;America/Chicago
+EWB;Fall River;US;41.6362;-70.9342;America/New_York
+EWN;New Bern;US;35.0783;-77.0346;America/New_York
+EXT;Exeter;GB;50.7184;-3.5339;Europe/London
+EYK;Belojarskij;RU;63.6967;66.7012;Asia/Yekaterinburg
+EYP;El Yopal;CO;5.3207;-72.3863;America/Bogota
+EYW;Key West;US;24.5557;-81.7826;America/New_York
+EZS;Elâzığ;TR;38.6748;39.2225;Europe/Istanbul
+FAE;Sorvagur;FO;62.0667;-7.2667;Atlantic/Faroe
+FAI;Fairbanks;US;64.8378;-147.7164;America/Anchorage
+FAO;Faro;PT;37.0154;-7.9351;Europe/Lisbon
+FAR;Fargo;US;46.8772;-96.7898;America/Chicago
+FAT;Fresno;US;36.7378;-119.7871;America/Los_Angeles
+FAV;Fakarava;PF;-16.0535;-145.6523;Pacific/Tahiti
+FAY;Fayetteville;US;35.0527;-78.8784;America/New_York
+FBM;Lubumbashi;CD;-11.6876;27.5026;Africa/Lubumbashi
+FCA;Kalispell;US;48.3073;-114.2532;America/Denver
+FCN;Cuxhaven;DE;53.8593;8.6879;Europe/Berlin
+FDF;Fort De France;MQ;14.6161;-61.0588;America/Martinique
+FDH;Friedrichshafen;DE;47.6618;9.48;Europe/Berlin
+FDU;Bandundu;CD;-3.3056;17.3833;Africa/Kinshasa
+FEG;Fergana;UZ;40.3734;71.7978;Asia/Tashkent
+FEN;Fernando De Noronha;BR;-3.85;-32.4167;America/Noronha
+FEZ;Fes;MA;34.0181;-5.0078;Africa/Casablanca
+FGU;Fangatau;PF;-16.05;-141.8333;Pacific/Tahiti
+FIH;Kinshasa;CD;-4.4419;15.2663;Africa/Kinshasa
+FIZ;Fitzroy Crossing;AU;-18.1783;125.5542;Australia/Perth
+FJR;Fujairah;AE;25.1094;56.3306;Asia/Dubai
+FKB;Karlsruhe;DE;49.0081;8.4038;Europe/Berlin
+FKI;Kisangani;CD;0.5167;25.2;Africa/Lubumbashi
+FKQ;Fakfak;ID;-2.9167;132.3;Asia/Jayapura
+FKS;Fukushima;JP;37.2267;140.4328;Asia/Tokyo
+FLA;Florencia;CO;1.6154;-75.6042;America/Bogota
+FLL;Fort Lauderdale;US;26.1223;-80.1434;America/New_York
+FLN;Florianópolis;BR;-27.5949;-48.5482;America/Sao_Paulo
+FLO;Firenze;US;34.1889;-79.7244;America/New_York
+FLR;Firenze;IT;43.7687;11.2569;Europe/Rome
+FLW;Flores Island;PT;39.4667;-31.15;Atlantic/Azores
+FMA;Formosa;AR;-26.1858;-58.1756;America/Argentina/Cordoba
+FMI;Kalemie;CD;-5.9127;29.1914;Africa/Lubumbashi
+FMM;Memmingen;DE;47.9886;10.2394;Europe/Berlin
+FMO;Munster;DE;51.9616;7.6282;Europe/Berlin
+FMY;Fort Myers;US;26.6406;-81.8723;America/New_York
+FNA;Freetown;SL;8.4657;-13.2317;Africa/Freetown
+FNC;Madeira;PT;32.6669;-16.9241;Atlantic/Madeira
+FNI;Nîmes;FR;43.8367;4.3601;Europe/Paris
+FNJ;Pyongyang;KP;39.0392;125.7625;Asia/Pyongyang
+FNT;Flint;US;43.0125;-83.6875;America/Detroit
+FOC;Fuzhou;CN;26.0745;119.2965;Asia/Shanghai
+FOD;Fort Dodge;US;42.5525;-94.1897;America/Chicago
+FOG;Foggia;IT;41.4623;15.5447;Europe/Rome
+FON;La Fortuna;CR;10.4;-84.4833;America/Costa_Rica
+FOR;Fortaleza;BR;-3.7327;-38.527;America/Fortaleza
+FPO;Freeport;BS;26.5473;-78.7052;America/Nassau
+FRA;Francoforte;DE;50.0507;8.5708;Europe/Berlin
+FRD;Friday Harbor;US;48.5248;-123.0265;America/Los_Angeles
+FRL;Forlì;IT;44.2227;12.0407;Europe/Rome
+FRO;Florø;NO;61.5864;5.0246;Europe/Oslo
+FRS;Flores;GT;16.9167;-89.8833;America/Guatemala
+FRW;Francistown;BW;-21.1661;27.5144;Africa/Gaborone
+FSC;Figari;FR;41.4986;9.0982;Europe/Paris
+FSD;Sioux Falls;US;43.5473;-96.7283;America/Chicago
+FSM;Fort Smith;US;35.3859;-94.3985;America/Chicago
+FSP;Saint-Pierre;PM;46.9167;-56.1667;America/Miquelon
+FSZ;Shizuoka;JP;35.0929;138.319;Asia/Tokyo
+FTE;El Calafate;AR;-50.2842;-72.0537;America/Argentina/Rio_Gallegos
+FTU;Fort Dauphin;MG;-25.0381;46.9556;Indian/Antananarivo
+FTW;Fort Worth;US;32.75;-97.3333;America/Chicago
+FUE;Fuerteventura;ES;28.4506;-13.8699;Atlantic/Canary
+FUG;Fuyang;CN;32.8905;115.8145;Asia/Shanghai
+FUJ;Fukue;JP;32.6678;128.8376;Asia/Tokyo
+FUK;Fukuoka;JP;33.5902;130.4017;Asia/Tokyo
+FUN;Funafuti;TV;-8.5167;179.2083;Pacific/Funafuti
+FUO;Fuoshan;CN;23.0215;113.1214;Asia/Shanghai
+FWA;Fort Wayne;US;41.0793;-85.1394;America/Indiana/Indianapolis
+FYJ;Fuyuan (Heilongjiang);CN;48.3647;134.3079;Asia/Shanghai
+FYN;Contea di Fuyun;CN;46.8011;89.5383;Asia/Urumqi
+FYU;Fort Yukon;US;66.5698;-145.2482;America/Anchorage
+FYV;Fayetteville;US;36.0626;-94.1574;America/Chicago
+GAJ;Yamagata;JP;38.2554;140.3396;Asia/Tokyo
+GAL;Galena;US;64.738;-156.9419;America/Nome
+GAM;Gambell;US;63.7766;-171.7135;America/Nome
+GAN;Gan Island;MV;-0.69;73.1565;Indian/Maldives
+GAQ;Gao;ML;16.264;-0.028;Africa/Bamako
+GAU;Guwahati;IN;26.1445;91.7362;Asia/Kolkata
+GAY;Gaya;IN;24.7914;85.0002;Asia/Kolkata
+GBB;Qəbələ;AZ;40.9814;47.8458;Asia/Baku
+GBE;Gaborone;BW;-24.6282;25.9231;Africa/Gaborone
+GBJ;Marie Galante;GP;15.8667;-61.2667;America/Guadeloupe
+GCC;Gillette;US;44.3464;-105.5327;America/Denver
+GCH;Gachsaran;IR;30.366;50.7936;Asia/Tehran
+GCI;Guernsey;GG;49.4328;-2.595;Europe/Guernsey
+GCK;Garden City;US;37.9286;-100.7297;America/Chicago
+GCM;George Town;KY;19.2964;-81.3578;America/Cayman
+GCN;Grand Canyon Village;US;36.3552;-112.6612;America/Phoenix
+GDB;Gondia;IN;21.4598;80.195;Asia/Kolkata
+GDE;Gode;ET;5.9022;43.6283;Africa/Addis_Ababa
+GDL;Guadalajara;MX;20.6597;-103.3496;America/Mexico_City
+GDN;Danzica;PL;54.352;18.6466;Europe/Warsaw
+GDQ;Gondar;ET;12.603;37.4521;Africa/Addis_Ababa
+GDT;Cockburn Town;TC;21.4667;-71.1333;America/Grand_Turk
+GDV;Glendive;US;47.1389;-104.8069;America/Denver
+GDX;Magadan;RU;59.5594;150.8128;Asia/Magadan
+GDZ;Gelendzhik;RU;44.562;38.0905;Europe/Moscow
+GEG;Spokane;US;47.6588;-117.426;America/Los_Angeles
+GEL;Santo Ângelo;BR;-28.2811;-54.1681;America/Sao_Paulo
+GEO;Georgetown;GY;6.8013;-58.1551;America/Guyana
+GER;Nueva Gerona;CU;21.8375;-82.78;America/Havana
+GES;General Santos;PH;6.1164;125.1716;Asia/Manila
+GET;Geraldton;AU;-28.7961;114.702;Australia/Perth
+GEV;Gällivare;SE;67.1344;20.8167;Europe/Stockholm
+GFF;Griffith;AU;-34.2554;146.0627;Australia/Sydney
+GFK;Grand Forks;US;47.9253;-97.0329;America/Chicago
+GGG;Longview;US;32.3863;-94.8758;America/Chicago
+GGT;Georgetown;BS;23.564;-75.8725;America/Nassau
+GGW;Glasgow;US;48.2128;-106.6156;America/Denver
+GHA;Ghardaïa;DZ;32.4944;3.6445;Africa/Algiers
+GHB;Governor's Harbour;BS;25.2805;-76.3249;America/Nassau
+GHV;Brașov;RO;45.6486;25.6061;Europe/Bucharest
+GIB;Gibilterra;GI;36.1538;-5.3493;Europe/Gibraltar
+GID;Gitega;BI;-3.4167;29.9167;Africa/Bujumbura
+GIL;Gilgit;PK;35.9197;74.3322;Asia/Karachi
+GIS;Gisborne;NZ;-38.6619;177.9823;Pacific/Auckland
+GIZ;Jizan;SA;16.8894;42.5706;Asia/Riyadh
+GJA;Guanaja;HN;16.445;-85.9058;America/Tegucigalpa
+GJL;Jijel;DZ;36.821;5.7634;Africa/Algiers
+GJT;Grand Junction;US;39.0639;-108.5506;America/Denver
+GKA;Goroka;PG;-6.0752;145.3929;Pacific/Port_Moresby
+GKN;Gulkana;US;62.1553;-145.4522;America/Anchorage
+GLA;Glasgow;GB;55.8656;-4.2572;Europe/London
+GLF;Golfito;CR;8.6514;-83.1808;America/Costa_Rica
+GLH;Greenville;US;33.4844;-90.985;America/Chicago
+GLT;Gladstone;AU;-23.8715;151.2235;Australia/Brisbane
+GMA;Gemena;CD;3.2516;19.777;Africa/Kinshasa
+GMB;Gambela;ET;8.2833;34.5833;Africa/Addis_Ababa
+GME;Homel';BY;52.4313;30.9937;Europe/Minsk
+GMO;Gombergean;NG;10.3638;11.1928;Africa/Lagos
+GMR;Gambier Is;PF;-23.084;-134.8876;Pacific/Gambier
+GND;Grenada;GD;12.0042;-61.7861;America/Grenada
+GNJ;Gyandzha;AZ;40.6879;46.3723;Asia/Baku
+GNO;Grenoble;FR;45.1715;5.7224;Europe/Paris
+GNS;Gunungsitoli;ID;1.25;97.5;Asia/Jakarta
+GNV;Gainesville;US;29.6516;-82.3248;America/New_York
+GNY;Golgen;TR;37.15;38.8;Europe/Istanbul
+GOA;Genova;IT;44.4056;8.9463;Europe/Rome
+GOH;Nuuk;GL;64.1819;-51.725;America/Godthab
+GOI;Goa;IN;15.2993;74.124;Asia/Kolkata
+GOJ;Nižnij Novgorod;RU;56.3269;44.0059;Europe/Moscow
+GOM;Goma;CD;-1.6585;29.2205;Africa/Lubumbashi
+GOP;Gorakhpur;IN;26.7606;83.3732;Asia/Kolkata
+GOQ;Golmud;CN;36.4046;94.7893;Asia/Shanghai
+GOT;Göteborg;SE;57.697;11.9865;Europe/Stockholm
+GOU;Garoua;CM;9.3226;13.3934;Africa/Douala
+GOV;Gove;AU;-12.2696;136.8227;Australia/Darwin
+GPA;Patrasso;GR;38.25;21.7333;Europe/Athens
+GPI;Guapi;CO;2.5;-78.3417;America/Bogota
+GPS;Galapagos Is;EC;-0.4347;-90.2828;Pacific/Galapagos
+GPT;Gulfport;US;30.3674;-89.0928;America/Chicago
+GRB;Green Bay;US;44.5133;-88.0133;America/Chicago
+GRI;Grand Island;US;40.9264;-98.342;America/Chicago
+GRJ;George;ZA;-34.0015;22.3822;Africa/Johannesburg
+GRO;Gerona;ES;41.9794;2.8214;Europe/Madrid
+GRQ;Groninga;NL;53.2194;6.5665;Europe/Amsterdam
+GRR;Grand Rapids;US;42.9634;-85.6681;America/Detroit
+GRV;Groznyj;RU;43.3169;45.6815;Europe/Moscow
+GRW;Graciosa Island;PT;39.091;-28.028;Atlantic/Azores
+GRX;Granada;ES;37.1765;-3.5979;Europe/Madrid
+GRY;Grímsey;IS;66.5667;-18.0167;Atlantic/Reykjavik
+GRZ;Graz;AT;47.0707;15.4395;Europe/Vienna
+GSM;Qeshm;IR;26.7578;55.9053;Asia/Tehran
+GSO;Greensboro;US;36.0726;-79.792;America/New_York
+GSP;Greenville;US;34.8526;-82.394;America/New_York
+GST;Gustavus;US;58.4133;-135.7369;America/Juneau
+GTE;Groote Eylandt;AU;-13.9739;136.46;Australia/Darwin
+GTF;Great Falls;US;47.5002;-111.3008;America/Denver
+GUA;Guatemala;GT;14.6349;-90.5069;America/Guatemala
+GUC;Gunnison;US;38.5339;-106.9389;America/Denver
+GUM;Tamuning;GU;13.4762;144.7515;Pacific/Guam
+GUP;Gallup;US;35.5111;-108.7867;America/Denver
+GUR;Alotau;PG;-10.3108;150.3386;Pacific/Port_Moresby
+GUW;Atyrau;KZ;47.0945;51.9238;Asia/Atyrau
+GVA;Ginevra;CH;46.1984;6.1423;Europe/Zurich
+GVR;Governador Valadares;BR;-18.8548;-41.959;America/Sao_Paulo
+GWD;Gwadar;PK;25.246;62.2861;Asia/Karachi
+GWL;Gwalior;IN;26.2183;78.1828;Asia/Kolkata
+GWT;Westerland;DE;54.9153;8.3431;Europe/Berlin
+GXF;Seiyun;YE;15.9618;48.7871;Asia/Aden
+GXG;Negage;AO;-7.7833;15.45;Africa/Luanda
+GYA;Guayaramerín;BO;-10.83;-65.3617;America/La_Paz
+GYE;Guayaquil;EC;-2.1894;-79.8891;America/Guayaquil
+GYM;Guaymas;MX;27.9179;-110.9089;America/Hermosillo
+GYN;Goiânia;BR;-16.6869;-49.2648;America/Sao_Paulo
+GYS;Guang Yuan;CN;32.4354;105.8434;Asia/Shanghai
+GYU;Guyuan;CN;36.0067;106.2808;Asia/Shanghai
+GYY;Chicago;US;41.602;-87.3372;America/Chicago
+GZP;Alanya;TR;36.5444;31.9954;Europe/Istanbul
+GZT;Gaziantep;TR;37.066;37.3781;Europe/Istanbul
+HAC;Hachijo Jima;JP;33.1179;139.7812;Asia/Tokyo
+HAD;Halmstad;SE;56.6744;12.8578;Europe/Stockholm
+HAH;Moroni;KM;-11.5319;43.2611;Indian/Comoro
+HAJ;Hannover;DE;52.3721;9.7357;Europe/Berlin
+HAK;Haikou;CN;20.0444;110.1983;Asia/Shanghai
+HAM;Amburgo;DE;53.5538;9.9916;Europe/Berlin
+HAN;Hanoi;VN;21.0278;105.8342;Asia/Ho_Chi_Minh
+HAQ;Hanimaadhoo;MV;6.7484;73.1684;Indian/Maldives
+HAR;Harrisburg;US;40.2161;-76.8522;America/New_York
+HAS;Ha'il;SA;27.5114;41.7208;Asia/Riyadh
+HAU;Haugesund;NO;59.3448;5.2159;Europe/Oslo
+HAV;L'Avana;CU;23.1136;-82.3666;America/Havana
+HBA;Hobart;AU;-42.8821;147.3272;Australia/Hobart
+HBX;Hubli;IN;15.3647;75.124;Asia/Kolkata
+HCR;Holy Cross;US;62.1889;-159.7717;America/Anchorage
+HDF;Heringsdorf;DE;53.8783;14.1382;Europe/Berlin
+HDG;Handan;CN;36.6257;114.539;Asia/Shanghai
+HDM;Hamadan;IR;34.7989;48.515;Asia/Tehran
+HDN;Hayden;US;40.4848;-107.2208;America/Denver
+HDS;Hoedspruit;ZA;-24.35;30.95;Africa/Johannesburg
+HDY;Hat Yai;TH;7.0086;100.4747;Asia/Bangkok
+HEA;Herat;AF;34.3529;62.204;Asia/Kabul
+HEH;Heho;MM;20.7439;96.7934;Asia/Yangon
+HEK;Heihe;CN;50.2451;127.5283;Asia/Shanghai
+HEL;Helsinki;FI;60.1699;24.9384;Europe/Helsinki
+HER;Candia;GR;35.3387;25.1442;Europe/Athens
+HET;Hohhot;CN;40.8424;111.75;Asia/Shanghai
+HFA;Haifa;IL;32.794;34.9896;Asia/Jerusalem
+HFE;Hefei;CN;31.8206;117.2272;Asia/Shanghai
+HFN;Höfn;IS;64.2833;-15.2667;Atlantic/Reykjavik
+HFT;Hammerfest;NO;70.68;23.6759;Europe/Oslo
+HGA;Hargheisa;SO;9.5624;44.077;Africa/Mogadishu
+HGH;Hangzhou;CN;30.2741;120.1551;Asia/Shanghai
+HGI;Itanagar;IN;27.1;93.62;Asia/Kolkata
+HGN;Mae Hong Son;TH;19.2997;97.9752;Asia/Bangkok
+HGO;Korhogo;CI;9.4669;-5.6143;Africa/Abidjan
+HGR;Hagerstown;US;39.7078;-77.73;America/New_York
+HGU;Mount Hagen;PG;-5.8288;144.2974;Pacific/Port_Moresby
+HHH;Hilton Head Island;US;32.2167;-80.6833;America/New_York
+HHQ;Hua Hin;TH;12.6274;99.9514;Asia/Bangkok
+HHR;Hawthorne;US;33.9164;-118.3526;America/Los_Angeles
+HIA;Huaiyin;CN;33.5511;119.1132;Asia/Shanghai
+HIB;Chisholm;US;47.3886;-92.8386;America/Chicago
+HID;Horn Island;AU;-10.5833;142.2833;Australia/Brisbane
+HII;Lake Havasu City;US;34.4839;-114.3225;America/Phoenix
+HIJ;Hiroshima;JP;34.3852;132.4553;Asia/Tokyo
+HIN;Jinju;KR;35.18;128.1076;Asia/Seoul
+HIR;Honiara;SB;-9.4456;159.9729;Pacific/Guadalcanal
+HJJ;Zhijiang;CN;27.445;109.685;Asia/Shanghai
+HJR;Khajuraho;IN;24.8187;79.9164;Asia/Kolkata
+HKD;Hakodate;JP;41.7687;140.7291;Asia/Tokyo
+HKG;Hong Kong;HK;22.3193;114.1694;Asia/Hong_Kong
+HKK;Hokitika;NZ;-42.7149;170.9835;Pacific/Auckland
+HKN;Hoskins;PG;-5.4569;150.403;Pacific/Port_Moresby
+HKT;città di Phuket;TH;7.9519;98.3381;Asia/Bangkok
+HLD;Hailar;CN;49.2122;119.7362;Asia/Shanghai
+HLE;Jamestown;SH;-15.9667;-5.7;Atlantic/St_Helena
+HLN;Helena;US;46.6105;-111.9902;America/Denver
+HLZ;Hamilton;NZ;-37.787;175.2793;Pacific/Auckland
+HMA;Chanty-Mansijsk;RU;61.0061;69.0312;Asia/Yekaterinburg
+HMB;Sohag;EG;26.5591;31.6957;Africa/Cairo
+HME;Hassi Messaoud;DZ;31.6753;6.1454;Africa/Algiers
+HMI;Hamilton;CN;42.9167;93.4167;Asia/Shanghai
+HMO;Hermosillo;MX;29.073;-110.9559;America/Hermosillo
+HNA;Hanamaki;JP;39.3886;141.1169;Asia/Tokyo
+HNL;Honolulu;US;21.3069;-157.8583;Pacific/Honolulu
+HNM;Hanau;US;20.7958;-156.0189;Pacific/Honolulu
+HNS;Haines;US;59.2458;-135.5189;America/Juneau
+HOB;Hobbs;US;32.7026;-103.136;America/Denver
+HOF;Alahsa;SA;25.2948;49.4875;Asia/Riyadh
+HOG;Holguín;CU;20.8795;-76.2595;America/Havana
+HOI;Hao Island;PF;-18.0625;-140.9653;Pacific/Tahiti
+HOM;Homer;US;59.6432;-151.4932;America/Anchorage
+HOR;Horta;PT;38.52;-28.7172;Atlantic/Azores
+HOT;Hot Springs;US;34.4789;-93.0961;America/Chicago
+HOU;Houston;US;29.7628;-95.3831;America/Chicago
+HOV;Orsta-Volda;NO;62.1798;6.0788;Europe/Oslo
+HPA;Ha'Apai;TO;-19.7785;-174.3409;Pacific/Tongatapu
+HPG;Shennongjia;CN;31.7447;110.6759;Asia/Shanghai
+HPH;Haiphong;VN;20.8449;106.6881;Asia/Ho_Chi_Minh
+HPN;White Plains;US;41.034;-73.7629;America/New_York
+HRB;Harbin;CN;45.8038;126.535;Asia/Shanghai
+HRE;Harare;ZW;-17.8252;31.0335;Africa/Harare
+HRG;Hurghada;EG;27.2579;33.8116;Africa/Cairo
+HRI;Hambantota;LK;6.1244;81.1026;Asia/Colombo
+HRL;Harlingen;US;26.1906;-97.6961;America/Chicago
+HRO;Harrison;US;36.2617;-93.1556;America/Chicago
+HSA;Turkistan;KZ;43.3019;68.2692;Asia/Almaty
+HSC;Shaoguan;CN;24.8109;113.5976;Asia/Shanghai
+HSG;Saga;JP;33.2631;130.3009;Asia/Tokyo
+HSL;Huslia;US;65.7025;-156.375;America/Anchorage
+HSN;Zhoushan;CN;29.9853;122.2072;Asia/Shanghai
+HSS;Hisar;IN;29.1492;75.7217;Asia/Kolkata
+HSV;Huntsville;US;34.7304;-86.5861;America/Chicago
+HTA;Čita;RU;52.0515;113.4712;Asia/Yakutsk
+HTG;Chatanga;RU;71.9667;102.5;Asia/Krasnoyarsk
+HTI;Hamilton Island;AU;-20.3517;148.9485;Australia/Lindeman
+HTN;Hotan;CN;37.1699;79.964;Asia/Shanghai
+HTS;Ashland;US;38.3669;-82.5561;America/New_York
+HTT;Mangnai;CN;38.25;90.857;Asia/Shanghai
+HTY;Antiochia;TR;36.3645;36.2806;Europe/Istanbul
+HUH;Huahine;PF;-16.6897;-151.0283;Pacific/Tahiti
+HUI;Hué;VN;16.4637;107.5909;Asia/Ho_Chi_Minh
+HUN;Hualian;TW;23.9911;121.6112;Asia/Taipei
+HUU;Huánuco;PE;-9.9208;-76.2411;America/Lima
+HUX;Huatulco;MX;15.7683;-96.2356;America/Mexico_City
+HUY;Barnetby;GB;53.5834;-0.3485;Europe/London
+HUZ;Huizhou;CN;23.1123;114.4158;Asia/Shanghai
+HVB;Hervey Bay;AU;-25.3199;152.8852;Australia/Brisbane
+HVD;Hovd;MN;48.0167;91.65;Asia/Hovd
+HVG;Honningsvåg;NO;70.9833;25.8333;Europe/Oslo
+HVN;New Haven;US;41.3082;-72.9282;America/New_York
+HVR;Havre;US;48.5444;-109.7611;America/Denver
+HYA;Hyannis;US;41.6658;-70.2806;America/New_York
+HYD;Hyderabad;IN;17.385;78.4867;Asia/Kolkata
+HYN;Huangyan;CN;28.6564;121.4208;Asia/Shanghai
+HYS;Hays;US;38.8461;-99.2742;America/Chicago
+HZA;Heze;CN;35.2343;115.4796;Asia/Shanghai
+HZG;Hanzhong;CN;33.0675;107.0233;Asia/Shanghai
+HZH;Liping;CN;26.3202;109.1538;Asia/Shanghai
+IAA;Igarka;RU;67.4333;86.6333;Asia/Krasnoyarsk
+IAG;Niagara Falls;US;43.1;-78.95;America/New_York
+IAM;In Aménas;DZ;28.0511;9.6381;Africa/Algiers
+IAN;Kiana;US;66.9756;-160.4306;America/Anchorage
+IAR;Jaroslavl';RU;57.6167;39.8833;Europe/Moscow
+IAS;Iaşi;RO;47.1585;27.6014;Europe/Bucharest
+IBA;Ibadan;NG;7.3775;3.947;Africa/Lagos
+IBE;Ibagué;CO;4.4447;-75.2424;America/Bogota
+IBR;Omitama;JP;36.2194;140.1833;Asia/Tokyo
+IBZ;Ibiza;ES;38.8766;1.3678;Europe/Madrid
+ICT;Wichita;US;37.6922;-97.3375;America/Chicago
+IDA;Idaho Falls;US;43.4927;-112.0408;America/Boise
+IDR;Indore;IN;22.7196;75.8577;Asia/Kolkata
+IEG;Zielona Góra;PL;51.9333;15.5167;Europe/Warsaw
+IFJ;Ísafjörður;IS;66.0597;-23.1328;Atlantic/Reykjavik
+IFN;Esfahan;IR;32.6539;51.666;Asia/Tehran
+IGA;Inagua;BS;20.9833;-73.6667;America/Nassau
+IGD;Alikamerli;TR;39.9201;44.0436;Europe/Istanbul
+IGR;Puerto Iguazú;AR;-25.7315;-54.4763;America/Argentina/Cordoba
+IGT;Magas;RU;43.2258;44.7641;Europe/Moscow
+IGU;Foz do Iguacu;BR;-25.5163;-54.5854;America/Sao_Paulo
+IJK;Iževsk;RU;56.8619;53.2324;Europe/Samara
+IKG;Karakol;KG;42.4903;78.3917;Asia/Bishkek
+IKI;Iki;JP;33.7456;129.7883;Asia/Tokyo
+IKS;Tiksi;RU;71.7;128.9;Asia/Yakutsk
+IKT;Irkutsk;RU;52.287;104.305;Asia/Irkutsk
+IKU;Issyk-Kul;KG;42.56;76.65;Asia/Bishkek
+ILD;Lleida;ES;41.6176;0.62;Europe/Madrid
+ILE;Killeen;US;31.1171;-97.7278;America/Chicago
+ILG;Wilmington;US;39.7458;-75.5467;America/New_York
+ILI;Iliamna;US;59.7528;-154.9083;America/Anchorage
+ILM;Wilmington;US;34.2104;-77.8868;America/New_York
+ILO;Iloilo;PH;10.7202;122.5621;Asia/Manila
+ILP;Île des Pins;NC;-22.5897;167.4475;Pacific/Noumea
+ILQ;Ilo;PE;-17.6667;-71.3333;America/Lima
+ILR;Ilorin;NG;8.4799;4.5418;Africa/Lagos
+ILY;Islay;GB;55.6819;-6.2542;Europe/London
+IMF;Imphal;IN;24.817;93.9368;Asia/Kolkata
+IMP;Imperatriz;BR;-5.5206;-47.4718;America/Fortaleza
+IMT;Iron Mountain;US;45.8156;-88.1142;America/Menominee
+INC;Yinchuan;CN;38.4872;106.2309;Asia/Shanghai
+IND;Indianapolis;US;39.7684;-86.1581;America/Indiana/Indianapolis
+INH;Inhambane;MZ;-23.8662;35.3827;Africa/Maputo
+INI;Niš;RS;43.3209;21.8958;Europe/Belgrade
+INL;International Falls;US;48.5631;-93.4042;America/Chicago
+INN;Innsbruck;AT;47.2692;11.4041;Europe/Vienna
+INU;Nauru Island;NR;-0.5333;166.9167;Pacific/Nauru
+INV;Inverness;GB;57.4767;-4.2315;Europe/London
+INZ;In Salah;DZ;27.25;2.5167;Africa/Algiers
+IOA;Giannina;GR;39.665;20.8537;Europe/Athens
+IOM;Isle Of Man;IM;54.0868;-4.6347;Europe/Isle_of_Man
+IOS;Ilhéus;BR;-14.7935;-39.0464;America/Bahia
+IPC;Isola di Pasqua;CL;-27.1167;-109.3667;Pacific/Easter
+IPH;Ipoh;MY;4.5975;101.0901;Asia/Kuala_Lumpur
+IPI;Ipiales;CO;0.83;-77.6416;America/Bogota
+IPL;El Centro;US;32.8372;-115.5747;America/Los_Angeles
+IPN;Ipatinga;BR;-19.4691;-42.549;America/Sao_Paulo
+IPT;Williamsport;US;41.2422;-76.9206;America/New_York
+IQM;Qiemo;CN;38.1333;85.5333;Asia/Urumqi
+IQN;Qingyang;CN;35.8001;107.6044;Asia/Shanghai
+IQQ;Iquique;CL;-20.2307;-70.1357;America/Santiago
+IQT;Iquitos;PE;-3.7437;-73.2516;America/Lima
+IRG;Lockhart River;AU;-12.7889;143.3125;Australia/Brisbane
+IRJ;La Rioja;AR;-29.4135;-66.8565;America/Argentina/La_Rioja
+IRK;Kirksville;US;40.0925;-92.5439;America/Chicago
+IRP;Isiro;CD;2.7722;27.6083;Africa/Lubumbashi
+ISA;Mount Isa;AU;-20.6676;139.4918;Australia/Brisbane
+ISB;Islamabad;PK;33.6844;73.0479;Asia/Karachi
+ISE;Isparta;TR;37.7626;30.5537;Europe/Istanbul
+ISG;Ishigaki;JP;24.3369;124.1689;Asia/Tokyo
+ISK;Nashik;IN;19.9975;73.7898;Asia/Kolkata
+ISN;Williston;US;48.1564;-103.6281;America/Chicago
+ISP;Islip;US;40.7893;-73.0975;America/New_York
+IST;Istanbul;TR;41.0082;28.9784;Europe/Istanbul
+ISU;Sulaymaniyah;IQ;35.5558;45.4351;Asia/Baghdad
+ITB;Itaituba;BR;-4.2671;-55.9931;America/Santarem
+ITH;Ithaca;US;42.4903;-76.4636;America/New_York
+ITO;Hilo;US;19.7146;-155.0396;Pacific/Honolulu
+IUE;Niue Island;NU;-19.0833;-169.9333;Pacific/Niue
+IVC;Invercargill;NZ;-46.4154;168.3218;Pacific/Auckland
+IVL;Ivalo;FI;68.6111;27.4156;Europe/Helsinki
+IWA;Ivanova;RU;57.0051;40.9766;Europe/Moscow
+IWJ;Iwami;JP;34.6764;131.7903;Asia/Tokyo
+IWK;Iwakuni;JP;34.1667;132.2192;Asia/Tokyo
+IXA;Agartala;IN;23.8315;91.2868;Asia/Kolkata
+IXB;Bagdogra;IN;26.6849;88.3248;Asia/Kolkata
+IXC;Chandigarh;IN;30.7333;76.7794;Asia/Kolkata
+IXD;Prayagraj;IN;25.4358;81.8463;Asia/Kolkata
+IXE;Mangalore;IN;12.9141;74.856;Asia/Kolkata
+IXG;Belgaum;IN;15.8497;74.4977;Asia/Kolkata
+IXI;Lilabari;IN;27.2903;94.0889;Asia/Kolkata
+IXJ;Jammu;IN;32.6808;74.8428;Asia/Kolkata
+IXK;Keshod;IN;21.2997;70.2493;Asia/Kolkata
+IXL;Leh;IN;34.1403;77.5475;Asia/Kolkata
+IXM;Madurai;IN;9.9252;78.1198;Asia/Kolkata
+IXP;Pathankot;IN;32.2733;75.6522;Asia/Kolkata
+IXR;Ranchi;IN;23.3441;85.3096;Asia/Kolkata
+IXS;Silchar;IN;24.8333;92.7789;Asia/Kolkata
+IXU;Aurangabad;IN;19.8762;75.3433;Asia/Kolkata
+IXY;Kandla;IN;23.1111;70.1042;Asia/Kolkata
+IXZ;Port Blair;IN;11.6234;92.7265;Asia/Kolkata
+IZM;Smirne;TR;38.4237;27.1428;Europe/Istanbul
+IZO;Izumo;JP;35.367;132.7547;Asia/Tokyo
+IZT;Ixtepec;MX;16.5692;-95.1083;America/Mexico_City
+JAC;Jackson;US;43.6028;-110.7361;America/Denver
+JAF;Jaffna;LK;9.6615;80.0255;Asia/Colombo
+JAI;Jaipur;IN;26.9124;75.7873;Asia/Kolkata
+JAN;Jackson;US;32.2988;-90.1848;America/Chicago
+JAU;Jauja;PE;-11.75;-75.25;America/Lima
+JAV;Ilulissat;GL;69.2344;-51.0511;America/Godthab
+JAX;Jacksonville;US;30.3322;-81.6557;America/New_York
+JBR;Jonesboro;US;35.8423;-90.7043;America/Chicago
+JDF;Juiz De Fora;BR;-21.765;-43.3488;America/Sao_Paulo
+JDH;Jodhpur;IN;26.2389;73.0243;Asia/Kolkata
+JDZ;Jingdezhen;CN;29.2688;117.1784;Asia/Shanghai
+JED;Gedda;SA;21.4858;39.1925;Asia/Riyadh
+JEE;Jérémie;HT;18.639;-74.1181;America/Port-au-Prince
+JEG;Aasiaat;GL;68.7;-52.75;America/Godthab
+JER;Jersey City;JE;49.2053;-2.1943;Europe/Jersey
+JGA;Jamnagar;IN;22.4707;70.0577;Asia/Kolkata
+JGD;Jiagedaqi;CN;50.4254;124.1188;Asia/Shanghai
+JGN;Jiuquan;CN;39.7726;98.2894;Asia/Shanghai
+JGS;Ji An;CN;27.0876;114.9647;Asia/Shanghai
+JHB;Johor Bahru;MY;1.4927;103.7414;Asia/Kuala_Lumpur
+JHG;Jinghong;CN;22.0001;100.7717;Asia/Shanghai
+JHM;Kapalua;US;20.9622;-156.6757;Pacific/Honolulu
+JHS;Sisimiut;GL;66.9369;-53.7042;America/Godthab
+JIB;Gibuti;DJ;11.8251;42.5903;Africa/Djibouti
+JIC;Jinchang;CN;38.5201;102.188;Asia/Shanghai
+JIJ;Giggiga;ET;9.3568;42.7955;Africa/Addis_Ababa
+JIM;Gimma;ET;7.6739;36.8358;Africa/Addis_Ababa
+JIQ;Youyang;CN;29.5176;108.8292;Asia/Shanghai
+JJD;Jericoacoara;BR;-2.9178;-40.1719;America/Fortaleza
+JJN;Quanzhou;CN;24.7817;118.5524;Asia/Shanghai
+JJU;Qaqortoq;GL;60.7167;-46.0333;America/Godthab
+JKG;Jönköping;SE;57.7826;14.1618;Europe/Stockholm
+JKH;Chio;GR;38.3458;26.1423;Europe/Athens
+JKR;Janakpur;NP;26.7271;85.9407;Asia/Kathmandu
+JKT;Giakarta;ID;-6.2115;106.8452;Asia/Jakarta
+JLN;Joplin;US;37.0842;-94.5133;America/Chicago
+JLR;Jabalpur;IN;23.1815;79.9864;Asia/Kolkata
+JMK;Mykonos;GR;37.4361;25.3444;Europe/Athens
+JMS;Jamestown;US;46.93;-98.6783;America/Chicago
+JMU;Jiamusi;CN;46.7998;130.3189;Asia/Shanghai
+JNB;Johannesburg;ZA;-26.2041;28.0473;Africa/Johannesburg
+JNG;Jining;CN;35.415;116.5873;Asia/Shanghai
+JNH;Jiaxing;CN;30.747;120.756;Asia/Shanghai
+JNJ;Duqm;OM;19.4965;57.6286;Asia/Muscat
+JNU;Juneau;US;58.3593;-134.5834;America/Juneau
+JNZ;Jinzhou;CN;41.0957;121.1268;Asia/Shanghai
+JOE;Joensuu;FI;62.601;29.7636;Europe/Helsinki
+JOG;Yogyakarta;ID;-7.7956;110.3695;Asia/Jakarta
+JOI;Joinville;BR;-26.2834;-48.8452;America/Sao_Paulo
+JOL;Jolo;PH;6.0553;121.0089;Asia/Manila
+JOS;Jos;NG;9.8965;8.8583;Africa/Lagos
+JPA;João Pessoa;BR;-7.1195;-34.845;America/Fortaleza
+JRH;Jorhat;IN;26.7509;94.2037;Asia/Kolkata
+JRO;Kilimanjaro;TZ;-3.4241;37.0653;Africa/Dar_es_Salaam
+JSA;Jaisalmer;IN;26.9167;70.9;Asia/Kolkata
+JSH;Sitia;GR;35.2167;26.1167;Europe/Athens
+JSI;Sciato;GR;39.1806;23.5056;Europe/Athens
+JSJ;Jiansanjiang;CN;47.255;132.626;Asia/Shanghai
+JSR;Jessore;BD;23.1634;89.2182;Asia/Dhaka
+JST;Johnstown;US;40.3167;-78.8344;America/New_York
+JTC;Bauru;BR;-22.3145;-49.0587;America/Sao_Paulo
+JTR;Santorini;GR;36.4;25.4833;Europe/Athens
+JUB;Giuba;SS;4.8594;31.5712;Africa/Juba
+JUJ;Jujuy;AR;-24.1858;-65.2995;America/Argentina/Jujuy
+JUL;Juliaca;PE;-15.4997;-70.1297;America/Lima
+JUZ;Quzhou;CN;28.9667;118.8333;Asia/Shanghai
+JXA;Jixi;CN;45.2951;130.9693;Asia/Shanghai
+JYV;Jyväskylä;FI;62.2426;25.7473;Europe/Helsinki
+JZH;Song Pan;CN;32.8567;103.6831;Asia/Shanghai
+KAB;Kariba;ZW;-16.5183;28.8853;Africa/Harare
+KAC;al-Qamishli;SY;37.031;41.2056;Asia/Damascus
+KAD;Kaduna;NG;10.5105;7.4165;Africa/Lagos
+KAI;Kaieteur;GY;5.2167;-59.4167;America/Guyana
+KAJ;Kajaani;FI;64.2778;27.6889;Europe/Helsinki
+KAN;Kano;NG;12.0022;8.592;Africa/Lagos
+KAO;Kuusamo;FI;65.9903;29.2339;Europe/Helsinki
+KAT;Kaitaia;NZ;-35.0663;173.2854;Pacific/Auckland
+KAW;Kawthaung;MM;10.05;98.5167;Asia/Yangon
+KBL;Kabul;AF;34.5607;69.2115;Asia/Kabul
+KBR;Kota Bharu;MY;6.1248;102.2544;Asia/Kuala_Lumpur
+KBV;Krabi;TH;8.0973;98.9806;Asia/Bangkok
+KCH;Kuching;MY;1.5535;110.3593;Asia/Kuching
+KCM;Kahramanmaraş;TR;37.5753;36.9228;Europe/Istanbul
+KCT;Koggala;LK;5.9831;80.3331;Asia/Colombo
+KCZ;Kōchi;JP;33.5589;133.5312;Asia/Tokyo
+KDH;Kandahar;AF;31.6289;65.7372;Asia/Kabul
+KDL;Kärdla;EE;58.9833;22.8;Europe/Tallinn
+KDM;Kaadedhdhoo;MV;0.4915;72.9959;Indian/Maldives
+KDO;Kadhdhoo;MV;1.8833;73.5167;Indian/Maldives
+KDU;Skardu;PK;35.3;75.7333;Asia/Karachi
+KEJ;Kemerovo;RU;55.345;86.0623;Asia/Novokuznetsk
+KEM;Kemi;FI;65.7801;24.5768;Europe/Helsinki
+KEP;Nepalganj;NP;28.1325;81.5764;Asia/Kathmandu
+KER;Kerman;IR;30.2839;57.0834;Asia/Tehran
+KET;Keng Tung;MM;21.2827;99.623;Asia/Yangon
+KFS;Kastamonu;TR;41.3766;33.7765;Europe/Istanbul
+KGA;Kananga;CD;-5.9;22.4167;Africa/Lubumbashi
+KGC;Kingscote;AU;-35.7093;137.5233;Australia/Adelaide
+KGD;Kaliningrad;RU;54.7104;20.4522;Europe/Kaliningrad
+KGF;Karaganda;KZ;49.8047;73.1094;Asia/Almaty
+KGI;Kalgoorlie;AU;-30.7852;121.4579;Australia/Perth
+KGL;Kigali;RW;-1.9441;30.0619;Africa/Kigali
+KGP;Kogalym;RU;62.2666;74.5447;Asia/Yekaterinburg
+KGS;Coo;GR;36.7931;27.0953;Europe/Athens
+KGT;Kangding;CN;29.9984;101.9571;Asia/Shanghai
+KHD;Khorramabad;IR;33.4647;48.339;Asia/Tehran
+KHG;Kashgar;CN;39.535;76.0111;Asia/Shanghai
+KHH;Kaohsiung;TW;22.6273;120.3014;Asia/Taipei
+KHI;Karachi;PK;24.8607;67.0011;Asia/Karachi
+KHK;Khark Island;IR;29.2617;50.3236;Asia/Tehran
+KHN;Nanchang;CN;28.6829;115.8582;Asia/Shanghai
+KHS;Khasab;OM;26.1639;56.2351;Asia/Muscat
+KHT;Khowst;AF;33.3331;69.9169;Asia/Kabul
+KHV;Habarovsk;RU;48.4814;135.0721;Asia/Vladivostok
+KIH;Kish;IR;26.5323;53.9721;Asia/Tehran
+KIJ;Niigata;JP;37.9161;139.0364;Asia/Tokyo
+KIK;Kirkuk;IQ;35.4666;44.3799;Asia/Baghdad
+KIM;Kimberley;ZA;-28.7282;24.7499;Africa/Johannesburg
+KIN;Kingston;JM;18.0179;-76.8099;America/Jamaica
+KIR;Kerry County;IE;52.1815;-9.5357;Europe/Dublin
+KIS;Kisumu;KE;-0.0917;34.768;Africa/Nairobi
+KJA;Krasnoyarsk;RU;56.1811;92.4829;Asia/Krasnoyarsk
+KJH;Kaili;CN;26.566;107.981;Asia/Shanghai
+KJI;Burqin;CN;48.2217;86.9961;Asia/Urumqi
+KKC;Khon Kaen;TH;16.4322;102.8236;Asia/Bangkok
+KKE;Kerikeri;NZ;-35.2633;173.9124;Pacific/Auckland
+KKJ;Kitakyūshū;JP;33.8835;130.8752;Asia/Tokyo
+KKN;Kirkenes;NO;69.7235;29.8912;Europe/Oslo
+KKR;Kaukura Atoll;PF;-15.7833;-146.6667;Pacific/Tahiti
+KKW;Kikwit;CD;-5.0361;18.7803;Africa/Kinshasa
+KKX;Kikaiga Shima;JP;28.3214;129.9281;Asia/Tokyo
+KLH;Kolhapur;IN;16.705;74.2433;Asia/Kolkata
+KLO;Kalibo;PH;11.6872;122.3818;Asia/Manila
+KLR;Kalmar;SE;56.685;16.2872;Europe/Stockholm
+KLU;Klagenfurt am Wörthersee;AT;46.6365;14.3122;Europe/Vienna
+KLV;Karlovy Vary;CZ;50.2322;12.8713;Europe/Prague
+KLW;Klawock;US;55.555;-133.1;America/Juneau
+KLX;Calamata;GR;37.0366;22.1144;Europe/Athens
+KMA;Kerema;PG;-7.9617;145.7715;Pacific/Port_Moresby
+KMC;King Khalid Mil. City;SA;27.9113;45.5235;Asia/Riyadh
+KME;Kamembe;RW;-2.4667;28.9167;Africa/Kigali
+KMG;Kunming;CN;24.8801;102.8329;Asia/Shanghai
+KMI;Miyazaki;JP;31.9077;131.4202;Asia/Tokyo
+KMJ;Kumamoto;JP;32.8032;130.7079;Asia/Tokyo
+KMQ;Komatsu;JP;36.4024;136.4134;Asia/Tokyo
+KMS;Kumasi;GH;6.6666;-1.6163;Africa/Accra
+KMW;Kostroma;RU;57.7677;40.9263;Europe/Moscow
+KND;Kindu;CD;-2.9492;25.9231;Africa/Lubumbashi
+KNG;Kaimana;ID;-3.65;133.75;Asia/Jayapura
+KNH;Kinmen;TW;24.4206;118.3444;Asia/Taipei
+KNQ;Koné;NC;-21.0533;164.8378;Pacific/Noumea
+KNS;King Island;AU;-39.8798;143.8817;Australia/Hobart
+KNU;Kanpur;IN;26.4499;80.3319;Asia/Kolkata
+KNX;Kununurra;AU;-15.784;128.7127;Australia/Perth
+KOA;Kona;US;19.7362;-156.0411;Pacific/Honolulu
+KOE;Kupang;ID;-10.1772;123.607;Asia/Dili
+KOI;Kirkwall;GB;58.9581;-2.9006;Europe/London
+KOJ;Kagoshima;JP;31.5969;130.5571;Asia/Tokyo
+KOK;Kokkola;FI;63.7188;23.1331;Europe/Helsinki
+KOP;Nakorn Panom;TH;17.4;104.75;Asia/Bangkok
+KOS;Sihanoukville;KH;10.6333;103.5;Asia/Phnom_Penh
+KOV;Kökšetau;KZ;53.2871;69.4044;Asia/Almaty
+KPO;Pohang;KR;36.019;129.3435;Asia/Seoul
+KPW;Keperveyem;RU;67.8167;166.1;Asia/Anadyr
+KQH;Ajmer;IN;26.57;74.87;Asia/Kolkata
+KQT;Bokhtar;TJ;37.8456;68.799;Asia/Dushanbe
+KRF;Kramfors;SE;63.0494;17.7728;Europe/Stockholm
+KRK;Cracovia;PL;50.0647;19.945;Europe/Warsaw
+KRL;Korla;CN;41.7259;86.1746;Asia/Shanghai
+KRN;Kiruna;SE;67.8222;20.3458;Europe/Stockholm
+KRO;Kurgan;RU;55.459;65.3493;Asia/Yekaterinburg
+KRP;Karup;DK;56.3;9.1167;Europe/Copenhagen
+KRR;Krasnodar;RU;45.0393;38.9872;Europe/Moscow
+KRS;Kristiansand;NO;58.1599;8.0182;Europe/Oslo
+KRT;Khartum;SD;15.5007;32.5599;Africa/Khartoum
+KRW;Türkmenbaşy;TM;40.0337;52.9759;Asia/Ashgabat
+KSA;Kosrae;FM;5.3525;162.9566;Pacific/Kosrae
+KSC;Košice;SK;48.7164;21.2611;Europe/Bratislava
+KSD;Karlstad;SE;59.4022;13.5115;Europe/Stockholm
+KSF;Kassel;DE;51.3127;9.4797;Europe/Berlin
+KSH;Kermanshah;IR;34.3277;47.0778;Asia/Tehran
+KSL;Cassala;SD;15.4581;36.404;Africa/Khartoum
+KSN;Kostanai;KZ;53.2198;63.6354;Asia/Qostanay
+KSU;Kristiansund;NO;63.1134;7.826;Europe/Oslo
+KSY;Kars;TR;40.6013;43.0975;Europe/Istanbul
+KSZ;Kotlas;RU;61.2491;46.635;Europe/Moscow
+KTA;Karratha;AU;-20.7083;116.7701;Australia/Perth
+KTD;Kitadaitō;JP;25.95;131.3;Asia/Tokyo
+KTG;Ketapang;ID;-1.8333;109.9833;Asia/Pontianak
+KTM;Katmandu;NP;27.7172;85.324;Asia/Kathmandu
+KTN;Ketchikan;US;55.3422;-131.6461;America/Sitka
+KTT;Kittilä;FI;67.6959;24.859;Europe/Helsinki
+KTW;Katowice;PL;50.2649;19.0238;Europe/Warsaw
+KUA;Kuantan;MY;3.7634;103.2202;Asia/Kuala_Lumpur
+KUF;Samara;RU;53.2038;50.1606;Europe/Samara
+KUH;Kushiro;JP;42.9849;144.3818;Asia/Tokyo
+KUL;Kuala Lumpur;MY;3.139;101.6869;Asia/Kuala_Lumpur
+KUM;Yakushima;JP;30.3856;130.6592;Asia/Tokyo
+KUN;Kaunas;LT;54.9;23.9167;Europe/Vilnius
+KUO;Kuopio;FI;62.898;27.6782;Europe/Helsinki
+KUS;Kulusuk;GL;65.5667;-37.1167;America/Godthab
+KUT;Kutaisi;GE;42.2662;42.718;Asia/Tbilisi
+KUU;Bhuntar Kullu;IN;31.9833;77.1;Asia/Kolkata
+KUV;Gunsan;KR;35.9677;126.7366;Asia/Seoul
+KVA;Kavala;GR;40.9376;24.4129;Europe/Athens
+KVG;Kavieng;PG;-2.5808;150.8065;Pacific/Port_Moresby
+KVO;Kraljevo;RS;43.7236;20.6875;Europe/Belgrade
+KVX;Kirov;RU;58.6035;49.6668;Europe/Volgograd
+KWA;Kwajalein;MH;8.7208;167.7219;Pacific/Kwajalein
+KWE;Guiyang;CN;26.6477;106.6302;Asia/Shanghai
+KWI;Al Kuwait;KW;29.3759;47.9774;Asia/Kuwait
+KWJ;Gwangju;KR;35.1595;126.8526;Asia/Seoul
+KWL;Guilin;CN;25.2345;110.18;Asia/Shanghai
+KWM;Kowanyama;AU;-15.4875;141.7483;Australia/Brisbane
+KWZ;Kolwezi;CD;-10.7275;25.5089;Africa/Lubumbashi
+KXK;Komsomol'sk-na-Amure;RU;50.567;136.9659;Asia/Vladivostok
+KYA;Iconio;TR;37.8746;32.4932;Europe/Istanbul
+KYD;Lanyu;TW;22.0833;121.5;Asia/Taipei
+KYP;Kyaukpyu;MM;19.4333;93.5333;Asia/Yangon
+KYS;Kayes;ML;14.4319;-11.4394;Africa/Bamako
+KYZ;Kyzyl;RU;51.7151;94.4575;Asia/Krasnoyarsk
+KZI;Kozani;GR;40.2886;21.8419;Europe/Athens
+KZN;Kazan’;RU;55.7879;49.1233;Europe/Moscow
+KZO;Kzyl-Orda;KZ;44.8488;65.4823;Asia/Qyzylorda
+KZR;Kütahya;TR;39.42;29.9857;Europe/Istanbul
+LAD;Luanda;AO;-8.8147;13.2302;Africa/Luanda
+LAE;Lae;PG;-6.7155;146.9999;Pacific/Port_Moresby
+LAF;Lafayette;US;40.4119;-86.9336;America/Indiana/Indianapolis
+LAJ;Lages;BR;-27.8155;-50.3264;America/Sao_Paulo
+LAL;Lakeland;US;28.0395;-81.9498;America/New_York
+LAN;Lansing;US;42.7325;-84.5555;America/Detroit
+LAO;Laoag;PH;18.196;120.5927;Asia/Manila
+LAP;La Paz;MX;24.1426;-110.3128;America/Mazatlan
+LAQ;Beida;LY;32.7886;21.9642;Africa/Tripoli
+LAR;Laramie;US;41.3136;-105.6731;America/Denver
+LAS;Las Vegas;US;36.1699;-115.1398;America/Los_Angeles
+LAU;Lamu;KE;-2.25;40.9117;Africa/Nairobi
+LAW;Lawton;US;34.6036;-98.3959;America/Chicago
+LAX;Los Ángeles;US;34.0522;-118.2437;America/Los_Angeles
+LBA;Leeds;GB;53.8008;-1.5491;Europe/London
+LBB;Lubbock;US;33.5779;-101.8552;America/Chicago
+LBD;Xuçand;TJ;40.2735;69.6392;Asia/Dushanbe
+LBE;Latrobe;US;40.2764;-79.4028;America/New_York
+LBF;North Platte;US;41.1283;-100.6967;America/Chicago
+LBL;Liberal;US;37.0444;-100.9606;America/Chicago
+LBS;Labasa;FJ;-16.4662;179.3377;Pacific/Fiji
+LBU;Labuan;MY;5.2831;115.2308;Asia/Kuching
+LBV;Libreville;GA;0.4162;9.4673;Africa/Libreville
+LCA;Larnaka;CY;34.9003;33.6232;Asia/Nicosia
+LCE;La Ceiba;HN;15.7703;-86.7919;America/Tegucigalpa
+LCG;A Coruña;ES;43.3623;-8.4115;Europe/Madrid
+LCH;Lake Charles;US;30.2266;-93.2174;America/Chicago
+LCJ;Łódź;PL;51.7592;19.456;Europe/Warsaw
+LCX;Longyan;CN;25.6756;116.7456;Asia/Shanghai
+LDB;Londrina;BR;-23.3045;-51.1696;America/Sao_Paulo
+LDE;Lourdes;FR;43.1865;0.0034;Europe/Paris
+LDS;Yichun;CN;47.7518;129.018;Asia/Shanghai
+LDU;Lahad Datu;MY;5.0353;118.3261;Asia/Kuching
+LDX;St Laurent du Maroni;GF;5.4833;-54.05;America/Cayenne
+LDY;Londonderry;GB;54.9966;-7.3086;Europe/London
+LEA;Learmonth;AU;-22.2399;114.0943;Australia/Perth
+LEB;Lebanon;US;43.6294;-72.31;America/New_York
+LED;San Pietroburgo;RU;59.9311;30.3609;Europe/Moscow
+LEI;Almería;ES;36.834;-2.4637;Europe/Madrid
+LEJ;Lipsia;DE;51.4221;12.2204;Europe/Berlin
+LEN;Leon;ES;42.5999;-5.5718;Europe/Madrid
+LER;Leinster;AU;-27.8333;120.6167;Australia/Perth
+LET;Leticia;CO;-4.1964;-69.9394;America/Bogota
+LEU;Seo de Urgel;ES;42.4167;1.4667;Europe/Madrid
+LEX;Lexington;US;38.0317;-84.4951;America/New_York
+LFM;Lamerd;IR;27.3741;53.1909;Asia/Tehran
+LFQ;Linfen;CN;36.088;111.519;Asia/Shanghai
+LFT;Lafayette;US;30.2241;-92.0198;America/Chicago
+LFW;Lomé;TG;6.1256;1.2254;Africa/Lome
+LGB;Long Beach;US;33.7701;-118.1937;America/Los_Angeles
+LGG;Liegi;BE;50.6333;5.5667;Europe/Brussels
+LGI;Deadmans Cay;BS;23.1794;-75.0905;America/Nassau
+LGK;Langkawi;MY;6.3422;99.7314;Asia/Kuala_Lumpur
+LHE;Lahore;PK;31.5204;74.3587;Asia/Karachi
+LHG;Lightning Ridge;AU;-29.4583;147.9833;Australia/Sydney
+LHS;Las Heras;AR;-32.85;-68.8167;America/Argentina/Rio_Gallegos
+LHW;Lanzhou;CN;36.0611;103.8343;Asia/Shanghai
+LIF;Lifou;NC;-20.7667;167.25;Pacific/Noumea
+LIG;Limoges;FR;45.8336;1.2611;Europe/Paris
+LIH;Lihue;US;21.9811;-159.3711;Pacific/Honolulu
+LIL;Lilla;FR;50.6292;3.0573;Europe/Paris
+LIM;Lima;PE;-12.0464;-77.0428;America/Lima
+LIO;Limón;CR;9.9913;-83.0415;America/Costa_Rica
+LIR;Liberia;CR;10.6;-85.5384;America/Costa_Rica
+LIS;Lisbona;PT;38.7223;-9.1393;Europe/Lisbon
+LIT;Little Rock;US;34.7465;-92.2896;America/Chicago
+LIW;Loikaw;MM;19.6886;97.2169;Asia/Yangon
+LJG;Lijiang City;CN;26.855;100.2278;Asia/Shanghai
+LJU;Lubiana;SI;46.0569;14.5058;Europe/Ljubljana
+LKL;Lakselv;NO;70.0678;24.9736;Europe/Oslo
+LKN;Leknes;NO;68.1542;13.6149;Europe/Oslo
+LKO;Lucknow;IN;26.8467;80.9462;Asia/Kolkata
+LLA;Luleå;SE;65.5494;22.1236;Europe/Stockholm
+LLF;Lingling;CN;26.3456;111.6122;Asia/Shanghai
+LLV;Lüliang;CN;37.519;111.1445;Asia/Shanghai
+LLW;Lilongwe;MW;-13.9626;33.7741;Africa/Blantyre
+LMM;Los Mochis;MX;25.7905;-108.9859;America/Mazatlan
+LMN;Limbang;MY;4.6667;115;Asia/Kuching
+LMP;Lampedusa;IT;35.5;12.6167;Europe/Rome
+LNJ;Lincang;CN;23.7441;100.0262;Asia/Shanghai
+LNK;Lincoln;US;40.8005;-96.8308;America/Chicago
+LNL;Longnan;CN;33.3702;104.9603;Asia/Shanghai
+LNO;Leonora;AU;-28.8793;121.3169;Australia/Perth
+LNS;Lancaster;US;40.0379;-76.3055;America/New_York
+LNY;Lanai City;US;20.7901;-156.9505;Pacific/Honolulu
+LNZ;Linz;AT;48.3069;14.2858;Europe/Vienna
+LOE;Loei;TH;17.45;101.7333;Asia/Bangkok
+LON;Londra;GB;51.5074;-0.1278;Europe/London
+LOO;Laghouat;DZ;33.8078;2.8628;Africa/Algiers
+LOP;Mataram;ID;-8.7573;116.2767;Asia/Makassar
+LOS;Lagos;NG;6.5244;3.3792;Africa/Lagos
+LPA;Palmas de Gran Canaria;ES;28.1235;-15.4363;Atlantic/Canary
+LPB;La Paz;BO;-16.4897;-68.1193;America/La_Paz
+LPI;Linköping;SE;58.4108;15.6214;Europe/Stockholm
+LPL;Liverpool;GB;53.4084;-2.9916;Europe/London
+LPP;Lappeenranta;FI;61.055;28.1897;Europe/Helsinki
+LPQ;Luang Prabang;LA;19.8971;102.1637;Asia/Vientiane
+LPT;Lampang;TH;18.2742;99.5072;Asia/Bangkok
+LRD;Laredo;US;27.5036;-99.5076;America/Chicago
+LRE;Longreach;AU;-23.4395;144.2715;Australia/Brisbane
+LRH;La Rochelle;FR;46.1603;-1.1511;Europe/Paris
+LRM;La Romana;DO;18.4339;-68.9659;America/Santo_Domingo
+LRR;Larvik;IR;27.6697;54.3828;Asia/Tehran
+LRU;Las Cruces;US;32.3199;-106.7637;America/Denver
+LSC;La Serena;CL;-29.9027;-71.2519;America/Santiago
+LSE;La Crosse;US;43.8138;-91.2519;America/Chicago
+LSH;Lashio;MM;22.9667;97.75;Asia/Yangon
+LSP;Las Piedras;VE;11.7167;-70.1833;America/Caracas
+LSR;Kutacane;ID;3.5;97.8;Asia/Jakarta
+LST;Launceston;AU;-41.4332;147.1441;Australia/Hobart
+LSY;Lismore;AU;-28.8367;153.2634;Australia/Sydney
+LTD;Ghadames;LY;30.1292;9.5097;Africa/Tripoli
+LTI;Altaj;MN;46.65;96.4167;Asia/Hovd
+LTK;Laodicea;SY;35.5407;35.7953;Asia/Damascus
+LTM;Lethem;GY;3.3717;-59.79;America/Guyana
+LTO;Loreto;MX;25.9833;-111.35;America/Mazatlan
+LTU;Latur;IN;18.4088;76.5604;Asia/Kolkata
+LTX;Latacunga;EC;-0.9011;-78.6025;America/Guayaquil
+LUA;Lukla;NP;27.6833;86.7333;Asia/Kathmandu
+LUD;Lüderitz;NA;-26.6864;15.2439;Africa/Windhoek
+LUG;Lugano;CH;46.0037;8.9511;Europe/Zurich
+LUL;Laurel;US;31.6941;-89.1306;America/Chicago
+LUM;Mangshi;CN;24.4053;98.5319;Asia/Shanghai
+LUN;Lusaka;ZM;-15.3875;28.3228;Africa/Lusaka
+LUQ;San Luis;AR;-33.2962;-66.3295;America/Argentina/San_Luis
+LUV;Langgur;ID;-5.6667;132.7167;Asia/Jayapura
+LUX;Lussemburgo;LU;49.8153;6.1296;Europe/Luxembourg
+LUZ;Lublin;PL;51.2319;22.6903;Europe/Warsaw
+LVI;Livingstone;ZM;-17.852;25.8285;Africa/Lusaka
+LWB;Lewisburg;US;37.8597;-80.3986;America/New_York
+LWN;Gyumri;AM;40.7929;43.8465;Asia/Yerevan
+LWS;Lewiston;US;46.3747;-117.0144;America/Los_Angeles
+LXA;Lhasa;CN;29.6534;91.1719;Asia/Shanghai
+LXR;Luxor;EG;25.6872;32.6396;Africa/Cairo
+LYA;Luoyang;CN;34.6202;112.4539;Asia/Shanghai
+LYC;Lycksele;SE;64.5507;18.7097;Europe/Stockholm
+LYG;Lianyungang;CN;34.5659;118.877;Asia/Shanghai
+LYH;Lynchburg;US;37.4138;-79.1422;America/New_York
+LYI;Linyi;CN;35.1047;118.3564;Asia/Shanghai
+LYP;Faisalabad;PK;31.4504;73.135;Asia/Karachi
+LYR;Longyearbyen;SJ;78.2089;15.8;Arctic/Longyearbyen
+LYS;Lione;FR;45.764;4.8357;Europe/Paris
+LZH;Liuzhou;CN;24.2062;109.3984;Asia/Shanghai
+LZN;Nangan;TW;26.1594;119.9583;Asia/Taipei
+LZO;Luzhou;CN;28.8448;105.379;Asia/Shanghai
+LZY;Prefettura di Nyingchi;CN;29.3091;94.3359;Asia/Shanghai
+MAA;Chennai;IN;13.0827;80.2707;Asia/Kolkata
+MAB;Marabá;BR;-5.3667;-49.1667;America/Belem
+MAD;Madrid;ES;40.4167;-3.7003;Europe/Madrid
+MAF;Midland;US;31.9973;-102.0779;America/Chicago
+MAG;Madang;PG;-5.2109;145.7878;Pacific/Port_Moresby
+MAH;Mahon;ES;39.8647;4.2263;Europe/Madrid
+MAJ;Uliga;MH;7.0687;171.2825;Pacific/Majuro
+MAK;Malakal;SS;9.528;31.6682;Africa/Juba
+MAM;Matamoros;MX;25.869;-97.5027;America/Matamoros
+MAN;Manchester;GB;53.4807;-2.2344;Europe/London
+MAO;Manaus;BR;-3.119;-60.0217;America/Manaus
+MAQ;Mae Sot;TH;16.6667;98.5833;Asia/Bangkok
+MAR;Maracaibo;VE;10.6427;-71.6125;America/Caracas
+MAS;Manus Island;PG;-2.0567;147.4244;Pacific/Port_Moresby
+MAU;Maupiti;PF;-16.4274;-152.2424;Pacific/Tahiti
+MAZ;Mayagüez;PR;18.2013;-67.1452;America/Puerto_Rico
+MBA;Mombasa;KE;-4.0435;39.6682;Africa/Nairobi
+MBD;Mmabatho;ZA;-25.8378;25.5948;Africa/Johannesburg
+MBE;Monbetsu;JP;44.2667;143.3833;Asia/Tokyo
+MBI;Mbeya;TZ;-8.9147;33.4619;Africa/Dar_es_Salaam
+MBJ;Montego Bay;JM;18.4762;-77.8939;America/Jamaica
+MBS;Bay City;US;43.5334;-84.0907;America/Detroit
+MBT;Masbate City;PH;12.3667;123.0667;Asia/Manila
+MBX;Maribor;SI;46.55;15.65;Europe/Ljubljana
+MCE;Merced;US;37.3022;-120.483;America/Los_Angeles
+MCG;Mcgrath;US;62.9787;-155.6576;America/Anchorage
+MCK;McCook;US;40.2639;-100.668;America/Chicago
+MCN;Macon;US;32.8407;-83.6324;America/New_York
+MCP;Macapá;BR;0.0356;-51.0705;America/Belem
+MCT;Mascate;OM;23.588;58.3829;Asia/Muscat
+MCW;Mason City;US;43.1569;-93.3294;America/Chicago
+MCX;Makhačkala;RU;42.9666;47.5126;Europe/Moscow
+MCY;Sunshine Coast;AU;-26.6054;153.0882;Australia/Brisbane
+MCZ;Maceió;BR;-9.6498;-35.7089;America/Maceio
+MDC;Manado;ID;1.4748;124.8421;Asia/Makassar
+MDE;Medellín;CO;6.2359;-75.5751;America/Bogota
+MDG;Mudanjiang;CN;44.5517;129.6332;Asia/Shanghai
+MDI;Makurdi;NG;7.7322;8.5391;Africa/Lagos
+MDK;Mbandaka;CD;0.0233;18.2922;Africa/Kinshasa
+MDL;Mandalay;MM;21.9588;96.0891;Asia/Yangon
+MDQ;Mar del Plata;AR;-38.0055;-57.5426;America/Argentina/Buenos_Aires
+MDU;Mendi;PG;-6.1586;143.65;Pacific/Port_Moresby
+MDZ;Mendoza;AR;-32.8895;-68.8458;America/Argentina/Mendoza
+MEC;Manta;EC;-0.9677;-80.7089;America/Guayaquil
+MED;Madinah;SA;24.5247;39.5692;Asia/Riyadh
+MEE;Mare;NC;-21.4823;168.0361;Pacific/Noumea
+MEG;Malanje;AO;-9.5333;16.3333;Africa/Luanda
+MEH;Mehamn;NO;71.0333;27.8333;Europe/Oslo
+MEI;Meridian;US;32.3372;-88.7492;America/Chicago
+MEL;Melbourne;AU;-37.8132;144.963;Australia/Melbourne
+MEM;Memphis;US;35.1495;-90.049;America/Chicago
+MEQ;Meulaboh;ID;4.15;96.1167;Asia/Jakarta
+MES;Medan;ID;3.5952;98.6722;Asia/Jakarta
+MEX;Città del Messico;MX;19.427;-99.1276;America/Mexico_City
+MFE;McAllen;US;26.2034;-98.23;America/Chicago
+MFK;Matsuyama;TW;26.1667;119.9167;Asia/Taipei
+MFM;Macao;MO;22.1987;113.5439;Asia/Macau
+MFR;Medford;US;42.3265;-122.8756;America/Los_Angeles
+MFU;Mfuwe;ZM;-13.2667;31.9333;Africa/Lusaka
+MGA;Managua;NI;12.115;-86.2362;America/Managua
+MGB;Mount Gambier;AU;-37.7441;140.7827;Australia/Adelaide
+MGC;Michigan City;US;41.7;-86.8167;America/Chicago
+MGF;Maringá;BR;-23.421;-51.9331;America/Sao_Paulo
+MGH;Margate;ZA;-30.9167;30.25;Africa/Johannesburg
+MGM;Montgomery;US;32.3792;-86.3077;America/Chicago
+MGQ;Muqdisho;SO;2.0469;45.3182;Africa/Mogadishu
+MGW;Morgantown;US;39.6428;-79.9158;America/New_York
+MGZ;Mergui;MM;12.45;98.6167;Asia/Yangon
+MHD;Mashhad;IR;36.2605;59.6168;Asia/Tehran
+MHG;Mannheim;DE;49.4875;8.466;Europe/Berlin
+MHH;Marsh Harbour;BS;26.5134;-77.0771;America/Nassau
+MHK;Manhattan;US;39.1422;-96.6689;America/Chicago
+MHQ;Maarianhamina;AX;60.1233;19.8967;Europe/Mariehamn
+MHT;Manchester;US;42.9279;-71.4384;America/New_York
+MHU;Mount Hotham;AU;-36.9667;147.1833;Australia/Melbourne
+MIA;Miami;US;25.7617;-80.1918;America/New_York
+MID;Mérida;MX;20.9674;-89.5926;America/Merida
+MIG;Mianyang;CN;31.4675;104.679;Asia/Shanghai
+MII;Marília;BR;-22.2176;-49.9505;America/Sao_Paulo
+MIL;Milano;IT;45.4637;9.1882;Europe/Rome
+MIM;Merimbula;AU;-36.91;149.902;Australia/Sydney
+MIR;Monastir;TN;35.7643;10.8113;Africa/Tunis
+MIU;Maiduguri;NG;11.8311;13.151;Africa/Lagos
+MJF;Mosjøen;NO;65.7844;13.2183;Europe/Oslo
+MJI;Tripoli;LY;32.8762;13.1875;Africa/Tripoli
+MJK;Monkey Mia;AU;-25.8882;113.5769;Australia/Perth
+MJM;Mbuji-Mayi;CD;-6.1307;23.5967;Africa/Lubumbashi
+MJN;Mahajanga;MG;-15.6921;46.3337;Indian/Antananarivo
+MJT;Mitilene;GR;39.0561;26.5994;Europe/Athens
+MJZ;Mirnyj;RU;62.5333;114.0333;Asia/Yakutsk
+MKC;Kansas City;US;39.0997;-94.5786;America/Chicago
+MKE;Milwaukee;US;43.0389;-87.9065;America/Chicago
+MKG;Muskegon;US;43.1706;-86.2375;America/Detroit
+MKK;Hoolehua;US;21.1528;-157.1;Pacific/Honolulu
+MKL;Jackson;US;35.6014;-88.9153;America/Chicago
+MKM;Mukah;MY;2.9069;112.0797;Asia/Kuching
+MKP;Makemo;PF;-16.5879;-143.6544;Pacific/Tahiti
+MKQ;Merauke;ID;-8.5167;140.5;Asia/Jayapura
+MKR;Meekatharra;AU;-26.6111;118.546;Australia/Perth
+MKU;Makokou;GA;0.5592;12.8611;Africa/Libreville
+MKW;Manokwari;ID;-0.8615;134.062;Asia/Jayapura
+MKY;Mackay;AU;-21.1425;149.1821;Australia/Brisbane
+MKZ;Malacca;MY;2.1896;102.2501;Asia/Kuala_Lumpur
+MLA;La Valletta;MT;35.8498;14.4954;Europe/Malta
+MLB;Melbourne;US;28.1025;-80.6303;America/New_York
+MLE;Malé;MV;4.1755;73.5093;Indian/Maldives
+MLG;Malang;ID;-7.9666;112.6326;Asia/Jakarta
+MLI;Moline;US;41.4539;-90.5061;America/Chicago
+MLM;Morelia;MX;19.706;-101.195;America/Mexico_City
+MLN;Melilla;ES;35.2923;-2.9381;Africa/Ceuta
+MLU;Monroe;US;32.5118;-92.0437;America/Chicago
+MLW;Monrovia;LR;6.2894;-10.7583;Africa/Monrovia
+MLX;Malatya;TR;38.3554;38.3335;Europe/Istanbul
+MMA;Malmö;SE;55.61;13.004;Europe/Stockholm
+MMB;Memanbetsu;JP;43.9;144.1672;Asia/Tokyo
+MMD;Minamidaitō;JP;25.8414;131.2472;Asia/Tokyo
+MME;Teesside;GB;54.51;-1.43;Europe/London
+MMG;Mount Magnet;AU;-28.0833;117.85;Australia/Perth
+MMH;Mammoth Lakes;US;37.6311;-118.8514;America/Los_Angeles
+MMJ;Matsumoto;JP;36.2333;137.9667;Asia/Tokyo
+MMK;Murmansk;RU;68.9733;33.0856;Europe/Moscow
+MMO;Maio;CV;15.25;-23.1667;Atlantic/Cape_Verde
+MMY;Miyako Jima;JP;24.7792;125.2978;Asia/Tokyo
+MNC;Nacala;MZ;-14.5656;40.6854;Africa/Maputo
+MNG;Maningrida;AU;-12.0549;134.2323;Australia/Darwin
+MNI;Montserrat;MS;16.75;-62.2333;America/Montserrat
+MNJ;Mananjary;MG;-21.2;48.3667;Indian/Antananarivo
+MNL;Manila;PH;14.5995;120.9842;Asia/Manila
+MNX;Manicoré;BR;-5.8167;-61.2833;America/Manaus
+MOB;Mobile;US;30.6944;-88.0431;America/Chicago
+MOC;Montes Claros;BR;-16.7286;-43.8582;America/Sao_Paulo
+MOG;Mong Hsat;MM;20.5333;99.2667;Asia/Yangon
+MOL;Molde;NO;62.7473;7.2621;Europe/Oslo
+MOQ;Morondava;MG;-20.2836;44.3183;Indian/Antananarivo
+MOT;Minot;US;48.2325;-101.2963;America/Chicago
+MOV;Moranbah;AU;-22.0606;148.0744;Australia/Brisbane
+MOW;Mosca;RU;55.7558;37.6176;Europe/Moscow
+MOZ;Moorea;PF;-17.4904;-149.7641;Pacific/Tahiti
+MPA;Mpacha;NA;-17.5;24.2667;Africa/Windhoek
+MPH;Caticlan;PH;11.9253;121.9521;Asia/Manila
+MPL;Montpellier;FR;43.6108;3.8767;Europe/Paris
+MPM;Maputo;MZ;-25.9692;32.5732;Africa/Maputo
+MPN;Mount Pleasant;FK;-51.8167;-58.45;Atlantic/Stanley
+MPY;Maripasoula;GF;3.6667;-54.0333;America/Cayenne
+MQF;Magnitogorsk;RU;53.3927;59.0623;Asia/Yekaterinburg
+MQJ;Chonuu;RU;66.45;143.2333;Asia/Srednekolymsk
+MQL;Mildura;AU;-34.2308;142.0846;Australia/Melbourne
+MQM;Mardin;TR;37.3129;40.734;Europe/Istanbul
+MQN;Mo i Rana;NO;66.3646;14.3027;Europe/Oslo
+MQS;Mustique;VC;12.8883;-61.1819;America/St_Vincent
+MQT;Marquette-lez-Lille;US;46.3536;-87.3953;America/Detroit
+MQX;Makale;ET;13.4936;39.4657;Africa/Addis_Ababa
+MRE;Maasai Mara;KE;-1.3004;35.0588;Africa/Nairobi
+MRS;Marsiglia;FR;43.2965;5.3698;Europe/Paris
+MRU;Port Louis;MU;-20.1609;57.5012;Indian/Mauritius
+MRV;Mineral'nye Vody;RU;44.2117;43.1239;Europe/Moscow
+MRX;Bandar Mahshahr;IR;30.5356;49.1672;Asia/Tehran
+MRY;Monterey;US;36.6002;-121.8947;America/Los_Angeles
+MRZ;Moree;AU;-29.4963;149.8502;Australia/Sydney
+MSJ;Misawa;JP;40.6963;141.3869;Asia/Tokyo
+MSL;Florence;US;34.7486;-87.6161;America/Chicago
+MSN;Madison;US;43.0731;-89.4012;America/Chicago
+MSO;Missoula;US;46.8721;-113.994;America/Denver
+MSP;Minneapolis;US;44.98;-93.2638;America/Chicago
+MSQ;Minsk;BY;53.9;27.5667;Europe/Minsk
+MSR;Muş;TR;38.7346;41.491;Europe/Istanbul
+MSS;Massena;US;44.9378;-74.8467;America/New_York
+MST;Maastricht;NL;50.8514;5.691;Europe/Amsterdam
+MSU;Maseru;LS;-29.3151;27.4869;Africa/Maseru
+MSY;New Orleans;US;29.9511;-90.0715;America/Chicago
+MSZ;Namibe;AO;-15.2086;12.1608;Africa/Luanda
+MTJ;Montrose;US;38.5103;-107.897;America/Denver
+MTR;Montería;CO;8.751;-75.8785;America/Bogota
+MTS;Manzini;SZ;-26.5082;31.3713;Africa/Mbabane
+MTT;Minatitlan;MX;17.9939;-94.5466;America/Mexico_City
+MTY;Monterrey;MX;25.6866;-100.3161;America/Monterrey
+MUA;Munda;SB;-8.3279;157.2697;Pacific/Guadalcanal
+MUB;Maun;BW;-19.9708;23.4306;Africa/Gaborone
+MUC;Monaco di Baviera;DE;48.1391;11.5802;Europe/Berlin
+MUE;Kamuela;US;20.0125;-155.6733;Pacific/Honolulu
+MUH;Marsa Matruh;EG;31.35;27.25;Africa/Cairo
+MUN;Maturín;VE;9.7334;-63.1914;America/Caracas
+MUR;Marudi;MY;4.1833;114.3167;Asia/Kuching
+MUX;Multan;PK;30.1575;71.5249;Asia/Karachi
+MVB;Franceville;GA;-1.65;13.4333;Africa/Libreville
+MVD;Montevideo;UY;-34.9011;-56.1645;America/Montevideo
+MVF;Mossoró;BR;-5.1841;-37.3478;America/Fortaleza
+MVP;Mitú;CO;1.1333;-70.05;America/Bogota
+MVQ;Mahilëŭ;BY;53.8981;30.3325;Europe/Minsk
+MVR;Maroua;CM;10.5925;14.321;Africa/Douala
+MVT;Mataiva;PF;-14.8333;-148.4167;Pacific/Tahiti
+MWA;Marion;US;37.7519;-89.0164;America/Chicago
+MWL;Mineral Wells;US;32.8085;-98.1128;America/Chicago
+MWX;Muan;KR;34.9905;126.4817;Asia/Seoul
+MWZ;Mwanza;TZ;-2.5164;32.9175;Africa/Dar_es_Salaam
+MXL;Mexicali;MX;32.6245;-115.4523;America/Tijuana
+MXV;Môrôn;MN;49.6333;100.1667;Asia/Ulaanbaatar
+MXX;Mora;SE;60.9581;14.5045;Europe/Stockholm
+MYA;Moruya;AU;-35.9025;150.1472;Australia/Sydney
+MYD;Malindi;KE;-3.2192;40.1169;Africa/Nairobi
+MYE;Miyake Jima;JP;34.0694;139.5625;Asia/Tokyo
+MYG;Mayaguana;BS;22.3767;-73.0183;America/Nassau
+MYJ;Matsuyama;JP;33.8394;132.7653;Asia/Tokyo
+MYL;McCall;US;44.9167;-116.1;America/Boise
+MYP;Mary;TM;37.6092;61.8643;Asia/Ashgabat
+MYQ;Mysore;IN;12.3;76.65;Asia/Kolkata
+MYR;Myrtle Beach;US;33.6891;-78.8867;America/New_York
+MYT;Myitkyina;MM;25.3946;97.3841;Asia/Yangon
+MYU;Mekoryuk;US;60.3728;-166.268;America/Nome
+MYW;Mtwara;TZ;-10.3112;40.176;Africa/Dar_es_Salaam
+MYY;Miri;MY;4.3995;113.9914;Asia/Kuching
+MZG;Magong;TW;23.5692;119.6186;Asia/Taipei
+MZH;Merzifon;TR;40.8748;35.4618;Europe/Istanbul
+MZI;Mopti;ML;14.4874;-4.1975;Africa/Bamako
+MZL;Manizales;CO;5.0703;-75.5138;America/Bogota
+MZO;Manzanillo;CU;20.325;-77.1289;America/Havana
+MZQ;Mkuze;ZA;-27.6333;32.05;Africa/Johannesburg
+MZR;Mazar-i Sharif;AF;36.6926;67.118;Asia/Kabul
+MZS;Mostyn;MY;4.6167;118.15;Asia/Kuching
+MZT;Mazatlán;MX;23.2494;-106.4111;America/Mazatlan
+MZV;Mulukukú;MY;4.0333;114.8;Asia/Kuching
+MZW;Mécheria;DZ;33.5219;-0.2831;Africa/Algiers
+NAA;Narrabri;AU;-30.3183;149.8291;Australia/Sydney
+NAG;Nagpur;IN;21.1458;79.0882;Asia/Kolkata
+NAH;Naha;ID;3.7167;125.3667;Asia/Makassar
+NAJ;Naxçıvan;AZ;39.1903;45.4589;Asia/Baku
+NAL;Nal'čik;RU;43.495;43.6045;Europe/Moscow
+NAM;Namlea;ID;-3.3;127.1;Asia/Jayapura
+NAN;Nadi;FJ;-17.7533;177.4516;Pacific/Fiji
+NAP;Napoli;IT;40.8518;14.2681;Europe/Rome
+NAQ;Qaanaaq;GL;77.4856;-69.3749;America/Thule
+NAS;Nassau;BS;25.0443;-77.3504;America/Nassau
+NAT;Natal;BR;-5.7793;-35.2009;America/Fortaleza
+NAV;Nevşehir;TR;38.6333;34.7167;Europe/Istanbul
+NAW;Narathiwat;TH;6.5167;101.75;Asia/Bangkok
+NBC;Naberezhnye Chelny;RU;55.7306;52.3893;Europe/Moscow
+NBE;Enfida;TN;36.0758;10.4386;Africa/Tunis
+NBO;Nairobi;KE;-1.2833;36.8167;Africa/Nairobi
+NBS;Baishan;CN;42.0833;127.6;Asia/Shanghai
+NCA;North Caicos;TC;21.9333;-71.9833;America/Grand_Turk
+NCE;Nizza;FR;43.7102;7.262;Europe/Paris
+NCL;Newcastle Upon Tyne;GB;54.9783;-1.6178;Europe/London
+NCU;Nukus;UZ;42.4619;59.6166;Asia/Samarkand
+NCY;Annecy;FR;45.9306;6.1008;Europe/Paris
+NDB;Nouadhibou;MR;20.9342;-17.0283;Africa/Nouakchott
+NDC;Nanded;IN;19.1383;77.321;Asia/Kolkata
+NDG;Qiqihar;CN;47.3543;123.9182;Asia/Shanghai
+NDJ;N'Djamena;TD;12.1348;15.0557;Africa/Ndjamena
+NDR;Nador;MA;35.1686;-2.9276;Africa/Casablanca
+NDU;Rundu;NA;-17.9253;19.7532;Africa/Windhoek
+NEC;Necochea;AR;-38.5545;-58.7396;America/Argentina/Buenos_Aires
+NER;Nerjungri;RU;56.6575;124.711;Asia/Yakutsk
+NEV;Nevis;KN;17.205;-62.5925;America/St_Kitts
+NGB;Ningbo;CN;29.8683;121.544;Asia/Shanghai
+NGE;Ngaoundéré;CM;7.3381;13.5668;Africa/Douala
+NGO;Nagoya;JP;35.1815;136.9066;Asia/Tokyo
+NGQ;Shiquanhe;CN;32.1038;80.0543;Asia/Shanghai
+NGS;Nagasaki;JP;32.7503;129.8779;Asia/Tokyo
+NHA;Nha Trang;VN;12.2388;109.1967;Asia/Ho_Chi_Minh
+NHV;Nuku Hiva;PF;-8.7952;-140.2222;Pacific/Marquesas
+NIM;Niamey;NE;13.5116;2.1254;Africa/Niamey
+NJC;Nižnevartovsk;RU;60.9389;76.5952;Asia/Yekaterinburg
+NJF;Najaf;IQ;32.0107;44.3265;Asia/Baghdad
+NKC;Nouakchott;MR;18.0735;-15.9582;Africa/Nouakchott
+NKG;Nanchino;CN;32.0603;118.7969;Asia/Shanghai
+NKT;Şırnak;TR;37.332;42.187;Europe/Istanbul
+NLA;Ndola;ZM;-12.9906;28.6498;Africa/Lusaka
+NLD;Nuevo Laredo;MX;27.4779;-99.5496;America/Matamoros
+NLI;Nikolaevsk-na-Amure;RU;53.1333;140.7333;Asia/Vladivostok
+NLK;Norfolk Island;NF;-29.0425;167.9394;Pacific/Norfolk
+NLP;Nelspruit;ZA;-25.4753;30.9694;Africa/Johannesburg
+NLT;Xinyuan;CN;43.4331;83.3803;Asia/Urumqi
+NMA;Namangan;UZ;41.0058;71.6436;Asia/Tashkent
+NMF;Maafaru;MV;5.8319;73.4803;Indian/Maldives
+NNG;Nanning;CN;22.817;108.3665;Asia/Shanghai
+NNM;Nar'jan-Mar;RU;67.6167;53.15;Europe/Moscow
+NNT;Nantes;TH;18.8;100.7833;Asia/Bangkok
+NOB;Nosara Beach;CR;9.9764;-85.653;America/Costa_Rica
+NOC;Knock;IE;53.914;-8.8105;Europe/Dublin
+NOJ;Nojabr'sk;RU;63.197;75.4424;Asia/Yekaterinburg
+NOP;Sinope;TR;42.0175;35.0689;Europe/Istanbul
+NOS;Nosy Be;MG;-13.3111;48.3139;Indian/Antananarivo
+NOU;Nouméa;NC;-22.2758;166.458;Pacific/Noumea
+NOV;Huambo;AO;-12.774;15.7469;Africa/Luanda
+NOZ;Novokuzneck;RU;53.7596;87.1216;Asia/Novokuznetsk
+NPE;Napier;NZ;-39.4928;176.912;Pacific/Auckland
+NPL;New Plymouth;NZ;-39.0101;174.1793;Pacific/Auckland
+NPO;Nangapinoh;ID;-0.3333;111.7333;Asia/Pontianak
+NPT;Newport;US;41.5308;-71.2825;America/New_York
+NQN;Neuquén;AR;-38.9517;-68.0592;America/Argentina/Salta
+NQT;Nottingham;GB;52.9551;-1.1492;Europe/London
+NQY;Newquay;GB;50.4374;-4.9979;Europe/London
+NQZ;Astana;KZ;51.1472;71.4222;Asia/Almaty
+NRK;Norrköping;SE;58.5947;16.1836;Europe/Stockholm
+NSH;Now Shahr;IR;36.6667;51.5;Asia/Tehran
+NSK;Noril'sk;RU;69.3558;88.1893;Asia/Krasnoyarsk
+NSN;Nelson;NZ;-41.2706;173.284;Pacific/Auckland
+NST;Nakhon Si Thammarat;TH;8.4325;99.9599;Asia/Bangkok
+NTE;Nantes;FR;47.2184;-1.5536;Europe/Paris
+NTG;NanTong;CN;31.9802;120.8943;Asia/Shanghai
+NTL;Newcastle;AU;-32.9283;151.7817;Australia/Sydney
+NTN;Normanton;AU;-17.6854;141.0731;Australia/Brisbane
+NTQ;Wajima;JP;37.2947;136.9568;Asia/Tokyo
+NTX;Ranai;ID;3.95;108.3833;Asia/Jakarta
+NUE;Norimberga;DE;49.4505;11.0805;Europe/Berlin
+NUI;Nuiqsut;US;70.2097;-151.0055;America/Anchorage
+NUM;Neom;SA;28.0064;35.2025;Asia/Riyadh
+NUX;Novy Urengoy;RU;66.0957;76.6564;Asia/Yekaterinburg
+NVA;Neiva;CO;2.9345;-75.2809;America/Bogota
+NVI;Navoiy;UZ;40.1039;65.3688;Asia/Samarkand
+NVT;Navegantes;BR;-26.8667;-48.6333;America/Sao_Paulo
+NWI;Norwich;GB;52.6309;1.2974;Europe/London
+NYA;Njagan';RU;62.1293;65.3745;Asia/Yekaterinburg
+NYC;New York;US;40.7144;-74.006;America/New_York
+NYI;Sunyani;GH;7.3349;-2.3123;Africa/Accra
+NYK;Nanyuki;KE;0.0167;37.0667;Africa/Nairobi
+NYM;Nadym;RU;65.4833;72.7167;Asia/Yekaterinburg
+NYT;Naypyidaw;MM;19.7633;96.0785;Asia/Yangon
+NZC;Nazca;PE;-14.8289;-74.9436;America/Lima
+NZH;Manzhouli;CN;49.5978;117.3785;Asia/Shanghai
+NZL;Zalantun;CN;48.027;122.708;Asia/Shanghai
+OAJ;Jacksonville;US;34.8304;-77.6058;America/New_York
+OAK;Oakland;US;37.8044;-122.2711;America/Los_Angeles
+OAX;Oaxaca de Juárez;MX;17.0732;-96.7266;America/Mexico_City
+OBO;Obihiro;JP;42.9233;143.1972;Asia/Tokyo
+OCC;Puerto Francisco de Orellana;EC;-0.4622;-76.986;America/Guayaquil
+OCE;Ocean City;US;38.3167;-75.1167;America/New_York
+OCJ;Ocho Rios;JM;18.4006;-76.9697;America/Jamaica
+ODB;Cordoba;ES;37.8847;-4.7792;Europe/Madrid
+ODE;Odense;DK;55.4038;10.4024;Europe/Copenhagen
+OEC;Ocussi;TL;-9.205;124.3417;Asia/Dili
+OER;Örnsköldsvik;SE;63.4126;18.9921;Europe/Stockholm
+OGD;Ogden;US;41.223;-111.9738;America/Denver
+OGG;Kahului;US;20.8929;-156.4386;Pacific/Honolulu
+OGL;Georgetown;GY;6.8;-58.1056;America/Guyana
+OGN;Yonaguni Jima;JP;24.4611;122.9764;Asia/Tokyo
+OGS;Ogdensburg;US;44.6817;-75.4658;America/New_York
+OGU;Ordu;TR;40.9833;37.8833;Europe/Istanbul
+OGX;Ouargla;DZ;31.9527;5.3335;Africa/Algiers
+OGZ;Vladikavkaz;RU;43.0252;44.666;Europe/Moscow
+OHD;Ocrida;MK;41.1231;20.8016;Europe/Skopje
+OHE;Mohelnice;CN;52.9211;122.4206;Asia/Shanghai
+OHO;Ochotsk;RU;59.4167;143.05;Asia/Vladivostok
+OHS;Sohar;OM;24.342;56.7299;Asia/Muscat
+OIM;Ōshima;JP;34.7792;139.365;Asia/Tokyo
+OIR;Okushiri;JP;42.1667;139.5167;Asia/Tokyo
+OIT;Ōita;JP;33.2396;131.6095;Asia/Tokyo
+OKA;Okinawa;JP;26.1202;127.7025;Asia/Tokyo
+OKC;Oklahoma City;US;35.4676;-97.5164;America/Chicago
+OKE;Okino Erabu;JP;27.3689;128.5667;Asia/Tokyo
+OKI;Oki Island;JP;36.1667;133.3167;Asia/Tokyo
+OKJ;Okayama;JP;34.6555;133.9198;Asia/Tokyo
+OKL;Oksibil;ID;-5.1;140.6667;Asia/Jayapura
+OKY;Oakey;AU;-27.4067;151.735;Australia/Brisbane
+OLA;Orlando;NO;63.7;9.6167;Europe/Oslo
+OLB;Olbia;IT;40.9031;9.5148;Europe/Rome
+OLF;Wolf Point;US;48.0947;-105.5664;America/Denver
+OLM;Olympia;US;47.0379;-122.9007;America/Los_Angeles
+OLZ;Olëkminsk;RU;60.3667;120.4167;Asia/Yakutsk
+OMA;Omaha;US;41.2565;-95.9345;America/Chicago
+OMD;Oranjemund;NA;-28.5833;16.45;Africa/Windhoek
+OME;Nome;US;64.5114;-165.4417;America/Nome
+OMH;Urmia;IR;37.5498;45.0786;Asia/Tehran
+OMN;Zomino;UZ;39.9631;68.3939;Asia/Samarkand
+OMO;Mostar;BA;43.3438;17.8078;Europe/Sarajevo
+OMR;Oradea;RO;47.0465;21.9189;Europe/Bucharest
+OMS;Omsk;RU;54.9914;73.3645;Asia/Omsk
+OND;Ondangwa;NA;-17.8855;15.9422;Africa/Windhoek
+ONJ;Odate Noshiro;JP;40.1964;140.3738;Asia/Tokyo
+ONQ;Zonguldak;TR;41.4535;31.7894;Europe/Istanbul
+ONT;Ontario;US;34.05;-117.64;America/Los_Angeles
+ONX;Colón;PA;9.35;-79.9;America/Panama
+OOL;Gold Coast;AU;-28.0167;153.4;Australia/Brisbane
+OOM;Cooma;AU;-36.3083;148.9733;Australia/Sydney
+OPO;Porto;PT;41.1579;-8.6291;Europe/Lisbon
+OPU;Balimo;PG;-8.0333;142.9333;Pacific/Port_Moresby
+ORB;Örebro;SE;59.2738;15.2075;Europe/Stockholm
+ORF;Norfolk;US;36.8508;-76.2859;America/New_York
+ORH;Worcester;US;42.2626;-71.8023;America/New_York
+ORK;Cork;IE;51.8985;-8.4756;Europe/Dublin
+ORL;Orlando;US;28.5336;-81.3867;America/New_York
+ORN;Orano;DZ;35.6969;-0.6331;Africa/Algiers
+ORT;Northway;US;62.9619;-141.9239;America/Anchorage
+ORU;Oruro;BO;-17.9717;-67.0931;America/La_Paz
+OSA;Osaka;JP;34.6937;135.5022;Asia/Tokyo
+OSD;Östersund;SE;63.1986;14.4944;Europe/Stockholm
+OSI;Osijek;HR;45.55;18.6833;Europe/Zagreb
+OSL;Oslo;NO;59.9139;10.7522;Europe/Oslo
+OSR;Ostrava;CZ;49.8209;18.2625;Europe/Prague
+OSS;Oš;KG;40.514;72.8161;Asia/Bishkek
+OST;Bruges;BE;51.2154;2.9287;Europe/Brussels
+OSW;Orsk;RU;51.2294;58.4751;Asia/Yekaterinburg
+OTH;North Bend;US;43.4189;-124.24;America/Los_Angeles
+OTZ;Kotzebue;US;66.8881;-162.6058;America/Nome
+OUA;Ouagadougou;BF;12.3714;-1.5197;Africa/Ouagadougou
+OUD;Oujda;MA;34.682;-1.9002;Africa/Casablanca
+OUL;Oulu;FI;65.0121;25.4651;Europe/Helsinki
+OUZ;Zouérat;MR;22.7333;-12.35;Africa/Nouakchott
+OVB;Novosibirsk;RU;54.9833;82.8964;Asia/Novosibirsk
+OVD;Asturias;ES;43.3619;-5.8494;Europe/Madrid
+OVS;Sovetskij (Circondario autonomo degli Chanty-Mansi-Jugra);RU;61.3321;63.6019;Asia/Yekaterinburg
+OWB;Owensboro;US;37.7719;-87.1112;America/Chicago
+OXB;Bissau;GW;11.8632;-15.5843;Africa/Bissau
+OYE;Oyem;GA;1.5667;11.5833;Africa/Libreville
+OZC;Ozamiz;PH;8.1624;123.7741;Asia/Manila
+OZG;Zagora;MA;30.2671;-5.8525;Africa/Casablanca
+OZZ;Ouarzazate;MA;30.9335;-6.937;Africa/Casablanca
+PAB;Bilaspur;IN;31.3167;76.8333;Asia/Kolkata
+PAD;Paderborn;DE;51.7189;8.7575;Europe/Berlin
+PAE;Everett;US;47.9097;-122.2845;America/Los_Angeles
+PAG;Pagadian;PH;7.8397;123.4343;Asia/Manila
+PAH;Paducah;US;37.0611;-88.7725;America/Chicago
+PAP;Port Au Prince;HT;18.5944;-72.3074;America/Port-au-Prince
+PAR;Parigi;FR;48.8566;2.3522;Europe/Paris
+PAT;Patna;IN;25.5941;85.1376;Asia/Kolkata
+PAV;Paulo Afonso;BR;-9.5875;-38.4008;America/Maceio
+PAZ;Poza Rica;MX;20.5167;-97.4672;America/Mexico_City
+PBC;Puebla;MX;18.9131;-98.4294;America/Mexico_City
+PBD;Porbandar;IN;21.6417;69.6293;Asia/Kolkata
+PBG;Plattsburgh;US;44.7;-73.4833;America/New_York
+PBH;Paro;BT;27.4333;89.4167;Asia/Thimphu
+PBI;West Palm Beach;US;26.7153;-80.0534;America/New_York
+PBM;Paramaribo;SR;5.852;-55.2038;America/Paramaribo
+PBO;Paraburdoo;AU;-23.1739;117.748;Australia/Perth
+PBR;Puerto Barrios;GT;15.697;-88.5855;America/Guatemala
+PBU;Putao;MM;27.3333;97.4167;Asia/Yangon
+PCL;Pucallpa;PE;-8.3929;-74.5826;America/Lima
+PCP;Principe;ST;1.6667;7.4167;Africa/Sao_Tome
+PCR;Puerto Carreño;CO;6.1833;-67.6333;America/Bogota
+PDA;Puerto Inirida;CO;3.8833;-67.8833;America/Bogota
+PDG;Padang;ID;-0.9471;100.4172;Asia/Jakarta
+PDL;Ponta Delgada;PT;37.7438;-25.6965;Atlantic/Azores
+PDO;Pendopo;ID;-3.2833;103.8667;Asia/Jakarta
+PDP;Punta del Este;UY;-34.9;-54.95;America/Montevideo
+PDS;Piedras Negras;MX;28.6916;-100.5409;America/Matamoros
+PDT;Pendleton (Lancashire);US;45.6983;-118.8361;America/Los_Angeles
+PDV;Filippopoli;BG;42.1354;24.7453;Europe/Sofia
+PDX;Portland;US;45.5051;-122.675;America/Los_Angeles
+PED;Pardubice;CZ;50.0378;15.7808;Europe/Prague
+PEE;Perm';RU;58.0092;56.227;Asia/Yekaterinburg
+PEG;Perugia;IT;43.1107;12.3908;Europe/Rome
+PEI;Pereira;CO;4.8087;-75.6906;America/Bogota
+PEM;Puerto Maldonado;PE;-12.5833;-69.2333;America/Lima
+PEN;Penang;MY;5.4356;100.3091;Asia/Kuala_Lumpur
+PER;Perth;AU;-31.9522;115.8589;Australia/Perth
+PES;Petrozavodsk;RU;61.7782;34.364;Europe/Moscow
+PET;Pelotas;BR;-31.7654;-52.3376;America/Sao_Paulo
+PEV;Pécs;HU;46.0727;18.2323;Europe/Budapest
+PEW;Peshawar;PK;34.0151;71.5249;Asia/Karachi
+PEX;Pečora;RU;65.1167;57.1333;Europe/Moscow
+PEZ;Penza;RU;53.2273;45;Europe/Moscow
+PFB;Passo Fundo;BR;-28.2623;-52.4103;America/Sao_Paulo
+PFO;Pafo;CY;34.7116;32.4891;Asia/Nicosia
+PGA;Page;US;36.9264;-111.4472;America/Phoenix
+PGD;Punta Gorda;US;26.9192;-81.9914;America/New_York
+PGF;Perpignano;FR;42.6887;2.8948;Europe/Paris
+PGH;Pantnagar;IN;29.0319;79.4736;Asia/Kolkata
+PGK;Pangkalpinang;ID;-2.1316;106.1169;Asia/Jakarta
+PGU;Asaloyeh;IR;27.384;52.7355;Asia/Tehran
+PGV;Greenville;US;35.6333;-77.3853;America/New_York
+PGZ;Ponta Grossa;BR;-25.0833;-50.15;America/Sao_Paulo
+PHB;Parnaíba;BR;-2.9055;-41.7734;America/Fortaleza
+PHC;Port Harcourt;NG;4.8156;7.0498;Africa/Lagos
+PHE;Port Hedland;AU;-20.3779;118.6316;Australia/Perth
+PHF;Newport News;US;37.0871;-76.473;America/New_York
+PHH;Phan Thiết;VN;10.9805;108.2615;Asia/Ho_Chi_Minh
+PHL;Filadelfia;US;39.9523;-75.1638;America/New_York
+PHS;Phitsanulok;TH;16.8211;100.2659;Asia/Bangkok
+PHW;Phalaborwa;ZA;-23.9424;31.1409;Africa/Johannesburg
+PHX;Phoenix;US;33.4484;-112.074;America/Phoenix
+PHY;Phetchabun;TH;16.3017;101.1193;Asia/Bangkok
+PIA;Peoria;US;40.6936;-89.589;America/Chicago
+PIH;Pocatello;US;42.8621;-112.4506;America/Boise
+PIR;Pierre;US;44.3804;-100.2932;America/Chicago
+PIS;Poitiers;FR;46.5802;0.3404;Europe/Paris
+PIT;Pittsburgh;US;40.4406;-79.9959;America/New_York
+PIU;Piura;PE;-5.1783;-80.6549;America/Lima
+PIX;Pico Island;PT;38.4667;-28.3;Atlantic/Azores
+PIZ;Point Lay;US;69.75;-163.1667;America/Nome
+PJM;Puerto Jimenez;CR;8.5833;-83.3333;America/Costa_Rica
+PKB;Parkersburg;US;39.3456;-81.4389;America/New_York
+PKC;Petropavlovsk-Kamčatskij;RU;53.0584;158.6321;Asia/Kamchatka
+PKE;Parkes;AU;-33.1385;148.2329;Australia/Sydney
+PKR;Pokhara;NP;28.1972;83.9861;Asia/Kathmandu
+PKU;Pekanbaru;ID;0.5071;101.4478;Asia/Jakarta
+PKV;Pskov;RU;57.8167;28.3345;Europe/Moscow
+PKY;Palangkaraya;ID;-2.2161;113.914;Asia/Pontianak
+PKZ;Pāksē;LA;15.1172;105.8159;Asia/Vientiane
+PLJ;Placencia;BZ;16.5333;-88.3528;America/Belize
+PLM;Palembang;ID;-2.9761;104.7754;Asia/Jakarta
+PLN;Pellston;US;45.5708;-84.7928;America/Detroit
+PLO;Port Lincoln;AU;-34.6033;135.8745;Australia/Adelaide
+PLQ;Palanga;LT;55.7075;21.1428;Europe/Vilnius
+PLS;Providenciales;TC;21.7692;-72.2683;America/Grand_Turk
+PLW;Palu;ID;-0.8679;119.9047;Asia/Makassar
+PLX;Semej;KZ;50.4233;80.2508;Asia/Almaty
+PLZ;Port Elizabeth;ZA;-33.9608;25.6022;Africa/Johannesburg
+PMC;Puerto Montt;CL;-41.4689;-72.9411;America/Santiago
+PMF;Parma;IT;44.4805;10.1941;Europe/Rome
+PMG;Ponta Porã;BR;-22.55;-55.7;America/Campo_Grande
+PMI;Palma de Mallorca;ES;39.5696;2.6502;Europe/Madrid
+PMO;Palermo;IT;38.1157;13.3615;Europe/Rome
+PMQ;Perito Moreno;AR;-46.5364;-70.9836;America/Argentina/Rio_Gallegos
+PMR;Palmerston North;NZ;-40.3523;175.6082;Pacific/Auckland
+PMV;Porlamar;VE;10.957;-63.87;America/Caracas
+PMW;Palmas;BR;-10.2491;-48.3243;America/Araguaina
+PMY;Puerto Madryn;AR;-42.7694;-65.0317;America/Argentina/Catamarca
+PNA;città di Pamplona;ES;42.818;-1.6442;Europe/Madrid
+PNH;Phnom Penh;KH;11.5564;104.9282;Asia/Phnom_Penh
+PNI;Pohnpei;FM;6.9809;158.2033;Pacific/Pohnpei
+PNK;Pontianak;ID;-0.0263;109.3425;Asia/Pontianak
+PNL;Pantelleria;IT;36.8136;11.9661;Europe/Rome
+PNP;Popondetta;PG;-8.8075;148.3087;Pacific/Port_Moresby
+PNQ;Pune;IN;18.5204;73.8567;Asia/Kolkata
+PNR;Pointe-Noire;CG;-4.7692;11.8664;Africa/Brazzaville
+PNS;Pensacola;US;30.4213;-87.2169;America/Chicago
+PNT;Puerto Natales;CL;-51.6833;-72.5167;America/Santiago
+PNY;Puducherry;IN;11.9416;79.8083;Asia/Kolkata
+PNZ;Petrolina;BR;-9.3933;-40.4906;America/Recife
+POA;Porto Alegre;BR;-30.0346;-51.2177;America/Sao_Paulo
+POG;Port-Gentil;GA;-0.7351;8.7591;Africa/Libreville
+POL;Pemba;MZ;-12.9732;40.5178;Africa/Maputo
+POM;Port Moresby;PG;-9.4438;147.1803;Pacific/Port_Moresby
+POP;Puerto Plata;DO;19.7808;-70.6871;America/Santo_Domingo
+POR;Pori;FI;61.4851;21.7974;Europe/Helsinki
+POS;Piarco;TT;10.6021;-61.3394;America/Port_of_Spain
+POZ;Poznań;PL;52.4064;16.9252;Europe/Warsaw
+PPB;Presidente Prudente;BR;-22.1211;-51.393;America/Sao_Paulo
+PPG;Pago Pago;AS;-14.3264;-170.6964;Pacific/Pago_Pago
+PPK;Petropavlovsk;KZ;54.8732;69.1505;Asia/Almaty
+PPN;Popayán;CO;2.45;-76.6089;America/Bogota
+PPP;Proserpine;AU;-20.4889;148.5519;Australia/Brisbane
+PPS;Puerto Princesa;PH;9.7638;118.7473;Asia/Manila
+PPT;Papeete;PF;-17.5596;-149.6094;Pacific/Tahiti
+PQC;Phu Quoc;VN;10.2237;103.9632;Asia/Ho_Chi_Minh
+PQI;Presque Isle;US;46.685;-68.0475;America/New_York
+PQQ;Port Macquarie;AU;-31.4314;152.8672;Australia/Sydney
+PRA;Paraná;AR;-31.7413;-60.5115;America/Argentina/Cordoba
+PRC;Prescott;US;34.65;-112.4242;America/Phoenix
+PRG;Praga;CZ;50.0755;14.4378;Europe/Prague
+PRI;Praslin Island;SC;-4.3239;55.6923;Indian/Mahe
+PRM;Portimão;PT;37.1333;-8.5333;Europe/Lisbon
+PRN;Prishtina;XK;42.5736;21.0356;Europe/Belgrade
+PSA;Pisa;IT;43.7228;10.4017;Europe/Rome
+PSC;Pasco;US;46.2305;-119.0922;America/Los_Angeles
+PSD;Porto Said;EG;31.2667;32.3;Africa/Cairo
+PSE;Ponce;PR;18.0111;-66.6141;America/Puerto_Rico
+PSG;Petersburg;US;56.8042;-132.9425;America/Juneau
+PSO;Pasto;CO;1.2059;-77.2858;America/Bogota
+PSP;Palm Springs;US;33.8303;-116.5453;America/Los_Angeles
+PSR;Pescara;IT;42.4618;14.2161;Europe/Rome
+PSS;Posadas;AR;-27.3621;-55.9009;America/Argentina/Cordoba
+PSU;Putussibau;ID;0.8333;112.9333;Asia/Pontianak
+PSZ;Puerto Suárez;BO;-18.9667;-57.8;America/La_Paz
+PTG;Polokwane;ZA;-23.8962;29.4486;Africa/Johannesburg
+PTH;Port Heiden;US;56.9567;-158.6375;America/Anchorage
+PTJ;Portland;AU;-38.3842;141.625;Australia/Melbourne
+PTP;Pointe-à-Pitre;GP;16.2675;-61.5264;America/Guadeloupe
+PTU;Platinum;US;59.0114;-161.8169;America/Nome
+PTY;Panama;PA;8.9943;-79.5188;America/Panama
+PUB;Pueblo;US;38.2544;-104.6091;America/Denver
+PUD;Puerto Deseado;AR;-47.75;-65.9167;America/Argentina/Rio_Gallegos
+PUF;Pau;FR;43.2951;-0.3708;Europe/Paris
+PUG;Port Augusta;AU;-32.5;137.7667;Australia/Adelaide
+PUJ;Punta Cana;DO;18.5625;-68.364;America/Santo_Domingo
+PUQ;Punta Arenas;CL;-53.1638;-70.9171;America/Santiago
+PUS;Busan;KR;35.1796;129.0756;Asia/Seoul
+PUU;Puerto Asís;CO;0.5333;-76.5333;America/Bogota
+PUW;Pullman;US;46.7447;-117.105;America/Los_Angeles
+PUY;Pola;HR;44.8666;13.8496;Europe/Zagreb
+PUZ;Puerto Cabezas;NI;14.0453;-83.3836;America/Managua
+PVA;Providencia;CO;13.35;-81.35;America/Bogota
+PVD;Providence;US;41.824;-71.4128;America/New_York
+PVH;Porto Velho;BR;-8.7612;-63.9004;America/Porto_Velho
+PVK;Prevesa;GR;38.9264;20.7658;Europe/Athens
+PVR;Puerto Vallarta;MX;20.6534;-105.2253;America/Mexico_City
+PVU;Provo;US;40.2338;-111.6585;America/Denver
+PWE;Pevek;RU;69.7833;170.6;Asia/Anadyr
+PWM;Portland;US;43.6475;-70.3103;America/New_York
+PWQ;Pavlodar;KZ;52.2873;76.9674;Asia/Almaty
+PXM;Puerto Escondido;MX;15.85;-97.0833;America/Mexico_City
+PXO;Porto Santo;PT;33.07;-16.345;Atlantic/Madeira
+PXR;Surin;TH;14.8667;103.5;Asia/Bangkok
+PXU;Pleiku;VN;13.9718;108.0151;Asia/Ho_Chi_Minh
+PYJ;Udačnyj;RU;66.4167;112.05;Asia/Yakutsk
+PYK;Pyke;IR;35.8356;51.0103;Asia/Tehran
+PZB;Pietermaritzburg;ZA;-29.6006;30.3794;Africa/Johannesburg
+PZH;Zhob;PK;31.3497;69.4665;Asia/Karachi
+PZI;Panzhihua;CN;26.5823;101.7186;Asia/Shanghai
+PZO;Puerto Ordaz;VE;8.2865;-62.7591;America/Caracas
+PZU;Porto Sudan;SD;19.5903;37.1902;Africa/Khartoum
+QBC;Bella Coola;CA;52.3333;-126.6667;America/Vancouver
+QOW;Owerri;NG;5.4891;7.0176;Africa/Lagos
+QRO;Querétaro;MX;20.6;-100.3833;America/Mexico_City
+QRW;Warri;NG;5.5544;5.7932;Africa/Lagos
+QSF;Sétif;DZ;36.1898;5.4108;Africa/Algiers
+QSR;Salerno;IT;40.6824;14.7681;Europe/Rome
+QUO;Uyo;NG;5.0377;7.9128;Africa/Lagos
+RAB;Rabaul;PG;-4.3333;152.3667;Pacific/Port_Moresby
+RAE;'Ar'ar;SA;30.9599;41.0596;Asia/Riyadh
+RAH;Rafha;SA;29.6235;43.4888;Asia/Riyadh
+RAI;Praia;CV;14.933;-23.5133;Atlantic/Cape_Verde
+RAJ;Rajkot;IN;22.3039;70.8022;Asia/Kolkata
+RAK;Marrakesh;MA;31.6295;-7.9811;Africa/Casablanca
+RAO;Ribeirão Preto;BR;-21.1704;-47.8103;America/Sao_Paulo
+RAP;Rapid City;US;44.0805;-103.231;America/Denver
+RAR;Rarotonga;CK;-21.1999;-159.7985;Pacific/Rarotonga
+RAS;Rasht;IR;37.2682;49.5891;Asia/Tehran
+RBA;Rabat;MA;33.9716;-6.8498;Africa/Casablanca
+RBR;Rio Branco;BR;-9.9754;-67.8249;America/Rio_Branco
+RBY;Ruby;US;64.73;-155.4608;America/Anchorage
+RCB;Richards Bay;ZA;-28.7807;32.0383;Africa/Johannesburg
+RCH;Riohacha;CO;11.5292;-72.9244;America/Bogota
+RDD;Redding;US;40.5865;-122.3917;America/Los_Angeles
+RDM;Bend;US;44.2543;-121.1629;America/Los_Angeles
+RDO;Radom;PL;51.3892;21.2136;Europe/Warsaw
+RDP;Durgapur;IN;23.55;87.32;Asia/Kolkata
+RDU;Raleigh;US;35.7796;-78.6382;America/New_York
+RDZ;Rodez;FR;44.4106;2.4839;Europe/Paris
+REC;Recife;BR;-8.0522;-34.9286;America/Recife
+REG;Reggio Calabria;IT;38.1113;15.6473;Europe/Rome
+REK;Reykjavík;IS;64.1466;-21.9426;Atlantic/Reykjavik
+REL;Trelew;AR;-43.2493;-65.3076;America/Argentina/Catamarca
+REN;Orenburg;RU;51.7666;55.1005;Asia/Yekaterinburg
+RER;Retalhuleu;GT;14.5203;-91.6969;America/Guatemala
+RES;Resistencia;AR;-27.4519;-58.9856;America/Argentina/Cordoba
+REU;Reus;ES;41.1548;1.1087;Europe/Madrid
+REW;Rewa;IN;24.5333;81.3;Asia/Kolkata
+REX;Reynosa;MX;26.0508;-98.2979;America/Matamoros
+RFP;Raiatea;PF;-16.725;-151.4667;Pacific/Tahiti
+RGA;Rio Grande;AR;-53.786;-67.7002;America/Argentina/Ushuaia
+RGI;Rangiroa;PF;-14.9563;-147.6592;Pacific/Tahiti
+RGL;Río Gallegos;AR;-51.623;-69.2168;America/Argentina/Rio_Gallegos
+RGN;Yangon;MM;16.8409;96.1735;Asia/Yangon
+RGO;Orang;KP;41.4456;129.6547;Asia/Pyongyang
+RHD;Rio Hondo;AR;-27.5333;-64.95;America/Argentina/Cordoba
+RHI;Rhinelander;US;45.6257;-89.4625;America/Chicago
+RHO;Rhodes;GR;36.435;28.2175;Europe/Athens
+RIA;Santa Maria;BR;-29.6876;-53.8129;America/Sao_Paulo
+RIB;Riberalta;BO;-11.0073;-66.0582;America/La_Paz
+RIC;Richmond;US;37.5407;-77.436;America/New_York
+RIO;Rio de Janeiro;BR;-22.9068;-43.1729;America/Sao_Paulo
+RIS;Rishiri;JP;45.1833;141.25;Asia/Tokyo
+RIW;Riverton;US;43.0644;-108.457;America/Denver
+RIX;Riga;LV;56.9496;24.1052;Europe/Riga
+RIY;Al-Mukalla;YE;14.5404;49.1272;Asia/Aden
+RIZ;Rizhao;CN;35.4167;119.5269;Asia/Shanghai
+RJA;Rajahmundry;IN;17.0005;81.804;Asia/Kolkata
+RJH;Rajshahi;BD;24.3745;88.6042;Asia/Dhaka
+RJK;Fiume;HR;45.3271;14.4422;Europe/Zagreb
+RJL;Logroño;ES;42.4627;-2.445;Europe/Madrid
+RJN;Rafsanjan;IR;30.3549;56.0027;Asia/Tehran
+RKD;Rockland;US;44.0592;-69.0981;America/New_York
+RKS;Rock Springs;US;41.5964;-109.0658;America/Denver
+RKT;Ras Al Khaimah;AE;25.8007;55.9762;Asia/Dubai
+RKZ;Xigaze/Rikaze;CN;29.2704;88.8873;Asia/Shanghai
+RLG;Rostock-Laage;DE;54.0924;12.0991;Europe/Berlin
+RLK;Baynnur;CN;40.7432;107.3877;Asia/Shanghai
+RMA;Roma;AU;-26.5436;148.7794;Australia/Brisbane
+RMF;Marsa Alam;EG;25.5558;34.5928;Africa/Cairo
+RMI;Rimini;IT;44.0678;12.5695;Europe/Rome
+RMO;Chişinău;MD;47.0105;28.8638;Europe/Chisinau
+RMQ;Taichung;TW;24.1477;120.6736;Asia/Taipei
+RMU;Murcia;ES;37.9834;-1.1299;Europe/Madrid
+RMZ;Tobol'sk;RU;58.2227;68.2778;Asia/Yekaterinburg
+RNB;Ronneby;SE;56.27;15.27;Europe/Stockholm
+RNJ;Yoronjima;JP;27.0333;128.4333;Asia/Tokyo
+RNN;comune regionale di Bornholm;DK;55.0656;14.7578;Europe/Copenhagen
+RNO;Reno;US;39.5296;-119.8138;America/Los_Angeles
+RNS;Rennes;FR;48.1135;-1.6757;Europe/Paris
+ROA;Roanoke;US;37.3205;-79.9704;America/New_York
+ROC;Rochester;US;43.161;-77.611;America/New_York
+ROI;Roi Et;TH;16.1153;103.7769;Asia/Bangkok
+ROK;Rockhampton;AU;-23.3791;150.51;Australia/Brisbane
+ROM;Roma;IT;41.8905;12.4942;Europe/Rome
+ROO;Rondonópolis;BR;-16.4654;-54.6388;America/Cuiaba
+ROP;Rota;MP;14.1716;145.2441;Pacific/Saipan
+ROR;Koror;PW;7.3641;134.5329;Pacific/Palau
+ROS;Rosario;AR;-32.9587;-60.693;America/Argentina/Cordoba
+ROT;Rotorua;NZ;-38.1368;176.2497;Pacific/Auckland
+ROW;Roswell;US;33.2997;-104.53;America/Denver
+RPR;Raipur;IN;21.2514;81.6296;Asia/Kolkata
+RRG;Rodrigues Is;MU;-19.75;63.35;Indian/Mauritius
+RRS;Røros;NO;62.5792;11.3456;Europe/Oslo
+RSA;Santa Rosa;AR;-36.6209;-64.2912;America/Argentina/Salta
+RSD;Rock Sound;BS;24.8917;-76.1781;America/Nassau
+RST;Rochester;US;44.0216;-92.4699;America/Chicago
+RSU;Yeosu;KR;34.7604;127.6622;Asia/Seoul
+RTB;Roatan;HN;16.3182;-86.5272;America/Tegucigalpa
+RTM;Rotterdam;NL;51.9242;4.4818;Europe/Amsterdam
+RTW;Saratov;RU;51.5462;46.0154;Europe/Samara
+RUA;Arua;UG;3.0303;30.9073;Africa/Kampala
+RUH;Riyad;SA;24.7136;46.6753;Asia/Riyadh
+RUN;Saint Denis;RE;-20.892;55.5119;Indian/Reunion
+RUR;Rurutu;PF;-22.4333;-151.3333;Pacific/Tahiti
+RUT;Rutland;US;43.5294;-72.9483;America/New_York
+RVK;Roervik;NO;64.8833;11.2333;Europe/Oslo
+RVN;Rovaniemi;FI;66.559;25.8296;Europe/Helsinki
+RVY;Rivera;UY;-30.9179;-55.5469;America/Montevideo
+RXS;Roxas;PH;11.5529;122.7407;Asia/Manila
+RYK;Rahimyar Khan;PK;28.4212;70.2989;Asia/Karachi
+RZE;Rzeszów;PL;50.0412;21.9991;Europe/Warsaw
+RZR;Ramsar;IR;36.9046;50.6824;Asia/Tehran
+RZV;Rize;TR;41.0247;40.5222;Europe/Istanbul
+SAB;Saba Island;BQ;17.65;-63.2167;America/Kralendijk
+SAC;Sacramento;US;38.5753;-121.4861;America/Los_Angeles
+SAF;Santa Fe;US;35.687;-105.9378;America/Denver
+SAG;Shirdi;IN;19.77;74.48;Asia/Kolkata
+SAH;San'a;YE;15.4736;44.2251;Asia/Aden
+SAI;Siem Reap;KH;13.3633;103.8564;Asia/Phnom_Penh
+SAL;San Salvador;SV;13.6929;-89.2182;America/El_Salvador
+SAN;San Diego;US;32.7153;-117.1573;America/Los_Angeles
+SAO;San Paolo;BR;-23.5505;-46.6333;America/Sao_Paulo
+SAP;San Pedro Sula;HN;15.5039;-88.0139;America/Tegucigalpa
+SAQ;San Andros;BS;25.05;-78.05;America/Nassau
+SAT;San Antonio;US;29.4241;-98.4936;America/Chicago
+SAV;Savannah;US;32.0835;-81.0998;America/New_York
+SBA;Santa Barbara;US;34.4208;-119.6982;America/Los_Angeles
+SBH;Saint Jean;GP;17.9;-62.85;America/St_Barthelemy
+SBN;South Bend;US;41.6764;-86.252;America/Indiana/Indianapolis
+SBP;San Luis Obispo;US;35.2742;-120.6631;America/Los_Angeles
+SBT;Sabetta;RU;71.2171;72.0496;Asia/Yekaterinburg
+SBW;Sibu;MY;2.2873;111.8305;Asia/Kuching
+SBY;Salisbury-Ocean City;US;38.3431;-75.5173;America/New_York
+SBZ;Sibiu;RO;45.7983;24.1256;Europe/Bucharest
+SCC;Prudhoe Bay;US;70.2036;-148.4601;America/Anchorage
+SCE;State College;US;40.8537;-77.8482;America/New_York
+SCK;Stockton;US;37.8944;-121.2392;America/Los_Angeles
+SCL;Santiago del Cile;CL;-33.4489;-70.6693;America/Santiago
+SCN;Saarbrücken;DE;49.2349;6.9944;Europe/Berlin
+SCO;Aktau;KZ;43.6588;51.1975;Asia/Aqtau
+SCQ;Santiago di Compostela;ES;42.8782;-8.5448;Europe/Madrid
+SCR;Sälen;SE;61.15;13.2667;Europe/Stockholm
+SCT;Socotra;YE;12.6275;53.9092;Asia/Aden
+SCU;Santiago di Cuba;CU;19.9692;-75.8358;America/Havana
+SCV;Suceava;RO;47.6635;26.2732;Europe/Bucharest
+SCW;Syktyvkar;RU;61.6641;50.8169;Europe/Moscow
+SDD;Lubango;AO;-14.9186;13.5321;Africa/Luanda
+SDE;Santiago del Estero;AR;-27.791;-64.2734;America/Argentina/Cordoba
+SDF;Louisville;US;38.2527;-85.7585;America/Kentucky/Louisville
+SDG;Sanandaj;IR;35.3219;46.9862;Asia/Tehran
+SDJ;Sendai;JP;38.2682;140.8694;Asia/Tokyo
+SDK;Sandakan;MY;5.8394;118.1172;Asia/Kuching
+SDL;Sundsvall;SE;62.3908;17.3069;Europe/Stockholm
+SDP;Sand Point;US;55.3167;-160.5139;America/Anchorage
+SDQ;Santo Domingo;DO;18.4861;-69.9312;America/Santo_Domingo
+SDR;Santander;ES;43.461;-3.8079;Europe/Madrid
+SDS;Sado Shima;JP;38;138.4167;Asia/Tokyo
+SDW;Malwan;IN;16.0438;73.4614;Asia/Kolkata
+SDY;Sidney;US;47.7069;-104.1919;America/Denver
+SDZ;Lerwick;GB;60.3442;-1.2564;Europe/London
+SEA;Seattle;US;47.6062;-122.3321;America/Los_Angeles
+SEB;Sebha;LY;27.0365;14.429;Africa/Tripoli
+SEK;Srednekolymsk;RU;67.4792;153.735;Asia/Srednekolymsk
+SEL;Seul;KR;37.5665;126.978;Asia/Seoul
+SEZ;Mahe;SC;-4.6827;55.4804;Indian/Mahe
+SFA;Sfax;TN;34.7398;10.76;Africa/Tunis
+SFG;Grand Case;MF;18.0999;-63.0472;America/Marigot
+SFJ;Kangerlussuaq;GL;67.0122;-50.7197;America/Godthab
+SFN;Santa Fe;AR;-31.5855;-60.7238;America/Argentina/Cordoba
+SFO;San Francisco;US;37.7749;-122.4194;America/Los_Angeles
+SFS;Subic Bay;PH;14.7856;120.2672;Asia/Manila
+SFT;Skellefteå;SE;64.6225;21.0685;Europe/Stockholm
+SGC;Surgut;RU;61.256;73.3845;Asia/Yekaterinburg
+SGD;Sønderborg;DK;54.9138;9.7922;Europe/Copenhagen
+SGF;Springfield;US;37.209;-93.2923;America/Chicago
+SGN;Ho Chi Minh;VN;10.8231;106.6297;Asia/Ho_Chi_Minh
+SGU;St. George;US;37.0326;-113.5102;America/Denver
+SHA;Shanghai;CN;31.2304;121.4737;Asia/Shanghai
+SHB;Nakashibetsu;JP;43.5722;144.9561;Asia/Tokyo
+SHD;Staunton;US;38.2639;-78.8967;America/New_York
+SHE;Shenyang;CN;41.8057;123.4315;Asia/Shanghai
+SHI;Shimojishima;JP;24.8167;125.15;Asia/Tokyo
+SHJ;Sharja;AE;25.3463;55.4209;Asia/Dubai
+SHL;Shillong;IN;25.5788;91.8933;Asia/Kolkata
+SHM;Shirahama;JP;33.6614;135.3581;Asia/Tokyo
+SHR;Sheridan;US;44.7742;-106.9772;America/Denver
+SHS;Shashi;CN;30.3111;112.2556;Asia/Shanghai
+SHV;Shreveport;US;32.5252;-93.7502;America/Chicago
+SHW;Sharurah;SA;17.4695;47.112;Asia/Riyadh
+SIA;Xi'an;CN;34.3416;108.9398;Asia/Shanghai
+SID;Sal;CV;16.7347;-22.9436;Atlantic/Cape_Verde
+SIN;Singapore;SG;1.3521;103.8198;Asia/Singapore
+SIS;Sishen;ZA;-27.9167;22.9833;Africa/Johannesburg
+SIT;Sitka;US;57.0486;-135.2333;America/Sitka
+SJC;San Jose;US;37.3394;-121.895;America/Los_Angeles
+SJD;San José del Cabo;MX;23.1624;-109.7173;America/Mazatlan
+SJE;San José del Guaviare;CO;2.5833;-72.6667;America/Bogota
+SJI;San Jose;PH;12.3598;121.0457;Asia/Manila
+SJJ;Sarajevo;BA;43.8563;18.4131;Europe/Sarajevo
+SJK;Sao Jose dos Campos;BR;-23.2237;-45.9009;America/Sao_Paulo
+SJL;São Gabriel;BR;-0.1483;-66.9856;America/Manaus
+SJO;San José;CR;9.9281;-84.0907;America/Costa_Rica
+SJP;Sao Jose do Rio Preto;BR;-20.8081;-49.3811;America/Sao_Paulo
+SJT;San Angelo;US;31.4638;-100.437;America/Chicago
+SJU;San Juan;PR;18.4663;-66.1057;America/Puerto_Rico
+SJW;Shijiazhuang;CN;38.0428;114.5149;Asia/Shanghai
+SJZ;São Jorge;PT;38.6646;-28.1684;Atlantic/Azores
+SKB;Basseterre;KN;17.3108;-62.714;America/St_Kitts
+SKD;Samarcanda;UZ;39.627;66.975;Asia/Samarkand
+SKG;Salonicco;GR;40.6401;22.9444;Europe/Athens
+SKN;Stokmarknes;NO;68.5791;15.0329;Europe/Oslo
+SKO;Sokoto;NG;13.0064;5.2422;Africa/Lagos
+SKP;Skopje;MK;42.005;21.4408;Europe/Skopje
+SKT;Sialkot;PK;32.4945;74.5229;Asia/Karachi
+SKX;Saransk;RU;54.2;45.1745;Europe/Moscow
+SKZ;Sukkur;PK;27.7244;68.8228;Asia/Karachi
+SLA;Salta;AR;-24.7821;-65.4232;America/Argentina/Salta
+SLC;Salt Lake City;US;40.7608;-111.891;America/Denver
+SLD;Sliač;SK;48.6333;19.1333;Europe/Bratislava
+SLE;Salem;US;44.9329;-123.1683;America/Los_Angeles
+SLK;Saranac Lake;US;44.3828;-74.2067;America/New_York
+SLL;Salalah;OM;17.0194;54.1108;Asia/Muscat
+SLM;Salamanca;ES;40.9667;-5.65;Europe/Madrid
+SLN;Salina;US;38.7908;-97.6525;America/Chicago
+SLP;San Luis Potosí;MX;22.1565;-100.9855;America/Mexico_City
+SLU;Castries;LC;13.9941;-61.0069;America/St_Lucia
+SLW;Saltillo;MX;25.4383;-100.9737;America/Monterrey
+SLY;Salechard;RU;66.5833;66.6;Asia/Yekaterinburg
+SLZ;São Luís;BR;-2.53;-44.2567;America/Fortaleza
+SMA;Santa Maria;PT;36.948;-25.145;Atlantic/Azores
+SMI;Samo;GR;37.6915;26.9144;Europe/Athens
+SML;Stella Maris;BS;23.5833;-75.2681;America/Nassau
+SMN;Salmon;US;45.1833;-113.9167;America/Boise
+SMR;Santa Marta;CO;11.2404;-74.211;America/Bogota
+SMS;Ile Sainte-Marie;MG;-17.0833;49.8167;Indian/Antananarivo
+SMW;Smara;MA;26.7333;-11.6833;Africa/Casablanca
+SMX;Santa Maria;US;34.953;-120.4357;America/Los_Angeles
+SNB;Snake Bay;AU;-11.4167;130.6667;Australia/Darwin
+SNC;Salinas;EC;-2.2;-80.9833;America/Guayaquil
+SNE;Sao Nicolau;CV;16.5869;-24.2886;Atlantic/Cape_Verde
+SNN;Shannon;IE;52.6925;-8.9204;Europe/Dublin
+SNO;Sakon Nakhon;TH;17.1546;104.1348;Asia/Bangkok
+SNP;Saint Paul Island;US;57.1522;-170.2172;America/Adak
+SNU;Santa Clara;CU;22.4244;-79.9417;America/Havana
+SNV;Santa Elena de Uairén;VE;4.55;-61.1167;America/Caracas
+SNW;Thandwe;MM;18.4539;94.3004;Asia/Yangon
+SOB;Saarmelleek;HU;46.7135;17.2404;Europe/Budapest
+SOC;Solo City;ID;-7.5755;110.8243;Asia/Jakarta
+SOF;Sofia;BG;42.6977;23.3219;Europe/Sofia
+SOJ;Sorkjosen;NO;69.7833;20.9333;Europe/Oslo
+SOM;San Tome;VE;8.9492;-64.1458;America/Caracas
+SON;Espiritu Santo;VU;-15.5083;167.2187;Pacific/Efate
+SOQ;Sorong;ID;-0.8762;131.2558;Asia/Jayapura
+SOU;Southampton;GB;50.9097;-1.4044;Europe/London
+SOW;Show Low;US;34.2644;-110.0042;America/Phoenix
+SPC;Santa Cruz de la Palma;ES;28.6264;-17.7556;Atlantic/Canary
+SPD;Saidpur;BD;25.7833;88.9;Asia/Dhaka
+SPI;Springfield;US;39.8442;-89.6789;America/Chicago
+SPK;Sapporo;JP;43.0621;141.3544;Asia/Tokyo
+SPN;Saipan;MP;15.1222;145.7233;Pacific/Saipan
+SPP;Menongue;AO;-14.6375;17.7256;Africa/Luanda
+SPR;San Pedro;BZ;17.9111;-87.9686;America/Belize
+SPU;Spalato;HR;43.5081;16.4402;Europe/Zagreb
+SPY;San Pédro;CI;4.7579;-6.6424;Africa/Abidjan
+SQD;Shangrao;CN;28.4551;117.9431;Asia/Shanghai
+SQG;Sintang;ID;0.0833;111.5833;Asia/Pontianak
+SQJ;Sanming;CN;26.2634;117.6387;Asia/Shanghai
+SQL;San Carlos;US;37.4833;-122.25;America/Los_Angeles
+SRE;Sucre;BO;-19.0353;-65.2592;America/La_Paz
+SRG;Semarang;ID;-7.0051;110.4381;Asia/Jakarta
+SRP;Stord;NO;59.8333;5.4167;Europe/Oslo
+SRQ;Bradenton;US;27.3364;-82.5307;America/New_York
+SRT;Soroti;UG;1.7132;33.6064;Africa/Kampala
+SRY;Sari;IR;36.5659;53.0586;Asia/Tehran
+SRZ;Santa Cruz;BO;-17.8146;-63.1561;America/La_Paz
+SSA;Salvador;BR;-12.9777;-38.5016;America/Bahia
+SSG;Malabo;GQ;3.755;8.7821;Africa/Malabo
+SSH;Sharm el-Sheikh;EG;27.9794;34.3853;Africa/Cairo
+SSI;Braunschweig;US;31.1659;-81.4635;America/New_York
+SSJ;Sandnessjøen;NO;65.9599;12.4765;Europe/Oslo
+SSM;Sault Ste Marie;US;46.5;-84.35;America/Detroit
+SST;Santa Teresita;AR;-33.4167;-60.7833;America/Argentina/Buenos_Aires
+SSY;M'Banza Congo;AO;-6.2739;14.2442;Africa/Luanda
+STC;Saint-Cloud;US;45.55;-94.1667;America/Chicago
+STD;Santo Domingo;VE;7.5833;-72.0667;America/Caracas
+STG;Saint George Island;US;56.6;-169.5525;America/Anchorage
+STI;Santiago de los Caballeros;DO;19.4018;-70.6021;America/Santo_Domingo
+STL;St Louis;US;38.627;-90.1994;America/Chicago
+STM;Santarém;BR;-2.4506;-54.7009;America/Santarem
+STO;Stoccolma;SE;59.3328;18.0645;Europe/Stockholm
+STR;Stoccarda;DE;48.7771;9.1808;Europe/Berlin
+STS;Santa Rosa;US;38.4404;-122.7141;America/Los_Angeles
+STT;St Thomas Island;VI;18.3419;-64.9307;America/St_Thomas
+STV;Surat;IN;21.1702;72.8311;Asia/Kolkata
+STW;Stavropol';RU;45.0455;41.9683;Europe/Moscow
+STX;Christiansted;VI;17.7466;-64.7032;America/St_Thomas
+SUB;Surabaya;ID;-7.2575;112.7521;Asia/Jakarta
+SUF;Lamezia Terme;IT;38.9629;16.3093;Europe/Rome
+SUG;Surigao;PH;9.7571;125.5138;Asia/Manila
+SUI;Sukhumi;AB;42.8667;41.1167;Europe/Moscow
+SUJ;Satu Mare;RO;47.8017;22.8576;Europe/Bucharest
+SUN;Hailey;US;43.6971;-114.3517;America/Boise
+SUV;Suva;FJ;-18.1248;178.4501;Pacific/Fiji
+SUX;Sioux City;US;42.4963;-96.4049;America/Chicago
+SVA;Savoonga;US;63.6909;-170.4868;America/Nome
+SVB;Sambava;MG;-14.2769;50.175;Indian/Antananarivo
+SVC;Silver City;US;32.6319;-108.1539;America/Denver
+SVD;St Vincent;VC;13.146;-61.2104;America/St_Vincent
+SVG;Stavanger;NO;58.97;5.7331;Europe/Oslo
+SVI;San Vicente del Caguán;CO;2.15;-74.7667;America/Bogota
+SVJ;Svolvær;NO;68.245;14.6678;Europe/Oslo
+SVL;Savonlinna;FI;61.95;28.95;Europe/Helsinki
+SVQ;Siviglia;ES;37.3826;-5.9963;Europe/Madrid
+SVX;Ekaterinburg;RU;56.8431;60.6454;Asia/Yekaterinburg
+SVZ;San Antonio del Táchira;VE;7.8431;-72.4381;America/Caracas
+SWA;Shantou;CN;23.3541;116.682;Asia/Shanghai
+SWF;Newburgh;US;41.4984;-74.101;America/New_York
+SWO;Stillwater;US;36.1589;-97.0856;America/Chicago
+SXB;Strasburgo;FR;48.5831;7.7479;Europe/Paris
+SXM;Saint Martin;SX;18.0447;-63.1141;America/Lower_Princes
+SXR;Srinagar;IN;34.0023;74.7626;Asia/Kolkata
+SYD;Sydney;AU;-33.8689;151.2071;Australia/Sydney
+SYM;Simao;CN;22.7966;100.9622;Asia/Shanghai
+SYO;Shonai;JP;38.8499;139.9049;Asia/Tokyo
+SYQ;San José;CR;9.95;-84.1333;America/Costa_Rica
+SYR;Siracusa;US;43.0481;-76.1474;America/New_York
+SYS;Saskylach;RU;71.9289;114.0822;Asia/Yakutsk
+SYX;Sanya;CN;18.2528;109.5119;Asia/Shanghai
+SYY;Stornoway;GB;58.2136;-6.322;Europe/London
+SYZ;Shiraz;IR;29.5926;52.5836;Asia/Tehran
+SZA;Soyo;AO;-6.141;12.3521;Africa/Luanda
+SZF;Samsun;TR;41.2797;36.3361;Europe/Istanbul
+SZG;Salisburgo;AT;47.8095;13.055;Europe/Vienna
+SZH;Senipah;ID;-0.9667;117.1333;Asia/Makassar
+SZK;Skukuza;ZA;-24.9625;31.5861;Africa/Johannesburg
+SZX;Shenzhen;CN;22.5431;114.0579;Asia/Shanghai
+SZY;Szymany;PL;53.5628;20.9853;Europe/Warsaw
+SZZ;Stettino;PL;53.4285;14.5528;Europe/Warsaw
+TAB;Crown Point;TT;11.2337;-60.6989;America/Port_of_Spain
+TAC;Tacloban City;PH;11.2543;124.9617;Asia/Manila
+TAE;Daegu;KR;35.8714;128.6014;Asia/Seoul
+TAG;Tagbilaran;PH;9.6729;123.873;Asia/Manila
+TAH;Tanna;VU;-19.4584;169.2282;Pacific/Efate
+TAI;Ta'izz;YE;13.5776;44.0178;Asia/Aden
+TAK;Takamatsu;JP;34.3425;134.0465;Asia/Tokyo
+TAM;Tampico;MX;22.2331;-97.8611;America/Monterrey
+TAO;Qingdao;CN;36.0671;120.3826;Asia/Shanghai
+TAP;Tapachula;MX;14.9097;-92.2531;America/Mexico_City
+TAS;Taskent;UZ;41.2995;69.2401;Asia/Tashkent
+TAT;Poprad;SK;49.0511;20.2954;Europe/Bratislava
+TAY;Tartu;EE;58.378;26.729;Europe/Tallinn
+TAZ;Daşoguz;TM;41.8333;59.9667;Asia/Ashgabat
+TBB;Tuy Hoa;VN;13.0442;109.3397;Asia/Ho_Chi_Minh
+TBH;Tablas;PH;12.3161;122.0806;Asia/Manila
+TBI;The Bight;BS;24.315;-75.4536;America/Nassau
+TBJ;Tabarka;TN;36.9783;8.8764;Africa/Tunis
+TBP;Tumbes;PE;-3.5565;-80.4271;America/Lima
+TBS;Tbilisi;GE;41.7151;44.8271;Asia/Tbilisi
+TBT;Tabatinga;BR;-4.2333;-69.9333;America/Porto_Velho
+TBU;Nukuʻalofa;TO;-21.2412;-175.1413;Pacific/Tongatapu
+TBZ;Tabriz;IR;38.0962;46.2738;Asia/Tehran
+TCA;Tennant Creek;AU;-19.6381;134.1808;Australia/Darwin
+TCB;Treasure Cay;BS;26.735;-77.3722;America/Nassau
+TCI;Tenerife;ES;28.2916;-16.6291;Atlantic/Canary
+TCO;Tumaco;CO;1.7874;-78.7913;America/Bogota
+TCP;Taba;EG;29.55;34.9167;Africa/Cairo
+TCQ;Tacna;PE;-18.0066;-70.2463;America/Lima
+TCZ;Tengchong;CN;24.9394;98.482;Asia/Shanghai
+TDD;Trinidad;BO;-14.8226;-64.9193;America/La_Paz
+TDK;Taldıqorğan;KZ;45.0177;78.3804;Asia/Almaty
+TDX;Trat;TH;12.274;102.3187;Asia/Bangkok
+TEB;Teterboro;US;40.8497;-74.0622;America/New_York
+TEE;Tbessa;DZ;35.4011;8.1173;Africa/Algiers
+TEN;Tongren;CN;27.7315;109.1896;Asia/Shanghai
+TEQ;Tekirdag;TR;40.9781;27.5117;Europe/Istanbul
+TER;Terceira Island;PT;38.7541;-27.0876;Atlantic/Azores
+TET;Tete;MZ;-16.1328;33.6064;Africa/Maputo
+TEX;Telluride;US;37.9375;-107.8123;America/Denver
+TEZ;Tezpur;IN;26.6528;92.7926;Asia/Kolkata
+TFF;Tefé;BR;-3.3667;-64.7;America/Manaus
+TGD;Podgorica;ME;42.4304;19.2594;Europe/Podgorica
+TGG;Kuala Terengganu;MY;5.3296;103.137;Asia/Kuala_Lumpur
+TGJ;Tiga;NC;-21.0984;167.8029;Pacific/Noumea
+TGM;Târgu Mureș;RO;46.5386;24.5514;Europe/Bucharest
+TGO;Tongliao;CN;43.6529;122.2434;Asia/Shanghai
+TGR;Touggourt;DZ;33.0583;6.0847;Africa/Algiers
+TGT;Tanga;TZ;-5.0889;39.1023;Africa/Dar_es_Salaam
+TGU;Tegucigalpa;HN;14.065;-87.1715;America/Tegucigalpa
+TGZ;Tuxtla Gutiérrez;MX;16.7516;-93.103;America/Mexico_City
+THE;Teresina;BR;-5.092;-42.8038;America/Fortaleza
+THG;Thangool;AU;-24.5;150.5667;Australia/Brisbane
+THL;Tachileik;MM;20.4521;99.8989;Asia/Yangon
+THN;Trollhättan;SE;58.2667;12.3;Europe/Stockholm
+THQ;Tianshui;CN;34.5809;105.725;Asia/Shanghai
+THR;Teheran;IR;35.6892;51.389;Asia/Tehran
+THS;Sukhothai;TH;17.2231;99.8222;Asia/Bangkok
+TIA;Tirana;AL;41.3275;19.8187;Europe/Tirane
+TIF;Ta'if;SA;21.2841;40.4248;Asia/Riyadh
+TIH;Tikehau Atoll;PF;-15.1186;-148.2338;Pacific/Tahiti
+TIJ;Tijuana;MX;32.5149;-117.0382;America/Tijuana
+TIM;Tembagapura;ID;-4.5257;136.8875;Asia/Jayapura
+TIN;Tindouf;DZ;27.7167;-8.1667;Africa/Algiers
+TIQ;municipalità di Tinian;MP;14.9943;145.6263;Pacific/Saipan
+TIR;Tirupati;IN;13.6288;79.4192;Asia/Kolkata
+TIU;Timaru;NZ;-44.3034;171.2263;Pacific/Auckland
+TIV;Teodo;ME;42.4036;18.7256;Europe/Podgorica
+TIW;Tacoma;US;47.2529;-122.4443;America/Los_Angeles
+TJA;Tarija;BO;-21.5178;-64.7296;America/La_Paz
+TJG;Tanjung;ID;-1.75;115.6667;Asia/Jakarta
+TJH;Toyooka;JP;35.5092;134.7897;Asia/Tokyo
+TJK;Tokat;TR;40.3235;36.5522;Europe/Istanbul
+TJM;Tjumen';RU;57.1553;65.5619;Asia/Yekaterinburg
+TJU;Kulob;TJ;37.9274;69.8002;Asia/Dushanbe
+TKD;Takoradi;GH;4.8917;-1.775;Africa/Accra
+TKF;Truckee;US;39.325;-120.1417;America/Los_Angeles
+TKG;Bandar Lampung;ID;-5.3971;105.2668;Asia/Jakarta
+TKK;Truk;FM;7.4574;151.842;Pacific/Chuuk
+TKN;Tokunoshima;JP;27.8333;128.8833;Asia/Tokyo
+TKP;Takapoto;PF;-15.45;-145.1417;Pacific/Tahiti
+TKS;Tokushima;JP;34.0704;134.555;Asia/Tokyo
+TKU;Turku;FI;60.4518;22.2666;Europe/Helsinki
+TKX;Takaroa;PF;-14.4577;-145.0264;Pacific/Tahiti
+TLE;Toliara;MG;-23.3516;43.6855;Indian/Antananarivo
+TLH;Tallahassee;US;30.4383;-84.2807;America/New_York
+TLL;Tallinn;EE;59.4389;24.7545;Europe/Tallinn
+TLM;Tlemcen;DZ;34.8829;-1.3167;Africa/Algiers
+TLN;Tolone;FR;43.1205;6.1286;Europe/Paris
+TLQ;Turfan;CN;42.9513;89.1898;Asia/Urumqi
+TLS;Tolosa;FR;43.6047;1.4442;Europe/Paris
+TLV;Tel Aviv;IL;32.0853;34.7818;Asia/Jerusalem
+TME;Tame;CO;6.5;-71.7667;America/Bogota
+TMH;Tanahmerah;ID;-6.0833;140.2667;Asia/Jayapura
+TMJ;Termez;UZ;37.2611;67.3086;Asia/Samarkand
+TML;Tamale;GH;9.4034;-0.8424;Africa/Accra
+TMM;Toamasina;MG;-18.1443;49.3958;Indian/Antananarivo
+TMP;Tampere;FI;61.4979;23.7596;Europe/Helsinki
+TMR;Tamanrasset;DZ;22.7903;5.5193;Africa/Algiers
+TMS;São Tomé;ST;0.2603;6.6211;Africa/Sao_Tome
+TMT;Trombetas;BR;-1.9167;-55.5833;America/Santarem
+TMW;Tamworth;AU;-31.0845;150.8485;Australia/Sydney
+TMX;Timimoun;DZ;29.2333;0.2833;Africa/Algiers
+TNA;Jinan;CN;36.6512;117.1201;Asia/Shanghai
+TND;Trinidad;CU;21.8;-80;America/Havana
+TNE;Tanegashima;JP;30.5411;130.9542;Asia/Tokyo
+TNG;Tangeri;MA;35.7595;-5.834;Africa/Casablanca
+TNH;Tonghua;CN;41.7284;125.9397;Asia/Shanghai
+TNJ;Tanjung Pinang;ID;0.9192;104.5361;Asia/Jakarta
+TNN;Tainan;TW;22.9997;120.227;Asia/Taipei
+TNR;Antananarivo;MG;-18.8792;47.5079;Indian/Antananarivo
+TOD;Tioman;MY;2.75;104.1667;Asia/Kuala_Lumpur
+TOE;Tozeur;TN;33.9167;8.1333;Africa/Tunis
+TOF;Tomsk;RU;56.4884;84.948;Asia/Krasnoyarsk
+TOL;Toledo;US;41.6528;-83.5379;America/New_York
+TOM;Timbuctù;ML;16.7322;-3.0053;Africa/Bamako
+TOS;Tromsø;NO;69.6798;18.9073;Europe/Oslo
+TOU;Touho;NC;-20.8;165.25;Pacific/Noumea
+TOY;Toyama;JP;36.6958;137.2137;Asia/Tokyo
+TPA;Tampa;US;27.9494;-82.4651;America/New_York
+TPE;Taipei;TW;25.033;121.5654;Asia/Taipei
+TPJ;Taplejung;NP;27.35;87.6833;Asia/Kathmandu
+TPP;Tarapoto;PE;-6.5111;-76.3986;America/Lima
+TPQ;Tepic;MX;21.5;-104.9;America/Mazatlan
+TPS;Trapani;IT;38.0174;12.5365;Europe/Rome
+TQO;Tulum;MX;20.2119;-87.4658;America/Cancun
+TRA;Taramajima;JP;24.65;124.7;Asia/Tokyo
+TRC;Torreón;MX;25.5428;-103.4068;America/Monterrey
+TRD;Trondheim;NO;63.4305;10.3951;Europe/Oslo
+TRE;Tiree;GB;56.5006;-6.8714;Europe/London
+TRG;Tauranga;NZ;-37.6878;176.1651;Pacific/Auckland
+TRI;Blountville;US;36.4811;-82.4078;America/New_York
+TRK;Tarakan;ID;3.3272;117.5653;Asia/Makassar
+TRN;Torino;IT;45.0706;7.6866;Europe/Rome
+TRR;Trincomalee;LK;8.5874;81.2152;Asia/Colombo
+TRS;Trieste;IT;45.6495;13.7768;Europe/Rome
+TRT;Tremonton;US;41.7167;-112.1667;America/Denver
+TRU;Trujillo;PE;-8.106;-79.033;America/Lima
+TRV;Thiruvananthapuram;IN;8.5241;76.9366;Asia/Kolkata
+TRW;Tarawa;KI;1.3583;172.9417;Pacific/Tarawa
+TRZ;Tiruchirappalli;IN;10.7905;78.7047;Asia/Kolkata
+TSJ;Tsushima;JP;34.2861;129.3264;Asia/Tokyo
+TSM;Taos;US;36.4592;-105.6753;America/Denver
+TSN;Tientsin;CN;39.3434;117.3616;Asia/Shanghai
+TSR;Timişoara;RO;45.7489;21.2087;Europe/Bucharest
+TST;Trang;TH;7.5594;99.611;Asia/Bangkok
+TSV;Townsville;AU;-19.259;146.8169;Australia/Brisbane
+TTA;Tan-Tan;MA;28.45;-11.0833;Africa/Casablanca
+TTE;Ternate;ID;0.7958;127.3614;Asia/Jayapura
+TTJ;Tottori;JP;35.5011;134.2351;Asia/Tokyo
+TTT;Taitung;TW;22.75;121.1;Asia/Taipei
+TTU;Tetouan;MA;35.5889;-5.3626;Africa/Casablanca
+TUA;Tulcán;EC;0.8151;-77.7166;America/Guayaquil
+TUB;Tubuai;PF;-23.35;-149.4667;Pacific/Tahiti
+TUC;Tucuman;AR;-26.8083;-65.2176;America/Argentina/Tucuman
+TUF;Tours;FR;47.3941;0.6848;Europe/Paris
+TUG;Tuguegarao City;PH;17.6132;121.727;Asia/Manila
+TUI;Turaif;SA;31.6887;38.7338;Asia/Riyadh
+TUK;Turbat;PK;26.0081;63.0383;Asia/Karachi
+TUL;Tulsa;US;36.154;-95.9928;America/Chicago
+TUN;Tunisi;TN;36.8065;10.1815;Africa/Tunis
+TUO;Taupo;NZ;-38.7414;176.0823;Pacific/Auckland
+TUP;Tupelo;US;34.2589;-88.7672;America/Chicago
+TUR;Tucuruí;BR;-3.767;-49.6702;America/Belem
+TUS;Tucson;US;32.2226;-110.9747;America/Phoenix
+TUU;Tabuk;SA;28.3835;36.5662;Asia/Riyadh
+TVC;Traverse City;US;44.7441;-85.5803;America/Detroit
+TVF;Thief River Falls;US;48.0661;-96.185;America/Chicago
+TVY;Tavoy;MM;14.0828;98.194;Asia/Yangon
+TWB;Toowoomba;AU;-27.5598;151.9507;Australia/Brisbane
+TWF;Twin Falls;US;42.4819;-114.4867;America/Boise
+TWT;Tawitawi;PH;5.045;119.744;Asia/Manila
+TWU;Tawau;MY;4.2447;117.8912;Asia/Kuching
+TXE;Takengon;ID;4.6264;96.8475;Asia/Jakarta
+TXK;Texarkana;US;33.4564;-93.9892;America/Chicago
+TXN;Tunxi;CN;29.7296;118.2565;Asia/Shanghai
+TYF;Torsby;SE;60.1545;12.9966;Europe/Stockholm
+TYL;Talara;PE;-4.5812;-81.2629;America/Lima
+TYN;Taiyuan;CN;37.8706;112.5489;Asia/Shanghai
+TYO;Tokyo;JP;35.6762;139.6503;Asia/Tokyo
+TYR;Tyler;US;32.3513;-95.3011;America/Chicago
+TYS;Knoxville;US;35.9606;-83.9207;America/New_York
+TZL;Tuzla;BA;44.5375;18.6735;Europe/Sarajevo
+TZN;South Andros;BS;24.165;-77.5853;America/Nassau
+TZX;Trebisonda;TR;41.0027;39.7168;Europe/Istanbul
+UAI;Suai;TL;-9.3;125.2833;Asia/Dili
+UAQ;San Juan;AR;-31.5351;-68.5386;America/Argentina/San_Juan
+UAR;Bouarfa;MA;32.5309;-1.965;Africa/Casablanca
+UBA;Uberaba;BR;-19.7474;-47.9392;America/Sao_Paulo
+UBJ;Ube;JP;33.9516;131.2468;Asia/Tokyo
+UBN;Ulan Bator;MN;47.8864;106.9057;Asia/Ulaanbaatar
+UBP;Ubon Ratchathani;TH;15.2448;104.8473;Asia/Bangkok
+UBS;Columbus;US;33.4667;-88.3833;America/Chicago
+UCT;Uchta;RU;63.5651;53.6721;Europe/Moscow
+UDI;Uberlândia;BR;-18.9128;-48.2755;America/Sao_Paulo
+UDR;Udaipur;IN;24.5854;73.7125;Asia/Kolkata
+UEL;Quelimane;MZ;-17.8503;36.9219;Africa/Maputo
+UEO;Kumejima;JP;26.3653;126.7194;Asia/Tokyo
+UET;Quetta;PK;30.1798;66.975;Asia/Karachi
+UFA;Ufa;RU;54.7388;55.9721;Asia/Yekaterinburg
+UGA;Bulgan;MN;48.8;103.55;Asia/Ulaanbaatar
+UGC;Urgench;UZ;41.5345;60.6249;Asia/Samarkand
+UGU;Zugapa;ID;-3.7333;137.0333;Asia/Jayapura
+UIB;Quibdó;CO;5.6906;-76.6419;America/Bogota
+UIH;Qui Nhon;VN;13.783;109.2197;Asia/Ho_Chi_Minh
+UIN;Quincy;US;39.9442;-91.1972;America/Chicago
+UIO;Quito;EC;-0.1807;-78.4678;America/Guayaquil
+UKE;Bhawanipatna;IN;19.91;83.128;Asia/Kolkata
+UKK;Ust-Kamenogorsk;KZ;49.9749;82.6017;Asia/Almaty
+UKX;Ust'-Kut;RU;56.85;105.7333;Asia/Irkutsk
+ULG;Ulgit;MN;48.9667;89.9667;Asia/Ulaanbaatar
+ULH;Alula;SA;26.6167;37.8667;Asia/Riyadh
+ULK;Lensk;RU;60.7225;114.8315;Asia/Yakutsk
+ULO;Ulaangom;MN;49.9833;92.0667;Asia/Hovd
+ULP;Quilpie;AU;-26.6333;144.3;Australia/Brisbane
+ULU;Gulu;UG;2.7724;32.2881;Africa/Kampala
+ULY;Ul'janovsk;RU;54.3215;48.3857;Europe/Samara
+UME;Umeå;SE;63.8258;20.263;Europe/Stockholm
+UNI;Union Island;VC;13.5;-61;America/St_Vincent
+UNK;Unalakleet;US;63.8819;-160.7994;America/Anchorage
+UNN;Ranong;TH;9.8528;98.6292;Asia/Bangkok
+UPG;Makassar;ID;-5.1477;119.4327;Asia/Makassar
+UPN;Uruapan;MX;19.4111;-102.0472;America/Mexico_City
+URA;Uralsk;KZ;51.2278;51.3865;Asia/Oral
+URC;Ürümqi;CN;43.8256;87.6168;Asia/Shanghai
+URE;Kuressaare;EE;58.2167;22.5;Europe/Tallinn
+URG;Uruguaiana;BR;-29.7619;-57.0858;America/Sao_Paulo
+URJ;Uraj;RU;60.1167;64.8333;Asia/Yekaterinburg
+URT;Surat Thani;TH;9.1382;99.3217;Asia/Bangkok
+URY;Al Qurayyat;SA;31.3296;37.3614;Asia/Riyadh
+USA;Concord;US;35.4044;-80.6006;America/New_York
+USH;Ushuaia;AR;-54.8019;-68.303;America/Argentina/Ushuaia
+USK;Usinsk;RU;65.95;57.4;Europe/Moscow
+USM;Ko Samui;TH;9.5553;100.0628;Asia/Bangkok
+USN;Ulsan;KR;35.5384;129.3114;Asia/Seoul
+USR;Ust'-Nera;RU;64.5833;143.25;Asia/Ust-Nera
+UST;St. Augustine;US;29.9012;-81.3124;America/New_York
+USU;Busuanga;PH;12.1;120.1667;Asia/Manila
+UTH;Udon Thani;TH;17.3647;102.8159;Asia/Bangkok
+UTN;Upington;ZA;-28.3953;21.2368;Africa/Johannesburg
+UTP;Pattaya;TH;12.9236;100.8825;Asia/Bangkok
+UTT;Umtata;ZA;-31.6067;28.7781;Africa/Johannesburg
+UUA;Bugul'ma;RU;54.5299;52.8039;Europe/Moscow
+UUD;Ulan Ude;RU;51.8336;107.584;Asia/Irkutsk
+UUS;Južno-Sachalinsk;RU;46.9641;142.7285;Asia/Sakhalin
+UVE;Ouvéa;NC;-20.6424;166.572;Pacific/Noumea
+UYL;Nyala;SD;12.0717;24.8947;Africa/Khartoum
+UYN;Yulin;CN;38.2858;109.7341;Asia/Shanghai
+UYU;Uyuni;BO;-20.4463;-66.8484;America/La_Paz
+VAA;Vaasa;FI;63.0951;21.6165;Europe/Helsinki
+VAI;Vanimo;PG;-2.6947;141.3019;Pacific/Port_Moresby
+VAM;Maamigili;MV;3.475;72.8375;Indian/Maldives
+VAN;Van;TR;38.5012;43.373;Europe/Istanbul
+VAQ;Vanavara (Russia);RU;60.3444;102.2833;Asia/Krasnoyarsk
+VAR;Varna;BG;43.2141;27.9147;Europe/Sofia
+VAS;Sivas;TR;39.7505;37.015;Europe/Istanbul
+VAV;Vava'u;TO;-18.586;-173.9683;Pacific/Tongatapu
+VAW;Vardoe;NO;70.3547;31.0456;Europe/Oslo
+VBY;Visby;SE;57.6604;18.3382;Europe/Stockholm
+VCA;Cần Thơ;VN;10.0452;105.7469;Asia/Ho_Chi_Minh
+VCE;Venezia;IT;45.4408;12.3155;Europe/Rome
+VCS;Côn Đảo;VN;10.3714;106.6333;Asia/Ho_Chi_Minh
+VCT;Victoria City;US;28.8053;-97.0036;America/Chicago
+VDC;Vitória da Conquista;BR;-14.8619;-40.8445;America/Bahia
+VDE;Valverde;ES;27.814;-17.8849;Atlantic/Canary
+VDH;ong Hoi;VN;17.515;106.5905;Asia/Ho_Chi_Minh
+VDM;Viedma;AR;-40.85;-63.0167;America/Argentina/Salta
+VDO;Van Don;VN;21.0719;107.4244;Asia/Ho_Chi_Minh
+VDS;Vadsø;NO;70.065;29.8453;Europe/Oslo
+VDZ;Valdez (Ecuador);US;61.1325;-146.2389;America/Anchorage
+VEL;Vernal;US;40.4389;-109.5103;America/Denver
+VEO;Severo-Enisejskij;RU;60.3756;93.035;Asia/Krasnoyarsk
+VER;Veracruz;MX;19.1738;-96.1342;America/Mexico_City
+VFA;Victoria Falls;ZW;-18.0931;25.8403;Africa/Harare
+VGA;Vijayawada;IN;16.5062;80.648;Asia/Kolkata
+VGO;Vigo;ES;42.2314;-8.7124;Europe/Madrid
+VHM;Vilhelmina;SE;64.6167;16.65;Europe/Stockholm
+VIE;Vienna;AT;48.2082;16.3738;Europe/Vienna
+VIG;El Vigia;VE;8.6333;-71.65;America/Caracas
+VII;Vinh City;VN;18.6796;105.6813;Asia/Ho_Chi_Minh
+VIJ;Virgin Gorda;VG;18.4819;-64.3903;America/Tortola
+VIL;Dakhla;MA;23.7133;-15.935;Africa/Casablanca
+VIT;Vitoria-Gasteiz;ES;42.8502;-2.6729;Europe/Madrid
+VIX;Vitória;BR;-20.2976;-40.2958;America/Sao_Paulo
+VKG;Rach Gia;VN;10.0215;105.0911;Asia/Ho_Chi_Minh
+VKT;Vorkuta;RU;67.4969;64.0602;Europe/Moscow
+VLC;Valencia;ES;39.4699;-0.3763;Europe/Madrid
+VLD;Valdosta;US;30.8327;-83.2785;America/New_York
+VLI;Port Vila;VU;-17.7019;168.3195;Pacific/Efate
+VLL;Valladolid;ES;41.6529;-4.7284;Europe/Madrid
+VLN;Valencia;VE;10.1543;-67.9225;America/Caracas
+VLV;Valera;VE;9.3191;-70.6033;America/Caracas
+VMU;Baimuru;PG;-7.5;144.8;Pacific/Port_Moresby
+VNO;Vilnius;LT;54.6872;25.2797;Europe/Vilnius
+VNS;Varanasi;IN;25.3176;82.9739;Asia/Kolkata
+VNX;Vilankulo;MZ;-22.0167;35.2833;Africa/Maputo
+VOG;Volgograd;RU;48.708;44.5133;Europe/Volgograd
+VOL;Volo;GR;39.3666;22.9507;Europe/Athens
+VOZ;Voronež;RU;51.6683;39.1919;Europe/Moscow
+VPE;Ondjiva;AO;-17.05;15.7;Africa/Luanda
+VPN;Vopnafjörður;IS;65.7569;-14.8294;Atlantic/Reykjavik
+VPS;Valparaiso;US;30.4959;-86.5495;America/Chicago
+VPY;Chimoio;MZ;-19.1055;33.4608;Africa/Maputo
+VQS;Vieques;PR;18.1341;-65.488;America/Puerto_Rico
+VRA;Varadero;CU;23.0399;-81.4369;America/Havana
+VRB;Vero Beach;US;27.6525;-80.4136;America/New_York
+VRC;Virac;PH;13.5833;124.2;Asia/Manila
+VRL;Vila-real;PT;41.3;-7.75;Europe/Lisbon
+VRN;Verona;IT;45.4383;10.9918;Europe/Rome
+VSA;Villahermosa;MX;17.9895;-92.9475;America/Mexico_City
+VSE;Viseu;PT;40.65;-7.9167;Europe/Lisbon
+VTE;Vientiane;LA;17.9757;102.6331;Asia/Vientiane
+VTU;Victoria de Las Tunas;CU;20.9667;-76.95;America/Havana
+VTZ;Vishakhapatnam;IN;17.6868;83.2185;Asia/Kolkata
+VUP;Valledupar;CO;10.4742;-73.2436;America/Bogota
+VUS;Velikij Ustyug;RU;60.7667;46.3167;Europe/Moscow
+VVC;Villavicencio;CO;4.1514;-73.6377;America/Bogota
+VVO;Vladivostok;RU;43.1332;131.9113;Asia/Vladivostok
+VVZ;Illizi;DZ;26.5333;8.55;Africa/Algiers
+VXC;Lichinga;MZ;-13.3024;35.2478;Africa/Maputo
+VXE;Sao Vicente;CV;16.828;-24.9754;Atlantic/Cape_Verde
+VXO;Växjö;SE;56.879;14.8059;Europe/Stockholm
+VYI;Viljujsk;RU;63.75;121.6333;Asia/Yakutsk
+WAE;Wadi Ad Dawasir;SA;20.4984;45.2045;Asia/Riyadh
+WAG;distretto di Whanganui;NZ;-39.9609;175.0244;Pacific/Auckland
+WAS;Washington;US;38.8951;-77.0364;America/New_York
+WAW;Varsavia;PL;52.2297;21.0122;Europe/Warsaw
+WBM;Wapenamanda;PG;-5.6167;143.9167;Pacific/Port_Moresby
+WDH;Windhoek;NA;-22.5609;17.0658;Africa/Windhoek
+WDS;Shiyan;CN;32.629;110.7987;Asia/Shanghai
+WEF;Weifang;CN;36.707;119.1617;Asia/Shanghai
+WEH;Weihai;CN;37.5131;122.1204;Asia/Shanghai
+WEI;Weipa;AU;-12.6813;141.9247;Australia/Brisbane
+WGA;Wagga Wagga;AU;-35.1599;147.4663;Australia/Sydney
+WGE;Walgett;AU;-30.0333;148.1333;Australia/Sydney
+WGN;Shaoyang;CN;27.2395;111.4679;Asia/Shanghai
+WHA;Wuhu;CN;31.3529;118.4329;Asia/Shanghai
+WHK;distretto di Whakatane;NZ;-37.9247;176.9175;Pacific/Auckland
+WIC;Wick;GB;58.4569;-3.0867;Europe/London
+WIN;Winton;AU;-22.35;143.0667;Australia/Brisbane
+WJR;Wajir;KE;1.7667;40.6;Africa/Nairobi
+WJU;Wonju;KR;37.3422;127.9202;Asia/Seoul
+WKA;Wanaka;NZ;-44.7234;169.2442;Pacific/Auckland
+WKJ;Wakkanai;JP;45.3994;141.7974;Asia/Tokyo
+WKK;Aleknagik;US;59.2778;-158.6111;America/Anchorage
+WLG;Wellington;NZ;-41.2865;174.7762;Pacific/Auckland
+WLS;Wallis Island;WF;-13.2333;-176.1667;Pacific/Wallis
+WMN;Maroantsetra;MG;-15.4333;49.6833;Indian/Antananarivo
+WMX;Wamena;ID;-4.1167;138.9333;Asia/Jayapura
+WNP;Naga City;PH;13.6218;123.1948;Asia/Manila
+WNR;Windorah;AU;-25.4167;142.6667;Australia/Brisbane
+WNS;Nawabshah;PK;26.2447;68.3935;Asia/Karachi
+WNZ;Wenzhou;CN;27.9938;120.6994;Asia/Shanghai
+WOS;Wŏnsan;KP;39.1528;127.4436;Asia/Pyongyang
+WRE;Whangārei;NZ;-35.7251;174.3237;Pacific/Auckland
+WRO;Breslavia;PL;51.1079;17.0385;Europe/Warsaw
+WST;Westerly;US;41.3502;-71.8069;America/New_York
+WSZ;Westport;NZ;-41.74;171.5786;Pacific/Auckland
+WUA;Wuhai;CN;39.6552;106.7942;Asia/Shanghai
+WUH;Wuhan;CN;30.5928;114.3055;Asia/Shanghai
+WUN;Wiluna;AU;-26.6333;120.2167;Australia/Perth
+WUS;Wuyishan;CN;27.7167;117.9667;Asia/Shanghai
+WUU;Wau;SS;7.7464;27.9853;Africa/Khartoum
+WUX;Wuxi;CN;31.4912;120.3119;Asia/Shanghai
+WUZ;Wuzhou;CN;23.477;111.2791;Asia/Shanghai
+WVB;Walvis Bay;NA;-22.9584;14.5058;Africa/Windhoek
+WWK;Wewak;PG;-3.58;143.6692;Pacific/Port_Moresby
+WYA;Whyalla;AU;-33.0524;137.522;Australia/Adelaide
+WYS;West Yellowstone;US;44.6867;-111.1047;America/Denver
+XAI;Xinyang;CN;32.149;114.091;Asia/Shanghai
+XAP;Chapecó;BR;-27.1009;-52.6157;America/Sao_Paulo
+XBJ;Birjand;IR;32.8649;59.2262;Asia/Tehran
+XCH;Christmas Island;CX;-10.5;105.6667;Indian/Christmas
+XCR;Châlons-en-Champagne;FR;48.9567;4.3631;Europe/Paris
+XFN;Xiangfan;CN;32.009;112.1224;Asia/Shanghai
+XIC;Xichang;CN;27.8945;102.2644;Asia/Shanghai
+XIL;Xilin Hot;CN;43.9334;116.086;Asia/Shanghai
+XKS;Kasabonika;CA;53.52;-88.6467;America/Winnipeg
+XMH;Manihi;PF;-14.438;-146.0705;Pacific/Tahiti
+XMN;Xiamen;CN;24.4798;118.0894;Asia/Shanghai
+XMS;Macas;EC;-2.3167;-78.1333;America/Guayaquil
+XNN;Xining;CN;36.6171;101.7782;Asia/Shanghai
+XPL;Comayagua;HN;14.449;-87.6482;America/Tegucigalpa
+XQP;Quepos;CR;9.4391;-84.1333;America/Costa_Rica
+XQU;Qualicum Beach;CA;49.3402;-124.3959;America/Vancouver
+XRY;Jerez de la Frontera;ES;36.6866;-6.1372;Europe/Madrid
+XSC;South Caicos;TC;21.5158;-71.5297;America/Grand_Turk
+XTG;Thargomindah;AU;-27.9667;143.7667;Australia/Brisbane
+XUZ;Xuzhou;CN;34.2058;117.2841;Asia/Shanghai
+YAA;Anahim Lake;CA;52.45;-125.3;America/Vancouver
+YAG;Fort Frances;CA;48.6528;-93.4472;America/Winnipeg
+YAK;Yakutat;US;59.5092;-139.6597;America/Yakutat
+YAM;Sault Ste Marie;CA;46.4853;-84.4999;America/Toronto
+YAO;Yaoundé;CM;3.848;11.5021;Africa/Douala
+YAP;Yap;FM;9.4977;138.0867;Pacific/Chuuk
+YAY;St Anthony-in-Meneage;CA;51.3667;-55.5833;America/St_Johns
+YAZ;Tofino;CA;49.1524;-125.9025;America/Vancouver
+YBC;Baie-Comeau;CA;49.2;-68.2667;America/Toronto
+YBG;Bagotville;CA;48.3222;-70.9886;America/Toronto
+YBK;Baker Lake;CA;64.3;-96.0833;America/Rankin_Inlet
+YBL;Campbell River;CA;50.0292;-125.274;America/Vancouver
+YBP;Yibin;CN;28.7518;104.6432;Asia/Shanghai
+YBR;Brandon;CA;49.9;-99.95;America/Winnipeg
+YBX;Blanc-Sablon;CA;51.4333;-57.2167;America/Blanc-Sablon
+YBY;Bonnyville;CA;54.2667;-110.7333;America/Edmonton
+YCB;Cambridge Bay;CA;69.1;-105.1333;America/Cambridge_Bay
+YCD;Nanaimo;CA;49.1659;-123.9401;America/Vancouver
+YCG;Castlegar;CA;49.2956;-117.6322;America/Vancouver
+YCM;St. Catharines;CA;43.1594;-79.2469;America/Toronto
+YCU;Yuncheng;CN;35.0265;111.0075;Asia/Shanghai
+YDA;Dawson City;CA;64.0417;-139.1208;America/Whitehorse
+YDF;Deer Lake;CA;49.2103;-57.3997;America/St_Johns
+YDN;Dauphin;CA;51.1;-100.05;America/Winnipeg
+YEA;Edmonton;CA;53.548;-113.49;America/Edmonton
+YEI;Bursa;TR;40.1885;29.061;Europe/Istanbul
+YEV;Inuvik;CA;68.3067;-133.4977;America/Inuvik
+YFB;Iqaluit;CA;63.7518;-68.5366;America/Iqaluit
+YFC;Fredericton;CA;45.9636;-66.6431;America/Moncton
+YFS;Fort Simpson;CA;61.75;-121.2333;America/Yellowknife
+YGJ;Yonago;JP;35.4281;133.331;Asia/Tokyo
+YGL;La Grande;CA;53.6297;-77.7064;America/Toronto
+YGP;Gaspé;CA;48.9029;-64.4787;America/Toronto
+YGR;Iles De La Madeleine;CA;47.3667;-61.9;America/Halifax
+YGV;Havre-Saint-Pierre;CA;50.25;-63.5833;America/Toronto
+YGW;Kuujjuarapik;CA;55.2792;-77.7667;America/Toronto
+YHY;Hay River;CA;60.8456;-115.7783;America/Yellowknife
+YHZ;Halifax;CA;44.6476;-63.5728;America/Halifax
+YIC;Yichun;CN;27.816;114.417;Asia/Shanghai
+YIE;Aershan;CN;47.31;119.9108;Asia/Shanghai
+YIF;Pakuashipi;CA;51.2167;-58.6667;America/Blanc-Sablon
+YIH;Yichang;CN;30.692;111.2865;Asia/Shanghai
+YIN;Yining;CN;43.952;81.3314;Asia/Shanghai
+YIV;Island Lk;CA;54.2;-94.7833;America/Winnipeg
+YIW;Yiwu;CN;29.3068;120.0751;Asia/Shanghai
+YKA;Kamloops;CA;50.6745;-120.3273;America/Vancouver
+YKF;Kitchener;CA;43.4516;-80.4925;America/Toronto
+YKH;Yingkou;CN;40.625;122.219;Asia/Shanghai
+YKL;Schefferville;CA;54.7833;-64.8167;America/Toronto
+YKM;Yakima;US;46.6021;-120.5059;America/Los_Angeles
+YKO;Yuksekova;TR;37.566;44.283;Europe/Istanbul
+YKS;Jakutsk;RU;62.0397;129.7422;Asia/Yakutsk
+YLK;Barrie;CA;44.4853;-79.5556;America/Toronto
+YLL;Lloydminster;CA;53.313;-110.0727;America/Edmonton
+YLW;Kelowna;CA;49.888;-119.496;America/Vancouver
+YLX;Yulin;CN;22.654;110.181;Asia/Shanghai
+YMM;Fort McMurray;CA;56.7267;-111.379;America/Edmonton
+YMO;Moosonee;CA;51.2911;-80.6042;America/Toronto
+YMQ;Montréal;CA;45.5089;-73.5542;America/Toronto
+YMS;Yurimaguas;PE;-5.9;-76.1;America/Lima
+YMT;Chibougamau;CA;49.9167;-74.3667;America/Toronto
+YNA;Natashquan;CA;50.1833;-61.8;America/Toronto
+YNB;Yanbuʿ;SA;24.0232;38.19;Asia/Riyadh
+YNJ;Yanji;CN;42.8913;129.5089;Asia/Shanghai
+YNL;Points North Landing;CA;58.2767;-104.0825;America/Regina
+YNT;Yantai;CN;37.4645;121.4479;Asia/Shanghai
+YNY;Yangyang;KR;38.0667;128.6;Asia/Seoul
+YNZ;Yancheng;CN;33.3473;120.1637;Asia/Shanghai
+YOJ;High Level;CA;58.6183;-117.1683;America/Edmonton
+YOL;Yola;NG;9.2035;12.4954;Africa/Lagos
+YOW;Ottawa;CA;45.4116;-75.6982;America/Toronto
+YPA;Prince Albert;CA;53.2167;-105.6833;America/Regina
+YPE;Peace River;CA;56.2278;-117.4403;America/Edmonton
+YPL;Pickle Lake;CA;51.2083;-90.2083;America/Toronto
+YPN;Port Menier;CA;49.8333;-64.2833;America/Toronto
+YPQ;Peterborough;CA;44.3;-78.3167;America/Toronto
+YPR;Prince Rupert;CA;54.3061;-130.3109;America/Vancouver
+YPW;Powell River;CA;49.8167;-124.5;America/Vancouver
+YPX;Puvirnituq;CA;60.0333;-77.1667;America/Toronto
+YPY;Fort Chipewyan;CA;58.7625;-111.1208;America/Edmonton
+YPZ;Burns Lake;CA;54.2333;-125.7667;America/Vancouver
+YQA;Muskoka;CA;44.9667;-79.3;America/Toronto
+YQB;Québec;CA;46.8139;-71.208;America/Toronto
+YQD;The Pas;CA;53.97;-101.09;America/Winnipeg
+YQG;Windsor;CA;42.3149;-83.0364;America/Toronto
+YQH;Watson Lake;CA;60.1236;-128.825;America/Whitehorse
+YQK;Kenora;CA;49.7875;-94.3583;America/Winnipeg
+YQL;Lethbridge;CA;49.6956;-112.8451;America/Edmonton
+YQM;Moncton;CA;46.0878;-64.7782;America/Moncton
+YQN;Nakina;CA;50.1667;-86.7;America/Toronto
+YQQ;Comox;CA;49.7059;-124.9078;America/Vancouver
+YQR;Regina;CA;50.4452;-104.6189;America/Regina
+YQT;Thunder Bay;CA;48.3809;-89.2477;America/Thunder_Bay
+YQU;Grande Prairie;CA;55.1771;-118.8736;America/Edmonton
+YQX;Gander;CA;48.9467;-54.5633;America/St_Johns
+YQY;Sydney;CA;46.1377;-60.1996;America/Glace_Bay
+YQZ;Quesnel;CA;53.0267;-122.5097;America/Vancouver
+YRB;Resolute;CA;74.7167;-94.9667;America/Resolute
+YRJ;Roberval;CA;48.5167;-72.2167;America/Toronto
+YRL;Red Lake;CA;51.0688;-93.8001;America/Winnipeg
+YRT;Rankin Inlet;CA;62.81;-92.1002;America/Rankin_Inlet
+YSB;Sudbury;CA;46.4917;-80.993;America/Toronto
+YSF;Stony Rapids;CA;59.25;-105.8333;America/Regina
+YSJ;Saint John;CA;45.2733;-66.0633;America/Moncton
+YSM;Fort Smith;CA;60.0167;-111.9667;America/Yellowknife
+YSQ;Songyuan;CN;45.129;124.8277;Asia/Shanghai
+YTH;Thompson;CA;55.7975;-97.8605;America/Winnipeg
+YTO;Toronto;CA;43.6535;-79.3839;America/Toronto
+YTS;Timmins;CA;48.5664;-81.3716;America/Toronto
+YTY;Yangzhou;CN;32.3942;119.4129;Asia/Shanghai
+YUM;Yuma;US;32.6927;-114.6277;America/Phoenix
+YUS;Yushu;CN;32.8399;97.0379;Asia/Shanghai
+YUX;Hall Beach;CA;68.7833;-81.25;America/Iqaluit
+YUY;Rouyn;CA;48.2056;-78.8306;America/Toronto
+YVB;Bonaventure;CA;48.05;-65.4833;America/Toronto
+YVC;La Ronge;CA;55.0833;-105.3333;America/Regina
+YVO;Val-d'Or;CA;48.0526;-77.7886;America/Toronto
+YVP;Kuujjuaq;CA;58.1002;-68.418;America/Toronto
+YVQ;Norman Wells;CA;65.2779;-126.7934;America/Yellowknife
+YVR;Vancouver;CA;49.2827;-123.1207;America/Vancouver
+YVV;Wiarton;CA;44.6667;-81.1667;America/Toronto
+YWG;Winnipeg;CA;49.8861;-97.1529;America/Winnipeg
+YWK;Wabush;CA;52.9263;-66.874;America/Goose_Bay
+YWL;Williams Lake;CA;52.1847;-122.0444;America/Vancouver
+YXC;Cranbrook;CA;49.6144;-115.787;America/Edmonton
+YXE;Saskatoon;CA;52.1332;-106.67;America/Regina
+YXH;Medicine Hat;CA;50.0292;-110.7034;America/Edmonton
+YXJ;Fort St John;CA;56.2479;-120.7344;America/Dawson_Creek
+YXL;Sioux Lookout;CA;50.1152;-91.903;America/Winnipeg
+YXS;Prince George;CA;53.9171;-122.7497;America/Vancouver
+YXT;Terrace;CA;54.4656;-128.5745;America/Vancouver
+YXU;London;CA;42.987;-81.251;America/Toronto
+YXX;Abbotsford;CA;49.0504;-122.3045;America/Vancouver
+YXY;Whitehorse;CA;60.7167;-135.0667;America/Whitehorse
+YYA;Yueyang;CN;29.3667;113.4333;Asia/Shanghai
+YYB;North Bay;CA;46.3091;-79.4608;America/Toronto
+YYC;Calgary;CA;51.0447;-114.0719;America/Edmonton
+YYD;Smithers;CA;54.8256;-127.1803;America/Vancouver
+YYE;Fort Nelson;CA;58.8333;-122.5833;America/Vancouver
+YYF;Penticton;CA;49.4647;-119.6;America/Vancouver
+YYG;Charlottetown;CA;46.2859;-63.1317;America/Halifax
+YYJ;Victoria;CA;48.4286;-123.3656;America/Vancouver
+YYL;Lynn Lake;CA;56.8667;-101.0667;America/Winnipeg
+YYQ;Churchill;CA;58.7555;-94.1125;America/Winnipeg
+YYR;Goose Bay;CA;53.3135;-60.4124;America/Goose_Bay
+YYT;St. John's;CA;47.5615;-52.7126;America/St_Johns
+YYY;Mont-Joli;CA;48.6;-68.2;America/Toronto
+YZF;Yellowknife;CA;62.4709;-114.4375;America/Yellowknife
+YZP;Sandspit;CA;53.2544;-131.8128;America/Vancouver
+YZS;Coral Harbour;CA;64.2;-83.3667;America/Atikokan
+YZT;Port Hardy;CA;50.6806;-127.3639;America/Vancouver
+YZU;Whitecourt;CA;54.15;-115.7833;America/Edmonton
+YZV;Sept-Îles;CA;50.2175;-66.264;America/Toronto
+YZY;Zhangye;CN;38.9259;100.4498;Asia/Shanghai
+ZAD;Zara;HR;44.1194;15.2314;Europe/Zagreb
+ZAG;Zagabria;HR;45.815;15.9819;Europe/Zagreb
+ZAH;Zahedan;IR;29.4519;60.8842;Asia/Tehran
+ZAL;Valdivia;CL;-39.8336;-73.2154;America/Santiago
+ZAM;Zamboanga;PH;6.9214;122.079;Asia/Manila
+ZAT;Zhaotong;CN;27.3383;103.7175;Asia/Shanghai
+ZAZ;Saragozza;ES;41.6488;-0.8891;Europe/Madrid
+ZBF;Bathurst;CA;47.6292;-65.7394;America/Moncton
+ZBR;Chabahar;IR;25.4365;60.3796;Asia/Tehran
+ZCL;Zacatecas;MX;22.7709;-102.5832;America/Mexico_City
+ZCO;Temuco;CL;-38.7359;-72.5904;America/Santiago
+ZEL;Bella Bella;CA;52.1667;-128.1;America/Vancouver
+ZHA;Zhanjiang;CN;21.2147;110.3627;Asia/Shanghai
+ZHY;Zhongwei;CN;37.5689;105.1525;Asia/Shanghai
+ZIG;Ziguinchor;SN;12.5641;-16.264;Africa/Dakar
+ZIH;Ixtapa;MX;17.6068;-101.4641;America/Mexico_City
+ZIX;Žigansk;RU;66.7667;123.3833;Asia/Yakutsk
+ZKP;Zyrjanka;RU;65.7383;150.7078;Asia/Magadan
+ZLO;Manzanillo;MX;19.1133;-104.3506;America/Mexico_City
+ZMT;Masset;CA;54.0167;-132.15;America/Vancouver
+ZND;Zinder;NE;13.8018;8.9853;Africa/Niamey
+ZNE;Newman;AU;-23.4165;119.8014;Australia/Perth
+ZNZ;Zanzibar;TZ;-6.1652;39.1989;Africa/Dar_es_Salaam
+ZOS;Osorno;CL;-40.5762;-73.1149;America/Santiago
+ZQN;Queenstown;NZ;-45.022;168.7391;Pacific/Auckland
+ZQZ;Zhangjiakou;CN;40.7675;114.8863;Asia/Shanghai
+ZRH;Zurigo;CH;47.3673;8.55;Europe/Zurich
+ZSA;San Salvador;BS;24.06;-74.5331;America/Nassau
+ZSE;Saint-Pierre;RE;-21.3333;55.4833;Indian/Reunion
+ZSJ;Sandy Lake;CA;53.0333;-93.2333;America/Winnipeg
+ZTH;Zakinthos;GR;37.7558;20.8883;Europe/Athens
+ZUH;Zhuhai;CN;22.2707;113.5767;Asia/Shanghai
+ZYI;Zunyi;CN;27.7257;106.9274;Asia/Shanghai
+ZYL;Sylhet;BD;24.8949;91.8687;Asia/Dhaka

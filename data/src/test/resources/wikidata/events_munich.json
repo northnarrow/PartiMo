@@ -1,0 +1,485 @@
+{
+  "head" : {
+    "vars" : [ "item", "itemLabel", "itemDescription", "months", "days", "christmasMarket", "ownLocation", "venueLocation", "areaLocation", "venue", "ended", "picture", "localTitle", "enTitle" ]
+  },
+  "results" : {
+    "bindings" : [ {
+      "item" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q2355360"
+      },
+      "itemLabel" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Streetlife Festival"
+      },
+      "itemDescription" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Festival in Munich"
+      },
+      "months" : {
+        "type" : "literal",
+        "value" : "Q123 Q119 Q120"
+      },
+      "days" : {
+        "type" : "literal",
+        "value" : ""
+      },
+      "venueLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.5775 48.142222222)"
+      },
+      "areaLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.5775 48.142222222)"
+      },
+      "venue" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Odeonsplatz"
+      },
+      "picture" : {
+        "type" : "uri",
+        "value" : "http://commons.wikimedia.org/wiki/Special:FilePath/Streetlife%20festival%202017-05%204670.jpg"
+      },
+      "enTitle" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Streetlife Festival"
+      }
+    }, {
+      "item" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q21064705"
+      },
+      "itemLabel" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Münchner Christkindlmarkt"
+      },
+      "itemDescription" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "christmas market in Munich, Germany"
+      },
+      "months" : {
+        "type" : "literal",
+        "value" : ""
+      },
+      "days" : {
+        "type" : "literal",
+        "value" : ""
+      },
+      "venueLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.575277777 48.137222222)"
+      },
+      "areaLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.575278 48.137222)"
+      },
+      "venue" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "Marienplatz"
+      },
+      "picture" : {
+        "type" : "uri",
+        "value" : "http://commons.wikimedia.org/wiki/Special:FilePath/WeihnachtsmarktMuenchen.jpg"
+      },
+      "enTitle" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Christkindlmarkt at Marienplatz"
+      },
+      "christmasMarket" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#integer",
+        "type" : "literal",
+        "value" : "1"
+      },
+      "ownLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.575278 48.137222)"
+      }
+    }, {
+      "item" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q26829981"
+      },
+      "itemLabel" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Wikimedia-Stammtisch München"
+      },
+      "itemDescription" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Monatlicher Stammtisch der Wikipedianer in München"
+      },
+      "months" : {
+        "type" : "literal",
+        "value" : ""
+      },
+      "days" : {
+        "type" : "literal",
+        "value" : "January 11|August|February 2|September 9|April 4|June 6|December 12|March 3|May 5|October 10|July 7|November 11"
+      },
+      "areaLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.575 48.1375)"
+      },
+      "picture" : {
+        "type" : "uri",
+        "value" : "http://commons.wikimedia.org/wiki/Special:FilePath/2017-08-10%20MUC-Wikipedia-Stammtisch.jpg"
+      }
+    }, {
+      "item" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q127728203"
+      },
+      "itemLabel" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "ceramitec"
+      },
+      "itemDescription" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "trade fair for the ceramics industry held in Munich"
+      },
+      "months" : {
+        "type" : "literal",
+        "value" : "Q110"
+      },
+      "days" : {
+        "type" : "literal",
+        "value" : ""
+      },
+      "areaLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.6922 48.1351)"
+      },
+      "ownLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.6922 48.1351)"
+      }
+    }, {
+      "item" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q102400"
+      },
+      "itemLabel" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "Oktoberfest"
+      },
+      "itemDescription" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "festa della birra di Monaco di Baviera"
+      },
+      "months" : {
+        "type" : "literal",
+        "value" : "Q123 Q124"
+      },
+      "days" : {
+        "type" : "literal",
+        "value" : "September"
+      },
+      "venueLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.55 48.1333)"
+      },
+      "areaLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.575 48.1375)"
+      },
+      "venue" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "Theresienwiese"
+      },
+      "picture" : {
+        "type" : "uri",
+        "value" : "http://commons.wikimedia.org/wiki/Special:FilePath/O%27zapft%20is%21%20M%C3%BCnchens%205%20Jahreszeit%20hat%20begonnen%20-%20O%27zapft%20is%21%20Munich%205%20season%2C%20the%20Oktoberfest%20has%20begun%20%289855483374%29.jpg"
+      },
+      "enTitle" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Oktoberfest"
+      },
+      "ownLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.549167 48.131389)"
+      },
+      "localTitle" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "Oktoberfest"
+      }
+    }, {
+      "item" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q543565"
+      },
+      "itemLabel" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Munich International Film Festival"
+      },
+      "itemDescription" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "festival cinematografico"
+      },
+      "months" : {
+        "type" : "literal",
+        "value" : "Q120"
+      },
+      "days" : {
+        "type" : "literal",
+        "value" : ""
+      },
+      "areaLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.575 48.1375)"
+      },
+      "picture" : {
+        "type" : "uri",
+        "value" : "http://commons.wikimedia.org/wiki/Special:FilePath/Weltpremiere%20%22Die%20H%C3%A4nde%20meiner%20Mutter%22%20auf%20dem%20Filmfest%20M%C3%BCnchen%202016.jpg"
+      },
+      "enTitle" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Filmfest München"
+      },
+      "ownLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.575 48.1375)"
+      }
+    }, {
+      "item" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q553663"
+      },
+      "itemLabel" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "Expo Real"
+      },
+      "itemDescription" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "International trade fair for real estate, investment and infrastructure sectors in Munich"
+      },
+      "months" : {
+        "type" : "literal",
+        "value" : "Q124"
+      },
+      "days" : {
+        "type" : "literal",
+        "value" : ""
+      },
+      "venueLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.6986 48.1356)"
+      },
+      "areaLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.6986 48.1356)"
+      },
+      "venue" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Neue Messe München"
+      },
+      "enTitle" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Expo Real"
+      },
+      "ownLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.6956 48.1351)"
+      },
+      "localTitle" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "Expo Real"
+      }
+    }, {
+      "item" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1395889"
+      },
+      "itemLabel" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Fantasy Filmfest"
+      },
+      "itemDescription" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "annual genre film festival in Germany"
+      },
+      "months" : {
+        "type" : "literal",
+        "value" : "Q122 Q123"
+      },
+      "days" : {
+        "type" : "literal",
+        "value" : ""
+      },
+      "areaLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.575 48.1375)"
+      },
+      "enTitle" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Fantasy Filmfest"
+      }
+    }, {
+      "item" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1426345"
+      },
+      "itemLabel" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Enchanted International Queer Film Festival"
+      },
+      "itemDescription" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "German lesbian/gay film festival in Munich, Frankfurt am Main, Cologne and Berlin (1991-2011)"
+      },
+      "months" : {
+        "type" : "literal",
+        "value" : "Q125 Q126"
+      },
+      "days" : {
+        "type" : "literal",
+        "value" : ""
+      },
+      "areaLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.575 48.1375)"
+      },
+      "ended" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#dateTime",
+        "type" : "literal",
+        "value" : "2011-01-01T00:00:00Z"
+      }
+    }, {
+      "item" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1725944"
+      },
+      "itemLabel" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Schwabinger Weihnachtsmarkt"
+      },
+      "itemDescription" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Münchener Weihnachtsmarkt"
+      },
+      "months" : {
+        "type" : "literal",
+        "value" : ""
+      },
+      "days" : {
+        "type" : "literal",
+        "value" : ""
+      },
+      "venueLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.5842 48.1567)"
+      },
+      "areaLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.58638889 48.16138889)"
+      },
+      "venue" : {
+        "xml:lang" : "it",
+        "type" : "literal",
+        "value" : "Leopoldstraße"
+      },
+      "picture" : {
+        "type" : "uri",
+        "value" : "http://commons.wikimedia.org/wiki/Special:FilePath/MUC%20SchwabingWeihnachtsmarktA.jpg"
+      },
+      "christmasMarket" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#integer",
+        "type" : "literal",
+        "value" : "1"
+      },
+      "ownLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.58638889 48.16138889)"
+      }
+    }, {
+      "item" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q2055590"
+      },
+      "itemLabel" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Pasinger Christkindl-Markt"
+      },
+      "itemDescription" : {
+        "xml:lang" : "de",
+        "type" : "literal",
+        "value" : "Weihnachtsmarkt in München Pasing"
+      },
+      "months" : {
+        "type" : "literal",
+        "value" : ""
+      },
+      "days" : {
+        "type" : "literal",
+        "value" : ""
+      },
+      "areaLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.46143317 48.14430554)"
+      },
+      "christmasMarket" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#integer",
+        "type" : "literal",
+        "value" : "1"
+      },
+      "ownLocation" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(11.46143317 48.14430554)"
+      }
+    } ]
+  }
+}

@@ -75,7 +75,8 @@ class DuffelFlightDataSource internal constructor(
                 add(DuffelSliceRequest(query.originIata, query.destinationIata, query.departureDate.toString()))
                 query.returnDate?.let { add(DuffelSliceRequest(query.destinationIata, query.originIata, it.toString())) }
             },
-            passengers = List(query.adults) { DuffelPassengerRequest() },
+            passengers = List(query.travellers.adults) { DuffelPassengerRequest() } +
+                query.travellers.childAges.map { age -> DuffelPassengerRequest(type = null, age = age) },
             cabinClass = query.cabinClass.name.lowercase(),
             maxConnections = query.maxConnections,
         )
@@ -103,7 +104,8 @@ class DuffelStayDataSource internal constructor(
     override suspend fun searchStays(query: AccommodationSearchQuery, forceRefresh: Boolean): Fetched<List<AccommodationOffer>> {
         val body = DuffelStaysSearchBody(
             rooms = query.rooms,
-            guests = List(query.adults) { DuffelPassengerRequest() },
+            guests = List(query.travellers.adults) { DuffelGuestRequest() } +
+                query.travellers.childAges.map { age -> DuffelGuestRequest(type = "child", age = age) },
             checkInDate = query.checkIn.toString(),
             checkOutDate = query.checkOut.toString(),
             location = DuffelStaysLocation(

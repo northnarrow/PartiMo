@@ -1,5 +1,7 @@
 package com.partimo.data.remote
 
+import com.partimo.data.config.AndroidAppIdentity
+import com.partimo.data.network.AndroidAppHeaders
 import com.partimo.data.remote.routes.GoogleRoutesApi
 import com.partimo.data.remote.routes.GoogleRoutesTransitDataSource
 import com.partimo.data.remote.routes.parseDuration
@@ -54,7 +56,9 @@ class GoogleRoutesTransitDataSourceTest {
             requests += request
             respond(routesJson, HttpStatusCode.OK, jsonHeaders)
         }
-        val source = GoogleRoutesTransitDataSource(GoogleRoutesApi(client, "test-key", "https://routes.test/"), inMemoryCache(), "it")
+        val identity = AndroidAppIdentity(packageName = "com.partimo.app", certificateSha1 = "A9993E364706816ABA3E25717850C26C9CD0D89D")
+        val api = GoogleRoutesApi(client, "test-key", "https://routes.test/", androidApp = identity)
+        val source = GoogleRoutesTransitDataSource(api, inMemoryCache(), "it")
         val query = TransitRouteQuery(
             origin = TestData.VIENNA_HUB,
             destination = TestData.VIENNA_CENTER,
@@ -64,6 +68,9 @@ class GoogleRoutesTransitDataSourceTest {
         )
 
         val route = source.routes(query, forceRefresh = false).data.single()
+
+        assertEquals("com.partimo.app", requests.single().headers[AndroidAppHeaders.PACKAGE])
+        assertEquals("A9993E364706816ABA3E25717850C26C9CD0D89D", requests.single().headers[AndroidAppHeaders.CERTIFICATE])
 
         assertEquals(3, route.legs.size)
         val (firstWalk, metro, lastWalk) = route.legs

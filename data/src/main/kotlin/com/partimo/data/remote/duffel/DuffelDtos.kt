@@ -28,13 +28,18 @@ internal data class DuffelSliceRequest(
     @SerialName("departure_date") val departureDate: String,
 )
 
+/** Passeggero di un volo: un adulto oppure, per i minori, solo l'età (Duffel ne ricava la tariffa). */
 @Serializable
-internal data class DuffelPassengerRequest(val type: String = "adult")
+internal data class DuffelPassengerRequest(val type: String? = "adult", val age: Int? = null)
+
+/** Ospite di un alloggio: adulto o bambino con l'età. */
+@Serializable
+internal data class DuffelGuestRequest(val type: String = "adult", val age: Int? = null)
 
 @Serializable
 internal data class DuffelStaysSearchBody(
     val rooms: Int,
-    val guests: List<DuffelPassengerRequest>,
+    val guests: List<DuffelGuestRequest>,
     @SerialName("check_in_date") val checkInDate: String,
     @SerialName("check_out_date") val checkOutDate: String,
     val location: DuffelStaysLocation,

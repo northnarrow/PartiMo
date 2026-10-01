@@ -4,7 +4,9 @@ import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.common.QueryIssue
+import com.partimo.domain.model.flight.FlexibleDates
 import com.partimo.domain.model.flight.FlightFilter
+import com.partimo.domain.model.flight.FlightPriceSource
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.flight.FlightSortOption
 import com.partimo.domain.testing.FakeFlightRepository
@@ -105,5 +107,33 @@ class SearchFlightsUseCaseTest {
 
         assertEquals(DataOrigin.CACHE, (result as DataResult.Success).origin)
         assertEquals(listOf(true), repository.forceRefreshFlags)
+    }
+
+    @Test
+    fun `con le date scelte dall'utente i voli in quei giorni vengono prima di quelli dei giorni vicini`() = runTest {
+        fun roundTrip(id: String, price: String, out: LocalDate, back: LocalDate) = flightOffer(id, price, departure = out.atTime(8, 0)).let { offer ->
+            offer.copy(slices = offer.slices + offer.outbound.copy(originIata = "VIE", destinationIata = "MXP", departureTime = back.atTime(18, 0), arrivalTime = back.atTime(19, 30)))
+        }
+        repository.result = DataResult.Success(
+            listOf(
+                roundTrip("vicino-economico", "60", LocalDate.of(2026, Month.DECEMBER, 11), LocalDate.of(2026, Month.DECEMBER, 15)),
+                roundTrip("esatto", "95", LocalDate.of(2026, Month.DECEMBER, 12), LocalDate.of(2026, Month.DECEMBER, 16)),
+            ),
+        )
+        val nearby = FlexibleDates(LocalDate.of(2026, Month.DECEMBER, 9)..LocalDate.of(2026, Month.DECEMBER, 15), 2L..6L, exactDatesFirst = true)
+
+        assertEquals(listOf("esatto", "vicino-economico"), useCase(query.copy(flexibleDates = nearby)).successData().map { it.offer.id })
+        assertEquals(
+            listOf("vicino-economico", "esatto"),
+            useCase(query.copy(flexibleDates = nearby.copy(exactDatesFirst = false)), sortBy = FlightSortOption.CHEAPEST).successData().map { it.offer.id },
+            "Per un mese intero conta solo il prezzo",
+        )
+    }
+
+    @Test
+    fun `dice da dove arrivano i prezzi`() {
+        assertEquals(FlightPriceSource.LIVE_OFFERS, useCase.priceSource)
+        val recent = SearchFlightsUseCase(FakeFlightRepository(priceSource = FlightPriceSource.RECENT_SEARCHES), clock = TestData.FIXED_CLOCK)
+        assertEquals(FlightPriceSource.RECENT_SEARCHES, recent.priceSource)
     }
 }

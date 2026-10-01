@@ -7,6 +7,7 @@ import com.partimo.app.R
 import com.partimo.domain.common.DataError
 import com.partimo.domain.common.QueryIssue
 import com.partimo.domain.model.place.TravelTheme
+import com.partimo.domain.model.poi.PoiCategory
 import com.partimo.domain.model.poi.PoiTag
 import com.partimo.domain.model.poi.RecommendationReason
 import com.partimo.domain.model.poi.Season
@@ -46,6 +47,9 @@ private fun QueryIssue.messageRes(): Int = when (this) {
     QueryIssue.STAY_TOO_LONG -> R.string.error_query_stay_too_long
     QueryIssue.QUERY_TOO_SHORT -> R.string.error_query_too_short
     QueryIssue.NO_AIRPORT_NEARBY -> R.string.error_query_no_airport
+    QueryIssue.TEXT_TOO_LONG -> R.string.error_query_text_too_long
+    QueryIssue.INVALID_AMOUNT -> R.string.error_query_invalid_amount
+    QueryIssue.UNSUPPORTED_SCRIPT -> R.string.error_query_unsupported_script
 }
 
 @StringRes
@@ -74,6 +78,51 @@ fun WeatherCondition.labelRes(): Int = when (this) {
     WeatherCondition.SNOW -> R.string.weather_snow
     WeatherCondition.THUNDERSTORM -> R.string.weather_thunderstorm
     WeatherCondition.UNKNOWN -> R.string.weather_unknown
+}
+
+fun WeatherCondition.emoji(): String = when (this) {
+    WeatherCondition.CLEAR -> "☀️"
+    WeatherCondition.PARTLY_CLOUDY -> "⛅"
+    WeatherCondition.OVERCAST -> "☁️"
+    WeatherCondition.FOG -> "🌫️"
+    WeatherCondition.DRIZZLE -> "🌦️"
+    WeatherCondition.RAIN -> "🌧️"
+    WeatherCondition.SNOW -> "🌨️"
+    WeatherCondition.THUNDERSTORM -> "⛈️"
+    WeatherCondition.UNKNOWN -> "🌡️"
+}
+
+@StringRes
+fun PoiCategory.labelRes(): Int = when (this) {
+    PoiCategory.MUSEUM -> R.string.category_museum
+    PoiCategory.MONUMENT -> R.string.category_monument
+    PoiCategory.RELIGIOUS_SITE -> R.string.category_religious_site
+    PoiCategory.VIEWPOINT -> R.string.category_viewpoint
+    PoiCategory.PARK -> R.string.category_park
+    PoiCategory.BEACH -> R.string.category_beach
+    PoiCategory.MARKET -> R.string.category_market
+    PoiCategory.SEASONAL_EVENT -> R.string.category_seasonal_event
+    PoiCategory.SKI_AREA -> R.string.category_ski_area
+    PoiCategory.NEIGHBORHOOD -> R.string.category_neighborhood
+    PoiCategory.ATTRACTION -> R.string.category_attraction
+    PoiCategory.SHOPPING -> R.string.category_shopping
+    PoiCategory.OTHER -> R.string.category_other
+}
+
+fun PoiCategory.emoji(): String = when (this) {
+    PoiCategory.MUSEUM -> "🖼️"
+    PoiCategory.MONUMENT -> "🏛️"
+    PoiCategory.RELIGIOUS_SITE -> "⛪"
+    PoiCategory.VIEWPOINT -> "🌄"
+    PoiCategory.PARK -> "🌳"
+    PoiCategory.BEACH -> "🏖️"
+    PoiCategory.MARKET -> "🧺"
+    PoiCategory.SEASONAL_EVENT -> "🎪"
+    PoiCategory.SKI_AREA -> "⛷️"
+    PoiCategory.NEIGHBORHOOD -> "🏘️"
+    PoiCategory.ATTRACTION -> "📍"
+    PoiCategory.SHOPPING -> "🛍️"
+    PoiCategory.OTHER -> "📍"
 }
 
 @StringRes

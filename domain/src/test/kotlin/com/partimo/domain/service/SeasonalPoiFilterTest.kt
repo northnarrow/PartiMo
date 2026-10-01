@@ -84,6 +84,17 @@ class SeasonalPoiFilterTest {
     }
 
     @Test
+    fun `senza valutazioni i luoghi più noti vengono per primi`() {
+        val famous = poi("colosseo", "Colosseo", category = PoiCategory.MONUMENT, rating = null, reviewCount = null, popularity = 1.0)
+        val minor = poi("minor", "Chiesa di quartiere", category = PoiCategory.MONUMENT, rating = null, reviewCount = null, popularity = 0.2)
+        val unknown = poi("unknown", "Luogo senza dati", category = PoiCategory.MONUMENT, rating = null, reviewCount = null)
+
+        val result = filter.recommend(listOf(minor, unknown, famous), december, today, Hemisphere.NORTHERN, null)
+
+        assertEquals(listOf("colosseo", "unknown", "minor"), result.map { it.poi.id })
+    }
+
+    @Test
     fun `la neve rende suggestivi mercatini ed eventi invernali`() {
         val market = poi("market", "Christkindlmarkt", category = PoiCategory.SEASONAL_EVENT)
         val snowyDay = LocalDate.of(2026, Month.DECEMBER, 1)

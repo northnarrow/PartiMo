@@ -9,6 +9,7 @@ import com.partimo.data.testing.jsonHeaders
 import com.partimo.data.testing.mockHttpClient
 import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.model.Money
+import com.partimo.domain.model.Travellers
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.stay.AccommodationSearchQuery
 import com.partimo.domain.testing.TestData
@@ -68,7 +69,7 @@ class DuffelDataSourcesTest {
         destinationIata = "VIE",
         departureDate = LocalDate.of(2026, Month.DECEMBER, 12),
         returnDate = LocalDate.of(2026, Month.DECEMBER, 16),
-        adults = 2,
+        travellers = Travellers(adults = 2, childAges = listOf(9, 1)),
     )
 
     @Test
@@ -100,7 +101,11 @@ class DuffelDataSourcesTest {
 
         val data = Json.parseToJsonElement(request.bodyText()).jsonObject.getValue("data").jsonObject
         assertEquals(2, data.getValue("slices").jsonArray.size)
-        assertEquals(2, data.getValue("passengers").jsonArray.size)
+        assertEquals(
+            listOf("""{"type":"adult"}""", """{"type":"adult"}""", """{"age":9}""", """{"age":1}"""),
+            data.getValue("passengers").jsonArray.map { it.toString() },
+            "Per i minori Duffel vuole solo l'età",
+        )
         assertEquals("economy", data.getValue("cabin_class").jsonPrimitive.content)
         assertEquals(1, data.getValue("max_connections").jsonPrimitive.int)
     }
@@ -133,7 +138,7 @@ class DuffelDataSourcesTest {
             location = TestData.VIENNA_CENTER,
             checkIn = LocalDate.of(2026, Month.DECEMBER, 12),
             checkOut = LocalDate.of(2026, Month.DECEMBER, 16),
-            adults = 2,
+            travellers = Travellers(adults = 2, childAges = listOf(6)),
         )
 
         val stay = source.searchStays(query, forceRefresh = false).data.single()
@@ -146,7 +151,10 @@ class DuffelDataSourcesTest {
 
         val data = Json.parseToJsonElement(requests.single().bodyText()).jsonObject.getValue("data").jsonObject
         assertEquals("2026-12-12", data.getValue("check_in_date").jsonPrimitive.content)
-        assertEquals(2, data.getValue("guests").jsonArray.size)
+        assertEquals(
+            listOf("""{"type":"adult"}""", """{"type":"adult"}""", """{"type":"child","age":6}"""),
+            data.getValue("guests").jsonArray.map { it.toString() },
+        )
         assertEquals(5, data.getValue("location").jsonObject.getValue("radius").jsonPrimitive.int)
     }
 }

@@ -3,6 +3,7 @@ package com.partimo.app.ui.search
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,26 +17,31 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -53,6 +59,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -61,6 +68,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.partimo.app.R
+import com.partimo.app.ui.bookings.emoji
 import com.partimo.app.ui.common.CityResultItem
 import com.partimo.app.ui.common.CitySearchField
 import com.partimo.app.ui.common.Formatters
@@ -68,6 +76,7 @@ import com.partimo.app.ui.common.PeriodChips
 import com.partimo.app.ui.common.SectionError
 import com.partimo.app.ui.common.SectionLoading
 import com.partimo.app.ui.common.SectionMessage
+import com.partimo.app.ui.common.TravellersRow
 import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.common.emoji
 import com.partimo.app.ui.common.errorMessage
@@ -77,10 +86,17 @@ import com.partimo.app.ui.common.phrase
 import com.partimo.app.ui.dashboard.PreviewData
 import com.partimo.app.ui.theme.PartiMoTheme
 import com.partimo.domain.model.Destination
+import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
+import com.partimo.domain.model.booking.Booking
+import com.partimo.domain.model.flight.CheapDestination
 import com.partimo.domain.model.place.CityPlace
 import com.partimo.domain.model.place.DeparturePoint
 import com.partimo.domain.model.place.DestinationSuggestion
+import com.partimo.domain.model.saved.SavedTrip
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 /** Tag della lista della schermata di ricerca, usato dai test UI per lo scroll. */
 const val SEARCH_LIST_TAG = "search_list"
@@ -93,12 +109,26 @@ data class SearchActions(
     val onClearQuery: () -> Unit = {},
     val onRetrySearch: () -> Unit = {},
     val onPeriodSelected: (TravelPeriod) -> Unit = {},
+    /** Date esatte scelte nelle celle «Andata» e «Ritorno». */
+    val onDatesSelected: (LocalDate, LocalDate) -> Unit = { _, _ -> },
+    /** Adulti e bambini scelti nella cella «Chi parte». */
+    val onTravellersSelected: (Travellers) -> Unit = {},
     val onChooseDeparture: () -> Unit = {},
     val onCitySelected: (CityPlace) -> Unit = {},
     val onRecommend: () -> Unit = {},
     val onMoreRecommendations: () -> Unit = {},
     val onSuggestionSelected: (DestinationSuggestion) -> Unit = {},
     val onDismissError: () -> Unit = {},
+    val onSavedTripSelected: (SavedTrip) -> Unit = {},
+    val onRemoveSavedTrip: (SavedTrip) -> Unit = {},
+    /** Fonti, licenze e privacy. */
+    val onOpenAbout: () -> Unit = {},
+    /** «Ovunque»: mete più economiche dalla città di partenza, filtro sul prezzo e meta scelta. */
+    val onAnywhere: () -> Unit = {},
+    val onAnywhereMaxPrice: (Int?) -> Unit = {},
+    val onCheapDestinationSelected: (CheapDestination) -> Unit = {},
+    /** Le mie prenotazioni: voli, alloggi e biglietti salvati sul telefono. */
+    val onOpenBookings: () -> Unit = {},
 )
 
 /** Collega il ViewModel alla schermata e apre la dashboard quando la meta è pronta. */
@@ -108,6 +138,8 @@ fun SearchRoute(
     onOpenDestination: (Destination, TravelPeriod) -> Unit,
     onChooseDeparture: () -> Unit,
     modifier: Modifier = Modifier,
+    onOpenAbout: () -> Unit = {},
+    onOpenBookings: () -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val openDestination by rememberUpdatedState(onOpenDestination)
@@ -125,12 +157,21 @@ fun SearchRoute(
             onClearQuery = viewModel::onClearQuery,
             onRetrySearch = viewModel::onRetrySearch,
             onPeriodSelected = viewModel::onPeriodSelected,
+            onDatesSelected = viewModel::onDatesSelected,
+            onTravellersSelected = viewModel::onTravellersSelected,
             onChooseDeparture = onChooseDeparture,
             onCitySelected = viewModel::onCitySelected,
             onRecommend = viewModel::onRecommend,
             onMoreRecommendations = viewModel::onMoreRecommendations,
             onSuggestionSelected = viewModel::onSuggestionSelected,
             onDismissError = viewModel::onPreparationErrorDismissed,
+            onSavedTripSelected = viewModel::onSavedTripSelected,
+            onRemoveSavedTrip = viewModel::onRemoveSavedTrip,
+            onOpenAbout = onOpenAbout,
+            onAnywhere = viewModel::onAnywhere,
+            onAnywhereMaxPrice = viewModel::onAnywhereMaxPrice,
+            onCheapDestinationSelected = viewModel::onCheapDestinationSelected,
+            onOpenBookings = onOpenBookings,
         ),
         modifier = modifier,
     )
@@ -174,7 +215,7 @@ fun SearchScreen(
             contentPadding = PaddingValues(bottom = innerPadding.calculateBottomPadding() + 24.dp),
         ) {
             item(key = "header") {
-                SearchHeader(topInset = innerPadding.calculateTopPadding(), compact = searchMode)
+                SearchHeader(topInset = innerPadding.calculateTopPadding(), compact = searchMode, onOpenAbout = actions.onOpenAbout)
             }
             item(key = "field") {
                 CitySearchField(
@@ -193,6 +234,19 @@ fun SearchScreen(
 
             val results = state.results
             if (results == null) {
+                if (state.savedTrips.isNotEmpty()) {
+                    item(key = "saved-trips") {
+                        SavedTripsRow(
+                            trips = state.savedTrips,
+                            today = state.today,
+                            onSelected = actions.onSavedTripSelected,
+                            onRemove = actions.onRemoveSavedTrip,
+                        )
+                    }
+                }
+                item(key = "bookings") {
+                    BookingsEntryRow(next = state.upcomingBookings.firstOrNull(), count = state.upcomingBookings.size, onOpen = actions.onOpenBookings)
+                }
                 item(key = "departure") { DepartureRow(departure = state.departure, onChoose = actions.onChooseDeparture) }
                 item(key = "period") {
                     Column(modifier = Modifier.padding(top = 8.dp)) {
@@ -203,6 +257,17 @@ fun SearchScreen(
                             today = state.today,
                             onSelected = actions.onPeriodSelected,
                         )
+                        TripDatesRow(
+                            period = state.period,
+                            today = state.today,
+                            onDatesSelected = actions.onDatesSelected,
+                            modifier = Modifier.padding(top = 12.dp),
+                        )
+                        TravellersRow(
+                            travellers = state.travellers,
+                            onTravellersSelected = actions.onTravellersSelected,
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
+                        )
                     }
                 }
                 item(key = "recommend") {
@@ -210,6 +275,17 @@ fun SearchScreen(
                 }
                 state.recommendations?.let { recommendations ->
                     recommendationItems(recommendations, state, selectSuggestion, actions)
+                }
+                if (state.anywhereAvailable) {
+                    item(key = "anywhere") {
+                        AnywhereSection(
+                            departure = state.departure,
+                            isLoading = state.anywhere == UiState.Loading,
+                            onAnywhere = actions.onAnywhere,
+                            onChooseDeparture = actions.onChooseDeparture,
+                        )
+                    }
+                    state.anywhere?.let { anywhere -> anywhereItems(anywhere, state, actions) }
                 }
             } else {
                 searchResultItems(results, query, state.preparingCityId, selectCity, actions.onRetrySearch)
@@ -220,7 +296,7 @@ fun SearchScreen(
 
 /** Intestazione con marchio e titolo; in modalità ricerca ([compact]) resta solo il titolo. */
 @Composable
-private fun SearchHeader(topInset: Dp, compact: Boolean, modifier: Modifier = Modifier) {
+private fun SearchHeader(topInset: Dp, compact: Boolean, onOpenAbout: () -> Unit, modifier: Modifier = Modifier) {
     val colors = MaterialTheme.colorScheme
     Box(
         modifier = modifier
@@ -255,6 +331,9 @@ private fun SearchHeader(topInset: Dp, compact: Boolean, modifier: Modifier = Mo
                     modifier = Modifier.padding(top = 8.dp),
                 )
             }
+        }
+        IconButton(onClick = onOpenAbout, modifier = Modifier.align(Alignment.TopEnd).offset(x = 12.dp, y = (-8).dp)) {
+            Icon(Icons.Outlined.Info, contentDescription = stringResource(R.string.about_open), tint = colors.onSurfaceVariant)
         }
     }
 }
@@ -308,6 +387,40 @@ private fun DepartureRow(departure: DeparturePoint?, onChoose: () -> Unit) {
     }
 }
 
+/** Tag della riga «Le mie prenotazioni», usato dai test UI. */
+const val BOOKINGS_ENTRY_TAG = "bookings_entry"
+
+/** «Le mie prenotazioni», con la prossima in arrivo (o un invito ad aggiungerne). */
+@Composable
+private fun BookingsEntryRow(next: Booking?, count: Int, onOpen: () -> Unit) {
+    OutlinedCard(
+        onClick = onOpen,
+        modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 16.dp).testTag(BOOKINGS_ENTRY_TAG),
+    ) {
+        Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "🎫", style = MaterialTheme.typography.titleLarge)
+            Spacer(Modifier.width(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = if (count > 0) pluralStringResource(R.plurals.bookings_entry_count, count, count) else stringResource(R.string.bookings_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Text(
+                    text = next?.let {
+                        stringResource(R.string.bookings_entry_next, it.kind.emoji() + " " + it.title, Formatters.weekdayDayMonth(it.startDate))
+                    } ?: stringResource(R.string.bookings_entry_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+            TextButton(onClick = onOpen) { Text(stringResource(R.string.bookings_entry_open)) }
+        }
+    }
+}
+
 @Composable
 private fun RecommendSection(isLoading: Boolean, onRecommend: () -> Unit) {
     Column(modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 24.dp)) {
@@ -354,6 +467,122 @@ private fun LazyListScope.searchResultItems(
         is UiState.Success -> items(results.data, key = { it.id }) { city ->
             CityResultItem(city = city, isPreparing = city.id == preparingCityId, onClick = { onCitySelected(city) })
             HorizontalDivider(modifier = Modifier.padding(start = 76.dp, end = 16.dp))
+        }
+    }
+}
+
+/** «Ovunque»: pulsante per le mete più economiche dalla città di partenza (che va scelta prima). */
+@Composable
+private fun AnywhereSection(departure: DeparturePoint?, isLoading: Boolean, onAnywhere: () -> Unit, onChooseDeparture: () -> Unit) {
+    Column(modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 16.dp)) {
+        OutlinedButton(
+            onClick = if (departure != null) onAnywhere else onChooseDeparture,
+            enabled = !isLoading,
+            modifier = Modifier.fillMaxWidth().height(56.dp),
+            shape = RoundedCornerShape(28.dp),
+        ) {
+            Text(
+                text = "🌍  " + if (departure != null) stringResource(R.string.anywhere_button, departure.cityName) else stringResource(R.string.anywhere_button_no_departure),
+                style = MaterialTheme.typography.titleMedium,
+            )
+        }
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text = stringResource(R.string.anywhere_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 8.dp),
+        )
+    }
+}
+
+private fun LazyListScope.anywhereItems(anywhere: UiState<List<CheapDestination>>, state: SearchUiState, actions: SearchActions) {
+    item(key = "anywhere-title") {
+        SectionTitle(stringResource(R.string.anywhere_title, state.departure?.cityName.orEmpty(), state.period.phrase(state.today)))
+    }
+    when (anywhere) {
+        UiState.Loading -> item(key = "anywhere-loading") { SectionLoading() }
+        UiState.Empty -> item(key = "anywhere-empty") { SectionMessage(stringResource(R.string.anywhere_empty)) }
+        is UiState.Error -> item(key = "anywhere-error") { SectionError(error = anywhere.error, onRetry = actions.onAnywhere) }
+        is UiState.Success -> {
+            item(key = "anywhere-prices") { AnywherePriceChips(selected = state.anywhereMaxPrice, onSelected = actions.onAnywhereMaxPrice) }
+            val shown = state.anywhereShown
+            if (shown.isEmpty()) {
+                item(key = "anywhere-none") { SectionMessage(stringResource(R.string.anywhere_none_in_budget)) }
+            }
+            items(shown, key = { "anywhere-" + it.cityCode }) { destination ->
+                CheapDestinationItem(
+                    destination = destination,
+                    isPreparing = destination.city.id == state.preparingCityId,
+                    onClick = { actions.onCheapDestinationSelected(destination) },
+                )
+                HorizontalDivider(modifier = Modifier.padding(start = 76.dp, end = 16.dp))
+            }
+        }
+    }
+}
+
+/** Prezzo massimo a persona: tutte le mete, fino a 50, 100 o 200 €. */
+@Composable
+private fun AnywherePriceChips(selected: Int?, onSelected: (Int?) -> Unit) {
+    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        item(key = "all") {
+            FilterChip(selected = selected == null, onClick = { onSelected(null) }, label = { Text(stringResource(R.string.anywhere_all_prices)) })
+        }
+        items(SearchUiState.ANYWHERE_PRICE_STEPS, key = { it }) { price ->
+            FilterChip(
+                selected = selected == price,
+                onClick = { onSelected(price) },
+                label = { Text(stringResource(R.string.anywhere_max_price, Formatters.money(Money.of(price, "EUR")))) },
+            )
+        }
+    }
+}
+
+/** Meta di «Ovunque»: bandiera, città e paese, date e notti del volo più economico, prezzo a persona. */
+@Composable
+private fun CheapDestinationItem(destination: CheapDestination, isPreparing: Boolean, onClick: () -> Unit) {
+    val fare = destination.fare
+    val details = buildList {
+        destination.city.country?.let { add(it) }
+        fare.returnDate?.let { back -> add(Formatters.dateRange(fare.departureDate, back)) }
+        fare.stayNights?.let { nights -> add(pluralStringResource(R.plurals.flight_stay_nights, nights.toInt(), nights.toInt())) }
+        add(if (fare.stops == 0) stringResource(R.string.flight_direct) else pluralStringResource(R.plurals.flight_stops, fare.stops, fare.stops))
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(enabled = !isPreparing, onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(text = flagEmoji(destination.city.countryCode), style = MaterialTheme.typography.headlineMedium)
+        Spacer(Modifier.width(16.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(text = destination.city.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            Text(
+                text = details.joinToString(" · "),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        Spacer(Modifier.width(8.dp))
+        if (isPreparing) {
+            CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+        } else {
+            Column(horizontalAlignment = Alignment.End) {
+                Text(
+                    text = Formatters.money(fare.price),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                Text(
+                    text = stringResource(R.string.anywhere_per_person),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
     }
 }
@@ -479,4 +708,66 @@ private fun SearchIdeasPreview() {
 @Composable
 private fun SearchResultsPreview() {
     PartiMoTheme { SearchScreen(state = PreviewData.searchResultsState(), query = "Par", actions = SearchActions()) }
+}
+
+/** Tag della riga dei viaggi salvati, scorrevole in orizzontale. */
+const val SAVED_TRIPS_TAG = "saved_trips"
+
+/** "I tuoi viaggi": i viaggi salvati, dal più vicino, da riaprire con un tocco. */
+@Composable
+private fun SavedTripsRow(trips: List<SavedTrip>, today: LocalDate, onSelected: (SavedTrip) -> Unit, onRemove: (SavedTrip) -> Unit) {
+    Column(modifier = Modifier.padding(top = 8.dp)) {
+        SectionTitle(stringResource(R.string.saved_trips_title))
+        LazyRow(
+            modifier = Modifier.testTag(SAVED_TRIPS_TAG),
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            items(trips, key = { it.id }) { trip -> SavedTripCard(trip, today, onClick = { onSelected(trip) }, onRemove = { onRemove(trip) }) }
+        }
+    }
+}
+
+@Composable
+private fun SavedTripCard(trip: SavedTrip, today: LocalDate, onClick: () -> Unit, onRemove: () -> Unit) {
+    val from = trip.departureDate(today)
+    val past = trip.period.isOver(today)
+    val days = ChronoUnit.DAYS.between(today, from)
+    OutlinedCard(onClick = onClick, modifier = Modifier.width(220.dp)) {
+        Row(modifier = Modifier.padding(start = 12.dp, top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = flagEmoji(trip.destination.countryCode) + " " + trip.destination.name,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f),
+            )
+            IconButton(onClick = onRemove) {
+                Icon(Icons.Default.Close, contentDescription = stringResource(R.string.saved_trip_remove, trip.destination.name))
+            }
+        }
+        Column(modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(
+                text = if (past) stringResource(R.string.saved_trip_past) else Formatters.dateRange(from, trip.returnDate(today)),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (!past) {
+                    Text(
+                        text = if (days <= 1) stringResource(R.string.saved_trip_tomorrow) else stringResource(R.string.saved_trip_in_days, days.toInt()),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
+                if (trip.favorites.isNotEmpty()) {
+                    Text(
+                        text = stringResource(R.string.saved_trip_favorites, trip.favorites.size),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+        }
+    }
 }

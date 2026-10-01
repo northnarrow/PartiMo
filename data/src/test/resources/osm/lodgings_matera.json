@@ -1,0 +1,1499 @@
+{
+ "version": 0.6,
+ "generator": "Overpass API 0.7.62.4 2390de5a",
+ "osm3s": {
+  "timestamp_osm_base": "2026-09-30T22:07:22Z",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+ },
+ "elements": [
+  {
+   "type": "node",
+   "id": 1894975702,
+   "lat": 40.6670187,
+   "lon": 16.6109793,
+   "tags": {
+    "name": "B&B all'Annunziata Vecchia",
+    "tourism": "guest_house",
+    "website": "http://annunziata.matera.it/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 1936066439,
+   "lat": 40.6677468,
+   "lon": 16.6119261,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "28",
+    "addr:postcode": "75100",
+    "addr:street": "Via Civita",
+    "brand": "Sextantio",
+    "name": "Sextantio Le Grotte della Civita",
+    "tourism": "hotel",
+    "website": "https://www.sextantio.it/grotte-civita/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2229571520,
+   "lat": 40.6646076,
+   "lon": 16.6091323,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "5",
+    "addr:postcode": "75100",
+    "addr:street": "Via Domenico Ridola",
+    "name": "Albergo Italia",
+    "stars": "3",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2229580571,
+   "lat": 40.6665106,
+   "lon": 16.6113977,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "13",
+    "addr:street": "Piazza Duomo",
+    "name": "Palazzo Gattini Luxury",
+    "stars": "5",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2229591604,
+   "lat": 40.6658431,
+   "lon": 16.6118068,
+   "tags": {
+    "name": "Le 12 lune",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2407238230,
+   "lat": 40.6627862,
+   "lon": 16.6109848,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:street": "Via San Francesco da Paola Vecchio",
+    "guest_house": "bed_and_breakfast",
+    "name": "Slow Living B&B",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2521185694,
+   "lat": 40.6690306,
+   "lon": 16.6093705,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "27",
+    "addr:postcode": "75100",
+    "addr:street": "Via San Pietro Barisano",
+    "name": "Palazzo degli Abati",
+    "tourism": "hotel",
+    "website": "http://www.palazzodegliabati.it"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2870522015,
+   "lat": 40.6602707,
+   "lon": 16.6127245,
+   "tags": {
+    "name": "B&B Le Tre Civette",
+    "stars": "1",
+    "tourism": "hotel",
+    "website": "www.letrecivette.it"
+   }
+  },
+  {
+   "type": "node",
+   "id": 3201647796,
+   "lat": 40.6817382,
+   "lon": 16.6085303,
+   "tags": {
+    "addr:street": "Contrada La Palomba",
+    "name": "Residence Palomba",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4191537158,
+   "lat": 40.6665353,
+   "lon": 16.6123552,
+   "tags": {
+    "name": "La Dimora Della Civita",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4191537159,
+   "lat": 40.6666157,
+   "lon": 16.6124719,
+   "tags": {
+    "name": "B&B San Potito",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4191642963,
+   "lat": 40.6664951,
+   "lon": 16.6125319,
+   "tags": {
+    "name": "Casa Vacanza Una carezza per l'anima",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4191642964,
+   "lat": 40.6661925,
+   "lon": 16.6119547,
+   "tags": {
+    "name": "Casa vacanze Le Scuderie Noha",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4191642966,
+   "lat": 40.6665801,
+   "lon": 16.6122157,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "7",
+    "addr:postcode": "75100",
+    "addr:street": "Via San Potito",
+    "name": "Palazzo Viceconte",
+    "stars": "4",
+    "tourism": "hotel",
+    "website": "https://www.palazzoviceconte.it/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4192062318,
+   "lat": 40.6659351,
+   "lon": 16.6097437,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "17",
+    "addr:postcode": "75100",
+    "addr:street": "Piazza del Sedile",
+    "name": "Residenza dei Suoni",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4192062326,
+   "lat": 40.6653848,
+   "lon": 16.6094245,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "4",
+    "addr:postcode": "75100",
+    "addr:street": "Recinto del Sedile",
+    "name": "Albergo del Sedile",
+    "tourism": "hotel",
+    "website": "https://www.albergodelsedile.it/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4510298078,
+   "lat": 40.6670242,
+   "lon": 16.6050765,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "4",
+    "addr:postcode": "75100",
+    "addr:street": "Via Roma",
+    "name": "Hotel San Domenico",
+    "stars": "4",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4510452991,
+   "lat": 40.660545,
+   "lon": 16.6133836,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "116",
+    "addr:postcode": "75100",
+    "addr:street": "Via Casalnuovo",
+    "name": "Residence del Casalnuovo",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4857980576,
+   "lat": 40.6627534,
+   "lon": 16.6070649,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "49",
+    "addr:postcode": "75100",
+    "addr:street": "Via Andrea Serrao",
+    "name": "Residenza del Maestro",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4895927062,
+   "lat": 40.6669782,
+   "lon": 16.6073639,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "7",
+    "addr:street": "Via Rosario",
+    "name": "Sassisuite B&B",
+    "tourism": "hotel",
+    "website": "https://www.sassisuite.it/it/home/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5766186273,
+   "lat": 40.6646531,
+   "lon": 16.6097231,
+   "tags": {
+    "addr:housenumber": "14",
+    "addr:street": "Gradoni Municipio",
+    "name": "L'Albero di Eliana",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6047327369,
+   "lat": 40.6586048,
+   "lon": 16.6158938,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "257",
+    "addr:postcode": "75100",
+    "addr:street": "Via Casalnuovo",
+    "name": "B&B Casastella",
+    "tourism": "guest_house",
+    "website": "https://www.casastella.it/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6436462051,
+   "lat": 40.6715278,
+   "lon": 16.6034984,
+   "tags": {
+    "name": "Casa Vacanze Casa Nonna franca",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6485246371,
+   "lat": 40.674555,
+   "lon": 16.606228,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "16",
+    "addr:street": "Via Cererie",
+    "name": "Chiostro delle Cererie",
+    "stars": "2",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6485299230,
+   "lat": 40.6670969,
+   "lon": 16.6125696,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "9",
+    "addr:street": "Via Civita",
+    "name": "Cenobio Hotel Matera",
+    "stars": "4",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6485299231,
+   "lat": 40.667198,
+   "lon": 16.609775,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "89",
+    "addr:street": "Via San Giovanni Vecchio",
+    "name": "Hotel Sassi",
+    "stars": "3",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6485299232,
+   "lat": 40.667698,
+   "lon": 16.610155,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "259",
+    "addr:street": "Via Fiorentini",
+    "name": "Hotel Residence San Giorgio",
+    "stars": "3",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6485299233,
+   "lat": 40.667902,
+   "lon": 16.609776,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "102",
+    "addr:street": "via D'Addozio",
+    "name": "Fra i sassi Residence",
+    "stars": "3",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6485299234,
+   "lat": 40.667489,
+   "lon": 16.609345,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "17",
+    "addr:street": "Via San Giovanni Vecchio",
+    "name": "Hotel in Pietra",
+    "stars": "3",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6485299235,
+   "lat": 40.667841,
+   "lon": 16.609158,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "67",
+    "addr:street": "Via San Rocco",
+    "name": "Locanda di San Martino",
+    "stars": "3",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6485299236,
+   "lat": 40.668011,
+   "lon": 16.604775,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "11",
+    "addr:street": "Via De Sariis",
+    "name": "Piccolo Albergo",
+    "stars": "3",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6485299237,
+   "lat": 40.667208,
+   "lon": 16.603684,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "62",
+    "addr:street": "Via Roma",
+    "name": "Albergo Roma",
+    "stars": "2",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6485319925,
+   "lat": 40.660796,
+   "lon": 16.61314,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "133",
+    "addr:street": "Via Casalnuovo",
+    "name": "Il Belvedere",
+    "stars": "3",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6485319926,
+   "lat": 40.662891,
+   "lon": 16.611299,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "12",
+    "addr:street": "Via Conche",
+    "name": "Aquatio Cave Luxury Hotel",
+    "stars": "5S",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6485319928,
+   "lat": 40.664287,
+   "lon": 16.610655,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "66",
+    "addr:street": "Via San Pietro Caveoso",
+    "name": "Casa di Lucio",
+    "stars": "4",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6485319929,
+   "lat": 40.665191,
+   "lon": 16.611945,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:street": "Piazza San Pietro Caveoso",
+    "name": "Hotel Sant'angelo",
+    "stars": "5S",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6485319930,
+   "lat": 40.66491,
+   "lon": 16.6114,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "26",
+    "addr:street": "Rione Pianelle",
+    "name": "Hotel Caveoso",
+    "stars": "3",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6485319931,
+   "lat": 40.666136,
+   "lon": 16.611718,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "52",
+    "addr:street": "Via Muro",
+    "name": "Palazzo del Duca",
+    "stars": "4",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6570318348,
+   "lat": 40.66881,
+   "lon": 16.606008,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "45",
+    "addr:postcode": "75100",
+    "addr:street": "Via XX Settembre",
+    "name": "Affittacamere Domus Matera",
+    "tourism": "apartment"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6761732376,
+   "lat": 40.6665771,
+   "lon": 16.6080627,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "14",
+    "addr:postcode": "75100",
+    "addr:street": "Via Fiorentini",
+    "guest_house": "bed_and_breakfast",
+    "name": "B&B Fiorentini",
+    "tourism": "guest_house",
+    "website": "https://www.bebfiorentini.com/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6761811395,
+   "lat": 40.6665491,
+   "lon": 16.6081364,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "16",
+    "addr:postcode": "75100",
+    "addr:street": "Via Fiorentini",
+    "guest_house": "guest_house",
+    "name": "Il Risveglio nei Sassi",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6763618364,
+   "lat": 40.6667163,
+   "lon": 16.6082695,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "71",
+    "addr:postcode": "75100",
+    "addr:street": "Via Fiorentini",
+    "name": "Locanda di San Martino",
+    "tourism": "hotel",
+    "website": "http://www.locandadisanmartino.it/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6816702985,
+   "lat": 40.6727729,
+   "lon": 16.6080202,
+   "tags": {
+    "addr:housenumber": "88",
+    "addr:street": "Via Santo Stefano",
+    "name": "Casa Michelangelo",
+    "name:en": "Casa Michela",
+    "name:it": "Casa Michela",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6821894786,
+   "lat": 40.6672661,
+   "lon": 16.610175,
+   "tags": {
+    "name": "Ai Maestri Rooms & Caffè",
+    "tourism": "hostel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 8231329807,
+   "lat": 40.6680675,
+   "lon": 16.609773,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "102",
+    "addr:postcode": "75100",
+    "addr:street": "Via d'Addozio",
+    "name": "Fra i Sassi Residence",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 8404829303,
+   "lat": 40.6695878,
+   "lon": 16.6087976,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "41",
+    "addr:postcode": "75100",
+    "addr:street": "Via Santa Cesarea",
+    "name": "Giulietta nei Sassi",
+    "tourism": "apartment",
+    "website": "http://www.giuliettaneisassi.it"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9284300041,
+   "lat": 40.6684826,
+   "lon": 16.6093957,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "90",
+    "addr:postcode": "75100",
+    "addr:street": "Via D'Addozio",
+    "name": "Il Nido dello Striscignl",
+    "tourism": "apartment",
+    "website": "http://www.ilnidodellostriscignl.it"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9294548630,
+   "lat": 40.6774633,
+   "lon": 16.5987832,
+   "tags": {
+    "addr:housenumber": "28",
+    "addr:street": "Via San Vito",
+    "name": "Alvino 1884",
+    "opening_hours": "Mo-Su 09:00-19:00",
+    "tourism": "hotel",
+    "website": "https://www.alvino1884.it/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9737959504,
+   "lat": 40.6653869,
+   "lon": 16.6063258,
+   "tags": {
+    "name": "Da Vinci",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9802569781,
+   "lat": 40.6679669,
+   "lon": 16.609982,
+   "tags": {
+    "addr:housenumber": "141",
+    "addr:street": "Via D'Addozio",
+    "name": "Ai Terrazzini",
+    "tourism": "hotel",
+    "website": "https://www.aiterrazzini.it/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9812231044,
+   "lat": 40.6664895,
+   "lon": 16.6082811,
+   "tags": {
+    "name": "Il risveglio nei sassi",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9812240625,
+   "lat": 40.6666595,
+   "lon": 16.6081569,
+   "tags": {
+    "name": "Beb & Breakfast FIORENTINI",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9812241162,
+   "lat": 40.6665108,
+   "lon": 16.6086576,
+   "tags": {
+    "name": "Casa Vacanze ELENA",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9812241717,
+   "lat": 40.666478,
+   "lon": 16.6083783,
+   "tags": {
+    "name": "Dimora 1919",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9812638531,
+   "lat": 40.6640585,
+   "lon": 16.6117806,
+   "tags": {
+    "name": "Le Dimore dell'idris",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9833833763,
+   "lat": 40.6697263,
+   "lon": 16.6080709,
+   "tags": {
+    "guest_house": "bed_and_breakfast",
+    "name": "Hydria Residence",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9833868708,
+   "lat": 40.6683706,
+   "lon": 16.6086742,
+   "tags": {
+    "name": "L'affaccio Casa Vacanze",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9833930701,
+   "lat": 40.6664172,
+   "lon": 16.6131653,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "8",
+    "addr:postcode": "75100",
+    "addr:street": "Recinto Santa Maria",
+    "guest_house": "guest_house",
+    "name": "L'Opera dell'Architetto - Suite Santa Maria",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9833934924,
+   "lat": 40.6664517,
+   "lon": 16.6131144,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "13",
+    "addr:postcode": "75100",
+    "addr:street": "Recinto II San Giacomo",
+    "guest_house": "guest_house",
+    "name": "L'Opera dell'Architetto - Suite San Giacomo",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9840715696,
+   "lat": 40.6729312,
+   "lon": 16.6041862,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:street": "Via Nicola Sole 34",
+    "guest_house": "bed_and_breakfast",
+    "name": "Emi Guest House",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9857631686,
+   "lat": 40.6660279,
+   "lon": 16.6116755,
+   "tags": {
+    "guest_house": "bed_and_breakfast",
+    "name": "Casa Vacanze \"Bella Vista\"",
+    "tourism": "guest_house",
+    "website": "https://bellavistacasavacanze.com/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9857634371,
+   "lat": 40.6660393,
+   "lon": 16.6116587,
+   "tags": {
+    "name": "B&B nel muro Sassi di Matera",
+    "tourism": "apartment",
+    "website": "https://www.bbnelmuro.it/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9874648409,
+   "lat": 40.661401,
+   "lon": 16.6118691,
+   "tags": {
+    "guest_house": "bed_and_breakfast",
+    "name": "Domina Sassi",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9874661403,
+   "lat": 40.6608724,
+   "lon": 16.6132655,
+   "tags": {
+    "guest_house": "bed_and_breakfast",
+    "name": "Luce nei Sassi",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9874682228,
+   "lat": 40.661052,
+   "lon": 16.6129477,
+   "tags": {
+    "guest_house": "bed_and_breakfast",
+    "name": "Casa Vacanze \"Il sogno e la stella\"",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9874688890,
+   "lat": 40.6612789,
+   "lon": 16.6124515,
+   "tags": {
+    "guest_house": "bed_and_breakfast",
+    "name": "\"Il Vicolo\" Casa Vacanze",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9874696094,
+   "lat": 40.6615352,
+   "lon": 16.6118709,
+   "tags": {
+    "guest_house": "bed_and_breakfast",
+    "name": "Krypte Comfort Room",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9874717990,
+   "lat": 40.6609692,
+   "lon": 16.6128794,
+   "tags": {
+    "name": "Le Stelle nei Sassi",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9892802356,
+   "lat": 40.6683359,
+   "lon": 16.6045605,
+   "tags": {
+    "addr:housenumber": "10",
+    "addr:street": "Via Alessio De Sariis",
+    "contact:website": "https://www.almacamere.it/",
+    "guest_house": "bed_and_breakfast",
+    "name": "ALMA CAMERE MATERA",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9896833579,
+   "lat": 40.6646307,
+   "lon": 16.6095585,
+   "tags": {
+    "name": "Casa DIVA",
+    "stars": "2",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9896854754,
+   "lat": 40.6652682,
+   "lon": 16.606642,
+   "tags": {
+    "guest_house": "bed_and_breakfast",
+    "name": "Livingstone bed&breakslow",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9897542602,
+   "lat": 40.6644634,
+   "lon": 16.6078058,
+   "tags": {
+    "contact:website": "https://www.lasuitematera.com/",
+    "name": "La Suite Matera Hotel & SPA",
+    "stars": "5",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9900180105,
+   "lat": 40.6660951,
+   "lon": 16.6046783,
+   "tags": {
+    "name": "Affittacamere Piazza Mulino 26",
+    "tourism": "apartment",
+    "website": "http://www.piazzamulino26.it/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9900209846,
+   "lat": 40.6659412,
+   "lon": 16.6045267,
+   "tags": {
+    "name": "Residence Nazionale Matera",
+    "tourism": "guest_house",
+    "website": "https://www.residencenazionalematera.com/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9900220231,
+   "lat": 40.6654193,
+   "lon": 16.6038542,
+   "tags": {
+    "name": "L'angolo di Frima",
+    "tourism": "guest_house",
+    "website": "https://www.langolodifrima.it/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9901177961,
+   "lat": 40.659981,
+   "lon": 16.6140446,
+   "tags": {
+    "guest_house": "bed_and_breakfast",
+    "name": "LITHOS ROOM",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9903430003,
+   "lat": 40.6649389,
+   "lon": 16.6117856,
+   "tags": {
+    "name": "I tre Portali",
+    "tourism": "hotel",
+    "website": "https://www.itreportali.it/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9907203381,
+   "lat": 40.6722504,
+   "lon": 16.6081094,
+   "tags": {
+    "guest_house": "bed_and_breakfast",
+    "name": "La Stufetta",
+    "tourism": "guest_house",
+    "website": "https://stufetta.bedsandhotels.com/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9907223682,
+   "lat": 40.6720843,
+   "lon": 16.6083901,
+   "tags": {
+    "guest_house": "bed_and_breakfast",
+    "name": "Casanelcuore holiday room",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9907226673,
+   "lat": 40.6727181,
+   "lon": 16.6078923,
+   "tags": {
+    "addr:housenumber": "96",
+    "addr:street": "Via Santo Stefano",
+    "name": "Ostello \"The Rock Hostel\" Matera",
+    "opening_hours": "Mo-Su 15:00-20:30",
+    "tourism": "hostel",
+    "website": "http://www.therockhostel.it/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9907232735,
+   "lat": 40.6719308,
+   "lon": 16.608448,
+   "tags": {
+    "name": "Il Peccato Originale Vacanze Matera",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9907235813,
+   "lat": 40.672586,
+   "lon": 16.6080464,
+   "tags": {
+    "name": "Art & Design Loft Suite Matera",
+    "tourism": "apartment"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9907252804,
+   "lat": 40.6717816,
+   "lon": 16.6083688,
+   "tags": {
+    "name": "IN & OUT Matera b&b",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9907281807,
+   "lat": 40.6716654,
+   "lon": 16.6085961,
+   "tags": {
+    "guest_house": "bed_and_breakfast",
+    "name": "Casa Festa Room",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9907282286,
+   "lat": 40.6717157,
+   "lon": 16.608402,
+   "tags": {
+    "guest_house": "bed_and_breakfast",
+    "name": "Casa Blanca Matera",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9907311559,
+   "lat": 40.6714087,
+   "lon": 16.6085936,
+   "tags": {
+    "guest_house": "bed_and_breakfast",
+    "name": "Casa Vacanze Nonna Bruna",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9907330127,
+   "lat": 40.6713288,
+   "lon": 16.6086329,
+   "tags": {
+    "guest_house": "bed_and_breakfast",
+    "name": "B&B 4u",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9907330750,
+   "lat": 40.6709267,
+   "lon": 16.6088738,
+   "tags": {
+    "guest_house": "bed_and_breakfast",
+    "name": "I Sassi da Nonno Ciccio",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9925174607,
+   "lat": 40.6747002,
+   "lon": 16.5994492,
+   "tags": {
+    "guest_house": "guest_house",
+    "name": "LA VOLTA BUONA Guest House",
+    "tourism": "guest_house",
+    "website": "http://www.lavoltabuonamatera.it/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9935642992,
+   "lat": 40.6664343,
+   "lon": 16.598379,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "12",
+    "addr:street": "Via Saragat",
+    "guest_house": "bed_and_breakfast",
+    "name": "Casa Vacanze Macamarda",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9936033825,
+   "lat": 40.669126,
+   "lon": 16.6013254,
+   "tags": {
+    "name": "B&B Le Colombine",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9963984681,
+   "lat": 40.6601475,
+   "lon": 16.6138774,
+   "tags": {
+    "name": "I Lamioni Holiday Home",
+    "tourism": "apartment"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9964645173,
+   "lat": 40.6657902,
+   "lon": 16.6060336,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "14",
+    "addr:street": "Via Luigi La Vista",
+    "name": "Palazzo della Fontana Urban Hotel",
+    "stars": "4",
+    "tourism": "hotel",
+    "website": "https://www.palazzodellafontana.it/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9982057181,
+   "lat": 40.6583406,
+   "lon": 16.6113855,
+   "tags": {
+    "name": "Hotel Ridola Matera",
+    "stars": "4",
+    "tourism": "hotel",
+    "website": "https://hotelridolamatera.it/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9983371107,
+   "lat": 40.6624339,
+   "lon": 16.6101915,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "49",
+    "addr:street": "Via Domenico Ridola",
+    "name": "Palazzo Montemurro Boutique Hotel",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9986377083,
+   "lat": 40.6590637,
+   "lon": 16.6148934,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "295 bis",
+    "addr:postcode": "75100",
+    "addr:street": "Via Lucana",
+    "name": "Dimora al Mulino",
+    "tourism": "guest_house",
+    "website": "https://dimora-al-mulino.business.site/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9986825820,
+   "lat": 40.6608357,
+   "lon": 16.6131325,
+   "tags": {
+    "name": "Hotel Il Belvedere",
+    "stars": "3",
+    "tourism": "hotel",
+    "website": "https://www.hotelbelvedere.matera.it"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10004376705,
+   "lat": 40.668973,
+   "lon": 16.6096002,
+   "tags": {
+    "guest_house": "bed_and_breakfast",
+    "name": "SUITE San Placido Matera",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10011449617,
+   "lat": 40.6705371,
+   "lon": 16.596176,
+   "tags": {
+    "addr:housenumber": "5",
+    "addr:postcode": "75100",
+    "addr:street": "Via Fratelli Grimm",
+    "name": "Hotel Dante",
+    "opening_hours": "24/7",
+    "tourism": "guest_house",
+    "website": "https://hoteldante.business.site/?gclid=Cj0KCQjwyOuYBhCGARIsAIdGQRMFgGuYzm00fpbp2HEz8QXiZkw3CwXTWuru-Od5_BugsYfrfGOuj0saAkU5EALw_wcB"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10035873385,
+   "lat": 40.6713512,
+   "lon": 16.6059032,
+   "tags": {
+    "guest_house": "bed_and_breakfast",
+    "name": "La Passione dei Sassi",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10087127734,
+   "lat": 40.6658588,
+   "lon": 16.6079973,
+   "tags": {
+    "name": "ANTICA PEPICE SUITE DELUXE",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10181056794,
+   "lat": 40.6658321,
+   "lon": 16.6074618,
+   "tags": {
+    "addr:housenumber": "7",
+    "addr:street": "Via del Corso",
+    "name": "Residenza del Corso",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10271541392,
+   "lat": 40.6634229,
+   "lon": 16.5983486,
+   "tags": {
+    "name": "Palace Hotel Dehors Esterno",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 11018001368,
+   "lat": 40.6629615,
+   "lon": 16.6117937,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "60",
+    "addr:postcode": "75100",
+    "addr:street": "Via Bruno Buozzi",
+    "name": "Casa di Irene",
+    "tourism": "apartment"
+   }
+  },
+  {
+   "type": "node",
+   "id": 11220795845,
+   "lat": 40.6618272,
+   "lon": 16.6108211,
+   "tags": {
+    "name": "Ostello dei sassi",
+    "tourism": "hostel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 11246939937,
+   "lat": 40.6548804,
+   "lon": 16.5865877,
+   "tags": {
+    "name": "BnB Pozzo Misseo",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12144368720,
+   "lat": 40.666703,
+   "lon": 16.6078306,
+   "tags": {
+    "name": "Il caminetto",
+    "tourism": "apartment"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12144433744,
+   "lat": 40.6666177,
+   "lon": 16.6079586,
+   "tags": {
+    "name": "Vivere nei sassi",
+    "tourism": "apartment"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12146673598,
+   "lat": 40.6661478,
+   "lon": 16.6077749,
+   "tags": {
+    "name": "Il Gufo e la Pupa",
+    "tourism": "apartment"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12182426285,
+   "lat": 40.6682191,
+   "lon": 16.6073806,
+   "tags": {
+    "name": "Il nido del grillaio",
+    "tourism": "apartment"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12182558326,
+   "lat": 40.6616953,
+   "lon": 16.6104405,
+   "tags": {
+    "name": "Il Nespolo",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12182723562,
+   "lat": 40.6617753,
+   "lon": 16.6104315,
+   "tags": {
+    "name": "Sassi low cost",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12246246689,
+   "lat": 40.6673221,
+   "lon": 16.6048778,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "4",
+    "addr:postcode": "75100",
+    "addr:street": "Via Roma",
+    "name": "Matera Guest House",
+    "stars": "4",
+    "tourism": "hotel"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12635962809,
+   "lat": 40.6655371,
+   "lon": 16.6118615,
+   "tags": {
+    "addr:housenumber": "20",
+    "addr:street": "Via San Giacomo",
+    "name": "Corte dei Venti",
+    "tourism": "guest_house",
+    "website": "https://beb.it/cortedeiventi/it/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12983537859,
+   "lat": 40.6662115,
+   "lon": 16.6078115,
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "16",
+    "addr:postcode": "75100",
+    "addr:street": "Vico Lombardi",
+    "name": "Residence Le Vie Del Mosto",
+    "tourism": "guest_house"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12986071701,
+   "lat": 40.6658398,
+   "lon": 16.6120051,
+   "tags": {
+    "name": "BV Quarry Matera",
+    "tourism": "hotel",
+    "website": "https://www.bvquarrymatera.com/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 13722891201,
+   "lat": 40.6686032,
+   "lon": 16.6091913,
+   "tags": {
+    "addr:housenumber": "22",
+    "addr:street": "Vico Santa Cesarea 22",
+    "name": "Matera apartament",
+    "tourism": "apartment"
+   }
+  },
+  {
+   "type": "way",
+   "id": 243430538,
+   "center": {
+    "lat": 40.6759494,
+    "lon": 16.5961133
+   },
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "158",
+    "addr:postcode": "75100",
+    "addr:street": "Via Nazionale",
+    "name": "Hotel Nazionale",
+    "stars": "4",
+    "tourism": "hotel",
+    "website": "https://www.hotelnazionalematera.com"
+   }
+  },
+  {
+   "type": "way",
+   "id": 257258454,
+   "center": {
+    "lat": 40.6633564,
+    "lon": 16.6120279
+   },
+   "tags": {
+    "addr:city": "Matera",
+    "addr:housenumber": "51",
+    "addr:postcode": "75100",
+    "addr:street": "Rione Malve",
+    "guest_house": "bed_and_breakfast",
+    "name": "La Dolce Vita",
+    "tourism": "guest_house",
+    "website": "https://ladolcevitamatera.it"
+   }
+  },
+  {
+   "type": "way",
+   "id": 1123138428,
+   "center": {
+    "lat": 40.6633801,
+    "lon": 16.598066
+   },
+   "tags": {
+    "addr:city": "Matera",
+    "addr:street": "Piazza Michele Bianco",
+    "name": "Palace Hotel",
+    "stars": "4",
+    "tourism": "hotel"
+   }
+  }
+ ]
+}

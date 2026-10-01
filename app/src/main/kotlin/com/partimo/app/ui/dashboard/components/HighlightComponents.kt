@@ -2,6 +2,7 @@ package com.partimo.app.ui.dashboard.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -22,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.pluralStringResource
@@ -32,11 +34,14 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.partimo.app.R
 import com.partimo.app.ui.common.DashboardSection
+import com.partimo.app.ui.common.FavoriteButton
 import com.partimo.app.ui.common.Formatters
 import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.common.emoji
 import com.partimo.app.ui.common.labelRes
+import com.partimo.app.ui.common.toFavorite
 import com.partimo.domain.model.poi.PoiTag
+import com.partimo.domain.model.poi.PointOfInterest
 import com.partimo.domain.model.poi.SeasonalHighlights
 import com.partimo.domain.model.poi.SeasonalRecommendation
 
@@ -50,6 +55,10 @@ private val TAG_DISPLAY_ORDER = listOf(
 )
 private const val MAX_VISIBLE_TAGS = 3
 
+/**
+ * Sezione "Da vedere": stagione e meteo, poi i luoghi consigliati con foto reali. Toccando un luogo
+ * si apre la sua scheda con descrizione, storia e il pulsante "Naviga".
+ */
 @Composable
 fun HighlightsSection(
     state: UiState<SeasonalHighlights>,
@@ -58,6 +67,10 @@ fun HighlightsSection(
     onPhotoSpotsOnlyChanged: (Boolean) -> Unit,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
+    onPlaceClick: (PointOfInterest) -> Unit = {},
+    /** Preferiti del viaggio; `null` se non si possono salvare (niente stelle). */
+    favoriteKeys: Set<String>? = null,
+    onToggleFavorite: (PointOfInterest) -> Unit = {},
 ) {
     DashboardSection(
         title = stringResource(R.string.section_highlights),
@@ -81,7 +94,13 @@ fun HighlightsSection(
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             SeasonWeatherCard(highlights = highlights, destinationName = destinationName)
             highlights.recommendations.forEach { recommendation ->
-                PoiCard(recommendation, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp))
+                PoiCard(
+                    recommendation = recommendation,
+                    onClick = { onPlaceClick(recommendation.poi) },
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                    isFavorite = favoriteKeys?.let { recommendation.poi.toFavorite().key in it },
+                    onToggleFavorite = { onToggleFavorite(recommendation.poi) },
+                )
             }
         }
     }
@@ -128,23 +147,39 @@ private fun SeasonWeatherCard(highlights: SeasonalHighlights, destinationName: S
     }
 }
 
+/** Card di un luogo con la sua foto reale; il tocco apre la scheda con storia e indicazioni. */
 @Composable
-fun PoiCard(recommendation: SeasonalRecommendation, modifier: Modifier = Modifier) {
+fun PoiCard(
+    recommendation: SeasonalRecommendation,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    /** Stato della stella dei preferiti; `null` per non mostrarla. */
+    isFavorite: Boolean? = null,
+    onToggleFavorite: () -> Unit = {},
+) {
     val poi = recommendation.poi
-    val ratingText = poi.rating?.let { rating ->
-        val reviews = poi.reviewCount?.let { count -> pluralStringResource(R.plurals.review_count, count, Formatters.count(count)) }
-        listOfNotNull("★ " + Formatters.rating(rating), reviews).joinToString(" · ")
-    }
-    ElevatedCard(modifier = modifier) {
-        AsyncImage(
-            model = poi.photoUrl,
-            contentDescription = poi.name,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(170.dp)
-                .background(MaterialTheme.colorScheme.surfaceVariant),
-        )
+    val ratingText = poiRatingText(poi)
+    ElevatedCard(onClick = onClick, modifier = modifier) {
+        Box {
+            AsyncImage(
+                model = poi.photoUrl,
+                contentDescription = poi.name,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(170.dp)
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
+            )
+            isFavorite?.let { favorite ->
+                FavoriteButton(
+                    isFavorite = favorite,
+                    name = poi.name,
+                    onToggle = onToggleFavorite,
+                    onPhoto = true,
+                    modifier = Modifier.align(Alignment.TopEnd).padding(4.dp),
+                )
+            }
+        }
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(
                 text = poi.name,
@@ -156,6 +191,15 @@ fun PoiCard(recommendation: SeasonalRecommendation, modifier: Modifier = Modifie
             ratingText?.let {
                 Text(text = it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
+            poi.description?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
             PoiTags(poi.tags)
             recommendation.reasons.firstOrNull()?.let { reason ->
                 Text(
@@ -164,13 +208,27 @@ fun PoiCard(recommendation: SeasonalRecommendation, modifier: Modifier = Modifie
                     color = MaterialTheme.colorScheme.primary,
                 )
             }
+            Text(
+                text = stringResource(R.string.place_open_hint),
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.primary,
+            )
         }
     }
 }
 
+/** "★ 4,6 · 12.345 recensioni", oppure `null` se il luogo non ha valutazioni (es. da Wikipedia). */
+@Composable
+internal fun poiRatingText(poi: PointOfInterest): String? = poi.rating?.let { rating ->
+    val reviews = poi.reviewCount?.let { count -> pluralStringResource(R.plurals.review_count, count, Formatters.count(count)) }
+    listOfNotNull("★ " + Formatters.rating(rating), reviews).joinToString(" · ")
+}
+
+/** Etichette fotografiche di un luogo, dalle più rilevanti. */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun PoiTags(tags: Set<PoiTag>) {
+internal fun PoiTags(tags: Set<PoiTag>) {
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),

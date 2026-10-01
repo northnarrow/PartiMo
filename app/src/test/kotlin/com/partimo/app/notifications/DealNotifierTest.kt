@@ -15,6 +15,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
+import java.time.LocalDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -63,6 +64,13 @@ class DealNotifierTest {
         val title = notifier.title(watch.copy(period = TravelPeriod.NextDays), TestData.TODAY)
 
         assertEquals("🔥 Vienna nei prossimi giorni: offerta davvero conveniente", title)
+    }
+
+    @Test
+    fun `con le date scelte il titolo le riporta`() {
+        val dates = TravelPeriod.Dates(LocalDate.of(2026, 12, 10), LocalDate.of(2026, 12, 14))
+
+        assertEquals("🔥 Vienna, 10–14 dic: offerta davvero conveniente", notifier.title(watch.copy(period = dates), TestData.TODAY))
     }
 
     @Test

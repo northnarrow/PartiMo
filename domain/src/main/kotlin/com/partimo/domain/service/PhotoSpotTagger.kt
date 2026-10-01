@@ -6,7 +6,8 @@ import com.partimo.domain.model.poi.PointOfInterest
 
 /**
  * Assegna ai POI le etichette fotografiche (Instagrammabile, Panoramico, Tramonto, Chicca nascosta)
- * combinando categoria, parole chiave multilingua e popolarità (valutazione + numero di recensioni).
+ * combinando categoria, parole chiave multilingua e popolarità (valutazione + numero di recensioni,
+ * oppure la notorietà stimata dal provider quando le recensioni mancano).
  */
 class PhotoSpotTagger(private val thresholds: Thresholds = Thresholds()) {
 
@@ -14,6 +15,8 @@ class PhotoSpotTagger(private val thresholds: Thresholds = Thresholds()) {
         /** Un luogo fotogenico molto popolare è considerato "instagrammabile". */
         val popularMinRating: Double = 4.5,
         val popularMinReviews: Int = 1_000,
+        /** Senza recensioni: notorietà minima (es. tra i luoghi più rilevanti della città su Wikipedia). */
+        val popularMinPopularity: Double = 0.75,
         /** Chicca nascosta: ottime valutazioni ma ancora poco affollata. */
         val hiddenGemMinRating: Double = 4.6,
         val hiddenGemReviews: IntRange = 50..1_000,
@@ -30,9 +33,9 @@ class PhotoSpotTagger(private val thresholds: Thresholds = Thresholds()) {
         val panoramic = poi.category == PoiCategory.VIEWPOINT || text.containsAnyWordPrefix(PANORAMIC_KEYWORDS)
         if (panoramic) tags += PoiTag.PANORAMIC
 
-        val popularPhotoSpot = poi.category in PHOTOGENIC_CATEGORIES &&
-            rating >= thresholds.popularMinRating &&
-            reviews >= thresholds.popularMinReviews
+        val isPopular = (rating >= thresholds.popularMinRating && reviews >= thresholds.popularMinReviews) ||
+            (poi.rating == null && (poi.popularity ?: 0.0) >= thresholds.popularMinPopularity)
+        val popularPhotoSpot = poi.category in PHOTOGENIC_CATEGORIES && isPopular
         if (panoramic || popularPhotoSpot || text.containsAnyWordPrefix(PHOTOGENIC_KEYWORDS)) {
             tags += PoiTag.INSTAGRAMMABLE
         }

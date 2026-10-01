@@ -14,6 +14,7 @@
     <!-- Periodo del viaggio -->
     <string name="period_next_days">Prossimi giorni</string>
     <string name="period_phrase_next_days">i prossimi giorni</string>
+    <string name="period_phrase_dates">le tue date (%1$s)</string>
 
     <!-- Pulsanti delle sezioni della dashboard -->
     <string name="nav_flights">Voli</string>
@@ -41,6 +42,14 @@
     <string name="notification_channel_deals_description">Avvisi quando voli e alloggi dei viaggi seguiti costano molto meno del solito.</string>
     <string name="notification_title_month">🔥 %1$s a %2$s: offerta davvero conveniente</string>
     <string name="notification_title_next_days">🔥 %1$s nei prossimi giorni: offerta davvero conveniente</string>
+    <string name="notification_title_dates">🔥 %1$s, %2$s: offerta davvero conveniente</string>
+    <string name="notification_channel_reminders">Promemoria dei viaggi</string>
+    <string name="notification_channel_reminders_description">Una settimana prima e il giorno prima della partenza dei viaggi salvati.</string>
+    <string name="reminder_title_days">🧳 %1$s tra %2$d giorni</string>
+    <string name="reminder_title_tomorrow">✈️ Domani si parte per %1$s!</string>
+    <string name="reminder_title_today">✈️ Oggi si parte per %1$s!</string>
+    <string name="reminder_text_week">Controlla documenti e meteo nella Guida, prepara la valigia e scarica il traduttore per l\'uso offline.</string>
+    <string name="reminder_text_day">Meteo, valuta, numeri di emergenza e i tuoi preferiti sono nell\'app, pronti anche senza rete.</string>
     <string name="notification_flight">✈️ Volo %1$s → %2$s a %3$s (−%4$d%% rispetto al solito)</string>
     <string name="notification_stay">🏨 %1$s a %2$s a notte (−%3$d%% rispetto al solito)</string>
 
@@ -63,7 +72,8 @@
     <string name="flights_change_departure">Cambia partenza</string>
 
     <!-- Banner demo -->
-    <string name="demo_banner">Modalità demo: alcune sezioni usano dati di esempio. Aggiungi le chiavi API in local.properties per i dati reali (il meteo è sempre reale).</string>
+    <string name="demo_banner">Le sezioni con l\'etichetta «Demo» mostrano stime, perché manca la chiave API del servizio: per prezzi e orari reali usa i pulsanti verso Google Voli, Skyscanner e Google Maps. Alloggi, ristoranti, luoghi da vedere e meteo sono sempre dati reali.</string>
+    <string name="demo_banner_transit">I percorsi dei Trasporti, con l\'etichetta «Demo», sono indicativi perché manca la chiave di Google: per linee e orari reali usa il pulsante verso Google Maps. Voli, alloggi, ristoranti, luoghi da vedere e meteo sono dati reali.</string>
 
     <!-- Provenienza dei dati -->
     <string name="origin_cache">Dalla cache</string>
@@ -74,20 +84,28 @@
     <string name="section_highlights">Stagione e spot da non perdere</string>
     <string name="section_flights">Voli · miglior rapporto qualità/prezzo</string>
     <string name="section_flights_subtitle">%1$s → %2$s, andata e ritorno</string>
+    <string name="section_flights_subtitle_cities">%1$s → %2$s, tutti gli aeroporti, andata e ritorno</string>
     <string name="section_stays">Alloggi consigliati</string>
     <string name="section_stays_subtitle">Ordinati per rapporto qualità/prezzo</string>
     <string name="section_transit">Trasporti pubblici in tempo reale</string>
     <string name="section_transit_subtitle">Da %1$s al centro · partenza adesso</string>
     <string name="section_restaurants">Ristoranti economici di qualità</string>
-    <string name="section_restaurants_subtitle">Fascia €–€€ · valutazione da %1$s in su</string>
+    <string name="section_restaurants_subtitle">Fascia €–€€ · valutazione da %1$s in su · tocca per recensioni e foto</string>
+    <string name="section_restaurants_nearby">Ristoranti vicino al centro</string>
+    <string name="section_restaurants_nearby_subtitle">Locali reali da OpenStreetMap · tocca per recensioni, foto e orari su Google Maps</string>
+    <string name="section_lodgings">Alloggi vicino al centro</string>
+    <string name="section_lodgings_subtitle">Strutture reali da OpenStreetMap · prezzi e disponibilità sui siti di prenotazione</string>
 
     <!-- Stati vuoti -->
     <string name="empty_flights">Nessun volo disponibile per queste date.</string>
+    <string name="empty_flights_recent">Nessun prezzo trovato di recente per questa tratta nel periodo scelto: Aviasales conosce solo le date cercate da altri viaggiatori. Prova con Google Voli o Skyscanner qui sopra.</string>
     <string name="empty_stays">Nessun alloggio disponibile per queste date.</string>
     <string name="empty_highlights">Nessun luogo adatto al periodo selezionato.</string>
     <string name="empty_highlights_photo">Nessuno spot fotografico per il periodo selezionato.</string>
     <string name="empty_transit">Nessun percorso disponibile in questo momento.</string>
     <string name="empty_restaurants">Nessun locale rispetta i criteri di prezzo e qualità.</string>
+    <string name="empty_restaurants_nearby">Nessun locale trovato vicino al centro.</string>
+    <string name="empty_lodgings">Nessuna struttura trovata vicino al centro: cerca direttamente sui siti di prenotazione.</string>
 
     <!-- Errori -->
     <string name="error_no_connection">Sei offline. Controlla la connessione e riprova.</string>
@@ -114,6 +132,16 @@
         <item quantity="other">%d scali</item>
     </plurals>
     <string name="flight_leg">%1$s %2$s → %3$s %4$s · %5$s · %6$s</string>
+    <string name="flight_outbound_day">Andata · %1$s</string>
+    <string name="flight_inbound_day">Ritorno · %1$s</string>
+    <plurals name="flight_stay_nights">
+        <item quantity="one">%d notte sul posto</item>
+        <item quantity="many">%d notti sul posto</item>
+        <item quantity="other">%d notti sul posto</item>
+    </plurals>
+    <string name="flight_price_found_on">prezzo trovato il %1$s</string>
+    <string name="flight_on_trip_dates">Nelle tue date</string>
+    <string name="flight_open_booking">Verifica e prenota su %1$s</string>
     <string name="flight_refundable">Rimborsabile</string>
     <string name="best_value_badge">Miglior rapporto qualità/prezzo</string>
     <string name="value_score">Qualità/prezzo %1$d%%</string>
@@ -133,6 +161,32 @@
         <item quantity="other">%s recensioni</item>
     </plurals>
     <string name="free_cancellation">Cancellazione gratuita</string>
+    <string name="lodging_type_hotel">Hotel</string>
+    <string name="lodging_type_hostel">Ostello</string>
+    <string name="lodging_type_guest_house">B&amp;B / pensione</string>
+    <string name="lodging_type_apartment">Appartamento</string>
+    <string name="lodging_type_motel">Motel</string>
+    <string name="lodging_prices">Vedi prezzi</string>
+    <string name="lodging_map">Mappa</string>
+    <string name="lodging_website">Sito web</string>
+    <string name="distance_from_center">%1$s dal centro</string>
+
+    <!-- Collegamenti ai siti con prezzi e orari reali -->
+    <string name="links_title">🔎 Prezzi reali per le tue date</string>
+    <string name="flights_links_estimates">Le tariffe qui sotto sono stime: apri la stessa ricerca per i prezzi aggiornati e per prenotare.</string>
+    <string name="flights_links_compare">Confronta la stessa ricerca anche su altri siti.</string>
+    <string name="flights_links_recent">Sotto ci sono i prezzi reali trovati negli ultimi giorni su Aviasales da chi ha cercato questa tratta, su tutte le date del periodo scelto: possono essere cambiati, quindi verificali prima di prenotare. Confronta anche qui:</string>
+    <string name="flights_links_recent_dates">Sotto ci sono i prezzi reali trovati negli ultimi giorni su Aviasales: prima i voli nelle tue date, poi quelli dei giorni vicini (fino a 3 giorni prima o dopo). Possono essere cambiati, quindi verificali prima di prenotare. Confronta anche qui:</string>
+    <string name="stays_links_text">Tutte le strutture di %1$s, con prezzi e disponibilità aggiornati:</string>
+    <string name="transit_links_title">🗺️ Percorso reale con i mezzi</string>
+    <string name="transit_links_text">Su Google Maps trovi lo stesso percorso con la navigazione passo passo.</string>
+    <string name="transit_links_estimates">I percorsi qui sotto sono indicativi: su Google Maps trovi linee, orari e cambi aggiornati.</string>
+    <string name="transit_open_maps">Apri in Google Maps</string>
+    <string name="link_google_flights">Google Voli</string>
+    <string name="link_skyscanner">Skyscanner</string>
+    <string name="link_booking">Booking.com</string>
+    <string name="link_airbnb">Airbnb</string>
+    <string name="osm_attribution">Dati © OpenStreetMap contributors (ODbL)</string>
 
     <!-- Stagione e meteo -->
     <string name="season_winter">Inverno</string>
@@ -155,6 +209,21 @@
     <string name="weather_unknown">condizioni variabili</string>
     <string name="photo_spots_only">Solo spot fotografici</string>
 
+    <!-- Eventi durante il soggiorno -->
+    <string name="section_events">Eventi durante il soggiorno</string>
+    <string name="section_events_subtitle">%1$s · mercatini, festival e festività</string>
+    <string name="events_none">Nessun evento ricorrente noto in questi giorni: cercane altri con i pulsanti qui sopra.</string>
+    <string name="events_christmas_markets_link">🎄 Mercatini di Natale a %1$s</string>
+    <string name="events_search_link">🔎 Tutti gli eventi di quei giorni</string>
+    <string name="event_usually_between">Di solito dal %1$s al %2$s</string>
+    <string name="event_yearly_between">Ogni anno dal %1$s al %2$s</string>
+    <string name="event_every_year_on">Ogni anno: %1$s</string>
+    <string name="event_every_year_in">Ogni anno a %1$s</string>
+    <string name="event_holiday">%1$s · festa nazionale</string>
+    <string name="event_holiday_note">Negozi, musei e trasporti possono avere orari ridotti.</string>
+    <string name="events_attribution">Eventi ricorrenti da Wikidata · festività da Nager.Date. Verifica date e orari prima di partire.</string>
+    <string name="list_and">%1$s e %2$s</string>
+
     <!-- Etichette dei luoghi -->
     <string name="tag_instagrammable">Instagrammabile</string>
     <string name="tag_panoramic">Panoramico</string>
@@ -167,6 +236,37 @@
     <string name="reason_snow">Atmosfera invernale</string>
     <string name="reason_weather_risk">Meteo incerto</string>
     <string name="reason_photo_spot">Spot fotografico</string>
+    <string name="place_open_hint">Scopri storia e percorso ›</string>
+
+    <!-- Categorie dei luoghi -->
+    <string name="category_museum">Museo</string>
+    <string name="category_monument">Monumento</string>
+    <string name="category_religious_site">Luogo di culto</string>
+    <string name="category_viewpoint">Punto panoramico</string>
+    <string name="category_park">Parco e natura</string>
+    <string name="category_beach">Spiaggia</string>
+    <string name="category_market">Mercato</string>
+    <string name="category_seasonal_event">Evento di stagione</string>
+    <string name="category_ski_area">Piste da sci</string>
+    <string name="category_neighborhood">Quartiere e piazze</string>
+    <string name="category_attraction">Attrazione</string>
+    <string name="category_shopping">Shopping</string>
+    <string name="category_other">Luogo da visitare</string>
+
+    <!-- Scheda del luogo -->
+    <string name="place_description">Descrizione</string>
+    <string name="place_history">Storia</string>
+    <string name="place_no_description">Nessuna descrizione disponibile per questo luogo.</string>
+    <string name="place_no_history">Nessuna notizia storica disponibile per questo luogo.</string>
+    <string name="place_text_language">Testo in %1$s: la voce non esiste in italiano.</string>
+    <string name="place_read_more">Leggi la voce completa su Wikipedia</string>
+    <string name="place_text_credit">Testi da Wikipedia, licenza CC BY-SA 4.0.</string>
+    <string name="place_photo_credit">Foto: %1$s (Wikimedia Commons)</string>
+    <string name="place_navigate">Naviga</string>
+    <string name="place_navigate_description">Naviga con Google Maps fino a %1$s</string>
+    <string name="place_navigate_hint">Percorso con Google Maps dalla tua posizione</string>
+    <string name="place_no_maps_app">Nessuna app disponibile per aprire le mappe.</string>
+    <string name="place_no_browser">Nessuna app disponibile per aprire il collegamento.</string>
 
     <!-- Trasporti -->
     <string name="transit_times">%1$s → %2$s</string>
@@ -191,6 +291,74 @@
     <string name="search_placeholder">Cerca una città, es. Lisbona</string>
     <string name="search_clear">Cancella ricerca</string>
     <string name="search_when">Quando vuoi partire?</string>
+    <string name="travellers_title">👥 Chi parte</string>
+    <string name="travellers_change">Cambia</string>
+    <string name="travellers_dialog_title">Chi parte?</string>
+    <string name="travellers_adults_label">Adulti</string>
+    <string name="travellers_adults_hint">Dai 18 anni</string>
+    <string name="travellers_children_label">Bambini e ragazzi</string>
+    <string name="travellers_children_hint">Da 0 a 17 anni</string>
+    <string name="travellers_child_age">Età del bambino %1$d</string>
+    <string name="travellers_age_baby">meno di 1 anno</string>
+    <string name="travellers_add_adult">Aggiungi un adulto</string>
+    <string name="travellers_remove_adult">Togli un adulto</string>
+    <string name="travellers_add_child">Aggiungi un bambino</string>
+    <string name="travellers_remove_child">Togli un bambino</string>
+    <string name="travellers_older">Bambino %1$d: un anno in più</string>
+    <string name="travellers_younger">Bambino %1$d: un anno in meno</string>
+    <string name="travellers_infants_note">Sotto i 2 anni in aereo si viaggia in braccio a un adulto: il supplemento si vede sul sito della compagnia.</string>
+    <string name="travellers_infants_error">Ogni bambino sotto i 2 anni viaggia in braccio a un adulto diverso: aggiungi un adulto.</string>
+    <string name="flights_change_travellers">Cambia</string>
+    <string name="flight_price_per_person">%1$s a persona · %2$s</string>
+    <plurals name="travellers_adults">
+        <item quantity="one">%d adulto</item>
+        <item quantity="other">%d adulti</item>
+    </plurals>
+    <plurals name="travellers_children">
+        <item quantity="one">%d bambino</item>
+        <item quantity="other">%d bambini</item>
+    </plurals>
+    <plurals name="travellers_age">
+        <item quantity="one">%d anno</item>
+        <item quantity="other">%d anni</item>
+    </plurals>
+    <plurals name="flight_seats">
+        <item quantity="one">totale per %d posto</item>
+        <item quantity="other">totale per %d posti</item>
+    </plurals>
+    <string name="month_price_from">da %1$s</string>
+    <string name="price_calendar_open">Calendario dei prezzi</string>
+    <string name="price_calendar_open_hint">Il giorno di partenza più conveniente, mese per mese</string>
+    <string name="price_calendar_title">Prezzi per giorno di partenza</string>
+    <string name="price_calendar_previous">Mese precedente</string>
+    <string name="price_calendar_next">Mese successivo</string>
+    <string name="price_calendar_close">Chiudi</string>
+    <string name="price_calendar_empty">Nessun prezzo trovato di recente per questo mese: prova un altro mese o i siti dei voli.</string>
+    <string name="price_calendar_day">%1$s: da %2$s</string>
+    <string name="price_calendar_day_empty">%1$s: nessun prezzo</string>
+    <string name="price_calendar_note">Prezzo più basso in euro a persona, andata e ritorno (%1$s), trovato negli ultimi giorni su Aviasales. In verde i giorni più convenienti: tocca un giorno per vedere i voli di quelle date.</string>
+    <string name="price_calendar_nights_range">soggiorni da %1$d a %2$d notti</string>
+    <plurals name="price_calendar_nights">
+        <item quantity="one">soggiorno di %d notte</item>
+        <item quantity="other">soggiorni di %d notti</item>
+    </plurals>
+    <string name="anywhere_button">Ovunque da %1$s</string>
+    <string name="anywhere_button_no_departure">Ovunque: scegli da dove parti</string>
+    <string name="anywhere_hint">Le mete più economiche per il periodo scelto, con i prezzi trovati negli ultimi giorni su Aviasales.</string>
+    <string name="anywhere_title">Da %1$s per %2$s</string>
+    <string name="anywhere_empty">Nessun volo trovato di recente da questa città per il periodo scelto: prova un altro mese.</string>
+    <string name="anywhere_none_in_budget">Nessuna meta entro questo prezzo: prova un limite più alto.</string>
+    <string name="anywhere_all_prices">Tutte</string>
+    <string name="anywhere_max_price">fino a %1$s</string>
+    <string name="anywhere_per_person">a persona</string>
+    <string name="search_dates_hint">Oppure scegli le date esatte: i voli di quei giorni vengono prima.</string>
+    <string name="search_departure_date">🛫 Andata</string>
+    <string name="search_return_date">🛬 Ritorno</string>
+    <string name="search_pick_date">Scegli la data</string>
+    <string name="search_dates_title">Date di andata e ritorno</string>
+    <string name="search_dates_too_long">Al massimo %1$d notti</string>
+    <string name="search_dates_confirm">Conferma</string>
+    <string name="search_dates_cancel">Annulla</string>
     <string name="search_recommend">Consigliami</string>
     <string name="search_recommend_hint">Non sai ancora dove andare? Ti proponiamo le mete più adatte al periodo scelto.</string>
     <string name="search_results_title">Città trovate</string>
@@ -222,4 +390,467 @@
     <!-- Errori di ricerca -->
     <string name="error_query_too_short">Scrivi almeno due lettere.</string>
     <string name="error_query_no_airport">nessun aeroporto con voli di linea entro 300 km.</string>
+
+    <!-- Assistente di viaggio con l'IA (Google Gemini) -->
+    <string name="assistant_itinerary_chip">Itinerario con l\'IA</string>
+    <string name="assistant_chat_chip">Chiedi a PartiMo</string>
+    <string name="assistant_unavailable">L\'assistente non è attivo: aggiungi la chiave GEMINI_API_KEY in local.properties e ricompila l\'app.</string>
+    <string name="assistant_ai_disclaimer">Proposto dall\'intelligenza artificiale (Google Gemini): verifica orari, aperture e prezzi prima di andare.</string>
+
+    <!-- Itinerario -->
+    <string name="itinerary_title">Itinerario a %1$s</string>
+    <plurals name="itinerary_subtitle">
+        <item quantity="one">%1$s · %2$d giorno</item>
+        <item quantity="many">%1$s · %2$d giorni</item>
+        <item quantity="other">%1$s · %2$d giorni</item>
+    </plurals>
+    <string name="itinerary_pace">Ritmo</string>
+    <string name="pace_relaxed">Rilassato</string>
+    <string name="pace_balanced">Equilibrato</string>
+    <string name="pace_intense">Intenso</string>
+    <string name="itinerary_interests">Interessi</string>
+    <string name="interest_art">Arte e musei</string>
+    <string name="interest_history">Storia</string>
+    <string name="interest_food">Cibo</string>
+    <string name="interest_nature">Natura</string>
+    <string name="interest_shopping">Shopping</string>
+    <string name="interest_nightlife">Vita notturna</string>
+    <string name="interest_family">Con bambini</string>
+    <string name="itinerary_apply_preferences">Aggiorna l\'itinerario</string>
+    <string name="itinerary_regenerate">Rigenera l\'itinerario</string>
+    <string name="itinerary_share">Condividi l\'itinerario</string>
+    <string name="itinerary_loading">PartiMo sta preparando il tuo itinerario…</string>
+    <string name="itinerary_loading_hint">Di solito bastano pochi secondi.</string>
+    <string name="itinerary_tab_days">Programma</string>
+    <string name="itinerary_tab_packing">Valigia</string>
+    <string name="itinerary_tab_tips">Consigli</string>
+    <string name="itinerary_day">Giorno %1$d · %2$s</string>
+    <string name="itinerary_morning">Mattina</string>
+    <string name="itinerary_afternoon">Pomeriggio</string>
+    <string name="itinerary_evening">Sera</string>
+    <string name="itinerary_duration">circa %1$s</string>
+    <string name="itinerary_suggested_by_ai">consigliato dall\'IA</string>
+    <string name="itinerary_walk">Giro a piedi</string>
+    <string name="itinerary_add_to_calendar">Calendario</string>
+    <string name="itinerary_distance">Circa %1$s in linea d\'aria tra le tappe</string>
+    <string name="itinerary_packed_count">%1$d di %2$d già in valigia</string>
+    <string name="itinerary_ask">Hai altre domande? Chiedi a PartiMo</string>
+    <string name="itinerary_share_footer">Creato con PartiMo e l\'IA di Google Gemini</string>
+    <string name="itinerary_share_chooser">Condividi l\'itinerario con…</string>
+    <string name="itinerary_no_calendar">Nessuna app di calendario disponibile.</string>
+    <string name="itinerary_calendar_title">%1$s · Giorno %2$d: %3$s</string>
+
+    <!-- Chiedi a PartiMo -->
+    <string name="chat_title">Chiedi a PartiMo</string>
+    <string name="chat_intro">Ciao! Sono l\'assistente di PartiMo. Chiedimi quello che vuoi sul viaggio a %1$s: cosa mangiare, come muoverti, cosa mettere in valigia…</string>
+    <string name="chat_privacy">Domande e dati del viaggio (città e date) vengono inviati a Google Gemini. Le risposte sono generate dall\'IA e possono contenere errori.</string>
+    <string name="chat_input_hint">Scrivi una domanda</string>
+    <string name="chat_send">Invia la domanda</string>
+    <string name="chat_thinking">PartiMo sta scrivendo…</string>
+    <string name="chat_suggestion_food">Cosa devo assolutamente mangiare a %1$s?</string>
+    <string name="chat_suggestion_airport">Come arrivo in centro dall\'aeroporto?</string>
+    <string name="chat_suggestion_packing">Cosa metto in valigia per questo viaggio?</string>
+    <string name="chat_suggestion_tipping">Come funzionano le mance a %1$s?</string>
+    <string name="chat_suggestion_rain">Cosa fare se piove?</string>
+    <string name="chat_suggestion_free">Cosa si può fare gratis?</string>
+    <string name="chat_copy">Copia la risposta</string>
+    <string name="chat_copied">Risposta copiata</string>
+
+    <!-- Guida del viaggio -->
+    <string name="guide_chip">Guida</string>
+    <string name="guide_title">Guida di %1$s</string>
+    <string name="guide_travel_advice">Sicurezza e documenti (Viaggiare Sicuri)</string>
+    <string name="guide_weather_title">Meteo del viaggio</string>
+    <string name="guide_weather_climate">Di solito in questo periodo: massime di %1$s, minime di %2$s; piove o nevica circa %3$d giorni su 10.</string>
+    <string name="guide_weather_climate_source">Media degli ultimi %1$d anni (Open-Meteo)</string>
+    <string name="guide_weather_forecast_source">Previsioni di Open-Meteo</string>
+    <string name="guide_rain_probability">💧 %1$d%%</string>
+    <string name="guide_sunrise">Alba %1$s</string>
+    <string name="guide_sunset">Tramonto %1$s</string>
+    <string name="guide_golden_hour">Ora d\'oro dalle %1$s</string>
+    <string name="guide_polar_night">Notte polare: il sole non sorge</string>
+    <string name="guide_polar_day">Sole di mezzanotte: il sole non tramonta</string>
+    <string name="guide_sun_note">Il %1$s, giorno di arrivo, all\'ora locale</string>
+    <string name="guide_basics_title">In breve</string>
+    <string name="guide_language">Lingua</string>
+    <string name="guide_currency">Valuta</string>
+    <string name="guide_calling_code">Prefisso</string>
+    <string name="guide_driving">Si guida</string>
+    <string name="guide_driving_left">a sinistra</string>
+    <string name="guide_driving_right">a destra</string>
+    <string name="guide_time_zone">Fuso orario</string>
+    <string name="guide_time_same">stessa ora di qui</string>
+    <string name="guide_time_ahead">%1$s avanti rispetto a qui</string>
+    <string name="guide_time_behind">%1$s indietro rispetto a qui</string>
+    <string name="guide_plugs">Prese</string>
+    <string name="guide_plugs_value">tipo %1$s · %2$s V, %3$s Hz</string>
+    <string name="guide_plugs_ok">Le spine italiane vanno bene, senza adattatore.</string>
+    <string name="guide_plugs_adapter">Serve un adattatore per le prese di tipo %1$s.</string>
+    <string name="guide_low_voltage">Tensione bassa: controlla che caricatori e asciugacapelli funzionino a 100–240 V.</string>
+    <string name="guide_emergency_title">Numeri di emergenza</string>
+    <string name="guide_emergency_general">Emergenze</string>
+    <string name="guide_emergency_police">Polizia</string>
+    <string name="guide_emergency_ambulance">Ambulanza</string>
+    <string name="guide_emergency_fire">Vigili del fuoco</string>
+    <string name="guide_emergency_call">Chiama %1$s (%2$s)</string>
+    <string name="guide_emergency_hint">Tocca un numero per comporlo. Per tutto il resto: Viaggiare Sicuri e l\'ambasciata.</string>
+    <string name="guide_currency_title">Cambio valuta</string>
+    <string name="guide_currency_euro">Si paga in euro: niente cambio.</string>
+    <string name="guide_currency_rate">1 € = %1$s</string>
+    <string name="guide_currency_amount">Importo in %1$s</string>
+    <string name="guide_currency_swap">Inverti le valute</string>
+    <string name="guide_currency_source">Cambi di ExchangeRate-API aggiornati il %1$s: sono indicativi, banche e carte applicano il loro cambio.</string>
+    <string name="guide_wikivoyage_title">Guida di Wikivoyage</string>
+    <string name="guide_wikivoyage_english">La guida in italiano non c\'è: ecco quella in inglese.</string>
+    <string name="guide_wikivoyage_more">Mostra tutto</string>
+    <string name="guide_wikivoyage_less">Mostra meno</string>
+    <string name="guide_wikivoyage_read">Guida completa su Wikivoyage</string>
+    <string name="guide_wikivoyage_license">Testi della comunità di Wikivoyage (CC BY-SA 4.0): prezzi e orari possono essere superati.</string>
+    <string name="guide_wikivoyage_empty">Wikivoyage non ha ancora una guida per %1$s.</string>
+    <string name="guide_no_dialer">Nessuna app per telefonare.</string>
+
+    <!-- Orari di apertura e accessibilità (OpenStreetMap) -->
+    <string name="hours_closed">chiuso</string>
+    <string name="hours_open_now">🟢 Aperto ora</string>
+    <string name="hours_open_until">🟢 Aperto ora · chiude alle %1$s</string>
+    <string name="hours_closed_now">🔴 Chiuso ora</string>
+    <string name="hours_closed_opens">🔴 Chiuso ora · apre alle %1$s</string>
+    <string name="hours_closed_opens_day">🔴 Chiuso ora · apre %1$s alle %2$s</string>
+    <string name="hours_tomorrow">domani</string>
+    <string name="hours_weekly">🕒 %1$s</string>
+    <string name="wheelchair_yes">♿ Accessibile in carrozzina</string>
+    <string name="wheelchair_limited">♿ In parte accessibile in carrozzina</string>
+    <string name="wheelchair_no">Non accessibile in carrozzina</string>
+
+    <!-- Preferiti e viaggi salvati -->
+    <string name="favorite_add">Aggiungi %1$s ai preferiti</string>
+    <string name="favorite_remove">Togli %1$s dai preferiti</string>
+    <string name="favorite_state_on">Nei preferiti</string>
+    <string name="favorite_state_off">Non nei preferiti</string>
+    <string name="trip_save">Salva il viaggio</string>
+    <string name="trip_unsave">Togli il viaggio dai salvati</string>
+    <string name="trip_saved_message">Viaggio salvato: lo ritrovi nella schermata iniziale e, con il Wi-Fi, si prepara per l\'uso senza rete.</string>
+    <string name="trip_removed_message">Viaggio tolto dai salvati.</string>
+    <string name="favorites_chip">Preferiti (%1$d)</string>
+    <string name="favorites_title">I preferiti di %1$s</string>
+    <string name="favorites_empty">Ancora nessun preferito: tocca ☆ su luoghi, eventi, ristoranti e alloggi per ritrovarli qui.</string>
+    <string name="favorites_places">Da vedere</string>
+    <string name="favorites_events">Eventi</string>
+    <string name="favorites_restaurants">Ristoranti</string>
+    <string name="favorites_lodgings">Alloggi</string>
+    <string name="favorites_walk">Giro a piedi tra i preferiti</string>
+    <string name="favorites_share">Condividi i preferiti</string>
+    <string name="favorites_share_title">I miei preferiti a %1$s</string>
+    <string name="saved_trips_title">I tuoi viaggi</string>
+    <string name="saved_trip_in_days">tra %1$d giorni</string>
+    <string name="saved_trip_tomorrow">domani</string>
+    <string name="saved_trip_past">passato</string>
+    <string name="saved_trip_favorites">★ %1$d</string>
+    <string name="saved_trip_remove">Togli %1$s dai viaggi salvati</string>
+    <string name="favorites_map">Vedi sulla mappa</string>
+
+    <!-- Mappa del viaggio -->
+    <string name="map_chip">Mappa</string>
+    <string name="map_title">Mappa di %1$s</string>
+    <string name="map_favorites_only">Solo preferiti</string>
+    <string name="map_fit_all">Inquadra tutti i punti</string>
+    <string name="map_open_details">Apri la scheda</string>
+    <string name="map_open_page">Apri la pagina</string>
+    <string name="map_close_point">Chiudi la scheda del punto</string>
+    <string name="map_partial_error">Alcuni punti non sono stati caricati.</string>
+    <string name="map_empty">Nessun punto da mostrare con questi filtri.</string>
+    <string name="map_no_favorites">Nessun preferito con una posizione: tocca ☆ su luoghi, eventi, ristoranti e alloggi.</string>
+    <string name="map_attribution">© OpenFreeMap © OpenMapTiles © OpenStreetMap</string>
+    <string name="map_locate_me">Mostra dove sono</string>
+    <string name="map_distance_from_you">a %1$s da te</string>
+    <string name="map_location_unavailable">Posizione non disponibile: controlla che la localizzazione sia attiva.</string>
+    <string name="map_location_denied">Senza il permesso di posizione la mappa non può mostrare dove sei.</string>
+    <string name="map_schematic_note">Schema dei punti: la mappa non è disponibile su questo dispositivo.</string>
+
+    <!-- Traduttore -->
+    <!-- Lingua in cui sono scritti i testi dell'app e il frasario (ISO 639-1): il traduttore parte da qui. -->
+    <string name="translator_user_language" translatable="false">it</string>
+    <string name="translator_photo_title">Traduci con la fotocamera</string>
+    <string name="translator_photo_text">Menù, cartelli e orari in %1$s: PartiMo legge il testo della foto e lo traduce sul telefono, anche offline.</string>
+    <string name="translator_photo_take">📷 Scatta</string>
+    <string name="translator_photo_pick">🖼️ Dalla galleria</string>
+    <string name="translator_photo_needs_pack">Prima scarica il pacchetto lingua qui sopra.</string>
+    <string name="translator_photo_unsupported">Il telefono non sa leggere le scritte in %1$s nelle foto: per le foto usa Google Traduttore.</string>
+    <string name="translator_photo_reading">Lettura e traduzione della foto…</string>
+    <string name="translator_photo_original">Mostra l\'originale</string>
+    <string name="translator_photo_close">Chiudi</string>
+    <string name="translator_photo_description">Foto da tradurre</string>
+    <string name="translator_photo_listen">Ascolta l\'originale</string>
+    <string name="translator_photo_no_text">Nessuna scritta trovata: avvicinati e inquadra bene il testo, con più luce.</string>
+    <string name="translator_photo_model_downloading">Il riconoscimento del testo si sta scaricando: riprova tra poco, con la rete attiva.</string>
+    <string name="translator_photo_no_camera">Nessuna app per scattare foto</string>
+    <string name="translator_chip">Traduttore</string>
+    <string name="guide_open_translator">Apri il traduttore</string>
+    <string name="translator_title">Traduttore</string>
+    <string name="translator_swap">Inverti le lingue</string>
+    <string name="translator_choose_language">Scegli la lingua</string>
+    <string name="translator_country_languages">Lingue del posto</string>
+    <string name="translator_all_languages">Tutte le lingue</string>
+    <string name="translator_checking">Controllo i pacchetti lingua…</string>
+    <string name="translator_pack_missing">Per tradurre anche senza Internet serve il pacchetto per: %1$s. Si scarica una volta sola (circa 30 MB per lingua, meglio con il Wi-Fi).</string>
+    <string name="translator_download">Scarica il pacchetto</string>
+    <string name="translator_downloading">Scarico il pacchetto lingua…</string>
+    <string name="translator_download_failed">Pacchetto non scaricato: %1$s</string>
+    <string name="translator_ready">✅ Funziona anche senza Internet</string>
+    <string name="translator_input_label">Testo in %1$s</string>
+    <string name="translator_translate">Traduci</string>
+    <string name="translator_clear">Cancella il testo</string>
+    <string name="translator_listen">Ascolta</string>
+    <string name="translator_listen_description">Ascolta la pronuncia di %1$s</string>
+    <string name="translator_no_voice">Nessuna voce installata per questa lingua: aggiungila nelle impostazioni di sintesi vocale del telefono.</string>
+    <string name="translator_copy">Copia</string>
+    <string name="translator_copied">Traduzione copiata</string>
+    <string name="translator_show_big">Mostra in grande</string>
+    <string name="translator_google">Google Traduttore</string>
+    <string name="translator_close">Chiudi</string>
+    <string name="translator_phrases">Frasi utili</string>
+    <string name="translator_phrases_hint">Tocca una categoria: le frasi si traducono sul telefono, anche offline.</string>
+    <string name="translator_failed">Traduzione non riuscita: %1$s</string>
+    <string name="error_query_text_too_long">Testo troppo lungo: traducilo un pezzo alla volta.</string>
+
+    <!-- Come arrivare: treni, pullman e voli a confronto, con le emissioni -->
+    <string name="getting_there_title">Come arrivare da %1$s</string>
+    <string name="getting_there_text">Treni, pullman e voli per %1$s a confronto: orari, durata e prezzi sui siti.</string>
+    <string name="getting_there_google">Treni e bus</string>
+    <string name="getting_there_rome2rio">Rome2rio</string>
+    <string name="footprint_title">🌱 CO₂ a persona, andata e ritorno (stima)</string>
+    <string name="footprint_flight">Aereo</string>
+    <string name="footprint_train">Treno</string>
+    <string name="footprint_coach">Pullman</string>
+    <string name="footprint_car_alone">Auto (da soli)</string>
+    <string name="footprint_car_shared">Auto (in %1$d)</string>
+    <string name="footprint_kg">%1$s kg</string>
+    <string name="footprint_source">Fattori ufficiali del governo britannico (DESNZ 2025), per l\'aereo con gli effetti in quota; percorsi stimati.</string>
+    <string name="tickets_title">🎟️ Biglietti per musei e attrazioni</string>
+    <string name="tickets_text">Biglietti d\'ingresso e salta-fila per le attrazioni di %1$s.</string>
+    <string name="tickets_tiqets">Tiqets</string>
+    <string name="place_tickets">Biglietti</string>
+
+    <!-- Budget del viaggio -->
+    <string name="budget_chip">Budget</string>
+    <string name="budget_title">Budget di %1$s</string>
+    <string name="budget_spent">Speso finora</string>
+    <string name="budget_per_person">%1$s a testa, in %2$d</string>
+    <string name="budget_of_limit">su un budget di %1$s</string>
+    <string name="budget_remaining">Restano %1$s</string>
+    <string name="budget_over">Oltre il budget di %1$s</string>
+    <string name="budget_set_limit">Imposta un budget</string>
+    <string name="budget_edit_limit">Modifica il budget</string>
+    <string name="budget_limit_label">Budget del viaggio (%1$s)</string>
+    <string name="budget_limit_hint">Lascia vuoto per non avere un tetto di spesa.</string>
+    <string name="budget_add">Aggiungi spesa</string>
+    <string name="budget_new_expense">Nuova spesa</string>
+    <string name="budget_amount">Importo</string>
+    <string name="budget_currency">Valuta</string>
+    <string name="budget_category">Categoria</string>
+    <string name="budget_day">Giorno</string>
+    <string name="budget_note">Nota (facoltativa)</string>
+    <string name="budget_save">Salva</string>
+    <string name="budget_cancel">Annulla</string>
+    <string name="budget_delete">Elimina la spesa %1$s</string>
+    <string name="budget_by_category">Per categoria</string>
+    <string name="budget_expenses">Spese</string>
+    <string name="budget_empty">Nessuna spesa: tocca «Aggiungi spesa» per registrare voli, alloggi, pasti e biglietti, anche nella valuta del posto.</string>
+    <string name="budget_converted">≈ %1$s</string>
+    <string name="budget_unconverted">%1$d spese in altre valute non sono nei totali: cambio non disponibile senza rete.</string>
+    <string name="budget_rates_note">Totali in euro con i cambi del giorno di ExchangeRate-API. Le spese restano sul telefono.</string>
+    <string name="budget_category_transport">Trasporti</string>
+    <string name="budget_category_lodging">Alloggio</string>
+    <string name="budget_category_food">Cibo</string>
+    <string name="budget_category_activities">Attività</string>
+    <string name="budget_category_shopping">Acquisti</string>
+    <string name="budget_category_other">Altro</string>
+    <string name="error_query_invalid_amount">Importo non valido.</string>
+    <string name="error_query_unsupported_script">Il telefono non sa leggere questa scrittura nelle foto.</string>
+
+    <!-- Widget "Prossimo viaggio" -->
+    <string name="widget_name">Prossimo viaggio</string>
+    <string name="widget_description">Il primo viaggio salvato con il conto alla rovescia.</string>
+    <string name="widget_label">Prossimo viaggio</string>
+    <string name="widget_empty">Salva un viaggio con il cuore ♥ per vederlo qui.</string>
+    <string name="widget_today">si parte oggi</string>
+    <string name="widget_tomorrow">si parte domani</string>
+    <string name="widget_in_days">tra %1$d giorni</string>
+
+    <!-- Fonti, licenze e privacy -->
+    <string name="about_open">I tuoi dati, fonti e privacy</string>
+    <string name="about_title">Dati, fonti e privacy</string>
+    <string name="about_version">PartiMo %1$s</string>
+    <string name="about_tagline">App personale per organizzare i viaggi con dati aperti e gratuiti.</string>
+    <string name="backup_title">💾 I tuoi dati</string>
+    <string name="backup_text">Viaggi salvati, preferiti, avvisi, budget, valigia e punto di partenza restano sul telefono. Android li include nel backup su Google e nel passaggio a un telefono nuovo; puoi anche salvarli in un file (es. su Drive) e reimportarli quando vuoi, senza perdere quelli già presenti.</string>
+    <string name="backup_summary">Sul telefono: %1$s</string>
+    <string name="backup_summary_empty">Sul telefono non ci sono ancora dati salvati.</string>
+    <string name="backup_departure">punto di partenza</string>
+    <string name="backup_nothing">nessun dato</string>
+    <string name="backup_export">Esporta</string>
+    <string name="backup_import">Importa</string>
+    <string name="backup_exported">Backup salvato: %1$s</string>
+    <string name="backup_imported">Importati: %1$s</string>
+    <string name="backup_imported_empty">Il file non conteneva dati da importare.</string>
+    <string name="backup_export_failed">Non è stato possibile salvare il file.</string>
+    <string name="backup_import_failed">Non è stato possibile leggere il file.</string>
+    <string name="backup_not_a_backup">Questo file non è un backup di PartiMo.</string>
+    <plurals name="backup_trips">
+        <item quantity="one">%d viaggio salvato</item>
+        <item quantity="other">%d viaggi salvati</item>
+    </plurals>
+    <plurals name="backup_favorites">
+        <item quantity="one">%d preferito</item>
+        <item quantity="other">%d preferiti</item>
+    </plurals>
+    <plurals name="backup_alerts">
+        <item quantity="one">%d avviso</item>
+        <item quantity="other">%d avvisi</item>
+    </plurals>
+    <plurals name="backup_expenses">
+        <item quantity="one">%d spesa</item>
+        <item quantity="other">%d spese</item>
+    </plurals>
+    <plurals name="backup_checked_items">
+        <item quantity="one">%d voce della valigia</item>
+        <item quantity="other">%d voci della valigia</item>
+    </plurals>
+    <string name="about_privacy">🔒 Privacy</string>
+    <string name="about_privacy_device">Viaggi salvati, preferiti, budget, valigia, prenotazioni con i loro documenti e punto di partenza restano sul telefono (e nei backup che scegli tu).</string>
+    <string name="about_privacy_location">La posizione si legge solo quando tocchi «Dove sono» sulla mappa e non lascia il telefono.</string>
+    <string name="about_privacy_ai">Le domande all\'assistente, con città, date ed eventi del viaggio, vanno a Google (Gemini) per la risposta.</string>
+    <string name="about_privacy_flights">Per i prezzi dei voli, città di partenza, meta e mese del viaggio vanno ad Aviasales (Travelpayouts); i loghi delle compagnie arrivano dal suo sito.</string>
+    <string name="about_privacy_translator">Il traduttore e la lettura del testo di PDF e foto (prenotazioni, menù e cartelli) lavorano sul telefono; ML Kit invia a Google statistiche anonime d\'uso.</string>
+    <string name="about_privacy_sources">Le ricerche di luoghi, eventi, meteo e cambi vanno ai servizi aperti qui sotto, senza dati personali.</string>
+    <string name="about_sources">📚 Fonti dei dati</string>
+    <string name="about_maps">🗺️ Mappe</string>
+    <string name="about_services">🔗 Servizi collegati</string>
+    <string name="about_libraries">🧩 Librerie open source</string>
+    <string name="about_src_wikipedia">Luoghi da vedere, descrizioni, storia e foto · testi CC BY-SA 4.0, foto con la licenza indicata nella scheda</string>
+    <string name="about_src_wikivoyage">Guida della città · CC BY-SA 4.0</string>
+    <string name="about_src_wikidata">Eventi e ricorrenze · CC0</string>
+    <string name="about_src_osm">Ristoranti, alloggi, orari e accessibilità · ODbL, © OpenStreetMap contributors</string>
+    <string name="about_src_openmeteo">Meteo, previsioni, clima e ricerca delle città · CC BY 4.0</string>
+    <string name="about_src_nager">Festività nazionali · MIT</string>
+    <string name="about_src_exchangerate">Cambi del giorno · Rates By Exchange Rate API</string>
+    <string name="about_src_ourairports">Aeroporti · pubblico dominio</string>
+    <string name="about_src_desnz">Emissioni di CO₂ dei mezzi · Open Government Licence v3.0</string>
+    <string name="about_src_viaggiaresicuri">Sicurezza e documenti per paese · Ministero degli Affari Esteri</string>
+    <string name="about_map_openfreemap">Mappe vettoriali gratuite, senza chiave</string>
+    <string name="about_map_openmaptiles">Schema e stile delle mappe · © OpenMapTiles</string>
+    <string name="about_map_maplibre">Disegno della mappa sul telefono · BSD 2-Clause</string>
+    <string name="about_service_gemini">Assistente con l\'IA (itinerario e domande) · termini di Google</string>
+    <string name="about_service_travelpayouts">Prezzi dei voli trovati di recente, con il tuo token gratuito; codici delle città, fusi orari e compagnie aeree inclusi nell\'app</string>
+    <string name="about_service_mlkit">Traduttore e riconoscimento del testo sul telefono · termini di Google</string>
+    <string name="about_service_links">Collegamenti a Google Voli, Skyscanner, Booking.com, Airbnb, Google Maps, Rome2rio e Tiqets: PartiMo apre le loro pagine, non legge i loro dati</string>
+    <string name="about_libraries_text">Kotlin, Jetpack Compose e Material 3, Navigation, Room, DataStore, WorkManager, Glance, Ktor, OkHttp, kotlinx.serialization, Coil, MapLibre, ML Kit · Apache 2.0, MIT, BSD</string>
+    <!-- Le mie prenotazioni -->
+    <string name="bookings_title">Le mie prenotazioni</string>
+    <string name="bookings_chip">Prenotazioni</string>
+    <string name="bookings_for_trip">Viaggio a %1$s</string>
+    <string name="bookings_add">Aggiungi</string>
+    <string name="bookings_hide_past">Nascondi quelle passate</string>
+    <plurals name="bookings_show_past">
+        <item quantity="one">Mostra %d prenotazione passata</item>
+        <item quantity="other">Mostra %d prenotazioni passate</item>
+    </plurals>
+    <string name="bookings_empty_title">Nessuna prenotazione</string>
+    <string name="bookings_empty_text">Voli, alloggi, treni e biglietti in un posto solo, anche senza rete: incolla la mail di conferma o scegli il PDF del biglietto e PartiMo legge date, orari e codice. Puoi anche condividerli con PartiMo da Gmail o dai Download.</string>
+    <string name="bookings_today">oggi</string>
+    <string name="bookings_tomorrow">domani</string>
+    <plurals name="bookings_in_days">
+        <item quantity="one">tra %d giorno</item>
+        <item quantity="other">tra %d giorni</item>
+    </plurals>
+    <plurals name="bookings_entry_count">
+        <item quantity="one">Le mie prenotazioni · %d in arrivo</item>
+        <item quantity="other">Le mie prenotazioni · %d in arrivo</item>
+    </plurals>
+    <string name="bookings_entry_next">Prossima: %1$s · %2$s</string>
+    <string name="bookings_entry_hint">Biglietti e conferme, anche offline</string>
+    <string name="bookings_entry_open">Apri</string>
+    <string name="share_booking_label">Aggiungi a PartiMo</string>
+    <string name="booking_kind_flight">Volo</string>
+    <string name="booking_kind_lodging">Alloggio</string>
+    <string name="booking_kind_train">Treno</string>
+    <string name="booking_kind_bus">Pullman</string>
+    <string name="booking_kind_car">Auto</string>
+    <string name="booking_kind_activity">Attività</string>
+    <string name="booking_kind_other">Altro</string>
+    <string name="booking_check_in_at">check-in dalle %1$s</string>
+    <string name="booking_next_day">(+1)</string>
+    <string name="booking_all_day">orario non indicato</string>
+    <string name="booking_reference_value">Codice %1$s</string>
+    <string name="booking_reference_copied">Codice copiato</string>
+    <string name="booking_open_document">Documento</string>
+    <string name="booking_document_no_app">Nessuna app per aprire il documento</string>
+    <string name="booking_document_missing">Il documento non è più sul telefono: allegalo di nuovo modificando la prenotazione.</string>
+    <string name="booking_new_title">Nuova prenotazione</string>
+    <string name="booking_edit_title">Modifica prenotazione</string>
+    <string name="booking_import_title">📥 Importa la conferma</string>
+    <string name="booking_import_text">Incolla la mail di conferma o scegli il PDF, la foto o lo screenshot del biglietto: PartiMo legge date, orari e codice sul telefono.</string>
+    <string name="booking_import_hint">Incolla qui il testo della conferma</string>
+    <string name="booking_import_read">Leggi il testo</string>
+    <string name="booking_import_document">📄 PDF o foto</string>
+    <string name="booking_import_reading">Lettura in corso…</string>
+    <string name="booking_read_position">Prenotazione %1$d di %2$d trovate: controllala e salvala.</string>
+    <string name="booking_field_title">Titolo</string>
+    <string name="booking_title_hint_flight">es. Ryanair FR 7178</string>
+    <string name="booking_title_hint_lodging">es. Hotel Sacher Wien</string>
+    <string name="booking_title_hint_train">es. Frecciarossa 9517</string>
+    <string name="booking_title_hint_bus">es. FlixBus N1234</string>
+    <string name="booking_title_hint_car">es. Hertz · Fiat 500</string>
+    <string name="booking_title_hint_activity">es. Museo del Prado</string>
+    <string name="booking_title_hint_other">es. Transfer dall\'aeroporto</string>
+    <string name="booking_field_departure">Partenza</string>
+    <string name="booking_field_arrival">Arrivo</string>
+    <string name="booking_field_check_in">Check-in</string>
+    <string name="booking_field_check_out">Check-out</string>
+    <string name="booking_field_pick_up">Ritiro</string>
+    <string name="booking_field_drop_off">Riconsegna</string>
+    <string name="booking_field_start">Inizio</string>
+    <string name="booking_field_end">Fine</string>
+    <string name="booking_field_time">Ora</string>
+    <string name="booking_pick_date">Scegli il giorno</string>
+    <string name="booking_pick_time">facoltativa</string>
+    <string name="booking_time_clear">Senza ora</string>
+    <string name="booking_field_origin">Da</string>
+    <string name="booking_field_destination">A</string>
+    <string name="booking_field_reference">Codice di prenotazione</string>
+    <string name="booking_field_provider">Compagnia, struttura o sito</string>
+    <string name="booking_field_address">Indirizzo</string>
+    <string name="booking_field_notes">Note (posto, bagaglio, come arrivare…)</string>
+    <string name="booking_attach">📎 Allega PDF o foto del biglietto</string>
+    <string name="booking_attachment_pdf">PDF allegato</string>
+    <string name="booking_attachment_image">Foto allegata</string>
+    <string name="booking_attachment_open">Apri</string>
+    <string name="booking_attachment_remove">Togli</string>
+    <string name="booking_save">Salva</string>
+    <string name="booking_save_next">Salva e passa alla successiva</string>
+    <string name="booking_save_hint">Per salvare servono almeno il titolo e il giorno.</string>
+    <string name="booking_ok">OK</string>
+    <string name="booking_cancel">Annulla</string>
+    <string name="booking_delete">Elimina</string>
+    <string name="booking_delete_title">Eliminare la prenotazione?</string>
+    <string name="booking_delete_text">Si cancella anche il documento allegato, se nessun\'altra prenotazione lo usa.</string>
+    <string name="booking_message_nothing_found">Nessuna prenotazione riconosciuta: completa tu i campi.</string>
+    <string name="booking_message_read_failed">Non è stato possibile leggere il documento.</string>
+    <string name="booking_message_model_downloading">Il riconoscimento del testo si sta scaricando: riprova tra poco, con la rete attiva.</string>
+    <string name="booking_message_too_large">Il documento è troppo grande (massimo 20 MB).</string>
+    <string name="booking_message_saved_next">Salvata! Ecco la prossima trovata.</string>
+    <string name="notification_channel_bookings">Promemoria delle prenotazioni</string>
+    <string name="notification_channel_bookings_description">Check-in online, partenza per l\'aeroporto, treni e attività che stanno per iniziare.</string>
+    <string name="booking_when_today">oggi alle %1$s</string>
+    <string name="booking_when_tomorrow">domani alle %1$s</string>
+    <string name="booking_when_date">%1$s alle %2$s</string>
+    <string name="booking_reminder_check_in">Check-in online aperto: il volo parte %1$s.</string>
+    <string name="booking_reminder_leave">È ora di andare in aeroporto: il volo parte %1$s.</string>
+    <string name="booking_reminder_departs">Si parte %1$s.</string>
+    <string name="booking_reminder_pick_up">Ritiro dell\'auto %1$s.</string>
+    <string name="booking_reminder_starts">Si comincia %1$s.</string>
+    <string name="booking_reminder_check_in_today">Check-in oggi.</string>
+    <string name="booking_reminder_check_in_today_from">Check-in oggi, dalle %1$s.</string>
+    <string name="booking_reminder_tomorrow">Domani: tieni a portata di mano la prenotazione.</string>
+    <string name="booking_reminder_reference">Codice %1$s</string>
 </resources>

@@ -1,0 +1,942 @@
+{
+ "version": 0.6,
+ "generator": "Overpass API 0.7.62.4 2390de5a",
+ "osm3s": {
+  "timestamp_osm_base": "2026-09-30T22:02:19Z",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+ },
+ "elements": [
+  {
+   "type": "node",
+   "id": 76514684,
+   "lat": 48.2096466,
+   "lon": 16.3736843,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "4",
+    "addr:postcode": "1010",
+    "addr:street": "Rotenturmstraße",
+    "amenity": "restaurant",
+    "cuisine": "pizza",
+    "name": "Pizza Bizi",
+    "opening_hours": "Mo-Su,PH 11:00-24:00",
+    "website": "https://www.pizzabizi.at/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 76518712,
+   "lat": 48.2050544,
+   "lon": 16.3667974,
+   "tags": {
+    "amenity": "restaurant",
+    "cuisine": "breakfast;regional;international",
+    "name": "Palmenhaus",
+    "opening_hours": "Mo-Fr 10:00-23:00; Sa, Su 09:00-23:00",
+    "website": "https://www.palmenhaus.at/impressum/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 249711655,
+   "lat": 48.198936,
+   "lon": 16.3674833,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "8-10",
+    "addr:postcode": "1040",
+    "addr:street": "Wiedner Hauptstraße",
+    "amenity": "restaurant",
+    "name": "TU Wien Mensa Freihaus",
+    "opening_hours": "Mo-Fr 09:00-14:00",
+    "website": "https://www.mensen.at/standort/mensa-tu-wien"
+   }
+  },
+  {
+   "type": "node",
+   "id": 250601788,
+   "lat": 48.2133477,
+   "lon": 16.3620265,
+   "tags": {
+    "addr:housenumber": "12",
+    "addr:postcode": "1010",
+    "addr:street": "Universitätsring",
+    "amenity": "fast_food",
+    "brand": "McDonald's",
+    "brand:wikidata": "Q38076",
+    "cuisine": "burger",
+    "name": "McDonald's",
+    "opening_hours": "Mo-Th 06:00-01:30; Fr 06:00-05:00; Sa 07:00-05:00; Su,PH 07:00-01:30",
+    "website": "https://www.mcdonalds.at/restaurant/universitaetsring-12-a-1010-wien"
+   }
+  },
+  {
+   "type": "node",
+   "id": 251361717,
+   "lat": 48.2040917,
+   "lon": 16.3706908,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "1",
+    "addr:street": "Krugerstraße",
+    "amenity": "fast_food",
+    "name": "zum Kaiser Würstlstand",
+    "opening_hours": "Mo-Th 10:00-02:00; Fr-Sa 10:00-03:00; Su 10:00-00:00",
+    "website": "https://www.zum-kaiser.at"
+   }
+  },
+  {
+   "type": "node",
+   "id": 269208762,
+   "lat": 48.2070366,
+   "lon": 16.3743892,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "13",
+    "addr:postcode": "1010",
+    "addr:street": "Singerstraße",
+    "amenity": "restaurant",
+    "cuisine": "korean;japanese",
+    "name": "Restaurant SURA",
+    "name:it": "Ristorante coreano SURA",
+    "opening_hours": "Mo-Su 11:30-23:00",
+    "website": "https://www.sura.wien/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 269208764,
+   "lat": 48.2071903,
+   "lon": 16.3741585,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "11a",
+    "addr:postcode": "1010",
+    "addr:street": "Singerstraße",
+    "amenity": "restaurant",
+    "cuisine": "chinese",
+    "name": "Cheng Chinese Cuisine",
+    "opening_hours": "Mo-Fr 11:30-21:00",
+    "website": "http://www.cheng.restaurant/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 269208773,
+   "lat": 48.207716,
+   "lon": 16.372115,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "4",
+    "addr:postcode": "1010",
+    "addr:street": "Singerstraße",
+    "amenity": "fast_food",
+    "brand": "McDonald's",
+    "brand:wikidata": "Q38076",
+    "cuisine": "burger",
+    "name": "McDonald's",
+    "name:en": "McDonald's",
+    "opening_hours": "Su-Th,PH 07:00-02:00, Fr,Sa 07:00-04:00",
+    "website": "https://www.mcdonalds.at/1010-singerstrasse-4"
+   }
+  },
+  {
+   "type": "node",
+   "id": 269209053,
+   "lat": 48.2076731,
+   "lon": 16.3723403,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "4",
+    "addr:postcode": "1010",
+    "addr:street": "Singerstraße",
+    "amenity": "fast_food",
+    "cuisine": "japanese",
+    "name": "Akakiko",
+    "opening_hours": "Mo-Su 11:00-22:30",
+    "website": "https://akakiko.at/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 270066222,
+   "lat": 48.2098341,
+   "lon": 16.3612146,
+   "tags": {
+    "amenity": "restaurant",
+    "name": "Vestibül",
+    "website": "https://www.vestibuel.at/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 277843035,
+   "lat": 48.1985019,
+   "lon": 16.367363,
+   "tags": {
+    "amenity": "restaurant",
+    "name": "Cafè Schrödinger",
+    "opening_hours": "Mo-Fr 09:00-16:00; PH off",
+    "website": "https://www.mensen.at/standort/cafe-schroedinger"
+   }
+  },
+  {
+   "type": "node",
+   "id": 298713610,
+   "lat": 48.2105229,
+   "lon": 16.3696039,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "4",
+    "addr:postcode": "1010",
+    "addr:street": "Steindlgasse",
+    "amenity": "restaurant",
+    "cuisine": "regional",
+    "name": "Gösser Bierklinik",
+    "opening_hours": "Mo-Su 12:00-23:00",
+    "website": "https://www.goesser-bierklinik.at/",
+    "wikidata": "Q38027144"
+   }
+  },
+  {
+   "type": "node",
+   "id": 306095249,
+   "lat": 48.1989041,
+   "lon": 16.3686553,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "5",
+    "addr:postcode": "1040",
+    "addr:street": "Resselgasse",
+    "amenity": "restaurant",
+    "contact:website": "http://www.pointers.at",
+    "cuisine": "burger;sandwich",
+    "name": "Pointers",
+    "opening_hours": "Mo-Fr 23:30-01:00; Sa 15:00-01:00; Su 17:00-00:00"
+   }
+  },
+  {
+   "type": "node",
+   "id": 323060577,
+   "lat": 48.2181919,
+   "lon": 16.3729473,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "57",
+    "addr:postcode": "1020",
+    "addr:street": "Obere Donaustraße",
+    "amenity": "restaurant",
+    "cuisine": "regional",
+    "name": "Zum Friedensrichter",
+    "opening_hours": "Mo-Fr 15:00-23:00; Sa, Su, PH off",
+    "website": "http://www.zum-friedensrichter.at/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 323060590,
+   "lat": 48.2178752,
+   "lon": 16.3790953,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "8",
+    "addr:postcode": "1020",
+    "addr:street": "Haidgasse",
+    "amenity": "restaurant",
+    "cuisine": "regional",
+    "name": "Zum Sieg",
+    "opening_hours": "Mo,Tu,Th,Fr 11:00-23:00; We 16:00-23:00; Sa 11:00-15:00"
+   }
+  },
+  {
+   "type": "node",
+   "id": 333672130,
+   "lat": 48.2044602,
+   "lon": 16.3812793,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "2A",
+    "addr:postcode": "1030",
+    "addr:street": "Am Heumarkt",
+    "amenity": "restaurant",
+    "cuisine": "breakfast;coffee_shop;fish;ice_cream;regional;tea",
+    "name": "Meierei im Stadtpark",
+    "opening_hours": "Mo-Fr 08:00-23:00; Sa 09:00-19:00; PH,Su off",
+    "stars": "2",
+    "website": "https://www.steirereck.at/meierei/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 334634698,
+   "lat": 48.2130932,
+   "lon": 16.3726243,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "6",
+    "addr:postcode": "1010",
+    "addr:street": "Salzgries",
+    "amenity": "restaurant",
+    "cuisine": "regional",
+    "name": "Toni's Café-Restaurant",
+    "opening_hours": "Mo-Su 08:00-24:00",
+    "website": "http://toni-s.at"
+   }
+  },
+  {
+   "type": "node",
+   "id": 334634963,
+   "lat": 48.213235,
+   "lon": 16.3711353,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "15",
+    "addr:postcode": "1010",
+    "addr:street": "Salzgries",
+    "amenity": "restaurant",
+    "brand": "Fladerei",
+    "cuisine": "flatbread",
+    "name": "Fladerei Salzgries",
+    "opening_hours": "Mo-Th 11:00-23:30; Fr 11:00-01:00; Sa 16:00-01:00; Su 16:00-21:00",
+    "website": "https://www.fladerei.com/salzgries/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 334636027,
+   "lat": 48.2132357,
+   "lon": 16.3732171,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "4",
+    "addr:postcode": "1010",
+    "addr:street": "Salztorgasse",
+    "amenity": "restaurant",
+    "name": "Noa",
+    "website": "https://www.noa.wien"
+   }
+  },
+  {
+   "type": "node",
+   "id": 335448900,
+   "lat": 48.2023478,
+   "lon": 16.3681914,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "3-5",
+    "addr:postcode": "1010",
+    "addr:street": "Opernring",
+    "amenity": "fast_food",
+    "brand": "Subway",
+    "brand:wikidata": "Q244457",
+    "cuisine": "sandwich",
+    "name": "Subway",
+    "opening_hours": "Mo-Fr 08:45-23:00; Sa 09:30-23:00; Su,PH 09:45-23:00"
+   }
+  },
+  {
+   "type": "node",
+   "id": 335933214,
+   "lat": 48.214845,
+   "lon": 16.3839082,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "31",
+    "addr:postcode": "1020",
+    "addr:street": "Praterstraße",
+    "amenity": "restaurant",
+    "cuisine": "italian;pizza",
+    "name": "Eatalico",
+    "opening_hours": "Mo-Su 11:30-23:00",
+    "website": "https://eatalico.at"
+   }
+  },
+  {
+   "type": "node",
+   "id": 335937019,
+   "lat": 48.2168765,
+   "lon": 16.3777554,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "51",
+    "addr:postcode": "1020",
+    "addr:street": "Leopoldsgasse",
+    "amenity": "restaurant",
+    "cuisine": "spanish",
+    "name": "Contor",
+    "opening_hours": "Mo-Su,PH 17:00-24:00"
+   }
+  },
+  {
+   "type": "node",
+   "id": 338470656,
+   "lat": 48.2153641,
+   "lon": 16.3844236,
+   "tags": {
+    "amenity": "restaurant",
+    "name": "Nestroy",
+    "opening_hours": "Mo-Fr 10:30-22:30; PH off"
+   }
+  },
+  {
+   "type": "node",
+   "id": 338470662,
+   "lat": 48.216106,
+   "lon": 16.3795337,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "3",
+    "addr:postcode": "1020",
+    "addr:street": "Karmeliterplatz",
+    "amenity": "restaurant",
+    "contact:website": "http://zumreichsapfel.at",
+    "cuisine": "heuriger",
+    "name": "Schank zum Reichsapfel",
+    "opening_hours": "PH off; Tu-Sa 16:00-23:00"
+   }
+  },
+  {
+   "type": "node",
+   "id": 338470667,
+   "lat": 48.2165769,
+   "lon": 16.3805363,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "19",
+    "addr:postcode": "1020",
+    "addr:street": "Taborstraße",
+    "amenity": "restaurant",
+    "contact:website": "http://bahur-tov.com",
+    "cuisine": "israeli",
+    "name": "Bahur Tov",
+    "opening_hours": "Mo-Th 16:00-22:00; Su 13:00-22:00"
+   }
+  },
+  {
+   "type": "node",
+   "id": 338470672,
+   "lat": 48.2174379,
+   "lon": 16.377265,
+   "tags": {
+    "amenity": "restaurant",
+    "cuisine": "5-Elemente",
+    "name": "Zimmer 37",
+    "opening_hours": "Tu-Th 10:30-18:00; Fr 08:30-18:00; Mo off; Sa 08:30-14:00"
+   }
+  },
+  {
+   "type": "node",
+   "id": 338470686,
+   "lat": 48.215232,
+   "lon": 16.3766403,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "8",
+    "addr:postcode": "1020",
+    "addr:street": "Hollandstraße",
+    "amenity": "restaurant",
+    "contact:website": "http://www.fliegender-hollaender.at",
+    "name": "Fliegender Holländer",
+    "opening_hours": "Mo-Fr 12:00-24:00"
+   }
+  },
+  {
+   "type": "node",
+   "id": 339908188,
+   "lat": 48.199431,
+   "lon": 16.3664826,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "20A",
+    "addr:postcode": "1040",
+    "addr:street": "Operngasse",
+    "amenity": "fast_food",
+    "contact:website": "https://www.opernschnitzel.at",
+    "cuisine": "kebab;pizza",
+    "name": "Opern Schnitzel",
+    "opening_hours": "Mo-Fr 09:00-22:00; Sa,Su 09:00-21:00"
+   }
+  },
+  {
+   "type": "node",
+   "id": 340069340,
+   "lat": 48.1989782,
+   "lon": 16.3680702,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "3",
+    "addr:postcode": "1040",
+    "addr:street": "Wiedner Hauptstraße",
+    "amenity": "restaurant",
+    "cuisine": "asian",
+    "name": "Quick Yammy",
+    "opening_hours": "Su-Fr 11:00-20:30, Sa off"
+   }
+  },
+  {
+   "type": "node",
+   "id": 342301304,
+   "lat": 48.2072016,
+   "lon": 16.3876568,
+   "tags": {
+    "amenity": "restaurant",
+    "contact:website": "http://www.stadtwirt.at",
+    "name": "Stadtwirt",
+    "opening_hours": "Mo-Fr 11:00-24:00"
+   }
+  },
+  {
+   "type": "node",
+   "id": 342301942,
+   "lat": 48.2097742,
+   "lon": 16.3876355,
+   "tags": {
+    "amenity": "restaurant",
+    "name": "WIST",
+    "opening_hours": "Mo-Fr 10:30-21:30"
+   }
+  },
+  {
+   "type": "node",
+   "id": 342303156,
+   "lat": 48.2067532,
+   "lon": 16.3892962,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "20",
+    "addr:postcode": "1030",
+    "addr:street": "Marxergasse",
+    "amenity": "restaurant",
+    "cuisine": "sushi;noodle",
+    "name": "Hitomi",
+    "opening_hours": "Su-Fr,PH 11:30-22:00"
+   }
+  },
+  {
+   "type": "node",
+   "id": 342303837,
+   "lat": 48.2068263,
+   "lon": 16.3883099,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "14",
+    "addr:postcode": "1030",
+    "addr:street": "Marxergasse",
+    "amenity": "restaurant",
+    "cuisine": "japanese;ramen",
+    "name": "Shoyu Pan",
+    "opening_hours": "Tu-Th 11:30-21:00, Fr-Sa 11:30-22:00",
+    "website": "https://www.shoyu.at/shoyupan-home/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 342304875,
+   "lat": 48.2057349,
+   "lon": 16.3881237,
+   "tags": {
+    "amenity": "restaurant",
+    "cuisine": "asian",
+    "name": "Asia Paradies",
+    "opening_hours": "Mo-Su 11:30-15:00, Mo-Sa 17:30-22:30"
+   }
+  },
+  {
+   "type": "node",
+   "id": 342305562,
+   "lat": 48.2057092,
+   "lon": 16.3878077,
+   "tags": {
+    "amenity": "restaurant",
+    "cuisine": "regional",
+    "name": "Hemmers",
+    "opening_hours": "Mo 17:00-23:00; Tu-Fr 11:00-23:00"
+   }
+  },
+  {
+   "type": "node",
+   "id": 342305687,
+   "lat": 48.2056647,
+   "lon": 16.3844561,
+   "tags": {
+    "amenity": "restaurant",
+    "contact:website": "http://www.marcopolosushi.at",
+    "cuisine": "asian",
+    "name": "Marco Polo",
+    "opening_hours": "11:00-22:30"
+   }
+  },
+  {
+   "type": "node",
+   "id": 343320228,
+   "lat": 48.207311,
+   "lon": 16.3750772,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "10",
+    "addr:postcode": "1010",
+    "addr:street": "Grünangergasse",
+    "amenity": "restaurant",
+    "cuisine": "french",
+    "name": "Ma Creperie",
+    "opening_hours": "Mo-Fr 17:00-23:30; Sa-Su 11:00-23:30",
+    "website": "http://www.macreperie.at"
+   }
+  },
+  {
+   "type": "node",
+   "id": 344925907,
+   "lat": 48.2053154,
+   "lon": 16.3875328,
+   "tags": {
+    "amenity": "restaurant",
+    "cuisine": "vietnamese",
+    "name": "Nem",
+    "opening_hours": "Mo-Fr 11:00-15:00,17:00-22:00; Su 16:00-22:00"
+   }
+  },
+  {
+   "type": "node",
+   "id": 344926482,
+   "lat": 48.2055308,
+   "lon": 16.386854,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "9",
+    "addr:postcode": "1030",
+    "addr:street": "Landstraßer Hauptstraße",
+    "amenity": "restaurant",
+    "contact:website": "http://www.duran.at",
+    "cuisine": "sandwich",
+    "name": "Duran",
+    "opening_hours": "Mo-Fr 08:00-16:00; Sa,Su,PH off"
+   }
+  },
+  {
+   "type": "node",
+   "id": 359238262,
+   "lat": 48.2150091,
+   "lon": 16.3705505,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "11",
+    "addr:postcode": "1010",
+    "addr:street": "Gonzagagasse",
+    "amenity": "restaurant",
+    "cuisine": "regional",
+    "name": "Aera",
+    "opening_hours": "Mo-Sa 10:00-01:00; Su, PH 10:00-24:00",
+    "website": "https://www.aera.at/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 359238264,
+   "lat": 48.2148968,
+   "lon": 16.3721051,
+   "tags": {
+    "amenity": "restaurant",
+    "cuisine": "asian",
+    "name": "Le Wei",
+    "opening_hours": "Mo-Fr 11:30-14:30, 18:00-22:00; Sa 18:00-22:00; Su, PH 12:00-14:00, 18:00-22:00",
+    "website": "https://lewei.at/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 365859732,
+   "lat": 48.2055529,
+   "lon": 16.3689909,
+   "tags": {
+    "amenity": "restaurant",
+    "cuisine": "regional",
+    "name": "Gasthaus Reinthaler"
+   }
+  },
+  {
+   "type": "node",
+   "id": 365865111,
+   "lat": 48.2055994,
+   "lon": 16.3750866,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "14",
+    "addr:postcode": "1010",
+    "addr:street": "Seilerstätte",
+    "amenity": "restaurant",
+    "cuisine": "regional",
+    "name": "Cafe-Restaurant Ronacher",
+    "opening_hours": "Mo-Fr 11:30-15:00",
+    "website": "https://www.caferonacher.com/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 365865114,
+   "lat": 48.2054661,
+   "lon": 16.374915,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "14",
+    "addr:postcode": "1010",
+    "addr:street": "Seilerstätte",
+    "amenity": "restaurant",
+    "cuisine": "asian",
+    "name": "Momoya Fusion",
+    "opening_hours": "Mo-Su,PH 11:00-23:00",
+    "website": "https://momoyafusion.at/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 367390337,
+   "lat": 48.2098925,
+   "lon": 16.3764341,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "3",
+    "addr:postcode": "1010",
+    "addr:street": "Grashofgasse",
+    "amenity": "restaurant",
+    "cuisine": "regional",
+    "name": "Buxbaum Restaurant",
+    "opening_hours": "Mo-Sa 10:00-23:00"
+   }
+  },
+  {
+   "type": "node",
+   "id": 374485605,
+   "lat": 48.2036962,
+   "lon": 16.3860251,
+   "tags": {
+    "amenity": "restaurant",
+    "contact:website": "http://www.bierteufl.at",
+    "name": "Bierteufl",
+    "opening_hours": "Mo-Fr 11:00-01:00, Sa 17:00-01:00, Su, PH 17:00-24:00"
+   }
+  },
+  {
+   "type": "node",
+   "id": 394941626,
+   "lat": 48.2064965,
+   "lon": 16.3706192,
+   "tags": {
+    "amenity": "restaurant",
+    "cuisine": "french",
+    "name": "Le Bol",
+    "opening_hours": "Mo-Sa 08:00-18:00+; PH,Su 09:00-18:00+"
+   }
+  },
+  {
+   "type": "node",
+   "id": 411757173,
+   "lat": 48.2098322,
+   "lon": 16.3787632,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "15",
+    "addr:postcode": "1010",
+    "addr:street": "Postgasse",
+    "amenity": "restaurant",
+    "contact:website": "http://www.czaak.com",
+    "name": "Beim Czaak",
+    "opening_hours": "Mo-Sa 17:00-22:00"
+   }
+  },
+  {
+   "type": "node",
+   "id": 412862778,
+   "lat": 48.2065833,
+   "lon": 16.3759964,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "16",
+    "addr:postcode": "1010",
+    "addr:street": "Riemergasse",
+    "amenity": "restaurant",
+    "name": "Jonathan und Sieglinde",
+    "opening_hours": "Mo,Tu 09:00-15:00; We-Fr 09:00-23:00",
+    "website": "https://www.jonathan-sieglinde.com/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 413128344,
+   "lat": 48.2145603,
+   "lon": 16.3722981,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "4",
+    "addr:postcode": "1010",
+    "addr:street": "Rudolfsplatz",
+    "amenity": "restaurant",
+    "contact:website": "http://gastwirtschaft-stopfer.at",
+    "cuisine": "austrian",
+    "name": "Gasthaus Stopfer",
+    "opening_hours": "Mo-Fr 11:00-23:00; PH off"
+   }
+  },
+  {
+   "type": "node",
+   "id": 415889061,
+   "lat": 48.2011661,
+   "lon": 16.369352,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "1",
+    "addr:postcode": "1010",
+    "addr:street": "Karlsplatz",
+    "amenity": "restaurant",
+    "contact:website": "https://meiweivienna.com/",
+    "cuisine": "asian;chinese;sushi",
+    "name": "Mei Wei",
+    "opening_hours": "Su-Th 11:30-22:30; Fr-Sa 11:30-23:00"
+   }
+  },
+  {
+   "type": "node",
+   "id": 415889385,
+   "lat": 48.2013436,
+   "lon": 16.3678268,
+   "tags": {
+    "amenity": "restaurant",
+    "cuisine": "greek",
+    "name": "Kostas",
+    "opening_hours": "Tu-Sa 11:30-22:30"
+   }
+  },
+  {
+   "type": "node",
+   "id": 418134093,
+   "lat": 48.2107463,
+   "lon": 16.3772648,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "11",
+    "addr:postcode": "1010",
+    "addr:street": "Fleischmarkt",
+    "amenity": "restaurant",
+    "cuisine": "regional",
+    "name": "Griechenbeisl",
+    "opening_hours": "Mo-Su 12:00-23:00",
+    "website": "https://www.griechenbeisl.at/",
+    "wikidata": "Q1546289"
+   }
+  },
+  {
+   "type": "node",
+   "id": 418164969,
+   "lat": 48.2011836,
+   "lon": 16.3740532,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "17",
+    "addr:postcode": "1010",
+    "addr:street": "Schwarzenbergplatz",
+    "amenity": "fast_food",
+    "brand": "McDonald's",
+    "brand:wikidata": "Q38076",
+    "cuisine": "burger",
+    "name": "McDonald's",
+    "opening_hours": "Mo-Th 07:00-01:00, Fr,Sa 07:00-05:00, Su,PH 08:00-01:00"
+   }
+  },
+  {
+   "type": "node",
+   "id": 418164970,
+   "lat": 48.2005638,
+   "lon": 16.375465,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "3",
+    "addr:postcode": "1010",
+    "addr:street": "Schwarzenbergplatz",
+    "amenity": "restaurant",
+    "name": "Falco's Vienna",
+    "opening_hours": "Mo-Th 08:30-24:00; Fr-Sa 08:30-01:00; Su 08:30-24:00",
+    "website": "https://www.nigrum-montis.at/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 437164262,
+   "lat": 48.2113888,
+   "lon": 16.3745687,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "1A",
+    "addr:postcode": "1010",
+    "addr:street": "Fleischmarkt",
+    "amenity": "restaurant",
+    "name": "GO!Wien",
+    "opening_hours": "Mo-Su 11:30-23:15",
+    "website": "https://www.hackl-gastro.at/gowien/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 437164275,
+   "lat": 48.2103608,
+   "lon": 16.3776797,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "20-22",
+    "addr:postcode": "1010",
+    "addr:street": "Fleischmarkt",
+    "amenity": "restaurant",
+    "cuisine": "asian",
+    "name": "En Wok",
+    "opening_hours": "Mo-Sa 11:00-21:00",
+    "website": "https://www.enwok.at/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 443503611,
+   "lat": 48.2123301,
+   "lon": 16.3641447,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "6",
+    "addr:postcode": "1010",
+    "addr:street": "Freyung",
+    "amenity": "restaurant",
+    "cuisine": "austrian",
+    "name": "Zattl",
+    "opening_hours": "11:00+",
+    "website": "https://www.zattl.at/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 443503613,
+   "lat": 48.212878,
+   "lon": 16.363157,
+   "tags": {
+    "addr:housenumber": "7",
+    "addr:postcode": "1010",
+    "addr:street": "Schottengasse",
+    "amenity": "restaurant",
+    "name": "Fat Monk",
+    "opening_hours": "Mo-Fr 11:00-20:00; Sa 11:00-18:00",
+    "website": "https://www.fatmonk.com"
+   }
+  },
+  {
+   "type": "node",
+   "id": 443503615,
+   "lat": 48.2129632,
+   "lon": 16.3630307,
+   "tags": {
+    "addr:city": "Wien",
+    "addr:housenumber": "7",
+    "addr:postcode": "1010",
+    "addr:street": "Schottengasse",
+    "amenity": "restaurant",
+    "cuisine": "regional",
+    "name": "Zum Leupold / Kupferdachl",
+    "website": "https://www.leupold.at/"
+   }
+  }
+ ]
+}

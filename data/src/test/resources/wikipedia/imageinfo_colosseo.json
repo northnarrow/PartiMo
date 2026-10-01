@@ -1,0 +1,47 @@
+{
+ "batchcomplete": true,
+ "query": {
+  "normalized": [
+   {
+    "fromencoded": false,
+    "from": "File:Colosseo_2020.jpg",
+    "to": "File:Colosseo 2020.jpg"
+   }
+  ],
+  "pages": [
+   {
+    "ns": 6,
+    "title": "File:Colosseo 2020.jpg",
+    "missing": true,
+    "known": true,
+    "imagerepository": "shared",
+    "imageinfo": [
+     {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/d/de/Colosseo_2020.jpg?utm_source=it.wikipedia.org&utm_campaign=imageinfo&utm_content=original",
+      "descriptionurl": "https://commons.wikimedia.org/wiki/File:Colosseo_2020.jpg",
+      "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=95579199",
+      "extmetadata": {
+       "Credit": {
+        "value": "<span class=\"int-own-work\" lang=\"it\">Opera propria</span>",
+        "source": "commons-desc-page"
+       },
+       "Artist": {
+        "value": "<a href=\"//commons.wikimedia.org/wiki/User:FeaturedPics\" title=\"User:FeaturedPics\">FeaturedPics</a>",
+        "source": "commons-desc-page"
+       },
+       "LicenseShortName": {
+        "value": "CC BY-SA 4.0",
+        "source": "commons-desc-page",
+        "hidden": ""
+       },
+       "LicenseUrl": {
+        "value": "https://creativecommons.org/licenses/by-sa/4.0",
+        "source": "commons-desc-page"
+       }
+      }
+     }
+    ]
+   }
+  ]
+ }
+}

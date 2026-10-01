@@ -3,6 +3,8 @@ package com.partimo.domain.model.stay
 import com.partimo.domain.common.QueryIssue
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.Money
+import com.partimo.domain.model.Travellers
+import com.partimo.domain.model.WheelchairAccess
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
@@ -12,7 +14,7 @@ data class AccommodationSearchQuery(
     val location: GeoPoint,
     val checkIn: LocalDate,
     val checkOut: LocalDate,
-    val adults: Int = 1,
+    val travellers: Travellers = Travellers.SOLO,
     val rooms: Int = 1,
     val radiusKm: Int = 5,
     val currencyCode: String = "EUR",
@@ -24,13 +26,15 @@ data class AccommodationSearchQuery(
         checkIn.isBefore(today) -> QueryIssue.DATE_IN_THE_PAST
         !checkOut.isAfter(checkIn) -> QueryIssue.INVALID_STAY_DATES
         nights > MAX_NIGHTS -> QueryIssue.STAY_TOO_LONG
-        adults !in 1..MAX_GUESTS || rooms !in 1..adults -> QueryIssue.INVALID_TRAVELLER_COUNT
+        rooms !in 1..travellers.adults -> QueryIssue.INVALID_TRAVELLER_COUNT
         else -> null
     }
 
     companion object {
         const val MAX_NIGHTS = 30
-        const val MAX_GUESTS = 10
+
+        /** Camere proposte: una ogni due adulti (i bambini dormono con loro). */
+        fun roomsFor(travellers: Travellers): Int = (travellers.adults + 1) / 2
     }
 }
 
@@ -72,3 +76,32 @@ data class AccommodationFilter(
 }
 
 enum class AccommodationSortOption { BEST_VALUE, CHEAPEST, TOP_RATED }
+
+/** Tipo di struttura ricettiva. */
+enum class LodgingType { HOTEL, HOSTEL, GUEST_HOUSE, APARTMENT, MOTEL }
+
+/**
+ * Struttura ricettiva reale senza prezzo (es. da OpenStreetMap): tariffe e disponibilità per le date
+ * del viaggio si consultano sul sito di prenotazione.
+ */
+data class Lodging(
+    val id: String,
+    val name: String,
+    val type: LodgingType,
+    val location: GeoPoint,
+    /** Classificazione ufficiale in stelle (1–5), se nota. */
+    val starRating: Int? = null,
+    val address: String? = null,
+    val website: String? = null,
+    val wheelchair: WheelchairAccess? = null,
+) {
+    init {
+        require(starRating == null || starRating in 1..5) { "Stelle fuori scala: $starRating" }
+    }
+}
+
+/** Strutture attorno a un punto (di solito il centro città). */
+data class LodgingQuery(
+    val location: GeoPoint,
+    val radiusMeters: Int = 2_000,
+)

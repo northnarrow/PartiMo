@@ -3,11 +3,25 @@ package com.partimo.data.local
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
+import com.partimo.data.local.preferences.DataStoreBudgetRepository
+import com.partimo.data.local.preferences.DataStoreChecklistRepository
 import com.partimo.data.local.preferences.DataStorePriceWatchRepository
+import com.partimo.data.local.preferences.DataStoreReminderLogRepository
+import com.partimo.data.local.preferences.DataStoreSavedTripRepository
 import com.partimo.data.local.preferences.DataStoreUserPreferencesRepository
 import com.partimo.data.local.preferences.StoredJson
+import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.Travellers
+import com.partimo.domain.model.budget.Expense
+import com.partimo.domain.model.budget.ExpenseCategory
+import com.partimo.domain.model.budget.TripBudget
+import com.partimo.domain.model.poi.PoiCategory
+import com.partimo.domain.model.poi.WikipediaPage
+import com.partimo.domain.model.saved.Favorite
+import com.partimo.domain.model.saved.FavoriteKind
+import com.partimo.domain.model.saved.SavedTrip
 import com.partimo.domain.testing.TestData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +29,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.test.runTest
+import java.math.BigDecimal
+import java.time.LocalDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -25,7 +41,7 @@ import kotlin.test.assertTrue
  * logica dei repository; la persistenza su file è responsabilità della libreria (e il suo storage
  * basato su java.io.File non riesce a sovrascrivere i file quando i test girano su Windows).
  */
-private class InMemoryPreferencesDataStore : DataStore<Preferences> {
+internal class InMemoryPreferencesDataStore : DataStore<Preferences> {
     private val state = MutableStateFlow(emptyPreferences())
     private val mutex = Mutex()
 
@@ -48,6 +64,19 @@ class PreferencesRepositoriesTest {
         repository.setDeparture(milan)
 
         assertEquals(milan, repository.departure.first())
+    }
+
+    @Test
+    fun `i viaggiatori si salvano e senza scelta si parte da soli`() = runTest {
+        val store = dataStore()
+        val repository = DataStoreUserPreferencesRepository(store)
+        assertEquals(Travellers.SOLO, repository.travellers.first())
+
+        val family = Travellers(adults = 2, childAges = listOf(9, 1))
+        repository.setTravellers(family)
+
+        assertEquals(family, repository.travellers.first())
+        assertNull(StoredJson.decodeTravellers("""{"adults": 0}"""), "Valore non più valido: ignorato")
     }
 
     @Test
@@ -75,9 +104,103 @@ class PreferencesRepositoriesTest {
 
         assertTrue(repository.watches.first().isEmpty())
     }
+
+    @Test
+    fun `le voci della valigia restano spuntate per ciascun viaggio`() = runTest {
+        val repository = DataStoreChecklistRepository(dataStore())
+
+        repository.setChecked("packing:vienna", "Abbigliamento › Cappotto", checked = true)
+        repository.setChecked("packing:vienna", "Documenti › Passaporto", checked = true)
+        repository.setChecked("packing:lisbona", "Mare › Costume", checked = true)
+        repository.setChecked("packing:vienna", "Documenti › Passaporto", checked = false)
+
+        assertEquals(setOf("Abbigliamento › Cappotto"), repository.checkedItems("packing:vienna").first())
+        assertEquals(setOf("Mare › Costume"), repository.checkedItems("packing:lisbona").first())
+        assertEquals(emptySet(), repository.checkedItems("packing:parigi").first())
+    }
+}
+
+class SavedTripRepositoryTest {
+
+    @Test
+    fun `il budget di ogni viaggio si salva con il tetto e le spese e sparisce quando è vuoto`() = runTest {
+        val store = InMemoryPreferencesDataStoreForTrips()
+        val repository = DataStoreBudgetRepository(store)
+        val dinner = Expense("1", BigDecimal("250.5"), "CZK", ExpenseCategory.FOOD, LocalDate.of(2026, 12, 11), "Cena")
+        val hotel = Expense("2", BigDecimal("89"), "EUR", ExpenseCategory.LODGING, LocalDate.of(2026, 12, 10))
+
+        repository.update("CZ:Praga:2026-12") { it.copy(limit = BigDecimal("500"), expenses = listOf(dinner, hotel)) }
+
+        assertEquals(TripBudget("CZ:Praga:2026-12", BigDecimal("500"), listOf(dinner, hotel)), repository.budget("CZ:Praga:2026-12").first())
+        assertEquals(TripBudget("AT:Vienna:2026-12"), repository.budget("AT:Vienna:2026-12").first(), "Gli altri viaggi non cambiano")
+
+        repository.update("CZ:Praga:2026-12") { it.copy(limit = null, expenses = emptyList()) }
+        assertTrue(store.data.first().asMap().isEmpty(), "Un budget vuoto non occupa spazio")
+    }
+
+    @Test
+    fun `i promemoria mostrati si ricordano`() = runTest {
+        val repository = DataStoreReminderLogRepository(InMemoryPreferencesDataStoreForTrips())
+        assertTrue(repository.sentReminders().isEmpty())
+
+        repository.markSent(listOf("AT:Vienna:2026-12:WEEK_BEFORE"))
+        repository.markSent(listOf("AT:Vienna:2026-12:DAY_BEFORE"))
+
+        assertEquals(setOf("AT:Vienna:2026-12:WEEK_BEFORE", "AT:Vienna:2026-12:DAY_BEFORE"), repository.sentReminders())
+
+        repository.forget(listOf("AT:Vienna:2026-12:WEEK_BEFORE", "mai segnato"))
+        assertEquals(setOf("AT:Vienna:2026-12:DAY_BEFORE"), repository.sentReminders())
+        repository.forget(listOf("AT:Vienna:2026-12:DAY_BEFORE"))
+        assertTrue(repository.sentReminders().isEmpty())
+    }
+
+    @Test
+    fun `viaggi e preferiti sopravvivono alla codifica`() = runTest {
+        val repository = DataStoreSavedTripRepository(InMemoryPreferencesDataStoreForTrips())
+        val trip = SavedTrip(
+            destination = TestData.destination(),
+            period = TravelPeriod.NextDays,
+            savedAt = TestData.NOW,
+            favorites = listOf(
+                Favorite("wikipedia:it:1", FavoriteKind.PLACE, "Duomo", "Luogo di culto", GeoPoint(48.2085, 16.3731), "https://img.test/a.jpg", null, WikipediaPage("it", "Duomo di Vienna"), PoiCategory.RELIGIOUS_SITE, "Cattedrale"),
+                Favorite("osm:node/11", FavoriteKind.RESTAURANT, "Figlmüller", url = "https://www.google.com/maps/search/?api=1&query=Figlm%C3%BCller"),
+            ),
+        )
+
+        repository.update { it + trip }
+
+        assertEquals(listOf(trip), repository.trips.first())
+        repository.update { trips -> trips.filterNot { it.id == trip.id } }
+        assertTrue(repository.trips.first().isEmpty())
+    }
+}
+
+/** Copia del DataStore in memoria di questo file per il test dei viaggi salvati. */
+private class InMemoryPreferencesDataStoreForTrips : DataStore<Preferences> {
+    private val state = MutableStateFlow(emptyPreferences())
+    private val mutex = Mutex()
+
+    override val data: Flow<Preferences> = state
+
+    override suspend fun updateData(transform: suspend (t: Preferences) -> Preferences): Preferences =
+        mutex.withLock { transform(state.value).also { state.value = it } }
 }
 
 class StoredJsonTest {
+
+    @Test
+    fun `le spese illeggibili si scartano una a una`() {
+        val stored = """{"limit":"100","expenses":[{"id":"1","amount":"12.5","currency":"EUR","category":"FOOD","date":"2026-12-11"},""" +
+            """{"id":"2","amount":"-3","currency":"EUR","category":"FOOD","date":"2026-12-11"},""" +
+            """{"id":"3","amount":"7","currency":"EUR","category":"SCONOSCIUTA","date":"2026-12-12"}]}"""
+
+        val budget = StoredJson.decodeBudget("viaggio", stored)
+
+        assertEquals(BigDecimal("100"), budget.limit)
+        assertEquals(listOf("1", "3"), budget.expenses.map { it.id })
+        assertEquals(ExpenseCategory.OTHER, budget.expenses.last().category, "Categoria sconosciuta: «Altro»")
+        assertEquals(TripBudget("viaggio"), StoredJson.decodeBudget("viaggio", "{non è json"))
+    }
 
     @Test
     fun `gli avvisi sopravvivono alla codifica con storico, periodo e fuso orario`() {

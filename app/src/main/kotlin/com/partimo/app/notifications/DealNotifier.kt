@@ -72,6 +72,11 @@ class DealNotifier(private val context: Context) {
             watch.destination.name,
             Formatters.monthYear(period.month, today.year),
         )
+        is TravelPeriod.Dates -> context.getString(
+            R.string.notification_title_dates,
+            watch.destination.name,
+            Formatters.dateRange(period.departure, period.returning),
+        )
     }
 
     internal fun dealLines(alert: DealAlert): List<String> = alert.deals.map { deal ->
