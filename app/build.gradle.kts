@@ -1,3 +1,4 @@
+import java.util.Base64
 import java.util.Properties
 
 plugins {
@@ -22,6 +23,27 @@ fun secret(name: String): String {
     // Escape per poter inserire il valore in modo sicuro in un letterale String Java.
     return value.replace("\\", "\\\\").replace("\"", "\\\"")
 }
+
+/** Impostazione della build da local.properties o da una variabile d'ambiente, con un valore predefinito. */
+fun setting(name: String, default: String): String =
+    localProperties.getProperty(name)?.trim()?.takeIf { it.isNotEmpty() }
+        ?: providers.environmentVariable(name).orNull?.trim()?.takeIf { it.isNotEmpty() }
+        ?: default
+
+// Chiave di firma di PartiMo: sempre la stessa, così ogni versione nuova si installa sopra quella del
+// telefono senza disinstallare l'app (e senza perderne i dati). È il file keystore/partimo.keystore,
+// escluso dal VCS come le chiavi API; in un ambiente nuovo si ricrea dalla variabile
+// PARTIMO_KEYSTORE_BASE64 (lo stesso file in Base64). Senza, la build usa la chiave di debug della
+// macchina: l'APK funziona, ma non si installa sopra quello firmato con la chiave di PartiMo.
+val partimoKeystore: File? = rootProject.file("keystore/partimo.keystore").let { file ->
+    val base64 = setting("PARTIMO_KEYSTORE_BASE64", "")
+    if (!file.isFile && base64.isNotEmpty()) {
+        file.parentFile.mkdirs()
+        file.writeBytes(Base64.getMimeDecoder().decode(base64))
+    }
+    file.takeIf { it.isFile }
+}
+if (partimoKeystore == null) logger.warn("PartiMo: keystore/partimo.keystore non trovato, gli APK sono firmati con la chiave di debug di questa macchina")
 
 android {
     namespace = "com.partimo.app"
@@ -54,7 +76,23 @@ android {
         }
     }
 
+    signingConfigs {
+        if (partimoKeystore != null) {
+            create("partimo") {
+                storeFile = partimoKeystore
+                // La chiave di PartiMo è nata come chiave di debug di Android: valori predefiniti di quella.
+                storePassword = setting("PARTIMO_KEYSTORE_PASSWORD", "android")
+                keyAlias = setting("PARTIMO_KEY_ALIAS", "androiddebugkey")
+                keyPassword = setting("PARTIMO_KEY_PASSWORD", "android")
+            }
+        }
+    }
+    val appSigning = signingConfigs.findByName("partimo") ?: signingConfigs.getByName("debug")
+
     buildTypes {
+        debug {
+            signingConfig = appSigning
+        }
         release {
             // R8 toglie le parti inutilizzate delle librerie: APK molto più leggero. Il codice dell'app
             // resta intero e non offuscato (vedi proguard-rules.pro).
@@ -64,8 +102,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            // App personale: firmata con la chiave di debug, così si installa sopra le versioni di debug.
-            signingConfig = signingConfigs.getByName("debug")
+            // App personale: firmata con la stessa chiave delle versioni di debug, così si installa sopra.
+            signingConfig = appSigning
         }
     }
 

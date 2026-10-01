@@ -330,8 +330,24 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
 ./gradlew compileDebugKotlin        # compilazione Kotlin di tutti i moduli
 ./gradlew test                      # test unitari (domain, data, app)
 ./gradlew :app:assembleDebug        # APK di debug (arm64-v8a, armeabi-v7a e universale)
-./gradlew :app:assembleRelease      # APK ottimizzati con R8, firmati con la chiave di debug
+./gradlew :app:assembleRelease      # APK ottimizzati con R8, firmati con la chiave di PartiMo
 ```
+
+### Firma dell'app
+
+Un aggiornamento si installa sopra l'app del telefono (senza disinstallarla e senza perderne i dati)
+solo se è firmato con la stessa chiave. La chiave di PartiMo è il file `keystore/partimo.keystore`,
+escluso dal VCS come le chiavi API: la build lo usa per gli APK di debug e di rilascio. Conservane una
+copia al sicuro (es. sul PC) e non pubblicarla. In un ambiente nuovo (un altro PC, una nuova sessione
+cloud, la CI) basta rimettere il file nella cartella `keystore/` oppure impostare la variabile
+`PARTIMO_KEYSTORE_BASE64` con il file codificato in Base64 (es. `base64 -w0 partimo.keystore`; su
+Windows `[Convert]::ToBase64String([IO.File]::ReadAllBytes("partimo.keystore"))` in PowerShell): la
+build ricrea il file da sola. La chiave è nata come chiave di debug di Android, quindi password e alias
+sono quelli predefiniti (`android`, `androiddebugkey`), modificabili con `PARTIMO_KEYSTORE_PASSWORD`,
+`PARTIMO_KEY_ALIAS` e `PARTIMO_KEY_PASSWORD`. Senza la chiave la build usa quella di debug della
+macchina (lo segnala con un avviso): l'APK funziona, ma per installarlo bisogna prima disinstallare
+l'app. Il certificato si controlla con `apksigner verify --print-certs`: quello di PartiMo ha
+SHA-256 `bafaf494…eaa0cf`.
 
 Ogni push su `main` e ogni pull request passano dalla CI di GitHub Actions
 (`.github/workflows/android.yml`): test unitari e APK di debug senza chiavi, scaricabile come
