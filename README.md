@@ -55,10 +55,28 @@ pulsanti sotto i mesi della dashboard:
 - **Chiedi a PartiMo:** domande libere sul viaggio («Cosa mangio a Vienna?», «Come arrivo in centro
   dall'aeroporto?»), con le risposte che tengono conto di città, date ed eventi del soggiorno.
 
-<img src="docs/search_ideas.png" alt="Schermata iniziale con partenza, mesi e consigli" width="240" /> <img src="docs/departure_picker.png" alt="Scelta dell'aeroporto di partenza" width="240" /> <img src="docs/trip_dashboard.png" alt="Dashboard: sezione Voli con i collegamenti a Google Voli e Skyscanner" width="240" /> <img src="docs/trip_dashboard_stays.png" alt="Dashboard: alloggi reali da OpenStreetMap con Booking.com e Airbnb" width="240" /> <img src="docs/trip_dashboard_explore.png" alt="Dashboard: sezione Da vedere" width="240" /> <img src="docs/place_detail.png" alt="Scheda di un luogo con descrizione, storia e pulsante Naviga" width="240" /> <img src="docs/trip_dashboard_transit.png" alt="Dashboard: trasporti con il percorso reale su Google Maps" width="240" /> <img src="docs/trip_dashboard_restaurants.png" alt="Dashboard: ristoranti reali da OpenStreetMap" width="240" /> <img src="docs/guide.png" alt="Guida del viaggio: meteo, alba e tramonto, informazioni pratiche ed emergenze" width="240" /> <img src="docs/guide_currency.png" alt="Guida con previsioni giorno per giorno e cambio valuta" width="240" /> <img src="docs/itinerary.png" alt="Itinerario con l'IA giorno per giorno, con giro a piedi e calendario" width="240" /> <img src="docs/itinerary_packing.png" alt="Lista per la valigia dell'itinerario" width="240" /> <img src="docs/chat.png" alt="Chiedi a PartiMo: domande all'assistente sul viaggio" width="240" />
+La **stella ☆** su luoghi, eventi, ristoranti e alloggi li salva tra i **preferiti** del viaggio e il
+**cuore** in alto salva il viaggio stesso: i viaggi salvati compaiono nella schermata iniziale sotto
+«I tuoi viaggi», con il conto alla rovescia. La schermata dei preferiti li raccoglie per tipo, con la
+mappa, il **giro a piedi** tra i preferiti su Google Maps e la condivisione dell'elenco.
+
+La **🗺️ Mappa** mostra tutti i punti del viaggio (luoghi, eventi, ristoranti e alloggi, con colori
+diversi) su una mappa vettoriale vera, senza chiavi: [OpenFreeMap](https://openfreemap.org) con i dati
+di OpenStreetMap, disegnata da [MapLibre](https://maplibre.org). I filtri fanno da legenda, «Solo
+preferiti» lascia i punti salvati e il tocco su un punto apre la sua scheda con «Naviga».
+
+Il **🗣️ Traduttore** propone la lingua del posto (es. il tedesco a Vienna) e, dopo aver scaricato una
+volta il pacchetto lingua, **traduce anche senza Internet** sul telefono (ML Kit di Google, gratuito).
+La traduzione si **ascolta** con la voce del telefono, si copia o si **mostra in grande** a chi si ha
+davanti; le lingue si invertono per tradurre cartelli e menù. C'è un **frasario** pronto (ristorante,
+spostamenti, albergo, acquisti, emergenze) e la scorciatoia a Google Traduttore per fotocamera e
+conversazione.
+
+<img src="docs/search_ideas.png" alt="Schermata iniziale con partenza, mesi e consigli" width="240" /> <img src="docs/departure_picker.png" alt="Scelta dell'aeroporto di partenza" width="240" /> <img src="docs/trip_dashboard.png" alt="Dashboard: sezione Voli con i collegamenti a Google Voli e Skyscanner" width="240" /> <img src="docs/trip_dashboard_stays.png" alt="Dashboard: alloggi reali da OpenStreetMap con Booking.com e Airbnb" width="240" /> <img src="docs/trip_dashboard_explore.png" alt="Dashboard: sezione Da vedere" width="240" /> <img src="docs/place_detail.png" alt="Scheda di un luogo con descrizione, storia e pulsante Naviga" width="240" /> <img src="docs/trip_dashboard_transit.png" alt="Dashboard: trasporti con il percorso reale su Google Maps" width="240" /> <img src="docs/trip_dashboard_restaurants.png" alt="Dashboard: ristoranti reali da OpenStreetMap" width="240" /> <img src="docs/guide.png" alt="Guida del viaggio: meteo, alba e tramonto, informazioni pratiche ed emergenze" width="240" /> <img src="docs/guide_currency.png" alt="Guida con previsioni giorno per giorno e cambio valuta" width="240" /> <img src="docs/itinerary.png" alt="Itinerario con l'IA giorno per giorno, con giro a piedi e calendario" width="240" /> <img src="docs/itinerary_packing.png" alt="Lista per la valigia dell'itinerario" width="240" /> <img src="docs/chat.png" alt="Chiedi a PartiMo: domande all'assistente sul viaggio" width="240" /> <img src="docs/favorites.png" alt="Preferiti del viaggio con mappa, giro a piedi e condivisione" width="240" /> <img src="docs/translator.png" alt="Traduttore con Ascolta, Copia, Mostra in grande e frasario" width="240" /> <img src="docs/translator_pack.png" alt="Traduttore al primo uso: pacchetto lingua da scaricare" width="240" />
 
 Negli screenshot (generati dai test, senza rete, con dati di esempio) le foto sono segnaposto grigi: nell'app si caricano
-le foto reali dei luoghi.
+le foto reali dei luoghi. La mappa non è tra gli screenshot: i test girano sulla JVM, dove la libreria
+nativa della mappa non c'è.
 
 ## Stack
 
@@ -134,6 +152,9 @@ le foto reali dei luoghi.
 | Guida del viaggio | `GetCountryInfoUseCase`, `GetExchangeRateUseCase`, `GetTravelGuideUseCase` | Dati internazionali del sistema (CLDR) + catalogo curato di 80 paesi, [ExchangeRate-API](https://www.exchangerate-api.com/docs/free) (accesso aperto, senza chiave), [Wikivoyage](https://www.wikivoyage.org) (senza chiave), [Viaggiare Sicuri](https://www.viaggiaresicuri.it) | Lingua, valuta, prefisso, lato di guida, fuso orario, prese e tensione (con l'avviso adattatore), numeri di emergenza da comporre con un tocco, convertitore di valuta (oltre 160 valute), capitoli utili della guida di Wikivoyage in italiano (o in inglese se manca) e scheda del paese della Farnesina |
 | Meteo per le date del viaggio | `GetTripWeatherUseCase`, `SunCalculator` | [Open-Meteo](https://open-meteo.com) previsioni giornaliere e [archivio storico](https://open-meteo.com/en/docs/historical-weather-api) (senza chiave) | Entro 16 giorni le previsioni dei giorni del viaggio; oltre, il clima tipico di quei giorni (±3) sugli ultimi dieci anni: massime, minime e giorni di pioggia o neve. Alba, tramonto e ora d'oro calcolati sul telefono (anche notte e giorno polari). Il meteo arriva anche all'assistente, per la lista della valigia |
 | Orari e accessibilità | `OpeningHoursParser`, `OpeningHours`, `WheelchairAccess` | OpenStreetMap (`opening_hours`, `wheelchair`) | Orari della settimana del viaggio con i giorni uguali raggruppati (es. «lun–ven 11:30–14:30, 18:00–22:00 · dom chiuso»), «aperto ora / apre domani alle 11:00» all'ora della meta per i viaggi dei prossimi giorni, chiusure dopo mezzanotte; accessibilità in carrozzina di ristoranti e alloggi |
+| Preferiti e viaggi salvati | `ToggleFavoriteUseCase`, `SetTripSavedUseCase`, `ObserveSavedTripsUseCase`, `SavedTrip`, `Favorite` | DataStore (sul telefono) | Stella su luoghi, eventi, ristoranti e alloggi (il primo preferito salva anche il viaggio), cuore per salvare il viaggio, «I tuoi viaggi» nella schermata iniziale (prima i prossimi, con il conto alla rovescia), preferiti per tipo con giro a piedi (dal primo, poi sempre il più vicino) e condivisione |
+| Mappa del viaggio | `MapViewModel`, `MapPoints` | [MapLibre Native](https://maplibre.org) + [OpenFreeMap](https://openfreemap.org) (stile vettoriale gratuito, senza chiave, dati © OpenStreetMap) | Luoghi, eventi, ristoranti e alloggi del viaggio (gli stessi dati della dashboard, dalla cache) più i preferiti salvati; filtri per tipo con i conteggi, «Solo preferiti», tema chiaro e scuro, scheda del punto con «Apri la scheda», «Apri la pagina», «Naviga» e stella. Zoom e posizione restano tornando dalla scheda di un luogo |
+| Traduttore | `TranslateTextUseCase`, `LanguagePacksUseCase`, `TranslatorLanguages` | [ML Kit Translation](https://developers.google.com/ml-kit/language/translation) (gratuito, sul telefono) + sintesi vocale di Android | 58 lingue; lingua del posto proposta dal paese, pacchetti di circa 30 MB scaricati una volta e poi offline, inversione delle lingue, Ascolta, Copia, Mostra in grande, frasario per categorie tradotto sul telefono, scorciatoia a Google Traduttore |
 | Ristoranti | `FindBudgetRestaurantsUseCase`, `BudgetDiningCriteria` | Google Places API (New), oppure senza chiave OpenStreetMap (Overpass API) | Con Google: vincolo `price_level` 1–2 e valutazione ≥ 4,3, riapplicato sempre dal dominio. Senza chiave: locali reali vicino al centro (cucina, indirizzo, distanza), prima i più completi e vicini, catene in fondo. Il tocco apre il locale su Google Maps (recensioni, foto, orari) |
 
 ### Quando un'offerta è "davvero conveniente"
@@ -267,16 +288,17 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
 ./gradlew :app:assembleDebug        # APK di debug
 ```
 
-410 test unitari:
-- **`:domain` (167):** modelli e validazioni (compresi i dodici mesi di `TravelPeriod` e i periodi
+444 test unitari:
+- **`:domain` (175):** modelli e validazioni (compresi i dodici mesi di `TravelPeriod` e i periodi
   degli eventi, anche a cavallo di Capodanno), servizi di dominio (qualità/prezzo, stagionalità,
   notorietà dei luoghi, scelta degli aeroporti, rilevamento degli affari, estratti brevi di descrizione
   e storia) e tutti i casi d'uso, compresi ristoranti senza valutazioni, strutture ricettive, eventi
   del soggiorno, assistente con l'IA (pulizia dell'itinerario, conversazione), meteo del viaggio
   (previsioni o clima tipico, anche a cavallo di Capodanno), cambio, capitoli della guida, orari di
   apertura su orari **reali** dei ristoranti di Vienna e alba e tramonto confrontati con i valori
-  **reali** di Open-Meteo (più Sydney e la notte polare di Tromsø), con fake condivisi tramite `testFixtures`.
-- **`:data` (118):** cache e TTL, mappatura degli errori, client HTTP con risposte JSON simulate
+  **reali** di Open-Meteo (più Sydney e la notte polare di Tromsø), viaggi salvati e preferiti, lingua
+  del traduttore proposta per paese, con fake condivisi tramite `testFixtures`.
+- **`:data` (119):** cache e TTL, mappatura degli errori, client HTTP con risposte JSON simulate
   (Duffel, Places, Routes, Open-Meteo, Wikipedia, Overpass, Wikidata, Nager.Date), Gemini con risposte
   **reali** (itinerario di Vienna e risposta a una domanda in `data/src/test/resources/gemini`), cambio
   di modello se uno è sovraccarico e richieste "di riserva" (tempo virtuale), guide **reali** di
@@ -287,10 +309,12 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
   eventi di Vienna e Monaco da risposte **reali** di Wikidata e festività 2026 di Austria e Italia,
   cambio di istanza Overpass se sovraccarica, intestazioni per le chiavi Google con restrizione
   Android, dataset aeroporti reale (es. Roma → FCO, Parigi → CDG), catalogo delle mete, repository
-  DataStore e formato di salvataggio (anche la valigia), mercato simulato della demo.
-- **`:app` (125):** ViewModel (dashboard con e senza chiavi, eventi del soggiorno, ricerca, scelta della
+  DataStore e formato di salvataggio (anche la valigia, i viaggi salvati e i preferiti), lingue dei
+  paesi come codici per il traduttore, mercato simulato della demo.
+- **`:app` (150):** ViewModel (dashboard con e senza chiavi, eventi del soggiorno, ricerca, scelta della
   partenza, scheda del luogo, itinerario, domande all'assistente, guida con convertitore di valuta e
-  fuso orario con l'ora legale), testi degli orari di apertura, rotte di navigazione, collegamenti a
+  fuso orario con l'ora legale, preferiti e viaggi salvati, mappa con filtri e «solo preferiti»,
+  traduttore con pacchetti lingua, inversione e frasario), testi degli orari di apertura, rotte di navigazione, collegamenti a
   Google Maps (anche il giro a piedi con le tappe), Google Voli, Skyscanner, Booking.com, Airbnb e
   ricerca degli eventi, calendario e condivisione dell'itinerario, browser interno (Custom Tabs),
   User-Agent delle foto, notifiche (Robolectric), formattazione e test UI Compose con
@@ -403,6 +427,20 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
   24/7); le regole sulle festività si ignorano e, con orari variabili (alba, tramonto, settimane),
   non si mostra nulla piuttosto che un orario sbagliato. «Aperto ora» compare per i viaggi dei
   prossimi giorni, all'ora locale della meta.
+- **Mappa:** MapLibre Native nella variante OpenGL ES (quella predefinita richiede Vulkan) con lo
+  stile `liberty` di OpenFreeMap (scuro: `dark`), senza chiave né limiti di uso. La libreria usa
+  OkHttp 4; PartiMo usa OkHttp 5, compatibile con tutte le chiamate che MapLibre fa (verificate una per
+  una). I permessi di posizione dichiarati dalla libreria sono rimossi dal manifest perché PartiMo non
+  li usa. Dove la libreria nativa non si carica (test sulla JVM, processori non supportati) la mappa
+  diventa uno schema dei punti con gli stessi colori e tocchi. L'attribuzione «© OpenFreeMap ©
+  OpenMapTiles © OpenStreetMap» è sempre visibile e apre la pagina dei diritti di OpenStreetMap.
+- **Traduttore:** ML Kit traduce sul telefono passando dall'inglese (sempre incluso); ogni altra
+  lingua è un pacchetto di circa 30 MB scaricato una volta dai server di Google. Il frasario è nelle
+  risorse dell'app, quindi segue la lingua dell'interfaccia. La voce è quella del telefono
+  (`TextToSpeech`, dichiarata in `<queries>` per Android 11+): se manca per una lingua, l'app lo dice.
+  ML Kit invia a Google statistiche anonime d'uso della libreria.
+- **Peso dell'APK:** mappa e traduttore hanno librerie native; l'APK contiene solo quelle per i
+  telefoni ARM (64 e 32 bit), compresse, e pesa circa 40 MB.
 - **Trasporti senza chiave:** [Transitous](https://transitous.org) offre percorsi reali senza chiave,
   ma solo per app open source non commerciali e previo contatto con il progetto: per ora non è
   attivo e senza chiave Google il percorso reale si apre in Google Maps.
@@ -427,7 +465,8 @@ data/src/main/kotlin/com/partimo/data/
                osm (Overpass API), wikidata, holidays, gemini (client, prompt e schema dell'itinerario),
                currency (ExchangeRate-API), wikivoyage
   local/       dataset aeroporti (asset), catalogo curato delle mete, informazioni sui paesi (catalogo
-               curato + dati del sistema), preferenze e valigia (DataStore)
+               curato + dati del sistema), preferenze, valigia, viaggi salvati e preferiti (DataStore)
+  translate/   traduttore sul telefono (ML Kit)
   demo/        catalogo e sorgenti demo (mercato simulato)
   repository/  implementazioni dei repository
   di/          DataModule
@@ -444,6 +483,9 @@ app/src/main/kotlin/com/partimo/app/
   ui/itinerary/   itinerario con l'IA (programma, valigia, consigli), calendario e condivisione
   ui/chat/        "Chiedi a PartiMo"
   ui/guide/       guida del viaggio (meteo, paese, emergenze, valuta, Wikivoyage)
+  ui/favorites/   preferiti del viaggio (giro a piedi, mappa, condivisione)
+  ui/map/         mappa del viaggio (MapLibre + OpenFreeMap, schema dei punti senza libreria nativa)
+  ui/translator/  traduttore offline, frasario e sintesi vocale
 app/src/test/        test di ViewModel, notifiche, stati UI e formattazione
 app/src/testDebug/   test UI Compose con Robolectric (+ screenshot)
 docs/                screenshot delle schermate
