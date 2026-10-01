@@ -8,6 +8,8 @@ import com.partimo.domain.model.plan.TripKnowledge
 import com.partimo.domain.model.plan.TripPace
 import com.partimo.domain.model.plan.TripPreferences
 import com.partimo.domain.model.poi.PoiCategory
+import com.partimo.domain.model.weather.TripWeather
+import com.partimo.domain.model.weather.WeatherCondition
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonObject
 import com.partimo.data.network.NetworkJson
@@ -15,6 +17,7 @@ import java.time.LocalDate
 import java.time.Month
 import java.time.format.TextStyle
 import java.util.Locale
+import kotlin.math.roundToInt
 
 /**
  * Richiesta di itinerario pronta da inviare: testi del prompt e codici brevi ("L3", "E1") con cui il
@@ -85,6 +88,7 @@ internal object TravelPrompts {
         val user = buildString {
             appendLine("Viaggio a " + tripLine(knowledge) + ".")
             appendLine("Ritmo: " + paceText(preferences.pace) + ".")
+            knowledge.weather?.let { appendLine(weatherText(it) + ".") }
             if (preferences.interests.isNotEmpty()) {
                 appendLine("Interessi: " + preferences.interests.sortedBy { it.ordinal }.joinToString(", ") { interestText(it) } + ".")
             }
@@ -117,6 +121,7 @@ internal object TravelPrompts {
         appendLine()
         appendLine("Viaggio dell'utente: " + tripLine(knowledge) + ".")
         appendLine("Oggi è " + longDate(today) + ".")
+        knowledge.weather?.let { appendLine(weatherText(it) + ".") }
         if (knowledge.events.isNotEmpty()) {
             appendLine("Eventi durante il soggiorno:")
             knowledge.events.forEach { event -> appendLine("• ${event.name}: ${eventWhen(event, knowledge.from, knowledge.to)}") }
@@ -164,6 +169,30 @@ internal object TravelPrompts {
         return "$dates ($kind)"
     }
 
+    /** "Previsioni: 10 dicembre pioggia, 4–9 °C; …" oppure "Clima tipico del periodo: massime 5 °C, minime 0 °C, …". */
+    private fun weatherText(weather: TripWeather): String = when (weather) {
+        is TripWeather.Forecast -> "Previsioni: " + weather.days.joinToString("; ") { day ->
+            "${day.date.dayOfMonth} ${monthName(day.date.month)} ${conditionText(day.condition)}, " +
+                "${day.minCelsius.roundToInt()}–${day.maxCelsius.roundToInt()} °C" +
+                (day.precipitationProbability?.takeIf { it >= RAIN_PROBABILITY_WORTH_MENTIONING }?.let { ", pioggia $it%" } ?: "")
+        }
+        is TripWeather.Climate -> "Clima tipico del periodo (media degli ultimi ${weather.normals.years} anni): " +
+            "massime ${weather.normals.averageMaxCelsius.roundToInt()} °C, minime ${weather.normals.averageMinCelsius.roundToInt()} °C, " +
+            "pioggia o neve in circa ${(weather.normals.wetDaysShare * 100).roundToInt()}% dei giorni"
+    }
+
+    private fun conditionText(condition: WeatherCondition): String = when (condition) {
+        WeatherCondition.CLEAR -> "sereno"
+        WeatherCondition.PARTLY_CLOUDY -> "poco nuvoloso"
+        WeatherCondition.OVERCAST -> "nuvoloso"
+        WeatherCondition.FOG -> "nebbia"
+        WeatherCondition.DRIZZLE -> "pioviggine"
+        WeatherCondition.RAIN -> "pioggia"
+        WeatherCondition.SNOW -> "neve"
+        WeatherCondition.THUNDERSTORM -> "temporali"
+        WeatherCondition.UNKNOWN -> "tempo incerto"
+    }
+
     private fun paceText(pace: TripPace): String = when (pace) {
         TripPace.RELAXED -> "rilassato, ${pace.stopsPerDay.first} o ${pace.stopsPerDay.last} tappe al giorno con pause"
         TripPace.BALANCED -> "equilibrato, ${pace.stopsPerDay.first} o ${pace.stopsPerDay.last} tappe al giorno"
@@ -197,5 +226,6 @@ internal object TravelPrompts {
     }
 
     private const val MAX_DESCRIPTION_CHARS = 80
+    private const val RAIN_PROBABILITY_WORTH_MENTIONING = 30
     private const val MAX_CHAT_PLACES = 15
 }

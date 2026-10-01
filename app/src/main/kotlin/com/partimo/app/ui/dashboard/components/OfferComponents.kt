@@ -34,6 +34,7 @@ import com.partimo.app.R
 import com.partimo.app.ui.common.BestValueBadge
 import com.partimo.app.ui.common.DashboardSection
 import com.partimo.app.ui.common.Formatters
+import com.partimo.app.ui.common.labelRes
 import com.partimo.app.ui.common.TravelLinks
 import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.common.ValueScoreBar
@@ -317,6 +318,9 @@ fun LodgingCard(lodging: Lodging, trip: TripContext, onOpenLink: (String) -> Uni
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
+                }
+                lodging.wheelchair?.let { access ->
+                    Text(text = stringResource(access.labelRes()), style = MaterialTheme.typography.bodySmall)
                 }
             }
         }

@@ -81,3 +81,7 @@ data class ItineraryDestination(val trip: String)
 /** "Chiedi a PartiMo": domande all'assistente sul viaggio. [trip] è un [TripArgs] in JSON. */
 @Serializable
 data class AssistantChatDestination(val trip: String)
+
+/** Guida del viaggio: meteo, paese, valuta, emergenze e Wikivoyage. [trip] è un [TripArgs] in JSON. */
+@Serializable
+data class GuideDestination(val trip: String)

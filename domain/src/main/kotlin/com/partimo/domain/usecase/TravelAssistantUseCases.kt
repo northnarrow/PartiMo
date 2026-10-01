@@ -26,6 +26,7 @@ import java.time.LocalDate
 class LoadTripKnowledgeUseCase(
     private val getSeasonalHighlights: GetSeasonalHighlightsUseCase,
     private val getTripEvents: GetTripEventsUseCase,
+    private val getTripWeather: GetTripWeatherUseCase? = null,
     private val maxPlaces: Int = DEFAULT_MAX_PLACES,
 ) {
 
@@ -33,6 +34,7 @@ class LoadTripKnowledgeUseCase(
         coroutineScope {
             val highlights = async { getSeasonalHighlights(destination.center, from, areaName = destination.name) }
             val events = async { getTripEvents(destination, from, to) }
+            val weather = async { getTripWeather?.invoke(destination.center, from, to)?.getOrNull() }
             TripKnowledge(
                 destination = destination,
                 from = from,
@@ -40,6 +42,7 @@ class LoadTripKnowledgeUseCase(
                 travellers = travellers,
                 places = highlights.await().getOrNull()?.recommendations?.map { it.poi }.orEmpty().take(maxPlaces),
                 events = events.await().getOrNull()?.events.orEmpty(),
+                weather = weather.await(),
             )
         }
 

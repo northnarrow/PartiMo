@@ -10,6 +10,7 @@ import com.partimo.data.testing.mockHttpClient
 import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.model.GeoPoint
+import com.partimo.domain.model.WheelchairAccess
 import com.partimo.domain.model.dining.RestaurantSearchQuery
 import com.partimo.domain.model.stay.AccommodationSearchQuery
 import com.partimo.domain.model.stay.LodgingQuery
@@ -85,10 +86,20 @@ class OsmDataSourcesTest {
         assertEquals("Pizza", pizza.cuisine)
         assertEquals("Rotenturmstraße 4", pizza.address)
         assertEquals("https://www.pizzabizi.at/", pizza.website)
+        assertEquals("Mo-Su,PH 11:00-24:00", pizza.openingHours)
         assertEquals(
             "https://www.google.com/maps/search/?api=1&query=Pizza%20Bizi%2C%20Rotenturmstra%C3%9Fe%204%2C%20Vienna",
             pizza.mapsUrl,
         )
+    }
+
+    @Test
+    fun `l'accessibilità in carrozzina si legge dal tag wheelchair`() {
+        assertEquals(WheelchairAccess.YES, OsmLabels.wheelchair("yes"))
+        assertEquals(WheelchairAccess.YES, OsmLabels.wheelchair("designated"))
+        assertEquals(WheelchairAccess.LIMITED, OsmLabels.wheelchair(" Limited "))
+        assertEquals(WheelchairAccess.NO, OsmLabels.wheelchair("no"))
+        assertEquals(null, OsmLabels.wheelchair("unknown"))
     }
 
     @Test

@@ -43,6 +43,7 @@ import kotlinx.coroutines.launch
 import java.time.Clock
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 /**
  * ViewModel della dashboard aggregata (MVVM).
@@ -103,7 +104,7 @@ class TripDashboardViewModel(
 
     fun onPeriodSelected(period: TravelPeriod) {
         if (period == _uiState.value.period) return
-        _uiState.update { it.copy(period = period, trip = tripFor(period, it.trip)) }
+        _uiState.update { it.copy(period = period, trip = tripFor(period, it.trip), nowAtDestination = nowAtDestination(period)) }
         loadDashboard(forceRefresh = false)
     }
 
@@ -278,7 +279,12 @@ class TripDashboardViewModel(
         _uiState.update { it.copy(transit = state) }
     }
 
+    /** Ora locale della meta, solo per i viaggi imminenti: per quelli lontani "aperto ora" non serve. */
+    private fun nowAtDestination(period: TravelPeriod): LocalDateTime? =
+        if (period == TravelPeriod.NextDays) LocalDateTime.now(clock.withZone(destination.timeZone)) else null
+
     private suspend fun loadRestaurants(trip: TripContext, forceRefresh: Boolean) {
+        _uiState.update { it.copy(nowAtDestination = nowAtDestination(it.period)) }
         val state = findBudgetRestaurants(
             location = trip.destination.center,
             areaName = trip.destination.name,
@@ -334,6 +340,7 @@ class TripDashboardViewModel(
             stayOffersAvailable = offersAvailable,
             restaurantRatingsAvailable = findBudgetRestaurants.ratingsAvailable,
             isDemoMode = isDemoMode,
+            nowAtDestination = nowAtDestination(period),
         )
     }
 

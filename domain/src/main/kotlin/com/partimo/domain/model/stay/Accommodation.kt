@@ -3,6 +3,7 @@ package com.partimo.domain.model.stay
 import com.partimo.domain.common.QueryIssue
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.Money
+import com.partimo.domain.model.WheelchairAccess
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
@@ -89,6 +90,7 @@ data class Lodging(
     val starRating: Int? = null,
     val address: String? = null,
     val website: String? = null,
+    val wheelchair: WheelchairAccess? = null,
 ) {
     init {
         require(starRating == null || starRating in 1..5) { "Stelle fuori scala: $starRating" }

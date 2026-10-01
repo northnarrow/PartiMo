@@ -9,12 +9,14 @@ import com.partimo.data.demo.DemoCatalog
 import com.partimo.data.demo.DemoFlightDataSource
 import com.partimo.data.demo.DemoTransitDataSource
 import com.partimo.data.local.BundledAirportsDataSource
+import com.partimo.data.local.BundledCountryInfoDataSource
 import com.partimo.data.local.CuratedDestinationCatalog
 import com.partimo.data.local.preferences.DataStoreChecklistRepository
 import com.partimo.data.local.preferences.DataStorePriceWatchRepository
 import com.partimo.data.local.preferences.DataStoreUserPreferencesRepository
 import com.partimo.data.local.preferences.createUserDataStore
 import com.partimo.data.network.HttpClientFactory
+import com.partimo.data.remote.currency.ExchangeRateApiDataSource
 import com.partimo.data.remote.duffel.DuffelApi
 import com.partimo.data.remote.duffel.DuffelFlightDataSource
 import com.partimo.data.remote.duffel.DuffelStayDataSource
@@ -30,6 +32,7 @@ import com.partimo.data.remote.places.GooglePlacesPoiDataSource
 import com.partimo.data.remote.places.GooglePlacesRestaurantDataSource
 import com.partimo.data.remote.routes.GoogleRoutesApi
 import com.partimo.data.remote.routes.GoogleRoutesTransitDataSource
+import com.partimo.data.remote.weather.OpenMeteoTripWeatherDataSource
 import com.partimo.data.remote.weather.OpenMeteoWeatherDataSource
 import com.partimo.data.remote.wikidata.WikidataApi
 import com.partimo.data.remote.wikidata.WikidataEventDataSource
@@ -37,11 +40,15 @@ import com.partimo.data.remote.wikipedia.WikipediaApi
 import com.partimo.data.remote.wikipedia.WikipediaArticleDataSource
 import com.partimo.data.remote.wikipedia.WikipediaPoiDataSource
 import com.partimo.data.remote.wikipedia.wikipediaLanguages
+import com.partimo.data.remote.wikivoyage.WikivoyageApi
+import com.partimo.data.remote.wikivoyage.WikivoyageGuideDataSource
 import com.partimo.data.repository.DefaultAccommodationRepository
 import com.partimo.data.repository.DefaultAirportRepository
 import com.partimo.data.repository.DefaultCitySearchRepository
+import com.partimo.data.repository.DefaultCountryInfoRepository
 import com.partimo.data.repository.DefaultDestinationCatalogRepository
 import com.partimo.data.repository.DefaultEventRepository
+import com.partimo.data.repository.DefaultExchangeRateRepository
 import com.partimo.data.repository.DefaultFlightRepository
 import com.partimo.data.repository.DefaultHolidayRepository
 import com.partimo.data.repository.DefaultLodgingRepository
@@ -49,6 +56,8 @@ import com.partimo.data.repository.DefaultPoiArticleRepository
 import com.partimo.data.repository.DefaultPoiRepository
 import com.partimo.data.repository.DefaultRestaurantRepository
 import com.partimo.data.repository.DefaultTransitRepository
+import com.partimo.data.repository.DefaultTravelGuideRepository
+import com.partimo.data.repository.DefaultTripWeatherRepository
 import com.partimo.data.repository.DefaultTravelAssistantRepository
 import com.partimo.data.repository.DefaultWeatherRepository
 import com.partimo.data.source.NoStayOffersDataSource
@@ -56,8 +65,10 @@ import com.partimo.domain.repository.AccommodationRepository
 import com.partimo.domain.repository.AirportRepository
 import com.partimo.domain.repository.ChecklistRepository
 import com.partimo.domain.repository.CitySearchRepository
+import com.partimo.domain.repository.CountryInfoRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
 import com.partimo.domain.repository.EventRepository
+import com.partimo.domain.repository.ExchangeRateRepository
 import com.partimo.domain.repository.FlightRepository
 import com.partimo.domain.repository.HolidayRepository
 import com.partimo.domain.repository.LodgingRepository
@@ -66,6 +77,8 @@ import com.partimo.domain.repository.PoiRepository
 import com.partimo.domain.repository.PriceWatchRepository
 import com.partimo.domain.repository.RestaurantRepository
 import com.partimo.domain.repository.TransitRepository
+import com.partimo.domain.repository.TravelGuideRepository
+import com.partimo.domain.repository.TripWeatherRepository
 import com.partimo.domain.repository.TravelAssistantRepository
 import com.partimo.domain.repository.UserPreferencesRepository
 import com.partimo.domain.repository.WeatherRepository
@@ -109,6 +122,7 @@ class DataModule(
     private val wikipediaApi by lazy { WikipediaApi(httpClient, config.userAgent) }
     private val overpassApi by lazy { OverpassApi(httpClient, config.userAgent) }
     private val wikidataApi by lazy { WikidataApi(httpClient, config.userAgent) }
+    private val wikivoyageApi by lazy { WikivoyageApi(httpClient, config.userAgent) }
     private val geminiApi by lazy { GeminiApi(httpClient, config.geminiApiKey, androidApp = config.androidApp) }
     private val wikipediaLanguages by lazy { wikipediaLanguages(config.languageCode) }
 
@@ -196,8 +210,28 @@ class DataModule(
         DefaultTravelAssistantRepository(source, ioDispatcher)
     }
 
+    /** Informazioni pratiche sui paesi: dati del sistema più il catalogo curato, senza rete. */
+    val countryInfoRepository: CountryInfoRepository by lazy {
+        DefaultCountryInfoRepository(BundledCountryInfoDataSource(config.languageCode), ioDispatcher)
+    }
+
+    /** Tassi di cambio da ExchangeRate-API (accesso aperto, senza chiave). */
+    val exchangeRateRepository: ExchangeRateRepository by lazy {
+        DefaultExchangeRateRepository(ExchangeRateApiDataSource(httpClient, responseCache, config.userAgent), ioDispatcher)
+    }
+
+    /** Guide delle città da Wikivoyage: gratuite e senza chiave. */
+    val travelGuideRepository: TravelGuideRepository by lazy {
+        DefaultTravelGuideRepository(WikivoyageGuideDataSource(wikivoyageApi, responseCache, wikipediaLanguages), ioDispatcher)
+    }
+
     val weatherRepository: WeatherRepository by lazy {
         DefaultWeatherRepository(OpenMeteoWeatherDataSource(httpClient, responseCache), ioDispatcher)
+    }
+
+    /** Previsioni e clima tipico per le date del viaggio, da Open-Meteo (gratuito e senza chiave). */
+    val tripWeatherRepository: TripWeatherRepository by lazy {
+        DefaultTripWeatherRepository(OpenMeteoTripWeatherDataSource(httpClient, responseCache, clock), ioDispatcher)
     }
 
     /** Ricerca città mondiale con Open-Meteo Geocoding: gratuita e senza chiave, sempre reale. */

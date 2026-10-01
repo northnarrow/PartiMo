@@ -2,6 +2,7 @@ package com.partimo.data.source
 
 import com.partimo.data.network.Fetched
 import com.partimo.domain.common.DataOrigin
+import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.dining.RestaurantSearchQuery
@@ -9,6 +10,9 @@ import com.partimo.domain.model.event.EventQuery
 import com.partimo.domain.model.event.TripEvent
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightSearchQuery
+import com.partimo.domain.model.guide.CountryInfo
+import com.partimo.domain.model.guide.ExchangeRates
+import com.partimo.domain.model.guide.TravelGuide
 import com.partimo.domain.model.place.Airport
 import com.partimo.domain.model.place.CatalogDestination
 import com.partimo.domain.model.place.CityPlace
@@ -25,7 +29,10 @@ import com.partimo.domain.model.stay.Lodging
 import com.partimo.domain.model.stay.LodgingQuery
 import com.partimo.domain.model.transit.TransitRoute
 import com.partimo.domain.model.transit.TransitRouteQuery
+import com.partimo.domain.model.weather.DailyForecast
+import com.partimo.domain.model.weather.DailyObservation
 import com.partimo.domain.model.weather.WeatherSnapshot
+import java.time.LocalDate
 
 // Sorgenti dati per provider. Ogni interfaccia ha un'implementazione reale (Ktor + cache Room),
 // e quelle che richiedono una chiave anche una demo: sostituire un provider (es. passare a un
@@ -84,6 +91,24 @@ interface TravelAssistantDataSource {
     suspend fun planTrip(knowledge: TripKnowledge, preferences: TripPreferences, forceRefresh: Boolean): Fetched<TripPlan>
 
     suspend fun answer(knowledge: TripKnowledge, conversation: List<ChatMessage>): Fetched<String>
+}
+
+interface CountryInfoDataSource {
+    suspend fun countryInfo(countryCode: String): Fetched<CountryInfo>
+}
+
+interface ExchangeRateDataSource {
+    suspend fun latestRates(base: String, forceRefresh: Boolean): Fetched<ExchangeRates>
+}
+
+interface TravelGuideDataSource {
+    suspend fun guide(destination: Destination, forceRefresh: Boolean): Fetched<TravelGuide?>
+}
+
+interface TripWeatherDataSource {
+    suspend fun dailyForecast(location: GeoPoint, from: LocalDate, to: LocalDate): Fetched<List<DailyForecast>>
+
+    suspend fun dailyHistory(location: GeoPoint, years: Int): Fetched<List<DailyObservation>>
 }
 
 interface CitySearchDataSource {

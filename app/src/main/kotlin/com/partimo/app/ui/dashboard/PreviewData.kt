@@ -3,6 +3,7 @@ package com.partimo.app.ui.dashboard
 import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.chat.ChatUiState
 import com.partimo.app.ui.departure.DeparturePickerUiState
+import com.partimo.app.ui.guide.GuideUiState
 import com.partimo.app.ui.itinerary.ItineraryUiState
 import com.partimo.app.ui.place.PlaceDetailUiState
 import com.partimo.app.ui.place.googleMapsSearchUrl
@@ -14,6 +15,7 @@ import com.partimo.domain.model.Money
 import com.partimo.domain.model.ScoredOffer
 import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.TripContext
+import com.partimo.domain.model.WheelchairAccess
 import com.partimo.domain.model.dining.PriceLevel
 import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.event.EventKind
@@ -22,6 +24,13 @@ import com.partimo.domain.model.event.TripEvent
 import com.partimo.domain.model.event.TripEvents
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightSlice
+import com.partimo.domain.model.guide.CountryInfo
+import com.partimo.domain.model.guide.DrivingSide
+import com.partimo.domain.model.guide.EmergencyNumbers
+import com.partimo.domain.model.guide.ExchangeRate
+import com.partimo.domain.model.guide.GuideSection
+import com.partimo.domain.model.guide.PowerInfo
+import com.partimo.domain.model.guide.TravelGuide
 import com.partimo.domain.model.place.Airport
 import com.partimo.domain.model.place.AirportOption
 import com.partimo.domain.model.place.AirportSize
@@ -59,13 +68,20 @@ import com.partimo.domain.model.transit.TransitLine
 import com.partimo.domain.model.transit.TransitMode
 import com.partimo.domain.model.transit.TransitRoute
 import com.partimo.domain.model.transit.TransitStop
+import com.partimo.domain.model.weather.ClimateNormals
+import com.partimo.domain.model.weather.DailyForecast
+import com.partimo.domain.model.weather.SunTimes
+import com.partimo.domain.model.weather.TripWeather
 import com.partimo.domain.model.weather.WeatherCondition
 import com.partimo.domain.model.weather.WeatherSnapshot
 import com.partimo.domain.service.SeasonalCalendar
+import java.math.BigDecimal
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.MonthDay
 import java.time.Month
 import java.time.YearMonth
 import java.time.ZoneId
@@ -269,7 +285,15 @@ internal object PreviewData {
         Lodging("osm:node/3", "Wombat's City Hostel The Naschmarkt", LodgingType.HOSTEL, GeoPoint(48.1975, 16.3601), address = "Rechte Wienzeile 35"),
     )
 
-    private fun openDataRestaurant(id: String, name: String, cuisine: String, address: String, location: GeoPoint) = Restaurant(
+    private fun openDataRestaurant(
+        id: String,
+        name: String,
+        cuisine: String,
+        address: String,
+        location: GeoPoint,
+        openingHours: String? = null,
+        wheelchair: WheelchairAccess? = null,
+    ) = Restaurant(
         id = id,
         name = name,
         priceLevel = null,
@@ -278,12 +302,15 @@ internal object PreviewData {
         address = address,
         location = location,
         mapsUrl = googleMapsSearchUrl("$name, $address, Vienna"),
+        openingHours = openingHours,
+        wheelchair = wheelchair,
     )
 
+    /** Orari e accessibilità come nei dati reali di OpenStreetMap. */
     private val openDataRestaurants = listOf(
-        openDataRestaurant("osm:node/11", "Figlmüller", "Austriaca", "Wollzeile 5", GeoPoint(48.2091, 16.3747)),
-        openDataRestaurant("osm:node/12", "Griechenbeisl", "Austriaca", "Fleischmarkt 11", GeoPoint(48.2115, 16.3771)),
-        openDataRestaurant("osm:node/13", "Pizza Bizi", "Pizza", "Rotenturmstraße 4", GeoPoint(48.2094, 16.3736)),
+        openDataRestaurant("osm:node/11", "Figlmüller", "Austriaca", "Wollzeile 5", GeoPoint(48.2091, 16.3747), "Mo-Su 11:00-22:30", WheelchairAccess.LIMITED),
+        openDataRestaurant("osm:node/12", "Griechenbeisl", "Austriaca", "Fleischmarkt 11", GeoPoint(48.2115, 16.3771), "Mo-Fr 11:30-14:30, 18:00-22:00; Sa 18:00-22:00; Su, PH off"),
+        openDataRestaurant("osm:node/13", "Pizza Bizi", "Pizza", "Rotenturmstraße 4", GeoPoint(48.2094, 16.3736), "Mo-Su,PH 11:00-24:00", WheelchairAccess.YES),
     )
 
     /** Senza chiavi API: voli e mezzi stimati con i collegamenti ai siti, alloggi e ristoranti reali (OpenStreetMap). */
@@ -477,6 +504,96 @@ internal object PreviewData {
                 "Ecco tre piatti imperdibili:\n\n• Wiener Schnitzel: la cotoletta di vitello impanata, da Figlmüller.\n" +
                     "• Tafelspitz: bollito di manzo con salsa di rafano e mele, da Plachutta.\n" +
                     "• Sachertorte: la torta al cioccolato più famosa, all'Hotel Sacher.\n\nPrenota in anticipo: a dicembre i locali sono pieni.",
+            ),
+        ),
+    )
+
+    // ---- Guida del viaggio ------------------------------------------------------------------------
+
+    val austria = CountryInfo(
+        countryCode = "AT",
+        countryCode3 = "AUT",
+        name = "Austria",
+        currencyCode = "EUR",
+        currencyName = "euro",
+        currencySymbol = "€",
+        languages = listOf("tedesco"),
+        callingCode = "+43",
+        drivingSide = DrivingSide.RIGHT,
+        power = PowerInfo(listOf("C", "F"), "230", "50"),
+        emergency = EmergencyNumbers(general = "112", police = "133", ambulance = "144", fire = "122"),
+    )
+
+    /** Guida reale di Wikivoyage, accorciata. */
+    private val viennaGuide = TravelGuide(
+        title = "Vienna",
+        language = "it",
+        url = "https://it.wikivoyage.org/wiki/Vienna",
+        introduction = listOf("Vienna è la capitale dell'Austria."),
+        sections = listOf(
+            GuideSection(
+                "Da sapere",
+                listOf("Si va a Vienna per rivivere le glorie e i fasti della dinastia asburgica, ma anche le sue tragedie."),
+                listOf(GuideSection("Quando andare", listOf("Dicembre è il mese dei mercatini di Natale."))),
+            ),
+            GuideSection(
+                "Come spostarsi",
+                emptyList(),
+                listOf(
+                    GuideSection("Con mezzi pubblici", listOf("I biglietti si acquistano ai distributori automatici e nelle tabaccherie.", "72 ore: 17,10 €.")),
+                    GuideSection("In taxi", listOf("Per il servizio taxi chiamare il numero 40100.")),
+                ),
+            ),
+            GuideSection("Sicurezza", listOf("Vienna è una città molto sicura, ma al Prater e nelle stazioni è meglio stare in guardia.")),
+        ),
+    )
+
+    fun guideState() = GuideUiState(
+        destination = SampleDestinations.VIENNA,
+        from = LocalDate.of(2026, Month.DECEMBER, 10),
+        to = LocalDate.of(2026, Month.DECEMBER, 14),
+        country = UiState.Success(austria),
+        exchangeRate = UiState.Empty,
+        weather = UiState.Success(
+            TripWeather.Climate(ClimateNormals(MonthDay.of(Month.DECEMBER, 7), MonthDay.of(Month.DECEMBER, 17), 5.0, 0.1, 0.31, 10)),
+        ),
+        sunTimes = SunTimes(
+            date = LocalDate.of(2026, Month.DECEMBER, 10),
+            sunrise = LocalTime.of(7, 34),
+            sunset = LocalTime.of(15, 59),
+            morningGoldenHourEnd = LocalTime.of(8, 22),
+            eveningGoldenHourStart = LocalTime.of(15, 11),
+        ),
+        guide = UiState.Success(viennaGuide),
+        expandedSections = setOf("Come spostarsi"),
+    )
+
+    /** Guida di un viaggio a Praga tra pochi giorni: corone ceche e previsioni giorno per giorno. */
+    fun pragueGuideState() = guideState().copy(
+        destination = SampleDestinations.VIENNA.copy(
+            name = "Praga",
+            countryCode = "CZ",
+            airportIata = "PRG",
+            center = GeoPoint(50.0755, 14.4378),
+            arrivalHub = GeoPoint(50.1008, 14.26),
+            arrivalHubName = "Aeroporto di Praga",
+            timeZone = ZoneId.of("Europe/Prague"),
+        ),
+        from = LocalDate.of(2026, 10, 2),
+        to = LocalDate.of(2026, 10, 6),
+        sunTimes = null,
+        guide = UiState.Empty,
+        country = UiState.Success(
+            austria.copy(countryCode = "CZ", countryCode3 = "CZE", name = "Cechia", currencyCode = "CZK", currencyName = "corona ceca", currencySymbol = "Kč", languages = listOf("ceco"), callingCode = "+420"),
+        ),
+        exchangeRate = UiState.Success(ExchangeRate("EUR", "CZK", BigDecimal("24.431512"), Instant.parse("2026-10-01T00:02:31Z"))),
+        weather = UiState.Success(
+            TripWeather.Forecast(
+                listOf(
+                    DailyForecast(LocalDate.of(2026, 10, 2), WeatherCondition.OVERCAST, 21.0, 12.0, 0.0, 5),
+                    DailyForecast(LocalDate.of(2026, 10, 3), WeatherCondition.PARTLY_CLOUDY, 22.0, 11.0, 0.0, 0),
+                    DailyForecast(LocalDate.of(2026, 10, 4), WeatherCondition.RAIN, 16.0, 10.0, 4.5, 75),
+                ),
             ),
         ),
     )

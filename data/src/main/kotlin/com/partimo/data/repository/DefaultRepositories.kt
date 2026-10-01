@@ -3,6 +3,10 @@ package com.partimo.data.repository
 import com.partimo.data.network.safeApiCall
 import com.partimo.data.source.AirportDataSource
 import com.partimo.data.source.CitySearchDataSource
+import com.partimo.data.source.CountryInfoDataSource
+import com.partimo.data.source.ExchangeRateDataSource
+import com.partimo.data.source.TravelGuideDataSource
+import com.partimo.data.source.TripWeatherDataSource
 import com.partimo.data.source.DestinationCatalogDataSource
 import com.partimo.data.source.EventDataSource
 import com.partimo.data.source.FlightOffersDataSource
@@ -17,6 +21,7 @@ import com.partimo.data.source.TravelAssistantDataSource
 import com.partimo.data.source.WeatherDataSource
 import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataResult
+import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.dining.RestaurantSearchQuery
@@ -24,6 +29,9 @@ import com.partimo.domain.model.event.EventQuery
 import com.partimo.domain.model.event.TripEvent
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightSearchQuery
+import com.partimo.domain.model.guide.CountryInfo
+import com.partimo.domain.model.guide.ExchangeRates
+import com.partimo.domain.model.guide.TravelGuide
 import com.partimo.domain.model.place.Airport
 import com.partimo.domain.model.place.CatalogDestination
 import com.partimo.domain.model.place.CityPlace
@@ -40,10 +48,17 @@ import com.partimo.domain.model.stay.Lodging
 import com.partimo.domain.model.stay.LodgingQuery
 import com.partimo.domain.model.transit.TransitRoute
 import com.partimo.domain.model.transit.TransitRouteQuery
+import com.partimo.domain.model.weather.DailyForecast
+import com.partimo.domain.model.weather.DailyObservation
 import com.partimo.domain.model.weather.WeatherSnapshot
+import java.time.LocalDate
 import com.partimo.domain.repository.AccommodationRepository
 import com.partimo.domain.repository.AirportRepository
 import com.partimo.domain.repository.CitySearchRepository
+import com.partimo.domain.repository.CountryInfoRepository
+import com.partimo.domain.repository.ExchangeRateRepository
+import com.partimo.domain.repository.TravelGuideRepository
+import com.partimo.domain.repository.TripWeatherRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
 import com.partimo.domain.repository.EventRepository
 import com.partimo.domain.repository.FlightRepository
@@ -104,6 +119,17 @@ class DefaultWeatherRepository(
         safeApiCall(ioDispatcher) { dataSource.currentWeather(location) }
 }
 
+class DefaultTripWeatherRepository(
+    private val dataSource: TripWeatherDataSource,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+) : TripWeatherRepository {
+    override suspend fun dailyForecast(location: GeoPoint, from: LocalDate, to: LocalDate): DataResult<List<DailyForecast>> =
+        safeApiCall(ioDispatcher) { dataSource.dailyForecast(location, from, to) }
+
+    override suspend fun dailyHistory(location: GeoPoint, years: Int): DataResult<List<DailyObservation>> =
+        safeApiCall(ioDispatcher) { dataSource.dailyHistory(location, years) }
+}
+
 class DefaultTransitRepository(
     private val dataSource: TransitDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
@@ -161,6 +187,30 @@ class DefaultTravelAssistantRepository(
         val source = dataSource ?: return DataResult.Failure(DataError.Unauthorized)
         return safeApiCall(ioDispatcher) { source.answer(knowledge, conversation) }
     }
+}
+
+class DefaultCountryInfoRepository(
+    private val dataSource: CountryInfoDataSource,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+) : CountryInfoRepository {
+    override suspend fun countryInfo(countryCode: String): DataResult<CountryInfo> =
+        safeApiCall(ioDispatcher) { dataSource.countryInfo(countryCode) }
+}
+
+class DefaultExchangeRateRepository(
+    private val dataSource: ExchangeRateDataSource,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+) : ExchangeRateRepository {
+    override suspend fun latestRates(base: String, forceRefresh: Boolean): DataResult<ExchangeRates> =
+        safeApiCall(ioDispatcher) { dataSource.latestRates(base, forceRefresh) }
+}
+
+class DefaultTravelGuideRepository(
+    private val dataSource: TravelGuideDataSource,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+) : TravelGuideRepository {
+    override suspend fun guide(destination: Destination, forceRefresh: Boolean): DataResult<TravelGuide?> =
+        safeApiCall(ioDispatcher) { dataSource.guide(destination, forceRefresh) }
 }
 
 class DefaultCitySearchRepository(

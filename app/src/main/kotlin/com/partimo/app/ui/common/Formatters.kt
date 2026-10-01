@@ -8,6 +8,7 @@ import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.Month
 import java.time.MonthDay
 import java.time.YearMonth
@@ -29,6 +30,11 @@ object Formatters {
     private val dayMonthFormatter = DateTimeFormatter.ofPattern("d MMM", locale)
     private val dayFormatter = DateTimeFormatter.ofPattern("d", locale)
     private val weekdayDayMonthFormatter = DateTimeFormatter.ofPattern("EEE d MMM", locale)
+    private val weekdayDayFormatter = DateTimeFormatter.ofPattern("EEE d", locale)
+    private val shortDateFormatter = DateTimeFormatter.ofPattern("d MMM yyyy", locale)
+
+    /** Oltre questo importo i decimali non servono (es. 2.443 corone). */
+    private const val LARGE_AMOUNT = 1000
 
     /** Importi interi senza decimali ("129 €"), altrimenti con i centesimi ("129,40 €"). */
     fun money(money: Money): String {
@@ -103,6 +109,33 @@ object Formatters {
         val rounded = (meters / 10).roundToInt() * 10
         return if (rounded < 1_000) "$rounded m" else "${compactNumber(meters / 1_000)} km"
     }
+
+    /** Ora del giorno senza data: "15:59". */
+    fun time(time: LocalTime): String = time.format(timeFormatter)
+
+    /** Giorno della settimana abbreviato e numero: "gio 10". */
+    fun weekdayDay(date: LocalDate): String = date.format(weekdayDayFormatter).lowercase(locale).replace(".", "")
+
+    /** Durata in ore e minuti per i fusi orari: "1 h", "5 h 30 min". */
+    fun hoursAndMinutes(minutes: Int): String = duration(Duration.ofMinutes(minutes.toLong()))
+
+    /**
+     * Importo in una valuta qualunque con le cifre decimali giuste per quella valuta ("2.443 CZK",
+     * "17.836 ¥", "12,50 €"): il simbolo viene dal sistema.
+     */
+    fun currencyAmount(amount: BigDecimal, currencyCode: String): String {
+        val currency = runCatching { Currency.getInstance(currencyCode) }.getOrNull()
+        val format = NumberFormat.getCurrencyInstance(locale).apply {
+            if (currency != null) this.currency = currency
+            val digits = if (amount.abs() >= BigDecimal(LARGE_AMOUNT)) 0 else (currency?.defaultFractionDigits ?: 2).coerceAtLeast(0)
+            minimumFractionDigits = digits
+            maximumFractionDigits = digits
+        }
+        return format.format(amount)
+    }
+
+    /** Data breve con l'anno: "1 ott 2026". */
+    fun shortDate(date: LocalDate): String = date.format(shortDateFormatter).lowercase(locale).replace(".", "")
 
     /** Importo senza segno, per le variazioni di prezzo ("12 €"). */
     fun moneyAmount(amount: BigDecimal, currencyCode: String): String = money(Money.of(amount.abs(), currencyCode))

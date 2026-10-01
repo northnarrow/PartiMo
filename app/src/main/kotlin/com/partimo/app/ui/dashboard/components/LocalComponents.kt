@@ -19,6 +19,7 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,6 +35,12 @@ import coil3.compose.AsyncImage
 import com.partimo.app.R
 import com.partimo.app.ui.common.DashboardSection
 import com.partimo.app.ui.common.Formatters
+import com.partimo.app.ui.common.OpeningHoursText
+import com.partimo.app.ui.common.labelRes
+import com.partimo.app.ui.common.openStateText
+import com.partimo.domain.service.OpeningHoursParser
+import java.time.LocalDate
+import java.time.LocalDateTime
 import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.common.emoji
 import com.partimo.domain.common.DataOrigin
@@ -204,6 +211,10 @@ fun RestaurantsSection(
     ratingsAvailable: Boolean = true,
     center: GeoPoint? = null,
     onOpenLink: (String) -> Unit = {},
+    /** Settimana di cui mostrare gli orari (quella del viaggio). */
+    hoursWeekOf: LocalDate? = null,
+    /** Ora locale della meta, per "Aperto ora"; `null` se il viaggio non è imminente. */
+    nowAtDestination: LocalDateTime? = null,
 ) {
     DashboardSection(
         title = stringResource(if (ratingsAvailable) R.string.section_restaurants else R.string.section_restaurants_nearby),
@@ -224,6 +235,8 @@ fun RestaurantsSection(
                     restaurant = restaurant,
                     distanceMeters = center?.let { restaurant.location?.distanceTo(it) },
                     onClick = restaurant.mapsUrl?.let { url -> { onOpenLink(url) } },
+                    hoursWeekOf = hoursWeekOf,
+                    nowAtDestination = nowAtDestination,
                 )
             }
             if (!ratingsAvailable) OsmAttribution(onOpenLink = onOpenLink, modifier = Modifier.padding(horizontal = 16.dp))
@@ -237,12 +250,16 @@ fun RestaurantRow(
     modifier: Modifier = Modifier,
     distanceMeters: Double? = null,
     onClick: (() -> Unit)? = null,
+    hoursWeekOf: LocalDate? = null,
+    nowAtDestination: LocalDateTime? = null,
 ) {
     val details = listOfNotNull(
         restaurant.cuisine,
         restaurant.priceLevel?.let(Formatters::priceLevel),
         distanceMeters?.let { stringResource(R.string.distance_from_center, Formatters.distance(it)) },
     ).joinToString(" · ")
+    val hours = remember(restaurant.openingHours) { OpeningHoursParser.parse(restaurant.openingHours) }
+    val closedLabel = stringResource(R.string.hours_closed)
     ListItem(
         modifier = if (onClick != null) modifier.clickable(onClick = onClick) else modifier,
         headlineContent = { Text(restaurant.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
@@ -250,6 +267,17 @@ fun RestaurantRow(
             Column {
                 if (details.isNotEmpty()) Text(details)
                 restaurant.address?.let { Text(it, maxLines = 1, overflow = TextOverflow.Ellipsis) }
+                if (hours != null && nowAtDestination != null) {
+                    Text(openStateText(hours.stateAt(nowAtDestination), nowAtDestination), style = MaterialTheme.typography.labelMedium)
+                }
+                if (hours != null && hoursWeekOf != null) {
+                    Text(
+                        text = stringResource(R.string.hours_weekly, OpeningHoursText.weekly(hours, hoursWeekOf, closedLabel)),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+                restaurant.wheelchair?.let { Text(stringResource(it.labelRes())) }
             }
         },
         leadingContent = {

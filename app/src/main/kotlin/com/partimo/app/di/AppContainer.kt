@@ -12,9 +12,13 @@ import com.partimo.domain.usecase.CheckPriceWatchesUseCase
 import com.partimo.domain.usecase.FindBudgetRestaurantsUseCase
 import com.partimo.domain.usecase.FindDepartureAirportsUseCase
 import com.partimo.domain.usecase.FindLodgingsUseCase
+import com.partimo.domain.usecase.GetCountryInfoUseCase
+import com.partimo.domain.usecase.GetExchangeRateUseCase
 import com.partimo.domain.usecase.GetPoiDetailsUseCase
 import com.partimo.domain.usecase.GetSeasonalHighlightsUseCase
+import com.partimo.domain.usecase.GetTravelGuideUseCase
 import com.partimo.domain.usecase.GetTripEventsUseCase
+import com.partimo.domain.usecase.GetTripWeatherUseCase
 import com.partimo.domain.usecase.LoadTripKnowledgeUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObservePriceAlertUseCase
@@ -65,6 +69,12 @@ interface AppContainer {
     val planTrip: PlanTripUseCase
     val askTravelAssistant: AskTravelAssistantUseCase
     val packingChecklist: PackingChecklistUseCase
+
+    /** Guida del viaggio: paese, valuta, meteo per le date e guida della città. */
+    val getCountryInfo: GetCountryInfoUseCase
+    val getExchangeRate: GetExchangeRateUseCase
+    val getTravelGuide: GetTravelGuideUseCase
+    val getTripWeather: GetTripWeatherUseCase
 }
 
 /**
@@ -152,8 +162,16 @@ class DefaultAppContainer(context: Context) : AppContainer {
     }
 
     override val loadTripKnowledge: LoadTripKnowledgeUseCase by lazy {
-        LoadTripKnowledgeUseCase(getSeasonalHighlights, getTripEvents)
+        LoadTripKnowledgeUseCase(getSeasonalHighlights, getTripEvents, getTripWeather)
     }
+
+    override val getCountryInfo: GetCountryInfoUseCase by lazy { GetCountryInfoUseCase(dataModule.countryInfoRepository) }
+
+    override val getExchangeRate: GetExchangeRateUseCase by lazy { GetExchangeRateUseCase(dataModule.exchangeRateRepository) }
+
+    override val getTravelGuide: GetTravelGuideUseCase by lazy { GetTravelGuideUseCase(dataModule.travelGuideRepository) }
+
+    override val getTripWeather: GetTripWeatherUseCase by lazy { GetTripWeatherUseCase(dataModule.tripWeatherRepository, clock) }
 
     override val planTrip: PlanTripUseCase by lazy { PlanTripUseCase(dataModule.travelAssistantRepository, loadTripKnowledge) }
 

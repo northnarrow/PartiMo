@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
@@ -114,6 +115,8 @@ data class DashboardActions(
     val onOpenItinerary: () -> Unit = {},
     /** "Chiedi a PartiMo": domande all'assistente sul viaggio mostrato. */
     val onOpenAssistant: () -> Unit = {},
+    /** Guida del viaggio: meteo per le date, paese, valuta, emergenze, Wikivoyage. */
+    val onOpenGuide: () -> Unit = {},
 )
 
 /**
@@ -129,6 +132,7 @@ fun TripDashboardRoute(
     modifier: Modifier = Modifier,
     onOpenItinerary: (TripContext) -> Unit = {},
     onOpenAssistant: (TripContext) -> Unit = {},
+    onOpenGuide: (TripContext) -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -165,6 +169,7 @@ fun TripDashboardRoute(
             },
             onOpenItinerary = { onOpenItinerary(state.trip) },
             onOpenAssistant = { onOpenAssistant(state.trip) },
+            onOpenGuide = { onOpenGuide(state.trip) },
         ),
         modifier = modifier,
     )
@@ -231,9 +236,12 @@ fun TripDashboardScreen(
                 onSelected = actions.onPeriodSelected,
                 modifier = Modifier.padding(vertical = 8.dp),
             )
-            if (state.assistantAvailable) {
-                AssistantChips(onOpenItinerary = actions.onOpenItinerary, onOpenAssistant = actions.onOpenAssistant)
-            }
+            TripToolChips(
+                assistantAvailable = state.assistantAvailable,
+                onOpenGuide = actions.onOpenGuide,
+                onOpenItinerary = actions.onOpenItinerary,
+                onOpenAssistant = actions.onOpenAssistant,
+            )
             PullToRefreshBox(
                 isRefreshing = state.isRefreshing,
                 onRefresh = actions.onRefresh,
@@ -331,6 +339,8 @@ private fun LazyListScope.sectionContent(section: DashboardSection, state: TripD
                 ratingsAvailable = state.restaurantRatingsAvailable,
                 center = state.trip.destination.center,
                 onOpenLink = actions.onOpenLink,
+                hoursWeekOf = state.trip.departureDate,
+                nowAtDestination = state.nowAtDestination,
             )
         }
     }
@@ -430,23 +440,31 @@ fun DashboardSection.emoji(): String = when (this) {
     DashboardSection.RESTAURANTS -> "🍝"
 }
 
-/** Scorciatoie dell'assistente con l'IA per il viaggio mostrato: itinerario e domande. */
+/** Tag della riga degli strumenti del viaggio, scorrevole in orizzontale. */
+const val TRIP_TOOLS_TAG = "trip_tools"
+
+/**
+ * Strumenti del viaggio mostrato: la guida (sempre) e, con la chiave Gemini, l'itinerario e le
+ * domande all'assistente con l'IA.
+ */
 @Composable
-private fun AssistantChips(onOpenItinerary: () -> Unit, onOpenAssistant: () -> Unit) {
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 4.dp),
+private fun TripToolChips(assistantAvailable: Boolean, onOpenGuide: () -> Unit, onOpenItinerary: () -> Unit, onOpenAssistant: () -> Unit) {
+    LazyRow(
+        modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp).testTag(TRIP_TOOLS_TAG),
+        contentPadding = PaddingValues(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        AssistChip(
-            onClick = onOpenItinerary,
-            label = { Text(stringResource(R.string.assistant_itinerary_chip)) },
-            leadingIcon = { Text("✨") },
-        )
-        AssistChip(
-            onClick = onOpenAssistant,
-            label = { Text(stringResource(R.string.assistant_chat_chip)) },
-            leadingIcon = { Text("💬") },
-        )
+        item(key = "guide") {
+            AssistChip(onClick = onOpenGuide, label = { Text(stringResource(R.string.guide_chip)) }, leadingIcon = { Text("📖") })
+        }
+        if (assistantAvailable) {
+            item(key = "itinerary") {
+                AssistChip(onClick = onOpenItinerary, label = { Text(stringResource(R.string.assistant_itinerary_chip)) }, leadingIcon = { Text("✨") })
+            }
+            item(key = "assistant") {
+                AssistChip(onClick = onOpenAssistant, label = { Text(stringResource(R.string.assistant_chat_chip)) }, leadingIcon = { Text("💬") })
+            }
+        }
     }
 }
 

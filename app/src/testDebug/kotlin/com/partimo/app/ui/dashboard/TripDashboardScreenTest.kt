@@ -328,6 +328,34 @@ class TripDashboardScreenTest {
     }
 
     @Test
+    fun `i ristoranti mostrano orari della settimana del viaggio, aperto ora e accessibilità`() {
+        val state = showDashboard(PreviewData.openDataState().copy(selectedSection = DashboardSection.RESTAURANTS))
+
+        composeRule.onNodeWithText("🕒 lun–dom 11:00–24:00").assertExists()
+        composeRule.onNodeWithText("🕒 lun–ven 11:30–14:30, 18:00–22:00 · sab 18:00–22:00 · dom chiuso").assertExists()
+        composeRule.onNodeWithText(text(R.string.wheelchair_yes)).assertExists()
+        composeRule.onNodeWithText(text(R.string.wheelchair_limited)).assertExists()
+        composeRule.onNodeWithText("🟢 Aperto ora", substring = true).assertDoesNotExist()
+
+        // Viaggio imminente: alle 23:30 di venerdì a Vienna Figlmüller ha chiuso, Pizza Bizi è aperta fino a mezzanotte.
+        state.value = state.value.copy(nowAtDestination = java.time.LocalDateTime.of(2026, 12, 11, 23, 30))
+        composeRule.onNodeWithText("🟢 Aperto ora · chiude alle 00:00").assertExists()
+        composeRule.onNodeWithText("🔴 Chiuso ora · apre domani alle 11:00").assertExists()
+    }
+
+    @Test
+    fun `la guida del viaggio si apre sempre, anche senza assistente`() {
+        var guides = 0
+        val state = showDashboard(PreviewData.loadedState().copy(assistantAvailable = false), DashboardActions(onOpenGuide = { guides++ }))
+
+        composeRule.onNodeWithText(text(R.string.guide_chip)).performClick()
+        assertEquals(1, guides)
+        composeRule.onNodeWithText(text(R.string.assistant_itinerary_chip)).assertDoesNotExist()
+        state.value = state.value.copy(assistantAvailable = true)
+        composeRule.onNodeWithText(text(R.string.assistant_itinerary_chip)).assertExists()
+    }
+
+    @Test
     fun `salva gli screenshot della dashboard`() {
         val state = showDashboard(PreviewData.loadedState())
         saveScreenshot("trip_dashboard.png")

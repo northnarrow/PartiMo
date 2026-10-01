@@ -273,7 +273,7 @@ private val HTML_TAG = Regex("<[^>]*>")
 private val WHITESPACE = Regex("\\s+")
 private val SEARCH_OPERATORS = Regex("[^\\p{L}\\p{N}' ]+")
 
-private fun parsePages(body: String): List<WikiPage> {
+internal fun parsePages(body: String): List<WikiPage> {
     val response = NetworkJson.decodeFromString(WikiQueryResponse.serializer(), body)
     require(response.error == null) { "Errore dell'API di Wikipedia: ${response.error?.code}" }
     return response.query?.pages.orEmpty()

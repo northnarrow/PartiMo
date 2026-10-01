@@ -98,11 +98,21 @@ internal object CachePolicy {
     val TRANSIT: Duration = Duration.ofMinutes(2)
     val WEATHER: Duration = Duration.ofMinutes(15)
 
+    /** Previsioni dei prossimi giorni: Open-Meteo le aggiorna più volte al giorno. */
+    val DAILY_FORECAST: Duration = Duration.ofHours(3)
+
+    /** I dati degli anni passati non cambiano: si tengono quanto le altre risposte. */
+    val CLIMATE: Duration = Duration.ofDays(30)
+
     /**
      * Itinerari proposti dall'assistente: restano finché l'utente non chiede di rigenerarli o cambia
      * viaggio o preferenze (che producono un'altra chiave).
      */
     val AI_PLAN: Duration = Duration.ofDays(30)
+
+    /** Le guide di viaggio cambiano poco; i cambi si aggiornano una volta al giorno (e il servizio chiede di non superare una richiesta l'ora). */
+    val GUIDES: Duration = Duration.ofDays(7)
+    val EXCHANGE_RATES: Duration = Duration.ofHours(12)
 
     /** I risultati della ricerca città cambiano molto raramente. */
     val GEOCODING: Duration = Duration.ofDays(7)

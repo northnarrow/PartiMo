@@ -4,6 +4,7 @@ import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.event.TripEvent
 import com.partimo.domain.model.poi.PointOfInterest
+import com.partimo.domain.model.weather.TripWeather
 import java.time.LocalDate
 
 /** Ritmo del viaggio: quante tappe al giorno propone l'itinerario. */
@@ -32,6 +33,8 @@ data class TripKnowledge(
     val places: List<PointOfInterest> = emptyList(),
     /** Eventi tra arrivo e partenza (mercatini, festival, festività). */
     val events: List<TripEvent> = emptyList(),
+    /** Previsioni o clima tipico del periodo, per l'abbigliamento e le attività al chiuso. */
+    val weather: TripWeather? = null,
 ) {
     init {
         require(!to.isBefore(from)) { "Il viaggio finisce prima di cominciare: $from–$to" }

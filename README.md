@@ -29,6 +29,21 @@ l'app mostra delle stime e i pulsanti verso **Google Voli**, **Skyscanner** e **
 con i mezzi), che si aprono con tratta e date del viaggio. I siti si aprono nel **browser interno** di
 PartiMo, senza uscire dall'app; le pagine di Google Maps nell'app Maps.
 
+Il pulsante **Guida**, sotto i mesi della dashboard, apre tutto ciò che serve sapere prima di partire,
+senza chiavi:
+- **meteo per le date del viaggio**: previsioni giorno per giorno se si parte entro due settimane,
+  altrimenti il clima tipico di quei giorni (media di dieci anni di dati misurati); **alba, tramonto e
+  ora d'oro** per le foto, calcolati sul telefono;
+- **in breve**: lingua, valuta, prefisso, lato di guida, fuso orario e **prese elettriche** (con
+  l'avviso se serve un adattatore o se la tensione è bassa);
+- **numeri di emergenza** da comporre con un tocco e la scheda del paese su **Viaggiare Sicuri**
+  (Farnesina) per documenti e sicurezza;
+- **convertitore di valuta** con il cambio del giorno;
+- la **guida di Wikivoyage** della città (come arrivare, come muoversi, dove mangiare, sicurezza…).
+
+I ristoranti mostrano anche gli **orari di apertura** della settimana del viaggio (e «aperto ora» per
+i viaggi imminenti) e, come gli alloggi, l'**accessibilità in carrozzina**, da OpenStreetMap.
+
 Con una chiave gratuita di **Google Gemini** si attiva l'**assistente con l'IA**, raggiungibile dai
 pulsanti sotto i mesi della dashboard:
 - **Itinerario con l'IA:** il programma giorno per giorno del viaggio, costruito con i luoghi e gli
@@ -40,7 +55,7 @@ pulsanti sotto i mesi della dashboard:
 - **Chiedi a PartiMo:** domande libere sul viaggio («Cosa mangio a Vienna?», «Come arrivo in centro
   dall'aeroporto?»), con le risposte che tengono conto di città, date ed eventi del soggiorno.
 
-<img src="docs/search_ideas.png" alt="Schermata iniziale con partenza, mesi e consigli" width="240" /> <img src="docs/departure_picker.png" alt="Scelta dell'aeroporto di partenza" width="240" /> <img src="docs/trip_dashboard.png" alt="Dashboard: sezione Voli con i collegamenti a Google Voli e Skyscanner" width="240" /> <img src="docs/trip_dashboard_stays.png" alt="Dashboard: alloggi reali da OpenStreetMap con Booking.com e Airbnb" width="240" /> <img src="docs/trip_dashboard_explore.png" alt="Dashboard: sezione Da vedere" width="240" /> <img src="docs/place_detail.png" alt="Scheda di un luogo con descrizione, storia e pulsante Naviga" width="240" /> <img src="docs/trip_dashboard_transit.png" alt="Dashboard: trasporti con il percorso reale su Google Maps" width="240" /> <img src="docs/trip_dashboard_restaurants.png" alt="Dashboard: ristoranti reali da OpenStreetMap" width="240" /> <img src="docs/itinerary.png" alt="Itinerario con l'IA giorno per giorno, con giro a piedi e calendario" width="240" /> <img src="docs/itinerary_packing.png" alt="Lista per la valigia dell'itinerario" width="240" /> <img src="docs/chat.png" alt="Chiedi a PartiMo: domande all'assistente sul viaggio" width="240" />
+<img src="docs/search_ideas.png" alt="Schermata iniziale con partenza, mesi e consigli" width="240" /> <img src="docs/departure_picker.png" alt="Scelta dell'aeroporto di partenza" width="240" /> <img src="docs/trip_dashboard.png" alt="Dashboard: sezione Voli con i collegamenti a Google Voli e Skyscanner" width="240" /> <img src="docs/trip_dashboard_stays.png" alt="Dashboard: alloggi reali da OpenStreetMap con Booking.com e Airbnb" width="240" /> <img src="docs/trip_dashboard_explore.png" alt="Dashboard: sezione Da vedere" width="240" /> <img src="docs/place_detail.png" alt="Scheda di un luogo con descrizione, storia e pulsante Naviga" width="240" /> <img src="docs/trip_dashboard_transit.png" alt="Dashboard: trasporti con il percorso reale su Google Maps" width="240" /> <img src="docs/trip_dashboard_restaurants.png" alt="Dashboard: ristoranti reali da OpenStreetMap" width="240" /> <img src="docs/guide.png" alt="Guida del viaggio: meteo, alba e tramonto, informazioni pratiche ed emergenze" width="240" /> <img src="docs/guide_currency.png" alt="Guida con previsioni giorno per giorno e cambio valuta" width="240" /> <img src="docs/itinerary.png" alt="Itinerario con l'IA giorno per giorno, con giro a piedi e calendario" width="240" /> <img src="docs/itinerary_packing.png" alt="Lista per la valigia dell'itinerario" width="240" /> <img src="docs/chat.png" alt="Chiedi a PartiMo: domande all'assistente sul viaggio" width="240" />
 
 Negli screenshot (generati dai test, senza rete, con dati di esempio) le foto sono segnaposto grigi: nell'app si caricano
 le foto reali dei luoghi.
@@ -116,6 +131,9 @@ le foto reali dei luoghi.
 | Trasporti pubblici | `PlanTransitRouteUseCase`, `TransitRoute` (cambi, coincidenze, tempo a piedi) | Google Routes API (`TRANSIT`) + Google Maps URLs | Percorsi multimodali metro/bus/tram/treni, coincidenze impossibili scartate, preferenze di routing. **Apri in Google Maps** mostra lo stesso percorso con linee e orari reali anche senza chiave |
 | Itinerario con l'IA | `PlanTripUseCase`, `LoadTripKnowledgeUseCase`, `PackingChecklistUseCase`, `TripPlan` | [Google Gemini](https://ai.google.dev/gemini-api/docs) (chiave gratuita di AI Studio) + Google Maps URLs | Programma giorno per giorno (mattina, pomeriggio, sera) con i luoghi e gli eventi reali dell'app, ritmo (rilassato, equilibrato, intenso) e interessi a scelta; tocco su una tappa → scheda del luogo o ricerca su Google Maps. **Giro a piedi** della giornata su Google Maps con le tappe in ordine (fino a 9 intermedie), **Calendario** (evento di tutto il giorno, senza permessi), **condivisione** come testo, lista per la valigia salvata sul telefono, consigli pratici |
 | Chiedi a PartiMo | `AskTravelAssistantUseCase` | Google Gemini | Conversazione sul viaggio con domande suggerite; il modello riceve città, date, eventi del soggiorno e luoghi consigliati, più gli ultimi 20 messaggi. Le risposte si possono selezionare e copiare |
+| Guida del viaggio | `GetCountryInfoUseCase`, `GetExchangeRateUseCase`, `GetTravelGuideUseCase` | Dati internazionali del sistema (CLDR) + catalogo curato di 80 paesi, [ExchangeRate-API](https://www.exchangerate-api.com/docs/free) (accesso aperto, senza chiave), [Wikivoyage](https://www.wikivoyage.org) (senza chiave), [Viaggiare Sicuri](https://www.viaggiaresicuri.it) | Lingua, valuta, prefisso, lato di guida, fuso orario, prese e tensione (con l'avviso adattatore), numeri di emergenza da comporre con un tocco, convertitore di valuta (oltre 160 valute), capitoli utili della guida di Wikivoyage in italiano (o in inglese se manca) e scheda del paese della Farnesina |
+| Meteo per le date del viaggio | `GetTripWeatherUseCase`, `SunCalculator` | [Open-Meteo](https://open-meteo.com) previsioni giornaliere e [archivio storico](https://open-meteo.com/en/docs/historical-weather-api) (senza chiave) | Entro 16 giorni le previsioni dei giorni del viaggio; oltre, il clima tipico di quei giorni (±3) sugli ultimi dieci anni: massime, minime e giorni di pioggia o neve. Alba, tramonto e ora d'oro calcolati sul telefono (anche notte e giorno polari). Il meteo arriva anche all'assistente, per la lista della valigia |
+| Orari e accessibilità | `OpeningHoursParser`, `OpeningHours`, `WheelchairAccess` | OpenStreetMap (`opening_hours`, `wheelchair`) | Orari della settimana del viaggio con i giorni uguali raggruppati (es. «lun–ven 11:30–14:30, 18:00–22:00 · dom chiuso»), «aperto ora / apre domani alle 11:00» all'ora della meta per i viaggi dei prossimi giorni, chiusure dopo mezzanotte; accessibilità in carrozzina di ristoranti e alloggi |
 | Ristoranti | `FindBudgetRestaurantsUseCase`, `BudgetDiningCriteria` | Google Places API (New), oppure senza chiave OpenStreetMap (Overpass API) | Con Google: vincolo `price_level` 1–2 e valutazione ≥ 4,3, riapplicato sempre dal dominio. Senza chiave: locali reali vicino al centro (cucina, indirizzo, distanza), prima i più completi e vicini, catene in fondo. Il tocco apre il locale su Google Maps (recensioni, foto, orari) |
 
 ### Quando un'offerta è "davvero conveniente"
@@ -132,7 +150,8 @@ prezzi visti in quel momento diventano il primo riferimento. A ogni controllo:
 `ResponseCache` salva in Room le risposte (già validate) di ogni ricerca, identificate da una chiave
 SHA-256 dei parametri. Il TTL dipende dal tipo di dato: voli 20 minuti, alloggi 1 ora, ristoranti
 12 ore, POI e strutture ricettive 24 ore, meteo 15 minuti, trasporti 2 minuti, ricerca città, voci di Wikipedia ed eventi
-ricorrenti 7 giorni, festività e itinerari dell'IA 30 giorni (riaprire un itinerario non consuma la
+ricorrenti e guide di Wikivoyage 7 giorni, cambi 12 ore, previsioni giornaliere 3 ore, festività, clima
+tipico e itinerari dell'IA 30 giorni (riaprire un itinerario non consuma la
 quota gratuita di Gemini; «Rigenera» ne chiede uno nuovo). Se la rete non è
 disponibile viene servito il dato scaduto, segnalato in UI con il badge "Offline · dati salvati".
 **Aggiorna**, il pull-to-refresh e i controlli in background ignorano le cache ancora valide.
@@ -157,6 +176,8 @@ VCS) oppure da variabili d'ambiente (utile in CI), e le inietta in `BuildConfig`
 | Ristoranti | ✅ Locali reali (OpenStreetMap), tocco → Google Maps | Google Places API (`GOOGLE_MAPS_API_KEY`): valutazioni, fasce di prezzo, foto |
 | Voli | Stime + ✅ Google Voli e Skyscanner con tratta e date (prezzi reali sul sito) | Offerte Duffel nell'app (`DUFFEL_ACCESS_TOKEN`) |
 | Trasporti pubblici | Stime + ✅ percorso reale su Google Maps | Percorsi reali nell'app, Google Routes API (`GOOGLE_MAPS_API_KEY`) |
+| Guida: meteo del viaggio, paese, emergenze, valuta, Wikivoyage | ✅ Reale (Open-Meteo, dati del sistema, ExchangeRate-API, Wikivoyage) | ✅ Reale |
+| Orari di apertura e accessibilità | ✅ Reali (OpenStreetMap) | Con Google Places: «aperto ora» di Google |
 | Itinerario con l'IA, valigia, Chiedi a PartiMo | Non disponibili (i pulsanti non compaiono) | ✅ Google Gemini (`GEMINI_API_KEY`, gratuita) |
 
 I dati di OpenStreetMap, Wikipedia, Wikidata, Nager.Date e Open-Meteo e i collegamenti ai siti non richiedono chiavi né
@@ -246,25 +267,30 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
 ./gradlew :app:assembleDebug        # APK di debug
 ```
 
-365 test unitari:
-- **`:domain` (147):** modelli e validazioni (compresi i dodici mesi di `TravelPeriod` e i periodi
+410 test unitari:
+- **`:domain` (167):** modelli e validazioni (compresi i dodici mesi di `TravelPeriod` e i periodi
   degli eventi, anche a cavallo di Capodanno), servizi di dominio (qualità/prezzo, stagionalità,
   notorietà dei luoghi, scelta degli aeroporti, rilevamento degli affari, estratti brevi di descrizione
   e storia) e tutti i casi d'uso, compresi ristoranti senza valutazioni, strutture ricettive, eventi
-  del soggiorno e assistente con l'IA (pulizia dell'itinerario, conversazione), con fake condivisi
-  tramite `testFixtures`.
-- **`:data` (104):** cache e TTL, mappatura degli errori, client HTTP con risposte JSON simulate
+  del soggiorno, assistente con l'IA (pulizia dell'itinerario, conversazione), meteo del viaggio
+  (previsioni o clima tipico, anche a cavallo di Capodanno), cambio, capitoli della guida, orari di
+  apertura su orari **reali** dei ristoranti di Vienna e alba e tramonto confrontati con i valori
+  **reali** di Open-Meteo (più Sydney e la notte polare di Tromsø), con fake condivisi tramite `testFixtures`.
+- **`:data` (118):** cache e TTL, mappatura degli errori, client HTTP con risposte JSON simulate
   (Duffel, Places, Routes, Open-Meteo, Wikipedia, Overpass, Wikidata, Nager.Date), Gemini con risposte
   **reali** (itinerario di Vienna e risposta a una domanda in `data/src/test/resources/gemini`), cambio
-  di modello se uno è sovraccarico e richieste "di riserva" (tempo virtuale), classificazione dei
+  di modello se uno è sovraccarico e richieste "di riserva" (tempo virtuale), guide **reali** di
+  Wikivoyage (Vienna, Lisbona), cambi **reali** (166 valute), previsioni e dieci anni di storico
+  **reali** di Open-Meteo, informazioni sui paesi (catalogo e dati del sistema), classificazione dei
   luoghi su risposte **reali** di Wikipedia (Roma, Lisbona, Colosseo in `data/src/test/resources/wikipedia`),
   ristoranti di Vienna e strutture di Matera da risposte **reali** di OpenStreetMap (`data/src/test/resources/osm`),
   eventi di Vienna e Monaco da risposte **reali** di Wikidata e festività 2026 di Austria e Italia,
   cambio di istanza Overpass se sovraccarica, intestazioni per le chiavi Google con restrizione
   Android, dataset aeroporti reale (es. Roma → FCO, Parigi → CDG), catalogo delle mete, repository
   DataStore e formato di salvataggio (anche la valigia), mercato simulato della demo.
-- **`:app` (114):** ViewModel (dashboard con e senza chiavi, eventi del soggiorno, ricerca, scelta della
-  partenza, scheda del luogo, itinerario, domande all'assistente), rotte di navigazione, collegamenti a
+- **`:app` (125):** ViewModel (dashboard con e senza chiavi, eventi del soggiorno, ricerca, scelta della
+  partenza, scheda del luogo, itinerario, domande all'assistente, guida con convertitore di valuta e
+  fuso orario con l'ora legale), testi degli orari di apertura, rotte di navigazione, collegamenti a
   Google Maps (anche il giro a piedi con le tappe), Google Voli, Skyscanner, Booking.com, Airbnb e
   ricerca degli eventi, calendario e condivisione dell'itinerario, browser interno (Custom Tabs),
   User-Agent delle foto, notifiche (Robolectric), formattazione e test UI Compose con
@@ -353,6 +379,30 @@ alternativa puoi aprire il progetto in Android Studio, che usa il suo JDK integr
   nell'intestazione `x-goog-api-key`, mai nell'URL né nei log. I modelli a volte usano il markdown
   anche se chiesto di evitarlo: asterischi e titoli vengono tolti. Ogni schermata ricorda che il testo
   è generato dall'IA e va verificato.
+- **Guida del viaggio:** nome del paese, valuta e lingue arrivano dai dati internazionali del sistema
+  (CLDR), quindi funzionano offline e per qualunque paese. Prefisso, lato di guida, prese, tensione e
+  numeri di emergenza sono un catalogo curato di 80 paesi (tutte le mete di «Consigliami» e le più
+  frequenti): per gli altri la Guida mostra il resto e rimanda a **Viaggiare Sicuri**, la cui scheda
+  si apre con il codice ISO a tre lettere del paese (`/find-country/country/AUT`).
+- **Cambi:** [ExchangeRate-API](https://www.exchangerate-api.com/docs/free) in accesso aperto
+  copre oltre 160 valute (la BCE ne pubblica una trentina), si aggiorna una volta al giorno e chiede
+  di citare la fonte e di non superare una richiesta l'ora: le risposte restano in cache 12 ore. I
+  cambi sono indicativi: lo dice la Guida.
+- **Wikivoyage:** testo semplice della pagina (TextExtracts), diviso in capitoli e sottosezioni; si
+  tengono quelli utili a chi parte (da sapere, come arrivare, come spostarsi, eventi, dove mangiare,
+  locali, acquisti, sicurezza, connessioni). Prima la guida in italiano, poi in inglese; si scartano
+  le disambiguazioni e le pagine lontane più di 50 km dalla meta. Testi CC BY-SA con collegamento alla
+  pagina originale. Wikimedia limita le richieste ripetute: cache di 7 giorni.
+- **Clima tipico:** dati giornalieri misurati (archivio ERA5 di Open-Meteo) degli ultimi dieci anni
+  completi, filtrati sui giorni del viaggio con tre giorni di margine prima e dopo; è «giorno di
+  pioggia» quello con almeno 1 mm.
+- **Alba e tramonto:** algoritmo dell'Almanac for Computers (US Naval Observatory), con precisione di
+  un paio di minuti; l'ora d'oro è il sole sotto i 6° di altezza.
+- **Orari di apertura:** si interpretano i casi più comuni del formato di OpenStreetMap (giorni,
+  fasce multiple, chiusure dopo mezzanotte, mesi, date di chiusura, regole aggiuntive con la virgola,
+  24/7); le regole sulle festività si ignorano e, con orari variabili (alba, tramonto, settimane),
+  non si mostra nulla piuttosto che un orario sbagliato. «Aperto ora» compare per i viaggi dei
+  prossimi giorni, all'ora locale della meta.
 - **Trasporti senza chiave:** [Transitous](https://transitous.org) offre percorsi reali senza chiave,
   ma solo per app open source non commerciali e previo contatto con il progetto: per ora non è
   attivo e senza chiave Google il percorso reale si apre in Google Maps.
@@ -373,9 +423,11 @@ data/src/main/kotlin/com/partimo/data/
   cache/       Room + ResponseCache (TTL, fallback offline)
   network/     HttpClientFactory, gestione errori, intestazioni per le chiavi Google Android,
                tentativi in cascata con richieste di riserva (Hedging)
-  remote/      duffel, places, routes, weather, geocoding, wikipedia, osm (Overpass API), wikidata, holidays,
-               gemini (client, prompt e schema dell'itinerario)
-  local/       dataset aeroporti (asset), catalogo curato delle mete, preferenze (DataStore)
+  remote/      duffel, places, routes, weather (anche previsioni giornaliere e storico), geocoding, wikipedia,
+               osm (Overpass API), wikidata, holidays, gemini (client, prompt e schema dell'itinerario),
+               currency (ExchangeRate-API), wikivoyage
+  local/       dataset aeroporti (asset), catalogo curato delle mete, informazioni sui paesi (catalogo
+               curato + dati del sistema), preferenze e valigia (DataStore)
   demo/        catalogo e sorgenti demo (mercato simulato)
   repository/  implementazioni dei repository
   di/          DataModule
@@ -391,6 +443,7 @@ app/src/main/kotlin/com/partimo/app/
   ui/place/       scheda del luogo (descrizione, storia, fonti) e collegamenti a Google Maps
   ui/itinerary/   itinerario con l'IA (programma, valigia, consigli), calendario e condivisione
   ui/chat/        "Chiedi a PartiMo"
+  ui/guide/       guida del viaggio (meteo, paese, emergenze, valuta, Wikivoyage)
 app/src/test/        test di ViewModel, notifiche, stati UI e formattazione
 app/src/testDebug/   test UI Compose con Robolectric (+ screenshot)
 docs/                screenshot delle schermate
@@ -399,5 +452,8 @@ data/src/test/resources/osm/        risposte reali di OpenStreetMap (Overpass) u
 data/src/test/resources/wikidata/   risposte reali di Wikidata (eventi di Vienna e Monaco) usate nei test
 data/src/test/resources/holidays/   festività reali 2026 (Nager.Date) usate nei test
 data/src/test/resources/gemini/     risposte reali di Gemini (itinerario di Vienna, domanda sul cibo) usate nei test
+data/src/test/resources/wikivoyage/ guide reali di Wikivoyage (Vienna, Lisbona) usate nei test
+data/src/test/resources/openmeteo/  previsioni giornaliere e dieci anni di storico reali di Vienna usati nei test
+data/src/test/resources/currency/   tassi di cambio reali dall'euro usati nei test
 data/src/main/assets/airports.csv   aeroporti con voli di linea (OurAirports, pubblico dominio)
 ```

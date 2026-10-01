@@ -14,6 +14,7 @@ import com.partimo.domain.model.stay.Lodging
 import com.partimo.domain.model.transit.TransitRoute
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 /** Sezioni della dashboard: ognuna ha il suo pulsante nella barra in basso e si carica in modo indipendente. */
 enum class DashboardSection { FLIGHTS, STAYS, HIGHLIGHTS, TRANSIT, RESTAURANTS }
@@ -52,6 +53,11 @@ data class TripDashboardUiState(
     val isDemoMode: Boolean = false,
     /** Assistente con l'IA attivo (chiave Gemini configurata): itinerario e domande. */
     val assistantAvailable: Boolean = false,
+    /**
+     * Ora locale della meta quando il viaggio è imminente ("Prossimi giorni", spesso consultati sul
+     * posto): serve per "Aperto ora". `null` per i viaggi nei mesi futuri.
+     */
+    val nowAtDestination: LocalDateTime? = null,
     /** Viaggio seguito: PartiMo avvisa quando voli o alloggi diventano davvero convenienti. */
     val alertEnabled: Boolean = false,
     /** Ora dell'ultimo caricamento completo delle offerte. */

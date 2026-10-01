@@ -77,6 +77,18 @@ fun WeatherCondition.labelRes(): Int = when (this) {
     WeatherCondition.UNKNOWN -> R.string.weather_unknown
 }
 
+fun WeatherCondition.emoji(): String = when (this) {
+    WeatherCondition.CLEAR -> "☀️"
+    WeatherCondition.PARTLY_CLOUDY -> "⛅"
+    WeatherCondition.OVERCAST -> "☁️"
+    WeatherCondition.FOG -> "🌫️"
+    WeatherCondition.DRIZZLE -> "🌦️"
+    WeatherCondition.RAIN -> "🌧️"
+    WeatherCondition.SNOW -> "🌨️"
+    WeatherCondition.THUNDERSTORM -> "⛈️"
+    WeatherCondition.UNKNOWN -> "🌡️"
+}
+
 @StringRes
 fun PoiCategory.labelRes(): Int = when (this) {
     PoiCategory.MUSEUM -> R.string.category_museum

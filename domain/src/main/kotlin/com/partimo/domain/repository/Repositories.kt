@@ -1,6 +1,7 @@
 package com.partimo.domain.repository
 
 import com.partimo.domain.common.DataResult
+import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.dining.Restaurant
@@ -9,6 +10,9 @@ import com.partimo.domain.model.event.EventQuery
 import com.partimo.domain.model.event.TripEvent
 import com.partimo.domain.model.flight.FlightOffer
 import com.partimo.domain.model.flight.FlightSearchQuery
+import com.partimo.domain.model.guide.CountryInfo
+import com.partimo.domain.model.guide.ExchangeRates
+import com.partimo.domain.model.guide.TravelGuide
 import com.partimo.domain.model.place.Airport
 import com.partimo.domain.model.place.CatalogDestination
 import com.partimo.domain.model.place.CityPlace
@@ -26,7 +30,10 @@ import com.partimo.domain.model.stay.Lodging
 import com.partimo.domain.model.stay.LodgingQuery
 import com.partimo.domain.model.transit.TransitRoute
 import com.partimo.domain.model.transit.TransitRouteQuery
+import com.partimo.domain.model.weather.DailyForecast
+import com.partimo.domain.model.weather.DailyObservation
 import com.partimo.domain.model.weather.WeatherSnapshot
+import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow
 
 // Contratti del dominio verso il data layer. Le implementazioni decidono provider, cache e
@@ -62,6 +69,15 @@ interface PoiArticleRepository {
 
 interface WeatherRepository {
     suspend fun getCurrentWeather(location: GeoPoint): DataResult<WeatherSnapshot>
+}
+
+/** Meteo per le date di un viaggio: previsioni dei prossimi giorni e dati misurati negli anni passati. */
+interface TripWeatherRepository {
+    /** Previsioni giornaliere tra [from] e [to], entrambi entro l'orizzonte delle previsioni (circa 16 giorni). */
+    suspend fun dailyForecast(location: GeoPoint, from: LocalDate, to: LocalDate): DataResult<List<DailyForecast>>
+
+    /** Dati giornalieri misurati negli ultimi [years] anni completi, per il clima tipico di un periodo. */
+    suspend fun dailyHistory(location: GeoPoint, years: Int): DataResult<List<DailyObservation>>
 }
 
 interface TransitRepository {
@@ -112,6 +128,22 @@ interface TravelAssistantRepository {
 
     /** Risposta all'ultimo messaggio di [conversation], che è sempre una domanda dell'utente. */
     suspend fun answer(knowledge: TripKnowledge, conversation: List<ChatMessage>): DataResult<String>
+}
+
+/** Informazioni pratiche sui paesi (lingua, valuta, prese, numeri di emergenza), incluse nell'app. */
+interface CountryInfoRepository {
+    suspend fun countryInfo(countryCode: String): DataResult<CountryInfo>
+}
+
+/** Tassi di cambio aggiornati una volta al giorno. */
+interface ExchangeRateRepository {
+    suspend fun latestRates(base: String, forceRefresh: Boolean = false): DataResult<ExchangeRates>
+}
+
+/** Guide di viaggio delle città (es. Wikivoyage). */
+interface TravelGuideRepository {
+    /** Guida di [destination] con tutti i suoi capitoli; `null` se non ne esiste una. */
+    suspend fun guide(destination: Destination, forceRefresh: Boolean = false): DataResult<TravelGuide?>
 }
 
 /** Ricerca di città in tutto il mondo (geocoding). */

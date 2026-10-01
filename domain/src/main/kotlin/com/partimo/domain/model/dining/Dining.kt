@@ -1,6 +1,7 @@
 package com.partimo.domain.model.dining
 
 import com.partimo.domain.model.GeoPoint
+import com.partimo.domain.model.WheelchairAccess
 
 /** Fascia di prezzo sulla scala 0–4 usata dai principali provider (es. Google Places). */
 enum class PriceLevel(val level: Int) {
@@ -31,6 +32,9 @@ data class Restaurant(
     /** Pagina del locale su Google Maps (recensioni, foto, indicazioni). */
     val mapsUrl: String? = null,
     val website: String? = null,
+    /** Orari nel formato di OpenStreetMap (es. "Mo-Fr 11:30-23:00"), da interpretare con OpeningHoursParser. */
+    val openingHours: String? = null,
+    val wheelchair: WheelchairAccess? = null,
 )
 
 /**

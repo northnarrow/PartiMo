@@ -8,6 +8,7 @@ import com.partimo.data.network.NetworkJson
 import com.partimo.data.network.mapNotNullSafely
 import com.partimo.data.source.LodgingDataSource
 import com.partimo.data.source.RestaurantDataSource
+import com.partimo.domain.model.WheelchairAccess
 import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.dining.RestaurantSearchQuery
 import com.partimo.domain.model.stay.Lodging
@@ -62,6 +63,8 @@ class OsmRestaurantDataSource internal constructor(
             location = location,
             mapsUrl = googleMapsSearchUrl(listOfNotNull(name, address, query.areaName)),
             website = website(),
+            openingHours = tags["opening_hours"]?.trim()?.takeIf { it.isNotEmpty() },
+            wheelchair = OsmLabels.wheelchair(tags["wheelchair"]),
         )
         return RankedRestaurant(restaurant, score(amenity, location.distanceTo(query.location)))
     }
@@ -127,6 +130,7 @@ class OsmLodgingDataSource internal constructor(
             starRating = OsmLabels.stars(tags["stars"]),
             address = address(),
             website = website(),
+            wheelchair = OsmLabels.wheelchair(tags["wheelchair"]),
         )
     }
 
@@ -141,6 +145,14 @@ class OsmLodgingDataSource internal constructor(
 internal object OsmLabels {
 
     private const val MAX_CUISINES = 2
+
+    /** Tag `wheelchair`: "yes", "limited", "no" (altri valori, come "designated", contano come accessibile). */
+    fun wheelchair(value: String?): WheelchairAccess? = when (value?.trim()?.lowercase()) {
+        "yes", "designated" -> WheelchairAccess.YES
+        "limited" -> WheelchairAccess.LIMITED
+        "no" -> WheelchairAccess.NO
+        else -> null
+    }
 
     private val CUISINES = mapOf(
         "italian" to "Italiana", "pizza" to "Pizza", "regional" to "Regionale", "local" to "Locale",

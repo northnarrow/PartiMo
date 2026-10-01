@@ -363,4 +363,70 @@
     <string name="chat_suggestion_free">Cosa si può fare gratis?</string>
     <string name="chat_copy">Copia la risposta</string>
     <string name="chat_copied">Risposta copiata</string>
+
+    <!-- Guida del viaggio -->
+    <string name="guide_chip">Guida</string>
+    <string name="guide_title">Guida di %1$s</string>
+    <string name="guide_travel_advice">Sicurezza e documenti (Viaggiare Sicuri)</string>
+    <string name="guide_weather_title">Meteo del viaggio</string>
+    <string name="guide_weather_climate">Di solito in questo periodo: massime di %1$s, minime di %2$s; piove o nevica circa %3$d giorni su 10.</string>
+    <string name="guide_weather_climate_source">Media degli ultimi %1$d anni (Open-Meteo)</string>
+    <string name="guide_weather_forecast_source">Previsioni di Open-Meteo</string>
+    <string name="guide_rain_probability">💧 %1$d%%</string>
+    <string name="guide_sunrise">Alba %1$s</string>
+    <string name="guide_sunset">Tramonto %1$s</string>
+    <string name="guide_golden_hour">Ora d\'oro dalle %1$s</string>
+    <string name="guide_polar_night">Notte polare: il sole non sorge</string>
+    <string name="guide_polar_day">Sole di mezzanotte: il sole non tramonta</string>
+    <string name="guide_sun_note">Il %1$s, giorno di arrivo, all\'ora locale</string>
+    <string name="guide_basics_title">In breve</string>
+    <string name="guide_language">Lingua</string>
+    <string name="guide_currency">Valuta</string>
+    <string name="guide_calling_code">Prefisso</string>
+    <string name="guide_driving">Si guida</string>
+    <string name="guide_driving_left">a sinistra</string>
+    <string name="guide_driving_right">a destra</string>
+    <string name="guide_time_zone">Fuso orario</string>
+    <string name="guide_time_same">stessa ora di qui</string>
+    <string name="guide_time_ahead">%1$s avanti rispetto a qui</string>
+    <string name="guide_time_behind">%1$s indietro rispetto a qui</string>
+    <string name="guide_plugs">Prese</string>
+    <string name="guide_plugs_value">tipo %1$s · %2$s V, %3$s Hz</string>
+    <string name="guide_plugs_ok">Le spine italiane vanno bene, senza adattatore.</string>
+    <string name="guide_plugs_adapter">Serve un adattatore per le prese di tipo %1$s.</string>
+    <string name="guide_low_voltage">Tensione bassa: controlla che caricatori e asciugacapelli funzionino a 100–240 V.</string>
+    <string name="guide_emergency_title">Numeri di emergenza</string>
+    <string name="guide_emergency_general">Emergenze</string>
+    <string name="guide_emergency_police">Polizia</string>
+    <string name="guide_emergency_ambulance">Ambulanza</string>
+    <string name="guide_emergency_fire">Vigili del fuoco</string>
+    <string name="guide_emergency_call">Chiama %1$s (%2$s)</string>
+    <string name="guide_emergency_hint">Tocca un numero per comporlo. Per tutto il resto: Viaggiare Sicuri e l\'ambasciata.</string>
+    <string name="guide_currency_title">Cambio valuta</string>
+    <string name="guide_currency_euro">Si paga in euro: niente cambio.</string>
+    <string name="guide_currency_rate">1 € = %1$s</string>
+    <string name="guide_currency_amount">Importo in %1$s</string>
+    <string name="guide_currency_swap">Inverti le valute</string>
+    <string name="guide_currency_source">Cambi di ExchangeRate-API aggiornati il %1$s: sono indicativi, banche e carte applicano il loro cambio.</string>
+    <string name="guide_wikivoyage_title">Guida di Wikivoyage</string>
+    <string name="guide_wikivoyage_english">La guida in italiano non c\'è: ecco quella in inglese.</string>
+    <string name="guide_wikivoyage_more">Mostra tutto</string>
+    <string name="guide_wikivoyage_less">Mostra meno</string>
+    <string name="guide_wikivoyage_read">Guida completa su Wikivoyage</string>
+    <string name="guide_wikivoyage_license">Testi della comunità di Wikivoyage (CC BY-SA 4.0): prezzi e orari possono essere superati.</string>
+    <string name="guide_wikivoyage_empty">Wikivoyage non ha ancora una guida per %1$s.</string>
+    <string name="guide_no_dialer">Nessuna app per telefonare.</string>
+
+    <!-- Orari di apertura e accessibilità (OpenStreetMap) -->
+    <string name="hours_closed">chiuso</string>
+    <string name="hours_open_now">🟢 Aperto ora</string>
+    <string name="hours_open_until">🟢 Aperto ora · chiude alle %1$s</string>
+    <string name="hours_closed_now">🔴 Chiuso ora</string>
+    <string name="hours_closed_opens">🔴 Chiuso ora · apre alle %1$s</string>
+    <string name="hours_closed_opens_day">🔴 Chiuso ora · apre %1$s alle %2$s</string>
+    <string name="hours_tomorrow">domani</string>
+    <string name="hours_weekly">🕒 %1$s</string>
+    <string name="wheelchair_yes">♿ Accessibile in carrozzina</string>
+    <string name="wheelchair_limited">♿ In parte accessibile in carrozzina</string>
+    <string name="wheelchair_no">Non accessibile in carrozzina</string>
 </resources>

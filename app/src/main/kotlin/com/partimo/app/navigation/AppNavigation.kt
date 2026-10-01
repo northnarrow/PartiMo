@@ -17,6 +17,8 @@ import com.partimo.app.ui.dashboard.TripDashboardRoute
 import com.partimo.app.ui.dashboard.TripDashboardViewModel
 import com.partimo.app.ui.departure.DeparturePickerRoute
 import com.partimo.app.ui.departure.DeparturePickerViewModel
+import com.partimo.app.ui.guide.GuideRoute
+import com.partimo.app.ui.guide.GuideViewModel
 import com.partimo.app.ui.itinerary.ItineraryRoute
 import com.partimo.app.ui.itinerary.ItineraryViewModel
 import com.partimo.app.ui.place.PlaceDetailRoute
@@ -204,7 +206,19 @@ fun PartiMoNavHost(
                 onOpenPlace = { poi -> navController.navigate(PlaceDetailDestination.from(poi)) },
                 onOpenItinerary = { trip -> navController.navigate(ItineraryDestination(TripArgs.from(trip).toJson())) },
                 onOpenAssistant = { trip -> navController.navigate(AssistantChatDestination(TripArgs.from(trip).toJson())) },
+                onOpenGuide = { trip -> navController.navigate(GuideDestination(TripArgs.from(trip).toJson())) },
             )
+        }
+        composable<GuideDestination> { backStackEntry ->
+            val trip = TripArgs.fromJson(backStackEntry.toRoute<GuideDestination>().trip)
+            if (trip == null) {
+                LaunchedEffect(Unit) { navController.popBackStack() }
+                return@composable
+            }
+            val viewModel: GuideViewModel = viewModel(
+                factory = GuideViewModel.factory(container, trip.destination(), trip.fromDate(), trip.toDate()),
+            )
+            GuideRoute(viewModel = viewModel, onBack = { navController.popBackStack() })
         }
         composable<ItineraryDestination> { backStackEntry ->
             val tripJson = backStackEntry.toRoute<ItineraryDestination>().trip

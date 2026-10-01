@@ -42,6 +42,17 @@ import com.partimo.domain.repository.PriceWatchRepository
 import com.partimo.domain.repository.RestaurantRepository
 import com.partimo.domain.repository.TransitRepository
 import com.partimo.domain.repository.TravelAssistantRepository
+import com.partimo.domain.repository.TripWeatherRepository
+import com.partimo.domain.repository.CountryInfoRepository
+import com.partimo.domain.repository.ExchangeRateRepository
+import com.partimo.domain.repository.TravelGuideRepository
+import com.partimo.domain.model.weather.DailyForecast
+import com.partimo.domain.model.weather.DailyObservation
+import com.partimo.domain.model.guide.CountryInfo
+import com.partimo.domain.model.guide.ExchangeRates
+import com.partimo.domain.model.guide.TravelGuide
+import com.partimo.domain.model.Destination
+import java.time.LocalDate
 import com.partimo.domain.repository.UserPreferencesRepository
 import com.partimo.domain.repository.WeatherRepository
 import kotlinx.coroutines.delay
@@ -296,5 +307,50 @@ class FakeChecklistRepository : ChecklistRepository {
             val items = current[listId].orEmpty()
             current + (listId to if (checked) items + item else items - item)
         }
+    }
+}
+
+class FakeTripWeatherRepository(
+    var forecastResult: DataResult<List<DailyForecast>> = DataResult.Success(emptyList()),
+    var historyResult: DataResult<List<DailyObservation>> = DataResult.Success(emptyList()),
+) : TripWeatherRepository {
+    val forecastRequests = mutableListOf<Pair<LocalDate, LocalDate>>()
+    val historyRequests = mutableListOf<Int>()
+
+    override suspend fun dailyForecast(location: GeoPoint, from: LocalDate, to: LocalDate): DataResult<List<DailyForecast>> {
+        forecastRequests += from to to
+        return forecastResult
+    }
+
+    override suspend fun dailyHistory(location: GeoPoint, years: Int): DataResult<List<DailyObservation>> {
+        historyRequests += years
+        return historyResult
+    }
+}
+
+class FakeCountryInfoRepository(var result: DataResult<CountryInfo>) : CountryInfoRepository {
+    val requests = mutableListOf<String>()
+
+    override suspend fun countryInfo(countryCode: String): DataResult<CountryInfo> {
+        requests += countryCode
+        return result
+    }
+}
+
+class FakeExchangeRateRepository(var result: DataResult<ExchangeRates>) : ExchangeRateRepository {
+    val requests = mutableListOf<Pair<String, Boolean>>()
+
+    override suspend fun latestRates(base: String, forceRefresh: Boolean): DataResult<ExchangeRates> {
+        requests += base to forceRefresh
+        return result
+    }
+}
+
+class FakeTravelGuideRepository(var result: DataResult<TravelGuide?> = DataResult.Success(null)) : TravelGuideRepository {
+    val requests = mutableListOf<Destination>()
+
+    override suspend fun guide(destination: Destination, forceRefresh: Boolean): DataResult<TravelGuide?> {
+        requests += destination
+        return result
     }
 }
