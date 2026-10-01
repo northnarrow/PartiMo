@@ -10,8 +10,12 @@ import com.partimo.app.ui.common.UiState
 import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.model.Destination
+import com.partimo.domain.model.ocr.DocumentSource
+import com.partimo.domain.model.ocr.PhotoTranslation
+import com.partimo.domain.model.ocr.TextScript
 import com.partimo.domain.usecase.GetCountryInfoUseCase
 import com.partimo.domain.usecase.LanguagePacksUseCase
+import com.partimo.domain.usecase.TranslatePhotoUseCase
 import com.partimo.domain.usecase.TranslateTextUseCase
 import com.partimo.domain.usecase.TranslatorLanguages
 import kotlinx.coroutines.Job
@@ -37,6 +41,13 @@ sealed interface LanguagePackState {
 /** Testo tradotto, con la lingua della traduzione per la pronuncia. */
 data class TranslatedText(val source: String, val translation: String, val language: String)
 
+/** Foto da tradurre (menù, cartello) con la sua traduzione; [showOriginal] nasconde la traduzione sopra la foto. */
+data class PhotoState(
+    val uri: String,
+    val translation: UiState<PhotoTranslation> = UiState.Loading,
+    val showOriginal: Boolean = false,
+)
+
 data class TranslatorUiState(
     val destination: Destination,
     /** Lingua dell'app e del frasario. */
@@ -54,6 +65,10 @@ data class TranslatorUiState(
     val result: UiState<TranslatedText>? = null,
     /** Traduzioni del frasario, per lingua e frase (vedi [phraseKey]). */
     val phraseTranslations: Map<String, String> = emptyMap(),
+    /** `true` se si possono tradurre le foto (riconoscimento del testo sul telefono). */
+    val photoAvailable: Boolean = false,
+    /** Ultima foto scattata o scelta, tradotta dalla lingua del posto; `null` se non ce n'è una. */
+    val photo: PhotoState? = null,
 ) {
     val from: String? get() = if (reversed) foreignLanguage else userLanguage
     val to: String? get() = if (reversed) userLanguage else foreignLanguage
@@ -61,6 +76,12 @@ data class TranslatorUiState(
     val canTranslate: Boolean get() = packs == LanguagePackState.Ready && input.isNotBlank() && result != UiState.Loading
 
     fun phraseTranslation(phrase: String): String? = foreignLanguage?.let { phraseTranslations[phraseKey(it, phrase)] }
+
+    /** `false` se la lingua del posto ha una scrittura che il telefono non legge nelle foto (es. il russo). */
+    val photoScriptSupported: Boolean get() = foreignLanguage?.let { TextScript.of(it) } != null
+
+    /** Si può scattare o scegliere una foto da tradurre: pacchetti pronti e scrittura leggibile. */
+    val canTranslatePhoto: Boolean get() = photoAvailable && photoScriptSupported && packs == LanguagePackState.Ready && photo?.translation != UiState.Loading
 
     companion object {
         fun phraseKey(language: String, phrase: String): String = "$language|$phrase"
@@ -77,6 +98,8 @@ class TranslatorViewModel(
     private val languagePacks: LanguagePacksUseCase,
     destination: Destination,
     userLanguage: String,
+    /** Traduzione delle foto (facoltativa). */
+    private val translatePhoto: TranslatePhotoUseCase? = null,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -84,12 +107,14 @@ class TranslatorViewModel(
             destination = destination,
             userLanguage = TranslatorLanguages.normalize(userLanguage),
             supportedLanguages = translateText.supportedLanguages.sorted(),
+            photoAvailable = translatePhoto != null,
         ),
     )
     val uiState: StateFlow<TranslatorUiState> = _uiState.asStateFlow()
 
     private var packsJob: Job? = null
     private var phrasesJob: Job? = null
+    private var photoJob: Job? = null
 
     init {
         viewModelScope.launch {
@@ -121,8 +146,35 @@ class TranslatorViewModel(
 
     fun onForeignLanguageSelected(language: String) {
         if (language == _uiState.value.foreignLanguage || language == _uiState.value.userLanguage) return
-        _uiState.update { it.copy(foreignLanguage = language, result = null) }
+        photoJob?.cancel()
+        _uiState.update { it.copy(foreignLanguage = language, result = null, photo = null) }
         checkPacks()
+    }
+
+    /** Foto scattata o scelta (menù, cartello): il testo si legge e si traduce sul telefono dalla lingua del posto. */
+    fun onPhotoSelected(uri: String, mimeType: String? = null) {
+        val translate = translatePhoto ?: return
+        val state = _uiState.value
+        val foreign = state.foreignLanguage ?: return
+        photoJob?.cancel()
+        _uiState.update { it.copy(photo = PhotoState(uri)) }
+        photoJob = viewModelScope.launch {
+            val translation = when (val result = translate(DocumentSource(uri, mimeType ?: "image/jpeg"), foreign, state.userLanguage)) {
+                is DataResult.Success -> UiState.Success(result.data, result.origin)
+                is DataResult.Failure -> UiState.Error(result.error)
+            }
+            _uiState.update { current -> current.copy(photo = current.photo?.takeIf { it.uri == uri }?.copy(translation = translation)) }
+        }
+    }
+
+    /** Mostra la foto senza la traduzione sopra (e viceversa). */
+    fun onPhotoOriginalToggled() {
+        _uiState.update { state -> state.copy(photo = state.photo?.let { it.copy(showOriginal = !it.showOriginal) }) }
+    }
+
+    fun onPhotoClosed() {
+        photoJob?.cancel()
+        _uiState.update { it.copy(photo = null) }
     }
 
     fun onDownloadPacks() {
@@ -197,6 +249,7 @@ class TranslatorViewModel(
                     languagePacks = container.languagePacks,
                     destination = destination,
                     userLanguage = userLanguage,
+                    translatePhoto = container.translatePhoto,
                 )
             }
         }

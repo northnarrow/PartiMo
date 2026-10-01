@@ -65,6 +65,7 @@ import com.partimo.domain.usecase.SetTripSavedUseCase
 import com.partimo.domain.usecase.SummarizeBudgetUseCase
 import com.partimo.domain.usecase.SummarizeUserDataUseCase
 import com.partimo.domain.usecase.ToggleFavoriteUseCase
+import com.partimo.domain.usecase.TranslatePhotoUseCase
 import com.partimo.domain.usecase.TranslateTextUseCase
 import com.partimo.domain.usecase.TripRemindersUseCase
 import kotlinx.coroutines.CoroutineScope
@@ -121,9 +122,10 @@ interface AppContainer {
     val getTravelGuide: GetTravelGuideUseCase
     val getTripWeather: GetTripWeatherUseCase
 
-    /** Traduttore sul telefono, anche offline. */
+    /** Traduttore sul telefono, anche offline, anche delle foto (menù, cartelli). */
     val translateText: TranslateTextUseCase
     val languagePacks: LanguagePacksUseCase
+    val translatePhoto: TranslatePhotoUseCase
 
     /** Budget e spese del viaggio. */
     val observeTripBudget: ObserveTripBudgetUseCase
@@ -270,6 +272,8 @@ class DefaultAppContainer(context: Context) : AppContainer {
     override val translateText: TranslateTextUseCase by lazy { TranslateTextUseCase(dataModule.translatorRepository) }
 
     override val languagePacks: LanguagePacksUseCase by lazy { LanguagePacksUseCase(dataModule.translatorRepository) }
+
+    override val translatePhoto: TranslatePhotoUseCase by lazy { TranslatePhotoUseCase(dataModule.textRecognitionRepository, translateText) }
 
     override val observeTripBudget: ObserveTripBudgetUseCase by lazy { ObserveTripBudgetUseCase(dataModule.budgetRepository) }
 

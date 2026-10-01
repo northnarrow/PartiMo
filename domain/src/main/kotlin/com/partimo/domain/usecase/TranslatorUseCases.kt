@@ -5,6 +5,12 @@ import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.common.QueryIssue
 import com.partimo.domain.common.map
+import com.partimo.domain.model.ocr.DocumentSource
+import com.partimo.domain.model.ocr.PhotoTranslation
+import com.partimo.domain.model.ocr.RecognizedBlock
+import com.partimo.domain.model.ocr.TextScript
+import com.partimo.domain.model.ocr.TranslatedBlock
+import com.partimo.domain.repository.TextRecognitionRepository
 import com.partimo.domain.repository.TranslatorRepository
 
 /**
@@ -65,4 +71,51 @@ class LanguagePacksUseCase(private val repository: TranslatorRepository) {
 
     suspend fun download(from: String, to: String): DataResult<Unit> =
         repository.download(TranslatorLanguages.normalize(from), TranslatorLanguages.normalize(to))
+}
+
+/**
+ * Traduce il testo di una foto (menù, cartelli, orari): lo riconosce sul telefono con il modello della scrittura
+ * della lingua [from] e traduce ogni blocco tenendone la posizione, per mostrare la traduzione sopra la foto.
+ * Gli elenchi (righe che finiscono con un prezzo o un numero, come nei menù) si traducono riga per riga, gli altri
+ * blocchi come un'unica frase. Una foto senza testo è [DataError.InvalidResponse].
+ */
+class TranslatePhotoUseCase(
+    private val textRecognition: TextRecognitionRepository,
+    private val translateText: TranslateTextUseCase,
+) {
+    suspend operator fun invoke(source: DocumentSource, from: String, to: String): DataResult<PhotoTranslation> {
+        val script = TextScript.of(from) ?: return DataResult.Failure(DataError.InvalidQuery(QueryIssue.UNSUPPORTED_SCRIPT))
+        val recognized = when (val result = textRecognition.recognize(source, script)) {
+            is DataResult.Failure -> return result
+            is DataResult.Success -> result.data
+        }
+        if (recognized.isEmpty) return DataResult.Failure(DataError.InvalidResponse)
+        // Senza posizioni (es. un PDF) tutto il testo è un blocco solo.
+        val blocks = recognized.blocks.ifEmpty { listOf(RecognizedBlock(recognized.text, 0, 0, 0, 0)) }
+            .filter { it.text.isNotBlank() }
+            .sortedWith(compareBy({ it.top }, { it.left }))
+        val cache = mutableMapOf<String, String>()
+        val translated = blocks.map { block ->
+            val translation = linesToTranslate(block.text).map { line ->
+                cache[line] ?: when (val result = translateText(line.take(TranslateTextUseCase.MAX_LENGTH), from, to)) {
+                    is DataResult.Failure -> return result
+                    is DataResult.Success -> result.data.also { cache[line] = it }
+                }
+            }
+            TranslatedBlock(block, translation.joinToString("\n"))
+        }
+        return DataResult.Success(PhotoTranslation(recognized.width, recognized.height, translated), DataOrigin.LOCAL)
+    }
+
+    /** Righe di un elenco una per una; altrimenti il blocco come un'unica frase, ricomponendo le parole divise. */
+    private fun linesToTranslate(text: String): List<String> {
+        val lines = text.lines().map { it.trim() }.filter { it.isNotEmpty() }
+        val listLike = lines.size > 1 && lines.count { line -> line.last().isDigit() || line.last() in CURRENCY_SIGNS } * 2 >= lines.size
+        if (listLike) return lines
+        return listOf(lines.reduceOrNull { joined, line -> if (joined.endsWith('-')) joined.dropLast(1) + line else "$joined $line" }.orEmpty())
+    }
+
+    private companion object {
+        val CURRENCY_SIGNS = setOf('€', '$', '£', '¥', '₩', '₹')
+    }
 }

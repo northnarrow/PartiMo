@@ -19,6 +19,7 @@ import com.partimo.app.ui.place.PlaceDetailUiState
 import com.partimo.app.ui.place.googleMapsSearchUrl
 import com.partimo.app.ui.search.SearchUiState
 import com.partimo.app.ui.translator.LanguagePackState
+import com.partimo.app.ui.translator.PhotoState
 import com.partimo.app.ui.translator.TranslatedText
 import com.partimo.app.ui.translator.TranslatorUiState
 import com.partimo.domain.common.DataError
@@ -56,6 +57,9 @@ import com.partimo.domain.model.guide.ExchangeRate
 import com.partimo.domain.model.guide.GuideSection
 import com.partimo.domain.model.guide.PowerInfo
 import com.partimo.domain.model.guide.TravelGuide
+import com.partimo.domain.model.ocr.PhotoTranslation
+import com.partimo.domain.model.ocr.RecognizedBlock
+import com.partimo.domain.model.ocr.TranslatedBlock
 import com.partimo.domain.model.place.Airport
 import com.partimo.domain.model.place.AirportOption
 import com.partimo.domain.model.place.AirportSize
@@ -881,6 +885,30 @@ internal object PreviewData {
             TranslatorUiState.phraseKey("de", "Buonasera") to "Guten Abend",
             TranslatorUiState.phraseKey("de", "Grazie mille") to "Vielen Dank",
             TranslatorUiState.phraseKey("de", "Per favore") to "Bitte",
+        ),
+        photoAvailable = true,
+    )
+
+    /** Menù di una trattoria di Vienna fotografato e tradotto sopra la foto. */
+    fun translatorPhotoState() = translatorState().copy(
+        input = "",
+        result = null,
+        photo = PhotoState(
+            uri = "content://com.partimo.app.files/camera/menu.jpg",
+            translation = UiState.Success(
+                PhotoTranslation(
+                    width = 1000,
+                    height = 900,
+                    blocks = listOf(
+                        TranslatedBlock(RecognizedBlock("Speisekarte", 320, 40, 680, 130), "Menù"),
+                        TranslatedBlock(RecognizedBlock("Wiener Schnitzel mit Kartoffelsalat 18,50", 60, 190, 940, 270), "Cotoletta alla viennese con insalata di patate 18,50"),
+                        TranslatedBlock(RecognizedBlock("Tafelspitz mit Apfelkren 22,90", 60, 310, 940, 390), "Bollito di manzo con salsa di mele e rafano 22,90"),
+                        TranslatedBlock(RecognizedBlock("Kaiserschmarrn mit Zwetschkenröster 12,40", 60, 430, 940, 510), "Frittata dolce sminuzzata con composta di prugne 12,40"),
+                        TranslatedBlock(RecognizedBlock("Apfelstrudel mit Schlagobers 6,90", 60, 550, 940, 630), "Strudel di mele con panna montata 6,90"),
+                        TranslatedBlock(RecognizedBlock("Bitte warten, Sie werden platziert", 100, 760, 900, 840), "Attendere, verrete accompagnati al tavolo"),
+                    ),
+                ),
+            ),
         ),
     )
 

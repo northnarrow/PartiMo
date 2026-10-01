@@ -4,7 +4,14 @@ import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.common.QueryIssue
+import com.partimo.domain.model.ocr.DocumentSource
+import com.partimo.domain.model.ocr.RecognizedBlock
+import com.partimo.domain.model.ocr.RecognizedText
+import com.partimo.domain.model.ocr.TextScript
+import com.partimo.domain.testing.FakeTextRecognitionRepository
 import com.partimo.domain.testing.FakeTranslatorRepository
+import com.partimo.domain.testing.failureError
+import com.partimo.domain.testing.successData
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -61,5 +68,61 @@ class TranslatorUseCasesTest {
         assertTrue(packs.download("it", "de") is DataResult.Success)
         assertEquals(listOf("it" to "de"), repository.downloads)
         assertEquals(emptySet(), (packs.missing("de", "it") as DataResult.Success).data)
+    }
+
+    @Test
+    fun `una foto di un menù si traduce riga per riga e un cartello come frase, dall'alto in basso`() = runTest {
+        val translator = FakeTranslatorRepository(downloaded = setOf("en", "de", "it"))
+        val ocr = FakeTextRecognitionRepository(
+            DataResult.Success(
+                RecognizedText(
+                    text = "Speisekarte ...",
+                    blocks = listOf(
+                        RecognizedBlock("Wiener Schnitzel 18,50\nApfelstrudel 6,90\nKaffee 3,50 €", 40, 300, 900, 520),
+                        RecognizedBlock("Bitte nicht\nrauchen", 60, 1200, 700, 1300),
+                        RecognizedBlock("Kartoffel-\nsalat", 40, 600, 600, 700),
+                        RecognizedBlock("Speisekarte", 200, 80, 800, 160),
+                    ),
+                    width = 1000,
+                    height = 1400,
+                ),
+            ),
+        )
+        val photo = DocumentSource("content://com.partimo.app.files/camera/menu.jpg", "image/jpeg")
+
+        val translation = TranslatePhotoUseCase(ocr, TranslateTextUseCase(translator))(photo, "de", "it").successData()
+
+        assertEquals(
+            listOf(
+                "[it] Speisekarte",
+                "[it] Wiener Schnitzel 18,50\n[it] Apfelstrudel 6,90\n[it] Kaffee 3,50 €",
+                "[it] Kartoffelsalat",
+                "[it] Bitte nicht rauchen",
+            ),
+            translation.blocks.map { it.translation },
+        )
+        assertEquals(1000 to 1400, translation.width to translation.height)
+        assertTrue(translation.hasLayout)
+        assertEquals(photo to TextScript.LATIN, ocr.requests.single())
+    }
+
+    @Test
+    fun `il giapponese usa il suo modello, il russo non si legge e una foto senza testo è un errore`() = runTest {
+        val ocr = FakeTextRecognitionRepository(DataResult.Success(RecognizedText("ラーメン", listOf(RecognizedBlock("ラーメン", 0, 0, 100, 40)), 100, 40)))
+        val translate = TranslatePhotoUseCase(ocr, TranslateTextUseCase(FakeTranslatorRepository(supportedLanguages = setOf("en", "ja", "it"), downloaded = setOf("en", "ja", "it"))))
+        val photo = DocumentSource("content://media/1", "image/jpeg")
+
+        assertEquals("[it] ラーメン", translate(photo, "ja", "it").successData().blocks.single().translation)
+        assertEquals(TextScript.JAPANESE, ocr.requests.single().second)
+        assertEquals(DataError.InvalidQuery(QueryIssue.UNSUPPORTED_SCRIPT), translate(photo, "ru", "it").failureError())
+        assertEquals(1, ocr.requests.size, "Per il russo la foto non si legge nemmeno")
+
+        ocr.result = DataResult.Success(RecognizedText(" "))
+        assertEquals(DataError.InvalidResponse, translate(photo, "ja", "it").failureError())
+        ocr.result = DataResult.Failure(DataError.NoConnection)
+        assertEquals(DataError.NoConnection, translate(photo, "ja", "it").failureError(), "Modello ancora da scaricare")
+        assertEquals(TextScript.DEVANAGARI, TextScript.of("hi"))
+        assertEquals(TextScript.CHINESE, TextScript.of("zh-TW"))
+        assertEquals(TextScript.LATIN, TextScript.of("cs"))
     }
 }

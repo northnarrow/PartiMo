@@ -5,26 +5,37 @@ import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Build
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -37,6 +48,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,6 +56,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -60,11 +73,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -74,19 +90,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.AsyncImage
 import com.partimo.app.R
+import com.partimo.app.files.CameraPhotos
 import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.common.errorMessage
 import com.partimo.app.ui.dashboard.PreviewData
 import com.partimo.app.ui.place.ExternalLinks
 import com.partimo.app.ui.theme.PartiMoTheme
+import com.partimo.domain.common.DataError
+import com.partimo.domain.model.ocr.PhotoTranslation
+import com.partimo.domain.model.ocr.TranslatedBlock
 import kotlinx.coroutines.launch
 import java.net.URLEncoder
 import java.util.Locale
+import kotlin.math.roundToInt
 
 /** Tag della lista del traduttore, usato dai test UI per lo scroll. */
 const val TRANSLATOR_LIST_TAG = "translator_list"
@@ -118,8 +142,13 @@ data class TranslatorActions(
     /** Pronuncia un testo nella lingua indicata. */
     val onSpeak: (text: String, language: String) -> Unit = { _, _ -> },
     val onCopy: (String) -> Unit = {},
-    /** Apre Google Traduttore (app o sito) con il testo, per fotocamera e conversazione. */
+    /** Apre Google Traduttore (app o sito) con il testo, per la conversazione e le scritture che il telefono non legge. */
     val onOpenGoogleTranslate: (text: String, from: String, to: String) -> Unit = { _, _, _ -> },
+    /** Foto da tradurre: scatto con la fotocamera, scelta dalla galleria, originale o traduzione, chiusura. */
+    val onTakePhoto: () -> Unit = {},
+    val onPickPhoto: () -> Unit = {},
+    val onPhotoOriginalToggled: () -> Unit = {},
+    val onPhotoClosed: () -> Unit = {},
 )
 
 @Composable
@@ -133,6 +162,17 @@ fun TranslatorRoute(viewModel: TranslatorViewModel, onBack: () -> Unit, modifier
     val noVoice = stringResource(R.string.translator_no_voice)
     val copied = stringResource(R.string.translator_copied)
     val noApp = stringResource(R.string.place_no_browser)
+    val noCamera = stringResource(R.string.translator_photo_no_camera)
+    // Indirizzo della foto in corso: sopravvive alla chiusura dell'app mentre la fotocamera è aperta.
+    var pendingPhoto by rememberSaveable { mutableStateOf<String?>(null) }
+    val takePicture = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { saved ->
+        val uri = pendingPhoto
+        pendingPhoto = null
+        if (saved && uri != null) viewModel.onPhotoSelected(uri, "image/jpeg")
+    }
+    val pickPhoto = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
+        uri?.let { viewModel.onPhotoSelected(it.toString(), context.contentResolver.getType(it)) }
+    }
     TranslatorScreen(
         state = state,
         actions = TranslatorActions(
@@ -153,6 +193,19 @@ fun TranslatorRoute(viewModel: TranslatorViewModel, onBack: () -> Unit, modifier
             onOpenGoogleTranslate = { text, from, to ->
                 if (!openGoogleTranslate(context, text, from, to, toolbarColor)) Toast.makeText(context, noApp, Toast.LENGTH_LONG).show()
             },
+            onTakePhoto = {
+                val uri = CameraPhotos.newPhotoUri(context)
+                pendingPhoto = uri.toString()
+                try {
+                    takePicture.launch(uri)
+                } catch (e: ActivityNotFoundException) {
+                    pendingPhoto = null
+                    Toast.makeText(context, noCamera, Toast.LENGTH_LONG).show()
+                }
+            },
+            onPickPhoto = { pickPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+            onPhotoOriginalToggled = viewModel::onPhotoOriginalToggled,
+            onPhotoClosed = viewModel::onPhotoClosed,
         ),
         modifier = modifier,
     )
@@ -161,7 +214,8 @@ fun TranslatorRoute(viewModel: TranslatorViewModel, onBack: () -> Unit, modifier
 /**
  * Traduttore del viaggio: dalla lingua dell'utente a quella del posto (e viceversa per cartelli e
  * menù), con i pacchetti lingua scaricati una volta e poi offline, la pronuncia, "Mostra in grande"
- * per far leggere la traduzione a chi si ha davanti e un frasario pronto per categoria.
+ * per far leggere la traduzione a chi si ha davanti, la traduzione delle foto (menù, cartelli) e un
+ * frasario pronto per categoria.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -203,6 +257,7 @@ fun TranslatorScreen(state: TranslatorUiState, actions: TranslatorActions, modif
             item(key = "packs") { PacksStatus(state = state, actions = actions) }
             item(key = "input") { InputSection(state = state, actions = actions) }
             item(key = "result") { ResultSection(state = state, actions = actions, onShowBig = { bigText = it }) }
+            item(key = "photo") { PhotoSection(state = state, actions = actions) }
             item(key = "phrases-title") {
                 Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 4.dp)) {
                     Text(
@@ -379,6 +434,159 @@ private fun InputSection(state: TranslatorUiState, actions: TranslatorActions) {
     }
 }
 
+/** Tag della sezione delle foto, usato dai test UI. */
+const val TRANSLATOR_PHOTO_TAG = "translator_photo"
+
+/**
+ * «Traduci con la fotocamera»: si scatta o si sceglie la foto di un menù o di un cartello e la traduzione compare
+ * sopra il testo originale, blocco per blocco, con l'elenco delle traduzioni sotto la foto.
+ */
+@Composable
+private fun PhotoSection(state: TranslatorUiState, actions: TranslatorActions) {
+    if (!state.photoAvailable) return
+    val user = state.userLanguage
+    val foreign = state.foreignLanguage
+    val foreignName = foreign?.let { languageName(it, user, capitalize = false) } ?: "…"
+    Column(modifier = Modifier.padding(top = 16.dp).testTag(TRANSLATOR_PHOTO_TAG)) {
+        Card(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = "📷 " + stringResource(R.string.translator_photo_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                if (foreign != null && !state.photoScriptSupported) {
+                    Text(text = stringResource(R.string.translator_photo_unsupported, foreignName), style = MaterialTheme.typography.bodySmall)
+                    AssistChip(onClick = { actions.onOpenGoogleTranslate("", foreign, user) }, label = { Text(stringResource(R.string.translator_google) + " ↗") })
+                } else {
+                    Text(
+                        text = stringResource(R.string.translator_photo_text, foreignName),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Button(onClick = actions.onTakePhoto, enabled = state.canTranslatePhoto) { Text(stringResource(R.string.translator_photo_take)) }
+                        OutlinedButton(onClick = actions.onPickPhoto, enabled = state.canTranslatePhoto) { Text(stringResource(R.string.translator_photo_pick)) }
+                    }
+                    if (state.packs != LanguagePackState.Ready) {
+                        Text(
+                            text = stringResource(R.string.translator_photo_needs_pack),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+            }
+        }
+        state.photo?.let { photo -> PhotoResult(photo = photo, from = foreign, actions = actions) }
+    }
+}
+
+@Composable
+private fun PhotoResult(photo: PhotoState, from: String?, actions: TranslatorActions) {
+    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        when (val translation = photo.translation) {
+            UiState.Loading -> {
+                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                Text(text = stringResource(R.string.translator_photo_reading), style = MaterialTheme.typography.bodySmall)
+            }
+            UiState.Empty -> Unit
+            is UiState.Error -> {
+                Text(
+                    text = when (translation.error) {
+                        DataError.NoConnection -> stringResource(R.string.translator_photo_model_downloading)
+                        DataError.InvalidResponse -> stringResource(R.string.translator_photo_no_text)
+                        else -> stringResource(R.string.translator_failed, errorMessage(translation.error))
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.error,
+                )
+                TextButton(onClick = actions.onPhotoClosed) { Text(stringResource(R.string.translator_photo_close)) }
+            }
+            is UiState.Success -> {
+                val result = translation.data
+                if (result.hasLayout) PhotoWithTranslation(uri = photo.uri, translation = result, showOriginal = photo.showOriginal)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (result.hasLayout) {
+                        FilterChip(
+                            selected = photo.showOriginal,
+                            onClick = actions.onPhotoOriginalToggled,
+                            label = { Text(stringResource(R.string.translator_photo_original)) },
+                        )
+                    }
+                    Spacer(Modifier.weight(1f))
+                    TextButton(onClick = actions.onPhotoClosed) { Text(stringResource(R.string.translator_photo_close)) }
+                }
+                result.blocks.forEach { block -> PhotoBlockItem(block = block, from = from, onSpeak = actions.onSpeak) }
+            }
+        }
+    }
+}
+
+/** La foto con la traduzione di ogni blocco nella sua posizione, scritta grande quanto ci sta. */
+@Composable
+private fun PhotoWithTranslation(uri: String, translation: PhotoTranslation, showOriginal: Boolean) {
+    val colors = MaterialTheme.colorScheme
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(translation.width.toFloat() / translation.height)
+            .clip(RoundedCornerShape(12.dp))
+            .background(colors.surfaceVariant),
+    ) {
+        AsyncImage(
+            model = uri,
+            contentDescription = stringResource(R.string.translator_photo_description),
+            contentScale = ContentScale.Fit,
+            modifier = Modifier.fillMaxSize(),
+        )
+        if (!showOriginal) {
+            // Pixel dello schermo per ogni pixel della foto analizzata.
+            val scale = constraints.maxWidth.toFloat() / translation.width
+            val density = LocalDensity.current
+            translation.blocks.forEach { block ->
+                val box = block.original
+                if (box.right <= box.left || box.bottom <= box.top) return@forEach
+                Box(
+                    contentAlignment = Alignment.CenterStart,
+                    modifier = Modifier
+                        .offset { IntOffset((box.left * scale).roundToInt(), (box.top * scale).roundToInt()) }
+                        .size(with(density) { ((box.right - box.left) * scale).toDp() }, with(density) { ((box.bottom - box.top) * scale).toDp() })
+                        .background(colors.surface.copy(alpha = OVERLAY_ALPHA), RoundedCornerShape(4.dp))
+                        .padding(horizontal = 2.dp),
+                ) {
+                    BasicText(
+                        text = block.translation,
+                        style = MaterialTheme.typography.bodyMedium.copy(color = colors.onSurface, fontWeight = FontWeight.Medium),
+                        autoSize = TextAutoSize.StepBased(minFontSize = 6.sp, maxFontSize = 22.sp, stepSize = 0.5.sp),
+                    )
+                }
+            }
+        }
+    }
+}
+
+private const val OVERLAY_ALPHA = 0.9f
+
+@Composable
+private fun PhotoBlockItem(block: TranslatedBlock, from: String?, onSpeak: (String, String) -> Unit) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.weight(1f).padding(vertical = 6.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            SelectionContainer {
+                Text(text = block.translation, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
+            }
+            Text(text = block.original.text, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        if (from != null) {
+            val listen = stringResource(R.string.translator_photo_listen)
+            IconButton(onClick = { onSpeak(block.original.text, from) }, modifier = Modifier.semantics { contentDescription = listen }) {
+                Text("🔊")
+            }
+        }
+    }
+    HorizontalDivider()
+}
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun ResultSection(state: TranslatorUiState, actions: TranslatorActions, onShowBig: (TranslatedText) -> Unit) {
@@ -532,6 +740,12 @@ private fun openGoogleTranslate(context: Context, text: String, from: String, to
 @Composable
 private fun TranslatorPreview() {
     PartiMoTheme { TranslatorScreen(PreviewData.translatorState(), TranslatorActions()) }
+}
+
+@Preview(name = "Traduttore · foto di un menù", showBackground = true, heightDp = 1400)
+@Composable
+private fun TranslatorPhotoPreview() {
+    PartiMoTheme { TranslatorScreen(PreviewData.translatorPhotoState(), TranslatorActions()) }
 }
 
 @Preview(name = "Traduttore · pacchetto da scaricare · tema scuro", showBackground = true, heightDp = 900, uiMode = Configuration.UI_MODE_NIGHT_YES)

@@ -49,6 +49,7 @@ private fun QueryIssue.messageRes(): Int = when (this) {
     QueryIssue.NO_AIRPORT_NEARBY -> R.string.error_query_no_airport
     QueryIssue.TEXT_TOO_LONG -> R.string.error_query_text_too_long
     QueryIssue.INVALID_AMOUNT -> R.string.error_query_invalid_amount
+    QueryIssue.UNSUPPORTED_SCRIPT -> R.string.error_query_unsupported_script
 }
 
 @StringRes

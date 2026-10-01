@@ -44,4 +44,7 @@ enum class QueryIssue {
     NO_AIRPORT_NEARBY,
     TEXT_TOO_LONG,
     INVALID_AMOUNT,
+
+    /** Lingua con una scrittura che il riconoscimento del testo sul telefono non legge (es. il russo). */
+    UNSUPPORTED_SCRIPT,
 }

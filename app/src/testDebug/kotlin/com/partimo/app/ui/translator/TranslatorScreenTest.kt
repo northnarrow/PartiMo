@@ -6,9 +6,14 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -123,6 +128,58 @@ class TranslatorScreenTest {
     }
 
     @Test
+    fun `la foto di un menù mostra la traduzione sopra il testo e l'elenco da ascoltare`() {
+        val spoken = mutableListOf<Pair<String, String>>()
+        var toggles = 0
+        var closed = 0
+        composeRule.setContent {
+            PartiMoTheme {
+                TranslatorScreen(
+                    PreviewData.translatorPhotoState(),
+                    TranslatorActions(
+                        onSpeak = { text, language -> spoken += text to language },
+                        onPhotoOriginalToggled = { toggles++ },
+                        onPhotoClosed = { closed++ },
+                    ),
+                )
+            }
+        }
+
+        composeRule.onNodeWithTag(TRANSLATOR_LIST_TAG).performScrollToNode(hasTestTag(TRANSLATOR_PHOTO_TAG))
+        composeRule.onNodeWithText("📷 " + text(R.string.translator_photo_title)).assertExists()
+        composeRule.onNodeWithText(text(R.string.translator_photo_take)).assertIsEnabled()
+        // La traduzione compare due volte: sopra la foto e nell'elenco sotto.
+        composeRule.onAllNodesWithText("Cotoletta alla viennese con insalata di patate 18,50").assertCountEquals(2)
+        composeRule.onNodeWithText(text(R.string.translator_photo_original)).performClick()
+        composeRule.onNodeWithTag(TRANSLATOR_LIST_TAG).performScrollToNode(hasText("Apfelstrudel mit Schlagobers 6,90"))
+        composeRule.onAllNodesWithContentDescription(text(R.string.translator_photo_listen))[1].performClick()
+        composeRule.onNodeWithText(text(R.string.translator_photo_close)).performClick()
+
+        assertEquals(1, toggles)
+        assertEquals(1, closed)
+        assertEquals(listOf("Wiener Schnitzel mit Kartoffelsalat 18,50" to "de"), spoken)
+    }
+
+    @Test
+    fun `con una scrittura che il telefono non legge propone Google Traduttore per le foto`() {
+        val opened = mutableListOf<Triple<String, String, String>>()
+        composeRule.setContent {
+            PartiMoTheme {
+                TranslatorScreen(
+                    PreviewData.translatorState().copy(foreignLanguage = "ru", input = "", result = null),
+                    TranslatorActions(onOpenGoogleTranslate = { text, from, to -> opened += Triple(text, from, to) }),
+                )
+            }
+        }
+
+        composeRule.onNodeWithTag(TRANSLATOR_LIST_TAG).performScrollToNode(hasTestTag(TRANSLATOR_PHOTO_TAG))
+        composeRule.onNodeWithText(text(R.string.translator_photo_take)).assertDoesNotExist()
+        composeRule.onNodeWithText(text(R.string.translator_google) + " ↗").performClick()
+
+        assertEquals(listOf(Triple("", "ru", "it")), opened)
+    }
+
+    @Test
     fun `salva gli screenshot del traduttore`() {
         var state by mutableStateOf(PreviewData.translatorState())
         composeRule.setContent { PartiMoTheme { TranslatorScreen(state, TranslatorActions()) } }
@@ -132,6 +189,11 @@ class TranslatorScreenTest {
         state = PreviewData.translatorMissingPackState()
         composeRule.waitForIdle()
         saveScreenshot("translator_pack.png")
+
+        state = PreviewData.translatorPhotoState()
+        composeRule.onNodeWithTag(TRANSLATOR_LIST_TAG).performScrollToNode(hasTestTag(TRANSLATOR_PHOTO_TAG))
+        composeRule.waitForIdle()
+        saveScreenshot("translator_photo.png")
     }
 
     private fun saveScreenshot(name: String) {

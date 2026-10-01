@@ -7,10 +7,16 @@ import com.partimo.app.ui.dashboard.SampleDestinations
 import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.model.guide.CountryInfo
+import com.partimo.domain.model.ocr.DocumentSource
+import com.partimo.domain.model.ocr.RecognizedBlock
+import com.partimo.domain.model.ocr.RecognizedText
+import com.partimo.domain.model.ocr.TextScript
 import com.partimo.domain.testing.FakeCountryInfoRepository
+import com.partimo.domain.testing.FakeTextRecognitionRepository
 import com.partimo.domain.testing.FakeTranslatorRepository
 import com.partimo.domain.usecase.GetCountryInfoUseCase
 import com.partimo.domain.usecase.LanguagePacksUseCase
+import com.partimo.domain.usecase.TranslatePhotoUseCase
 import com.partimo.domain.usecase.TranslateTextUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -32,13 +38,61 @@ class TranslatorViewModelTest {
     private val austria = CountryInfo("AT", "AUT", "Austria", "EUR", "euro", "€", listOf("tedesco"), listOf("de"))
     private val countries = FakeCountryInfoRepository(DataResult.Success(austria))
 
-    private fun createViewModel(translator: FakeTranslatorRepository) = TranslatorViewModel(
+    private val ocr = FakeTextRecognitionRepository(
+        DataResult.Success(
+            RecognizedText(
+                text = "Speisekarte\nApfelstrudel 6,90",
+                blocks = listOf(RecognizedBlock("Speisekarte", 300, 40, 700, 120), RecognizedBlock("Apfelstrudel 6,90", 60, 200, 900, 260)),
+                width = 1000,
+                height = 800,
+            ),
+        ),
+    )
+
+    private fun createViewModel(translator: FakeTranslatorRepository, photos: Boolean = false) = TranslatorViewModel(
         getCountryInfo = GetCountryInfoUseCase(countries),
         translateText = TranslateTextUseCase(translator),
         languagePacks = LanguagePacksUseCase(translator),
         destination = SampleDestinations.VIENNA,
         userLanguage = "it",
+        translatePhoto = if (photos) TranslatePhotoUseCase(ocr, TranslateTextUseCase(translator)) else null,
     )
+
+    @Test
+    fun `la foto di un menù si legge e si traduce dal tedesco, e cambiando lingua si chiude`() = runTest {
+        val viewModel = createViewModel(FakeTranslatorRepository(downloaded = setOf("en", "it", "de")), photos = true)
+        advanceUntilIdle()
+        assertTrue(viewModel.uiState.value.canTranslatePhoto)
+
+        viewModel.onPhotoSelected("content://com.partimo.app.files/camera/photo-1.jpg")
+        assertEquals(UiState.Loading, viewModel.uiState.value.photo?.translation)
+        assertFalse(viewModel.uiState.value.canTranslatePhoto, "Una foto alla volta")
+        advanceUntilIdle()
+
+        val translation = viewModel.uiState.value.photo?.translation?.successData()
+        assertEquals(listOf("[it] Speisekarte", "[it] Apfelstrudel 6,90"), translation?.blocks?.map { it.translation })
+        assertEquals(DocumentSource("content://com.partimo.app.files/camera/photo-1.jpg", "image/jpeg") to TextScript.LATIN, ocr.requests.single())
+        viewModel.onPhotoOriginalToggled()
+        assertTrue(viewModel.uiState.value.photo?.showOriginal == true)
+
+        viewModel.onForeignLanguageSelected("fr")
+        assertNull(viewModel.uiState.value.photo)
+        viewModel.onPhotoSelected("content://media/2")
+        viewModel.onPhotoClosed()
+        advanceUntilIdle()
+        assertNull(viewModel.uiState.value.photo)
+    }
+
+    @Test
+    fun `senza pacchetti o con una scrittura illeggibile le foto non si traducono`() = runTest {
+        val viewModel = createViewModel(FakeTranslatorRepository(supportedLanguages = setOf("en", "it", "de", "ru"), downloaded = setOf("en")), photos = true)
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.canTranslatePhoto, "Prima i pacchetti lingua")
+        viewModel.onForeignLanguageSelected("ru")
+        assertFalse(viewModel.uiState.value.photoScriptSupported)
+        assertFalse(createViewModel(FakeTranslatorRepository()).uiState.value.photoAvailable, "Senza riconoscimento del testo niente foto")
+    }
 
     @Test
     fun `a Vienna propone il tedesco e chiede i pacchetti mancanti, poi traduce offline`() = runTest {

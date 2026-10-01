@@ -570,6 +570,20 @@
     <!-- Traduttore -->
     <!-- Lingua in cui sono scritti i testi dell'app e il frasario (ISO 639-1): il traduttore parte da qui. -->
     <string name="translator_user_language" translatable="false">it</string>
+    <string name="translator_photo_title">Traduci con la fotocamera</string>
+    <string name="translator_photo_text">Menù, cartelli e orari in %1$s: PartiMo legge il testo della foto e lo traduce sul telefono, anche offline.</string>
+    <string name="translator_photo_take">📷 Scatta</string>
+    <string name="translator_photo_pick">🖼️ Dalla galleria</string>
+    <string name="translator_photo_needs_pack">Prima scarica il pacchetto lingua qui sopra.</string>
+    <string name="translator_photo_unsupported">Il telefono non sa leggere le scritte in %1$s nelle foto: per le foto usa Google Traduttore.</string>
+    <string name="translator_photo_reading">Lettura e traduzione della foto…</string>
+    <string name="translator_photo_original">Mostra l\'originale</string>
+    <string name="translator_photo_close">Chiudi</string>
+    <string name="translator_photo_description">Foto da tradurre</string>
+    <string name="translator_photo_listen">Ascolta l\'originale</string>
+    <string name="translator_photo_no_text">Nessuna scritta trovata: avvicinati e inquadra bene il testo, con più luce.</string>
+    <string name="translator_photo_model_downloading">Il riconoscimento del testo si sta scaricando: riprova tra poco, con la rete attiva.</string>
+    <string name="translator_photo_no_camera">Nessuna app per scattare foto</string>
     <string name="translator_chip">Traduttore</string>
     <string name="guide_open_translator">Apri il traduttore</string>
     <string name="translator_title">Traduttore</string>
@@ -652,6 +666,7 @@
     <string name="budget_category_shopping">Acquisti</string>
     <string name="budget_category_other">Altro</string>
     <string name="error_query_invalid_amount">Importo non valido.</string>
+    <string name="error_query_unsupported_script">Il telefono non sa leggere questa scrittura nelle foto.</string>
 
     <!-- Widget "Prossimo viaggio" -->
     <string name="widget_name">Prossimo viaggio</string>
@@ -706,7 +721,7 @@
     <string name="about_privacy_location">La posizione si legge solo quando tocchi «Dove sono» sulla mappa e non lascia il telefono.</string>
     <string name="about_privacy_ai">Le domande all\'assistente, con città, date ed eventi del viaggio, vanno a Google (Gemini) per la risposta.</string>
     <string name="about_privacy_flights">Per i prezzi dei voli, città di partenza, meta e mese del viaggio vanno ad Aviasales (Travelpayouts); i loghi delle compagnie arrivano dal suo sito.</string>
-    <string name="about_privacy_translator">Il traduttore e la lettura del testo di PDF e foto (prenotazioni) lavorano sul telefono; ML Kit invia a Google statistiche anonime d\'uso.</string>
+    <string name="about_privacy_translator">Il traduttore e la lettura del testo di PDF e foto (prenotazioni, menù e cartelli) lavorano sul telefono; ML Kit invia a Google statistiche anonime d\'uso.</string>
     <string name="about_privacy_sources">Le ricerche di luoghi, eventi, meteo e cambi vanno ai servizi aperti qui sotto, senza dati personali.</string>
     <string name="about_sources">📚 Fonti dei dati</string>
     <string name="about_maps">🗺️ Mappe</string>
