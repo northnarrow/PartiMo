@@ -40,7 +40,7 @@ import kotlin.test.assertTrue
  * logica dei repository; la persistenza su file è responsabilità della libreria (e il suo storage
  * basato su java.io.File non riesce a sovrascrivere i file quando i test girano su Windows).
  */
-private class InMemoryPreferencesDataStore : DataStore<Preferences> {
+internal class InMemoryPreferencesDataStore : DataStore<Preferences> {
     private val state = MutableStateFlow(emptyPreferences())
     private val mutex = Mutex()
 

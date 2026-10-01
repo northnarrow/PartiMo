@@ -17,6 +17,7 @@ import com.partimo.data.local.preferences.DataStoreChecklistRepository
 import com.partimo.data.local.preferences.DataStorePriceWatchRepository
 import com.partimo.data.local.preferences.DataStoreReminderLogRepository
 import com.partimo.data.local.preferences.DataStoreSavedTripRepository
+import com.partimo.data.local.preferences.DataStoreUserDataRepository
 import com.partimo.data.local.preferences.DataStoreUserPreferencesRepository
 import com.partimo.data.local.preferences.createUserDataStore
 import com.partimo.data.network.HttpClientFactory
@@ -91,6 +92,7 @@ import com.partimo.domain.repository.TranslatorRepository
 import com.partimo.domain.repository.TravelAssistantRepository
 import com.partimo.domain.repository.TravelGuideRepository
 import com.partimo.domain.repository.TripWeatherRepository
+import com.partimo.domain.repository.UserDataRepository
 import com.partimo.domain.repository.UserPreferencesRepository
 import com.partimo.domain.repository.WeatherRepository
 import io.ktor.client.HttpClient
@@ -294,6 +296,9 @@ class DataModule(
 
     /** Viaggi seguiti per gli avvisi sulle offerte convenienti. */
     val priceWatchRepository: PriceWatchRepository by lazy { DataStorePriceWatchRepository(userDataStore) }
+
+    /** Tutti i dati dell'utente insieme, per esportarli in un file e reimportarli. */
+    val userDataRepository: UserDataRepository by lazy { DataStoreUserDataRepository(userDataStore) }
 
     /** `true` se almeno un modulo sta usando dati dimostrativi. */
     val usesDemoData: Boolean

@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Android 12+: nessun dato viene salvato nel backup cloud o trasferito tra dispositivi.
-    L'app conserva solo una cache ricostruibile dalla rete.
+    Android 12+: backup su Google e trasferimento a un telefono nuovo contengono solo i dati dell'utente
+    (viaggi salvati, preferiti, avvisi, budget, valigia e punto di partenza: il file DataStore). Cache,
+    pacchetti lingua e mappe si riscaricano.
 -->
 <data-extraction-rules>
     <cloud-backup>
-        <exclude domain="root" />
-        <exclude domain="database" />
-        <exclude domain="sharedpref" />
-        <exclude domain="file" />
+        <include domain="file" path="datastore/partimo_user.preferences_pb" />
     </cloud-backup>
     <device-transfer>
-        <exclude domain="root" />
-        <exclude domain="database" />
-        <exclude domain="sharedpref" />
-        <exclude domain="file" />
+        <include domain="file" path="datastore/partimo_user.preferences_pb" />
     </device-transfer>
 </data-extraction-rules>

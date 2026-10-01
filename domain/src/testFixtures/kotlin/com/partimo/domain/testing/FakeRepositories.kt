@@ -5,6 +5,7 @@ import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
+import com.partimo.domain.model.backup.UserData
 import com.partimo.domain.model.budget.TripBudget
 import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.dining.Restaurant
@@ -61,6 +62,7 @@ import com.partimo.domain.repository.TranslatorRepository
 import com.partimo.domain.repository.TravelAssistantRepository
 import com.partimo.domain.repository.TravelGuideRepository
 import com.partimo.domain.repository.TripWeatherRepository
+import com.partimo.domain.repository.UserDataRepository
 import com.partimo.domain.repository.UserPreferencesRepository
 import com.partimo.domain.repository.WeatherRepository
 import kotlinx.coroutines.delay
@@ -69,6 +71,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
+import java.time.Instant
 import java.time.LocalDate
 
 // Fake dei repository condivisi fra i moduli tramite testFixtures: restituiscono un risultato
@@ -434,3 +437,25 @@ class FakeReminderLogRepository(sent: Set<String> = emptySet()) : ReminderLogRep
     }
 }
 
+
+/** Dati dell'utente in memoria; il «file» di backup è un segnaposto che rimanda ai dati esportati. */
+class FakeUserDataRepository(initial: UserData = UserData()) : UserDataRepository {
+    var data: UserData = initial
+        private set
+
+    /** Errore da lanciare al prossimo aggiornamento (es. disco pieno). */
+    var updateFailure: Exception? = null
+
+    private val files = mutableMapOf<String, UserData>()
+
+    override suspend fun read(): UserData = data
+
+    override suspend fun update(transform: (UserData) -> UserData) {
+        updateFailure?.let { throw it }
+        data = transform(data)
+    }
+
+    override fun encode(data: UserData, exportedAt: Instant): String = "backup-${files.size}@$exportedAt".also { files[it] = data }
+
+    override fun decode(content: String): UserData? = files[content]
+}

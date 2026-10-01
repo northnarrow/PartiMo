@@ -14,6 +14,7 @@ import androidx.navigation.toRoute
 import com.partimo.app.R
 import com.partimo.app.di.AppContainer
 import com.partimo.app.ui.about.AboutRoute
+import com.partimo.app.ui.about.BackupViewModel
 import com.partimo.app.ui.budget.BudgetRoute
 import com.partimo.app.ui.budget.BudgetViewModel
 import com.partimo.app.ui.chat.ChatRoute
@@ -216,7 +217,8 @@ fun PartiMoNavHost(
             )
         }
         composable<AboutDestination> {
-            AboutRoute(onBack = { navController.popBackStack() })
+            val viewModel: BackupViewModel = viewModel(factory = BackupViewModel.factory(container))
+            AboutRoute(backupViewModel = viewModel, onBack = { navController.popBackStack() })
         }
         composable<DashboardDestination> { backStackEntry ->
             val route = backStackEntry.toRoute<DashboardDestination>()

@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.Log
 import androidx.glance.appwidget.updateAll
 import com.partimo.app.BuildConfig
+import com.partimo.app.files.ContentResolverDocuments
+import com.partimo.app.files.UserDocuments
 import com.partimo.app.notifications.DealCheckScheduler
 import com.partimo.app.notifications.DealNotifier
 import com.partimo.app.notifications.TripReminderNotifier
@@ -14,6 +16,7 @@ import com.partimo.data.di.DataModule
 import com.partimo.domain.usecase.AskTravelAssistantUseCase
 import com.partimo.domain.usecase.CheckPriceWatchesUseCase
 import com.partimo.domain.usecase.EditTripBudgetUseCase
+import com.partimo.domain.usecase.ExportUserDataUseCase
 import com.partimo.domain.usecase.FindBudgetRestaurantsUseCase
 import com.partimo.domain.usecase.FindDepartureAirportsUseCase
 import com.partimo.domain.usecase.FindLodgingsUseCase
@@ -24,6 +27,7 @@ import com.partimo.domain.usecase.GetSeasonalHighlightsUseCase
 import com.partimo.domain.usecase.GetTravelGuideUseCase
 import com.partimo.domain.usecase.GetTripEventsUseCase
 import com.partimo.domain.usecase.GetTripWeatherUseCase
+import com.partimo.domain.usecase.ImportUserDataUseCase
 import com.partimo.domain.usecase.LanguagePacksUseCase
 import com.partimo.domain.usecase.LoadTripKnowledgeUseCase
 import com.partimo.domain.usecase.ObserveDepartureUseCase
@@ -44,6 +48,7 @@ import com.partimo.domain.usecase.SearchFlightsUseCase
 import com.partimo.domain.usecase.SetPriceAlertUseCase
 import com.partimo.domain.usecase.SetTripSavedUseCase
 import com.partimo.domain.usecase.SummarizeBudgetUseCase
+import com.partimo.domain.usecase.SummarizeUserDataUseCase
 import com.partimo.domain.usecase.ToggleFavoriteUseCase
 import com.partimo.domain.usecase.TranslateTextUseCase
 import com.partimo.domain.usecase.TripRemindersUseCase
@@ -109,6 +114,14 @@ interface AppContainer {
     val observeSavedTrip: ObserveSavedTripUseCase
     val setTripSaved: SetTripSavedUseCase
     val toggleFavorite: ToggleFavoriteUseCase
+
+    /** Backup di tutti i dati dell'utente in un file e importazione. */
+    val exportUserData: ExportUserDataUseCase
+    val importUserData: ImportUserDataUseCase
+    val summarizeUserData: SummarizeUserDataUseCase
+
+    /** File scelti dall'utente con il selettore di Android. */
+    val documents: UserDocuments
 }
 
 /**
@@ -248,6 +261,14 @@ class DefaultAppContainer(context: Context) : AppContainer {
     override val askTravelAssistant: AskTravelAssistantUseCase by lazy { AskTravelAssistantUseCase(dataModule.travelAssistantRepository) }
 
     override val packingChecklist: PackingChecklistUseCase by lazy { PackingChecklistUseCase(dataModule.checklistRepository) }
+
+    override val exportUserData: ExportUserDataUseCase by lazy { ExportUserDataUseCase(dataModule.userDataRepository, clock) }
+
+    override val importUserData: ImportUserDataUseCase by lazy { ImportUserDataUseCase(dataModule.userDataRepository) }
+
+    override val summarizeUserData: SummarizeUserDataUseCase by lazy { SummarizeUserDataUseCase(dataModule.userDataRepository) }
+
+    override val documents: UserDocuments by lazy { ContentResolverDocuments(appContext) }
 
     /**
      * Attività di avvio non bloccanti: pulizia delle risposte troppo vecchie in cache, canale delle

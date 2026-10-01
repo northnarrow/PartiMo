@@ -3,6 +3,7 @@ package com.partimo.domain.repository
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
+import com.partimo.domain.model.backup.UserData
 import com.partimo.domain.model.budget.TripBudget
 import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.dining.Restaurant
@@ -37,6 +38,7 @@ import com.partimo.domain.model.weather.DailyForecast
 import com.partimo.domain.model.weather.DailyObservation
 import com.partimo.domain.model.weather.WeatherSnapshot
 import kotlinx.coroutines.flow.Flow
+import java.time.Instant
 import java.time.LocalDate
 
 // Contratti del dominio verso il data layer. Le implementazioni decidono provider, cache e
@@ -233,4 +235,21 @@ interface PriceWatchRepository {
     suspend fun update(watch: PriceWatch)
 
     suspend fun remove(id: String)
+}
+
+/**
+ * Tutti i dati dell'utente insieme (partenza, viaggi e preferiti, avvisi, budget, liste), per il file di
+ * backup. Il formato del file lo decide il data layer.
+ */
+interface UserDataRepository {
+    suspend fun read(): UserData
+
+    /** Modifica atomica di tutti i dati: lettura e scrittura nella stessa transazione. */
+    suspend fun update(transform: (UserData) -> UserData)
+
+    /** Contenuto del file di backup con [data]. */
+    fun encode(data: UserData, exportedAt: Instant): String
+
+    /** Dati di un file di backup; `null` se [content] non è un backup di PartiMo leggibile. */
+    fun decode(content: String): UserData?
 }

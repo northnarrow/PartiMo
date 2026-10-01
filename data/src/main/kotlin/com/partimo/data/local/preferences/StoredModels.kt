@@ -4,6 +4,7 @@ import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.backup.UserData
 import com.partimo.domain.model.budget.Expense
 import com.partimo.domain.model.budget.ExpenseCategory
 import com.partimo.domain.model.budget.TripBudget
@@ -115,6 +116,31 @@ internal data class TripBudgetDto(
     val expenses: List<ExpenseDto> = emptyList(),
 )
 
+/** Budget di un viaggio nel file di backup, dove non c'è la chiave della preferenza a indicarne il viaggio. */
+@Serializable
+internal data class TripBudgetBackupDto(
+    val tripId: String,
+    val limit: String? = null,
+    val expenses: List<ExpenseDto> = emptyList(),
+)
+
+/**
+ * File di backup di tutti i dati dell'utente (JSON leggibile). [format] lo riconosce come backup di
+ * PartiMo; [version] cresce se il formato cambia in modo incompatibile.
+ */
+@Serializable
+internal data class UserDataBackupDto(
+    val format: String,
+    val version: Int,
+    /** Istante ISO dell'esportazione (es. "2026-10-01T16:30:00Z"). */
+    val exportedAt: String? = null,
+    val departure: DeparturePointDto? = null,
+    val savedTrips: List<SavedTripDto> = emptyList(),
+    val priceWatches: List<PriceWatchDto> = emptyList(),
+    val budgets: List<TripBudgetBackupDto> = emptyList(),
+    val checklists: Map<String, List<String>> = emptyMap(),
+)
+
 /** Codifica e decodifica delle preferenze. Un valore illeggibile viene ignorato, mai propagato come crash. */
 internal object StoredJson {
 
@@ -122,6 +148,16 @@ internal object StoredJson {
         ignoreUnknownKeys = true
         encodeDefaults = true
     }
+
+    /** Il file di backup lo può aprire anche una persona: JSON indentato. */
+    private val backupJson = Json {
+        ignoreUnknownKeys = true
+        encodeDefaults = true
+        prettyPrint = true
+    }
+
+    const val BACKUP_FORMAT = "partimo-backup"
+    const val BACKUP_VERSION = 1
 
     private val watchListSerializer = ListSerializer(PriceWatchDto.serializer())
     private val tripListSerializer = ListSerializer(SavedTripDto.serializer())
@@ -146,12 +182,49 @@ internal object StoredJson {
     fun decodeBudget(tripId: String, value: String?): TripBudget {
         if (value.isNullOrBlank()) return TripBudget(tripId)
         val dto = runCatching { json.decodeFromString(TripBudgetDto.serializer(), value) }.getOrNull() ?: return TripBudget(tripId)
-        return TripBudget(
-            tripId = tripId,
-            limit = dto.limit?.let { runCatching { BigDecimal(it) }.getOrNull() }?.takeIf { it.signum() > 0 },
-            expenses = dto.expenses.mapNotNull { expense -> runCatching { expense.toDomain() }.getOrNull() },
+        return budgetOf(tripId, dto.limit, dto.expenses)
+    }
+
+    /** File di backup con tutti i dati dell'utente. */
+    fun encodeBackup(data: UserData, exportedAt: Instant): String = backupJson.encodeToString(
+        UserDataBackupDto.serializer(),
+        UserDataBackupDto(
+            format = BACKUP_FORMAT,
+            version = BACKUP_VERSION,
+            exportedAt = exportedAt.toString(),
+            departure = data.departure?.toDto(),
+            savedTrips = data.savedTrips.map { it.toDto() },
+            priceWatches = data.priceWatches.map { it.toDto() },
+            budgets = data.budgets.filter { it.hasData }.map { budget ->
+                TripBudgetBackupDto(budget.tripId, budget.limit?.toPlainString(), budget.expenses.map { it.toDto() })
+            },
+            checklists = data.checklists.filterValues { it.isNotEmpty() }.mapValues { (_, items) -> items.sorted() },
+        ),
+    )
+
+    /**
+     * Dati di un file di backup; `null` se non è un backup di PartiMo. Come per le preferenze, gli
+     * elementi non più interpretabili vengono scartati uno a uno.
+     */
+    fun decodeBackup(content: String): UserData? {
+        val dto = runCatching { backupJson.decodeFromString(UserDataBackupDto.serializer(), content) }.getOrNull() ?: return null
+        if (dto.format != BACKUP_FORMAT) return null
+        return UserData(
+            departure = dto.departure?.let { runCatching { it.toDomain() }.getOrNull() },
+            savedTrips = dto.savedTrips.mapNotNull { runCatching { it.toDomain() }.getOrNull() },
+            priceWatches = dto.priceWatches.mapNotNull { runCatching { it.toDomain() }.getOrNull() },
+            budgets = dto.budgets.mapNotNull { budget ->
+                budget.tripId.takeIf { it.isNotBlank() }?.let { budgetOf(it, budget.limit, budget.expenses) }?.takeIf { it.hasData }
+            },
+            checklists = dto.checklists.mapValues { (_, items) -> items.filter { it.isNotBlank() }.toSet() }.filter { (id, items) -> id.isNotBlank() && items.isNotEmpty() },
         )
     }
+
+    private fun budgetOf(tripId: String, limit: String?, expenses: List<ExpenseDto>) = TripBudget(
+        tripId = tripId,
+        limit = limit?.let { runCatching { BigDecimal(it) }.getOrNull() }?.takeIf { it.signum() > 0 },
+        expenses = expenses.mapNotNull { expense -> runCatching { expense.toDomain() }.getOrNull() },
+    )
 
     fun encodeWatches(watches: List<PriceWatch>): String = json.encodeToString(watchListSerializer, watches.map { it.toDto() })
 
@@ -298,3 +371,6 @@ private fun ExpenseDto.toDomain() = Expense(
     note = note,
 )
 
+
+/** `true` se il budget ha un tetto o almeno una spesa: un budget vuoto non si salva. */
+internal val TripBudget.hasData: Boolean get() = limit != null || expenses.isNotEmpty()

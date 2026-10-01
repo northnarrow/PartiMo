@@ -602,12 +602,46 @@
     <string name="widget_in_days">tra %1$d giorni</string>
 
     <!-- Fonti, licenze e privacy -->
-    <string name="about_open">Fonti, licenze e privacy</string>
-    <string name="about_title">Fonti, licenze e privacy</string>
+    <string name="about_open">I tuoi dati, fonti e privacy</string>
+    <string name="about_title">Dati, fonti e privacy</string>
     <string name="about_version">PartiMo %1$s</string>
     <string name="about_tagline">App personale per organizzare i viaggi con dati aperti e gratuiti.</string>
+    <string name="backup_title">💾 I tuoi dati</string>
+    <string name="backup_text">Viaggi salvati, preferiti, avvisi, budget, valigia e punto di partenza restano sul telefono. Android li include nel backup su Google e nel passaggio a un telefono nuovo; puoi anche salvarli in un file (es. su Drive) e reimportarli quando vuoi, senza perdere quelli già presenti.</string>
+    <string name="backup_summary">Sul telefono: %1$s</string>
+    <string name="backup_summary_empty">Sul telefono non ci sono ancora dati salvati.</string>
+    <string name="backup_departure">punto di partenza</string>
+    <string name="backup_nothing">nessun dato</string>
+    <string name="backup_export">Esporta</string>
+    <string name="backup_import">Importa</string>
+    <string name="backup_exported">Backup salvato: %1$s</string>
+    <string name="backup_imported">Importati: %1$s</string>
+    <string name="backup_imported_empty">Il file non conteneva dati da importare.</string>
+    <string name="backup_export_failed">Non è stato possibile salvare il file.</string>
+    <string name="backup_import_failed">Non è stato possibile leggere il file.</string>
+    <string name="backup_not_a_backup">Questo file non è un backup di PartiMo.</string>
+    <plurals name="backup_trips">
+        <item quantity="one">%d viaggio salvato</item>
+        <item quantity="other">%d viaggi salvati</item>
+    </plurals>
+    <plurals name="backup_favorites">
+        <item quantity="one">%d preferito</item>
+        <item quantity="other">%d preferiti</item>
+    </plurals>
+    <plurals name="backup_alerts">
+        <item quantity="one">%d avviso</item>
+        <item quantity="other">%d avvisi</item>
+    </plurals>
+    <plurals name="backup_expenses">
+        <item quantity="one">%d spesa</item>
+        <item quantity="other">%d spese</item>
+    </plurals>
+    <plurals name="backup_checked_items">
+        <item quantity="one">%d voce della valigia</item>
+        <item quantity="other">%d voci della valigia</item>
+    </plurals>
     <string name="about_privacy">🔒 Privacy</string>
-    <string name="about_privacy_device">Viaggi salvati, preferiti, budget, valigia e punto di partenza restano sul telefono.</string>
+    <string name="about_privacy_device">Viaggi salvati, preferiti, budget, valigia e punto di partenza restano sul telefono (e nei backup che scegli tu).</string>
     <string name="about_privacy_location">La posizione si legge solo quando tocchi «Dove sono» sulla mappa e non lascia il telefono.</string>
     <string name="about_privacy_ai">Le domande all\'assistente, con città, date ed eventi del viaggio, vanno a Google (Gemini) per la risposta.</string>
     <string name="about_privacy_flights">Per i prezzi dei voli, città di partenza, meta e mese del viaggio vanno ad Aviasales (Travelpayouts); i loghi delle compagnie arrivano dal suo sito.</string>
