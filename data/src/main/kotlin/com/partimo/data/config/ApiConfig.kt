@@ -13,6 +13,8 @@ class ApiConfig(
     val googleMapsApiKey: String,
     /** Chiave di Google Gemini (AI Studio) per l'assistente di viaggio; vuota = assistente non disponibile. */
     val geminiApiKey: String = "",
+    /** Token di Travelpayouts per i prezzi dei voli di Aviasales; vuoto = prezzi stimati. */
+    val travelpayoutsToken: String = "",
     val languageCode: String = "it",
     val enableHttpLogging: Boolean = false,
     /**
@@ -29,10 +31,11 @@ class ApiConfig(
     val hasDuffelToken: Boolean get() = duffelAccessToken.isNotBlank()
     val hasGoogleMapsKey: Boolean get() = googleMapsApiKey.isNotBlank()
     val hasGeminiKey: Boolean get() = geminiApiKey.isNotBlank()
+    val hasTravelpayoutsToken: Boolean get() = travelpayoutsToken.isNotBlank()
 
     override fun toString(): String =
         "ApiConfig(duffel=${mask(duffelAccessToken)}, googleMaps=${mask(googleMapsApiKey)}, " +
-            "gemini=${mask(geminiApiKey)}, language=$languageCode)"
+            "gemini=${mask(geminiApiKey)}, travelpayouts=${mask(travelpayoutsToken)}, language=$languageCode)"
 
     private fun mask(secret: String): String = if (secret.isBlank()) "<non configurata>" else "****"
 

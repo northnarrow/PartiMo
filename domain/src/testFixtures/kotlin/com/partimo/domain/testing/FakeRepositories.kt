@@ -12,6 +12,7 @@ import com.partimo.domain.model.dining.RestaurantSearchQuery
 import com.partimo.domain.model.event.EventQuery
 import com.partimo.domain.model.event.TripEvent
 import com.partimo.domain.model.flight.FlightOffer
+import com.partimo.domain.model.flight.FlightPriceSource
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.guide.CountryInfo
 import com.partimo.domain.model.guide.ExchangeRates
@@ -76,6 +77,7 @@ import java.time.LocalDate
 class FakeFlightRepository(
     var result: DataResult<List<FlightOffer>> = DataResult.Success(emptyList()),
     var delayMillis: Long = 0,
+    override val priceSource: FlightPriceSource = FlightPriceSource.LIVE_OFFERS,
 ) : FlightRepository {
     val queries = mutableListOf<FlightSearchQuery>()
     val forceRefreshFlags = mutableListOf<Boolean>()

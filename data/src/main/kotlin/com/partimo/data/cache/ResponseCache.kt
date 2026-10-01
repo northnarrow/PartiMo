@@ -80,6 +80,9 @@ internal object CacheKey {
 internal object CachePolicy {
     /** Le offerte volo scadono lato provider in circa 20–30 minuti. */
     val FLIGHTS: Duration = Duration.ofMinutes(20)
+
+    /** Prezzi trovati dalle ricerche dei viaggiatori (Aviasales): cambiano nel corso della giornata. */
+    val FLIGHT_PRICES: Duration = Duration.ofHours(3)
     val STAYS: Duration = Duration.ofHours(1)
 
     /** POI e ristoranti cambiano raramente. */

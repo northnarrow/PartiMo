@@ -4,11 +4,9 @@ import com.partimo.data.network.safeApiCall
 import com.partimo.data.source.AirportDataSource
 import com.partimo.data.source.CitySearchDataSource
 import com.partimo.data.source.CountryInfoDataSource
-import com.partimo.data.source.ExchangeRateDataSource
-import com.partimo.data.source.TravelGuideDataSource
-import com.partimo.data.source.TripWeatherDataSource
 import com.partimo.data.source.DestinationCatalogDataSource
 import com.partimo.data.source.EventDataSource
+import com.partimo.data.source.ExchangeRateDataSource
 import com.partimo.data.source.FlightOffersDataSource
 import com.partimo.data.source.HolidayDataSource
 import com.partimo.data.source.LodgingDataSource
@@ -18,6 +16,8 @@ import com.partimo.data.source.RestaurantDataSource
 import com.partimo.data.source.StayOffersDataSource
 import com.partimo.data.source.TransitDataSource
 import com.partimo.data.source.TravelAssistantDataSource
+import com.partimo.data.source.TravelGuideDataSource
+import com.partimo.data.source.TripWeatherDataSource
 import com.partimo.data.source.WeatherDataSource
 import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataResult
@@ -28,6 +28,7 @@ import com.partimo.domain.model.dining.RestaurantSearchQuery
 import com.partimo.domain.model.event.EventQuery
 import com.partimo.domain.model.event.TripEvent
 import com.partimo.domain.model.flight.FlightOffer
+import com.partimo.domain.model.flight.FlightPriceSource
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.guide.CountryInfo
 import com.partimo.domain.model.guide.ExchangeRates
@@ -51,16 +52,13 @@ import com.partimo.domain.model.transit.TransitRouteQuery
 import com.partimo.domain.model.weather.DailyForecast
 import com.partimo.domain.model.weather.DailyObservation
 import com.partimo.domain.model.weather.WeatherSnapshot
-import java.time.LocalDate
 import com.partimo.domain.repository.AccommodationRepository
 import com.partimo.domain.repository.AirportRepository
 import com.partimo.domain.repository.CitySearchRepository
 import com.partimo.domain.repository.CountryInfoRepository
-import com.partimo.domain.repository.ExchangeRateRepository
-import com.partimo.domain.repository.TravelGuideRepository
-import com.partimo.domain.repository.TripWeatherRepository
 import com.partimo.domain.repository.DestinationCatalogRepository
 import com.partimo.domain.repository.EventRepository
+import com.partimo.domain.repository.ExchangeRateRepository
 import com.partimo.domain.repository.FlightRepository
 import com.partimo.domain.repository.HolidayRepository
 import com.partimo.domain.repository.LodgingRepository
@@ -69,9 +67,12 @@ import com.partimo.domain.repository.PoiRepository
 import com.partimo.domain.repository.RestaurantRepository
 import com.partimo.domain.repository.TransitRepository
 import com.partimo.domain.repository.TravelAssistantRepository
+import com.partimo.domain.repository.TravelGuideRepository
+import com.partimo.domain.repository.TripWeatherRepository
 import com.partimo.domain.repository.WeatherRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import java.time.LocalDate
 
 // Implementazioni dei repository di dominio: eseguono la sorgente dati sul dispatcher di I/O e
 // convertono ogni eccezione in DataError (safeApiCall), così i casi d'uso non gestiscono eccezioni.
@@ -79,6 +80,7 @@ import kotlinx.coroutines.Dispatchers
 class DefaultFlightRepository(
     private val dataSource: FlightOffersDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    override val priceSource: FlightPriceSource = FlightPriceSource.LIVE_OFFERS,
 ) : FlightRepository {
     override suspend fun searchFlights(query: FlightSearchQuery, forceRefresh: Boolean): DataResult<List<FlightOffer>> =
         safeApiCall(ioDispatcher) { dataSource.searchOffers(query, forceRefresh) }

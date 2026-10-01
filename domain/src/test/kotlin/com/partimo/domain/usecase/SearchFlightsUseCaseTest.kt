@@ -5,6 +5,7 @@ import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.common.QueryIssue
 import com.partimo.domain.model.flight.FlightFilter
+import com.partimo.domain.model.flight.FlightPriceSource
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.flight.FlightSortOption
 import com.partimo.domain.testing.FakeFlightRepository
@@ -105,5 +106,12 @@ class SearchFlightsUseCaseTest {
 
         assertEquals(DataOrigin.CACHE, (result as DataResult.Success).origin)
         assertEquals(listOf(true), repository.forceRefreshFlags)
+    }
+
+    @Test
+    fun `dice da dove arrivano i prezzi`() {
+        assertEquals(FlightPriceSource.LIVE_OFFERS, useCase.priceSource)
+        val recent = SearchFlightsUseCase(FakeFlightRepository(priceSource = FlightPriceSource.RECENT_SEARCHES), clock = TestData.FIXED_CLOCK)
+        assertEquals(FlightPriceSource.RECENT_SEARCHES, recent.priceSource)
     }
 }

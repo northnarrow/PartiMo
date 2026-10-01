@@ -51,6 +51,17 @@ class TravelPeriodTest {
     }
 
     @Test
+    fun `con le date flessibili si parte entro una settimana o in tutto il mese`() {
+        val december = TravelPeriod.InMonth(YearMonth.of(2026, Month.DECEMBER))
+        val october = TravelPeriod.InMonth(YearMonth.of(2026, Month.OCTOBER))
+
+        assertEquals(today.plusDays(1)..today.plusDays(7), TravelPeriod.NextDays.departureWindow(today))
+        assertEquals(LocalDate.of(2026, Month.DECEMBER, 1)..LocalDate.of(2026, Month.DECEMBER, 31), december.departureWindow(today))
+        val lateOctober = LocalDate.of(2026, Month.OCTOBER, 20)
+        assertEquals(lateOctober.plusDays(1)..LocalDate.of(2026, Month.OCTOBER, 31), october.departureWindow(lateOctober), "Nel mese in corso da domani")
+    }
+
+    @Test
     fun `la chiave permette di salvare e ricostruire il periodo`() {
         val december = TravelPeriod.InMonth(YearMonth.of(2026, Month.DECEMBER))
 

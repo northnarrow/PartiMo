@@ -10,6 +10,7 @@ import com.partimo.data.demo.DemoFlightDataSource
 import com.partimo.data.demo.DemoTransitDataSource
 import com.partimo.data.local.BundledAirportsDataSource
 import com.partimo.data.local.BundledCountryInfoDataSource
+import com.partimo.data.local.BundledFlightCodes
 import com.partimo.data.local.CuratedDestinationCatalog
 import com.partimo.data.local.preferences.DataStoreBudgetRepository
 import com.partimo.data.local.preferences.DataStoreChecklistRepository
@@ -35,6 +36,7 @@ import com.partimo.data.remote.places.GooglePlacesPoiDataSource
 import com.partimo.data.remote.places.GooglePlacesRestaurantDataSource
 import com.partimo.data.remote.routes.GoogleRoutesApi
 import com.partimo.data.remote.routes.GoogleRoutesTransitDataSource
+import com.partimo.data.remote.travelpayouts.TravelpayoutsFlightDataSource
 import com.partimo.data.remote.weather.OpenMeteoTripWeatherDataSource
 import com.partimo.data.remote.weather.OpenMeteoWeatherDataSource
 import com.partimo.data.remote.wikidata.WikidataApi
@@ -65,6 +67,7 @@ import com.partimo.data.repository.DefaultTripWeatherRepository
 import com.partimo.data.repository.DefaultWeatherRepository
 import com.partimo.data.source.NoStayOffersDataSource
 import com.partimo.data.translate.MlKitTranslatorRepository
+import com.partimo.domain.model.flight.FlightPriceSource
 import com.partimo.domain.repository.AccommodationRepository
 import com.partimo.domain.repository.AirportRepository
 import com.partimo.domain.repository.BudgetRepository
@@ -123,6 +126,12 @@ class DataModule(
         DemoCatalog(airportLocator = { iata -> airportsDataSource.findByIata(iata)?.location }, clock = clock)
     }
     private val userDataStore by lazy { createUserDataStore(appContext) }
+    private val flightCodes: BundledFlightCodes by lazy {
+        BundledFlightCodes(
+            openAirports = { appContext.assets.open(AIRPORT_CITIES_ASSET) },
+            openAirlines = { appContext.assets.open(AIRLINES_ASSET) },
+        )
+    }
 
     private val duffelApi by lazy { DuffelApi(httpClient, config.duffelAccessToken) }
     private val placesApi by lazy { GooglePlacesApi(httpClient, config.googleMapsApiKey, androidApp = config.androidApp) }
@@ -134,9 +143,21 @@ class DataModule(
     private val geminiApi by lazy { GeminiApi(httpClient, config.geminiApiKey, androidApp = config.androidApp) }
     private val wikipediaLanguages by lazy { wikipediaLanguages(config.languageCode) }
 
+    /**
+     * Voli: offerte prenotabili di Duffel se il token è configurato; altrimenti, con il token di
+     * Travelpayouts, i prezzi trovati di recente su Aviasales per tutto il periodo del viaggio; senza
+     * chiavi, stime calcolate sul telefono.
+     */
     val flightRepository: FlightRepository by lazy {
-        val source = if (config.hasDuffelToken) DuffelFlightDataSource(duffelApi, responseCache) else DemoFlightDataSource(demoCatalog)
-        DefaultFlightRepository(source, ioDispatcher)
+        when {
+            config.hasDuffelToken -> DefaultFlightRepository(DuffelFlightDataSource(duffelApi, responseCache), ioDispatcher)
+            config.hasTravelpayoutsToken -> DefaultFlightRepository(
+                TravelpayoutsFlightDataSource(httpClient, responseCache, config.travelpayoutsToken, flightCodes),
+                ioDispatcher,
+                priceSource = FlightPriceSource.RECENT_SEARCHES,
+            )
+            else -> DefaultFlightRepository(DemoFlightDataSource(demoCatalog), ioDispatcher, priceSource = FlightPriceSource.ESTIMATES)
+        }
     }
 
     /**
@@ -276,7 +297,7 @@ class DataModule(
 
     /** `true` se almeno un modulo sta usando dati dimostrativi. */
     val usesDemoData: Boolean
-        get() = !config.hasDuffelToken || !config.hasGoogleMapsKey
+        get() = (!config.hasDuffelToken && !config.hasTravelpayoutsToken) || !config.hasGoogleMapsKey
 
     /** Rimuove le risposte troppo vecchie anche per il fallback offline (da chiamare all'avvio). */
     suspend fun trimCache() {
@@ -285,5 +306,7 @@ class DataModule(
 
     private companion object {
         const val AIRPORTS_ASSET = "airports.csv"
+        const val AIRPORT_CITIES_ASSET = "airport_cities.csv"
+        const val AIRLINES_ASSET = "airlines.csv"
     }
 }

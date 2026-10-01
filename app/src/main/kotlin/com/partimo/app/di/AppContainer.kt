@@ -128,6 +128,7 @@ class DefaultAppContainer(context: Context) : AppContainer {
             duffelAccessToken = BuildConfig.DUFFEL_ACCESS_TOKEN,
             googleMapsApiKey = BuildConfig.GOOGLE_MAPS_API_KEY,
             geminiApiKey = BuildConfig.GEMINI_API_KEY,
+            travelpayoutsToken = BuildConfig.TRAVELPAYOUTS_TOKEN,
             languageCode = Locale.getDefault().language.ifBlank { DEFAULT_LANGUAGE },
             enableHttpLogging = BuildConfig.DEBUG,
             userAgent = PARTIMO_USER_AGENT,

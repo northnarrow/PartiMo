@@ -10,6 +10,7 @@ import com.partimo.domain.model.dining.RestaurantSearchQuery
 import com.partimo.domain.model.event.EventQuery
 import com.partimo.domain.model.event.TripEvent
 import com.partimo.domain.model.flight.FlightOffer
+import com.partimo.domain.model.flight.FlightPriceSource
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.guide.CountryInfo
 import com.partimo.domain.model.guide.ExchangeRates
@@ -42,6 +43,10 @@ import java.time.LocalDate
 // threading; il parametro forceRefresh permette di ignorare una cache ancora valida.
 
 interface FlightRepository {
+    /** Da dove arrivano i prezzi: le stime e i prezzi trovati di recente vanno presentati come tali. */
+    val priceSource: FlightPriceSource
+        get() = FlightPriceSource.LIVE_OFFERS
+
     suspend fun searchFlights(query: FlightSearchQuery, forceRefresh: Boolean = false): DataResult<List<FlightOffer>>
 }
 

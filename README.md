@@ -29,6 +29,13 @@ l'app mostra delle stime e i pulsanti verso **Google Voli**, **Skyscanner** e **
 con i mezzi), che si aprono con tratta e date del viaggio. I siti si aprono nel **browser interno** di
 PartiMo, senza uscire dall'app; le pagine di Google Maps nell'app Maps.
 
+Con il token gratuito di **Travelpayouts** la sezione **Voli** mostra i **prezzi reali** trovati negli
+ultimi giorni su **Aviasales** per **tutto il mese scelto** (o la prossima settimana): compagnia con il
+logo, date e orari di andata e ritorno, scali, notti sul posto e giorno in cui è stato trovato il prezzo,
+cercando in tutti gli aeroporti della città (Milano comprende Bergamo, Londra anche Stansted). Ogni volo
+si apre su Aviasales per verificare il prezzo e prenotare; la campanella segue il volo più conveniente
+del periodo.
+
 Il pulsante **Guida**, sotto i mesi della dashboard, apre tutto ciò che serve sapere prima di partire,
 senza chiavi:
 - **meteo per le date del viaggio**: previsioni giorno per giorno se si parte entro due settimane,
@@ -86,7 +93,7 @@ Altri strumenti del viaggio, tutti senza chiavi:
 - Widget **Prossimo viaggio** per la schermata Home, con il conto alla rovescia.
 - **Fonti, licenze e privacy** (ⓘ nella schermata iniziale).
 
-<img src="docs/search_ideas.png" alt="Schermata iniziale con partenza, mesi e consigli" width="240" /> <img src="docs/departure_picker.png" alt="Scelta dell'aeroporto di partenza" width="240" /> <img src="docs/trip_dashboard.png" alt="Dashboard: sezione Voli con i collegamenti a Google Voli e Skyscanner" width="240" /> <img src="docs/trip_dashboard_stays.png" alt="Dashboard: alloggi reali da OpenStreetMap con Booking.com e Airbnb" width="240" /> <img src="docs/trip_dashboard_explore.png" alt="Dashboard: sezione Da vedere" width="240" /> <img src="docs/place_detail.png" alt="Scheda di un luogo con descrizione, storia e pulsante Naviga" width="240" /> <img src="docs/trip_dashboard_transit.png" alt="Dashboard: trasporti con il percorso reale su Google Maps" width="240" /> <img src="docs/trip_dashboard_restaurants.png" alt="Dashboard: ristoranti reali da OpenStreetMap" width="240" /> <img src="docs/guide.png" alt="Guida del viaggio: meteo, alba e tramonto, informazioni pratiche ed emergenze" width="240" /> <img src="docs/guide_currency.png" alt="Guida con previsioni giorno per giorno e cambio valuta" width="240" /> <img src="docs/itinerary.png" alt="Itinerario con l'IA giorno per giorno, con giro a piedi e calendario" width="240" /> <img src="docs/itinerary_packing.png" alt="Lista per la valigia dell'itinerario" width="240" /> <img src="docs/chat.png" alt="Chiedi a PartiMo: domande all'assistente sul viaggio" width="240" /> <img src="docs/favorites.png" alt="Preferiti del viaggio con mappa, giro a piedi e condivisione" width="240" /> <img src="docs/translator.png" alt="Traduttore con Ascolta, Copia, Mostra in grande e frasario" width="240" /> <img src="docs/translator_pack.png" alt="Traduttore al primo uso: pacchetto lingua da scaricare" width="240" /> <img src="docs/budget.png" alt="Budget del viaggio con spese in euro e in corone" width="240" /> <img src="docs/about.png" alt="Fonti, licenze e privacy" width="240" />
+<img src="docs/search_ideas.png" alt="Schermata iniziale con partenza, mesi e consigli" width="240" /> <img src="docs/departure_picker.png" alt="Scelta dell'aeroporto di partenza" width="240" /> <img src="docs/trip_dashboard_flights.png" alt="Dashboard: voli con i prezzi reali trovati su Aviasales nel mese scelto" width="240" /> <img src="docs/trip_dashboard.png" alt="Dashboard: sezione Voli con i collegamenti a Google Voli e Skyscanner" width="240" /> <img src="docs/trip_dashboard_stays.png" alt="Dashboard: alloggi reali da OpenStreetMap con Booking.com e Airbnb" width="240" /> <img src="docs/trip_dashboard_explore.png" alt="Dashboard: sezione Da vedere" width="240" /> <img src="docs/place_detail.png" alt="Scheda di un luogo con descrizione, storia e pulsante Naviga" width="240" /> <img src="docs/trip_dashboard_transit.png" alt="Dashboard: trasporti con il percorso reale su Google Maps" width="240" /> <img src="docs/trip_dashboard_restaurants.png" alt="Dashboard: ristoranti reali da OpenStreetMap" width="240" /> <img src="docs/guide.png" alt="Guida del viaggio: meteo, alba e tramonto, informazioni pratiche ed emergenze" width="240" /> <img src="docs/guide_currency.png" alt="Guida con previsioni giorno per giorno e cambio valuta" width="240" /> <img src="docs/itinerary.png" alt="Itinerario con l'IA giorno per giorno, con giro a piedi e calendario" width="240" /> <img src="docs/itinerary_packing.png" alt="Lista per la valigia dell'itinerario" width="240" /> <img src="docs/chat.png" alt="Chiedi a PartiMo: domande all'assistente sul viaggio" width="240" /> <img src="docs/favorites.png" alt="Preferiti del viaggio con mappa, giro a piedi e condivisione" width="240" /> <img src="docs/translator.png" alt="Traduttore con Ascolta, Copia, Mostra in grande e frasario" width="240" /> <img src="docs/translator_pack.png" alt="Traduttore al primo uso: pacchetto lingua da scaricare" width="240" /> <img src="docs/budget.png" alt="Budget del viaggio con spese in euro e in corone" width="240" /> <img src="docs/about.png" alt="Fonti, licenze e privacy" width="240" />
 
 Negli screenshot (generati dai test, senza rete, con dati di esempio) le foto sono segnaposto grigi: nell'app si caricano
 le foto reali dei luoghi. La mappa non è tra gli screenshot: i test girano sulla JVM, dove la libreria
@@ -153,7 +160,7 @@ nativa della mappa non c'è.
 | Punto di partenza | `FindDepartureAirportsUseCase`, `ObserveDepartureUseCase`, `SaveDepartureUseCase` | Geocoding + aeroporti, salvato con DataStore | L'utente cerca la sua città e sceglie l'aeroporto: il consigliato è in cima, ma può preferirne un altro (es. Linate invece di Malpensa). Cambiandolo, i voli si ricaricano da soli |
 | Periodo del viaggio | `TravelPeriod` | – | "Prossimi giorni" + i dodici mesi successivi: ogni mese dell'anno è selezionabile, sia nella ricerca sia nella dashboard |
 | Consigliami | `RecommendDestinationsUseCase` | Catalogo curato di ~50 mete + meteo attuale | Mete adatte al mese del viaggio: mercatini, aurora boreale, fioriture, foliage, mare, clima ideale |
-| Voli | `SearchFlightsUseCase`, `ValueForMoneyScorer` | [Duffel](https://duffel.com/docs) (offer requests) | Punteggio qualità/prezzo normalizzato. Sempre presenti i pulsanti **Google Voli** e **Skyscanner** con tratta e date compilate: senza chiave le tariffe mostrate sono stime e i pulsanti portano ai prezzi reali |
+| Voli | `SearchFlightsUseCase`, `ValueForMoneyScorer`, `FlightSearchQuery.matchesDates` | [Aviasales Data API](https://support.travelpayouts.com/hc/en-us/articles/203956163-Aviasales-Data-API) (Travelpayouts, token gratuito) oppure [Duffel](https://duffel.com/docs) (offer requests) | Con Travelpayouts: prezzi reali trovati di recente per tutte le partenze del mese scelto (o dei prossimi sette giorni) con soggiorni da 2 a 7 notti, cercando per città (codici e fusi orari degli aeroporti e nomi delle compagnie inclusi nell'app, dai dati di Travelpayouts), orari locali calcolati con il fuso di ogni aeroporto (anche al cambio dell'ora), giorno in cui è stato trovato il prezzo e pagina del volo su Aviasales. Punteggio qualità/prezzo normalizzato. Sempre presenti i pulsanti **Google Voli** e **Skyscanner** con tratta e date compilate: senza chiavi le tariffe mostrate sono stime e i pulsanti portano ai prezzi reali |
 | Alloggi | `SearchAccommodationsUseCase`, `FindLodgingsUseCase` | Duffel Stays, oppure senza chiave [OpenStreetMap](https://www.openstreetmap.org) ([Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API)) | Con Duffel: offerte con prezzo, media bayesiana sulle recensioni, filtri e ordinamenti. Senza chiave: hotel, B&B, ostelli e appartamenti reali vicino al centro (tipo, stelle, indirizzo, distanza), ognuno con **Vedi prezzi** (Booking.com con nome e date), mappa e sito ufficiale; in alto Booking.com e Airbnb per tutta la città |
 | Aggiorna (last minute) | `TripDashboardViewModel.refresh`, `PriceChange` | – | Ricarica tutto ignorando la cache e riassume la variazione dei prezzi migliori (es. "🔥 Volo sceso a 89 € (−12 €)") |
 | Avvisi sulle offerte | `SetPriceAlertUseCase`, `CheckPriceWatchesUseCase`, `DealDetector` | WorkManager + notifiche | Controllo ogni 6 ore con rete disponibile; notifica se volo o alloggio (ben recensito) costa almeno il 15% in meno del solito; tocco sulla notifica → dashboard del viaggio |
@@ -188,7 +195,7 @@ prezzi visti in quel momento diventano il primo riferimento. A ogni controllo:
 
 ### Cache delle ricerche
 `ResponseCache` salva in Room le risposte (già validate) di ogni ricerca, identificate da una chiave
-SHA-256 dei parametri. Il TTL dipende dal tipo di dato: voli 20 minuti, alloggi 1 ora, ristoranti
+SHA-256 dei parametri. Il TTL dipende dal tipo di dato: offerte Duffel 20 minuti, prezzi dei voli di Aviasales 3 ore, alloggi 1 ora, ristoranti
 12 ore, POI e strutture ricettive 24 ore, meteo 15 minuti, trasporti 2 minuti, ricerca città, voci di Wikipedia ed eventi
 ricorrenti e guide di Wikivoyage 7 giorni, cambi 12 ore, previsioni giornaliere 3 ore, festività, clima
 tipico e itinerari dell'IA 30 giorni (riaprire un itinerario non consuma la
@@ -214,7 +221,7 @@ VCS) oppure da variabili d'ambiente (utile in CI), e le inietta in `BuildConfig`
 | Ricerca città, aeroporti, Consigliami, meteo | ✅ Reale | ✅ Reale |
 | Alloggi | ✅ Strutture reali (OpenStreetMap) + Booking.com e Airbnb con le date del viaggio | Offerte con prezzo di Duffel Stays (`DUFFEL_ACCESS_TOKEN`) |
 | Ristoranti | ✅ Locali reali (OpenStreetMap), tocco → Google Maps | Google Places API (`GOOGLE_MAPS_API_KEY`): valutazioni, fasce di prezzo, foto |
-| Voli | Stime + ✅ Google Voli e Skyscanner con tratta e date (prezzi reali sul sito) | Offerte Duffel nell'app (`DUFFEL_ACCESS_TOKEN`) |
+| Voli | Stime + ✅ Google Voli e Skyscanner con tratta e date (prezzi reali sul sito) | ✅ Prezzi reali trovati di recente su Aviasales per tutto il mese (`TRAVELPAYOUTS_TOKEN`, gratuito), oppure offerte Duffel nell'app (`DUFFEL_ACCESS_TOKEN`) |
 | Trasporti pubblici | Stime + ✅ percorso reale su Google Maps | Percorsi reali nell'app, Google Routes API (`GOOGLE_MAPS_API_KEY`) |
 | Guida: meteo del viaggio, paese, emergenze, valuta, Wikivoyage | ✅ Reale (Open-Meteo, dati del sistema, ExchangeRate-API, Wikivoyage) | ✅ Reale |
 | Orari di apertura e accessibilità | ✅ Reali (OpenStreetMap) | Con Google Places: «aperto ora» di Google |
@@ -260,7 +267,19 @@ registrazione: per questo quelle funzioni sono reali in qualunque configurazione
    prodotti ([termini](https://ai.google.dev/gemini-api/terms)). PartiMo invia solo città, date,
    luoghi ed eventi del viaggio e le domande scritte; non invia la posizione né dati personali.
 
-### 4. Inserisci le chiavi in `local.properties`
+### 4. Token Travelpayouts (prezzi dei voli, gratuito)
+1. Registrati gratuitamente su [travelpayouts.com](https://www.travelpayouts.com) (programma per i
+   partner di Aviasales): la Data API dei voli è disponibile a tutti subito dopo la registrazione, senza
+   carta di credito.
+2. Copia il token dal tuo profilo, nella sezione **API token** (32 caratteri esadecimali).
+3. Limiti: 600 richieste al minuto, molto più di quanto serva (PartiMo fa una o due richieste per meta
+   e periodo e tiene le risposte in cache 3 ore). I prezzi sono quelli trovati da chi ha cercato la stessa
+   tratta negli ultimi giorni: per le tratte poco cercate o i mesi lontani possono non esserci, e
+   l'app lo dice lasciando i pulsanti verso Google Voli e Skyscanner.
+4. **Privacy:** ad Aviasales arrivano solo le città di partenza e di arrivo e il mese; il token viaggia
+   nell'intestazione `X-Access-Token`, mai nell'URL né nei log.
+
+### 5. Inserisci le chiavi in `local.properties`
 
 Il file si trova nella cartella principale del progetto (Android Studio lo crea con `sdk.dir`):
 
@@ -273,6 +292,8 @@ DUFFEL_ACCESS_TOKEN=duffel_test_xxx
 GOOGLE_MAPS_API_KEY=AIza...
 # Assistente con l'IA (Google AI Studio, gratuita)
 GEMINI_API_KEY=...
+# Prezzi dei voli trovati di recente su Aviasales (Travelpayouts, gratuito)
+TRAVELPAYOUTS_TOKEN=...
 ```
 
 Nei file `.properties` i commenti vanno su una riga a sé: un `#` scritto dopo il valore farebbe parte
@@ -292,8 +313,8 @@ in una chat, revocala e creane una nuova.
   si possono imitare: la restrizione riduce gli abusi ma non li impedisce. Il token Duffel è una
   credenziale lato server: in produzione le chiamate a Duffel e Google vanno instradate da un proprio
   backend (BFF), che custodisce le chiavi. I `DataSource` sono già isolati per questo passaggio.
-  Lo stesso vale per la chiave Gemini: un APK compilato con la chiave va tenuto per sé, non
-  pubblicato né condiviso.
+  Lo stesso vale per la chiave Gemini e il token Travelpayouts: un APK compilato con le chiavi va
+  tenuto per sé, non pubblicato né condiviso.
 
 ## Build e test
 
@@ -312,9 +333,9 @@ Ogni push su `main` e ogni pull request passano dalla CI di GitHub Actions
 (`.github/workflows/android.yml`): test unitari e APK di debug senza chiavi, scaricabile come
 artefatto. Dependabot propone gli aggiornamenti delle librerie ogni settimana.
 
-480 test unitari:
-- **`:domain` (187):** modelli e validazioni (compresi i dodici mesi di `TravelPeriod` e i periodi
-  degli eventi, anche a cavallo di Capodanno), servizi di dominio (qualità/prezzo, stagionalità,
+498 test unitari:
+- **`:domain` (192):** modelli e validazioni (compresi i dodici mesi di `TravelPeriod`, le date flessibili
+  dei voli con le notti del soggiorno e i periodi degli eventi, anche a cavallo di Capodanno), servizi di dominio (qualità/prezzo, stagionalità,
   notorietà dei luoghi, scelta degli aeroporti, rilevamento degli affari, estratti brevi di descrizione
   e storia) e tutti i casi d'uso, compresi ristoranti senza valutazioni, strutture ricettive, eventi
   del soggiorno, assistente con l'IA (pulizia dell'itinerario, conversazione), meteo del viaggio
@@ -323,8 +344,12 @@ artefatto. Dependabot propone gli aggiornamenti delle librerie ogni settimana.
   **reali** di Open-Meteo (più Sydney e la notte polare di Tromsø), viaggi salvati e preferiti, lingua
   del traduttore proposta per paese, CO₂ dei mezzi, budget con i cambi, promemoria prima della
   partenza e preparazione offline, con fake condivisi tramite `testFixtures`.
-- **`:data` (122):** cache e TTL, mappatura degli errori, client HTTP con risposte JSON simulate
-  (Duffel, Places, Routes, Open-Meteo, Wikipedia, Overpass, Wikidata, Nager.Date), Gemini con risposte
+- **`:data` (132):** cache e TTL, mappatura degli errori, client HTTP con risposte JSON simulate
+  (Duffel, Places, Routes, Open-Meteo, Wikipedia, Overpass, Wikidata, Nager.Date), prezzi dei voli con
+  risposte **reali** della Data API di Aviasales (Roma–Vienna a ottobre e dicembre, Milano–Londra a
+  novembre in `data/src/test/resources/travelpayouts`: ricerca per città, soggiorni da 2 a 7 notti,
+  orari locali anche al cambio dell'ora, finestre a cavallo di due mesi, token solo nell'intestazione),
+  codici delle città, fusi orari e compagnie aeree inclusi nell'app, Gemini con risposte
   **reali** (itinerario di Vienna e risposta a una domanda in `data/src/test/resources/gemini`), cambio
   di modello se uno è sovraccarico e richieste "di riserva" (tempo virtuale), guide **reali** di
   Wikivoyage (Vienna, Lisbona), cambi **reali** (166 valute), previsioni e dieci anni di storico
@@ -337,7 +362,7 @@ artefatto. Dependabot propone gli aggiornamenti delle librerie ogni settimana.
   DataStore e formato di salvataggio (anche la valigia, i viaggi salvati, i preferiti, il budget e i
   promemoria già mostrati), lingue dei
   paesi come codici per il traduttore, mercato simulato della demo.
-- **`:app` (171):** ViewModel (dashboard con e senza chiavi, eventi del soggiorno, ricerca, scelta della
+- **`:app` (174):** ViewModel (dashboard con e senza chiavi, voli su tutto il mese con i prezzi di Aviasales, eventi del soggiorno, ricerca, scelta della
   partenza, scheda del luogo, itinerario, domande all'assistente, guida con convertitore di valuta e
   fuso orario con l'ora legale, preferiti e viaggi salvati, mappa con filtri e «solo preferiti»,
   traduttore con pacchetti lingua, inversione e frasario, budget, «Dove sono»), notifiche dei
@@ -502,8 +527,9 @@ data/src/main/kotlin/com/partimo/data/
                tentativi in cascata con richieste di riserva (Hedging)
   remote/      duffel, places, routes, weather (anche previsioni giornaliere e storico), geocoding, wikipedia,
                osm (Overpass API), wikidata, holidays, gemini (client, prompt e schema dell'itinerario),
-               currency (ExchangeRate-API), wikivoyage
-  local/       dataset aeroporti (asset), catalogo curato delle mete, informazioni sui paesi (catalogo
+               currency (ExchangeRate-API), wikivoyage, travelpayouts (prezzi dei voli di Aviasales)
+  local/       dataset aeroporti (asset), codici delle città, fusi orari e compagnie per i voli (asset),
+               catalogo curato delle mete, informazioni sui paesi (catalogo
                curato + dati del sistema), preferenze, valigia, viaggi salvati e preferiti (DataStore)
   translate/   traduttore sul telefono (ML Kit)
   demo/        catalogo e sorgenti demo (mercato simulato)
@@ -540,5 +566,8 @@ data/src/test/resources/gemini/     risposte reali di Gemini (itinerario di Vien
 data/src/test/resources/wikivoyage/ guide reali di Wikivoyage (Vienna, Lisbona) usate nei test
 data/src/test/resources/openmeteo/  previsioni giornaliere e dieci anni di storico reali di Vienna usati nei test
 data/src/test/resources/currency/   tassi di cambio reali dall'euro usati nei test
+data/src/test/resources/travelpayouts/  prezzi reali dei voli di Aviasales (Roma–Vienna, Milano–Londra) usati nei test
 data/src/main/assets/airports.csv   aeroporti con voli di linea (OurAirports, pubblico dominio)
+data/src/main/assets/airport_cities.csv  codice della città e fuso orario degli aeroporti (dati di Travelpayouts)
+data/src/main/assets/airlines.csv   nomi delle compagnie aeree per codice IATA (dati di Travelpayouts)
 ```

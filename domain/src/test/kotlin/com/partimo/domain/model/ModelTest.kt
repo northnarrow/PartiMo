@@ -6,10 +6,12 @@ import com.partimo.domain.model.poi.Season
 import com.partimo.domain.model.stay.AccommodationSearchQuery
 import com.partimo.domain.testing.TestData
 import java.math.BigDecimal
+import java.time.LocalDateTime
 import java.time.Month
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -93,6 +95,40 @@ class QueryValidationTest {
             flightQuery.copy(returnDate = flightQuery.departureDate.minusDays(1)).validate(today),
         )
         assertEquals(QueryIssue.INVALID_TRAVELLER_COUNT, flightQuery.copy(adults = 0).validate(today))
+    }
+
+    @Test
+    fun `senza date flessibili valgono solo le date del viaggio`() {
+        assertTrue(flightQuery.matchesDates(today.plusDays(10), today.plusDays(14)))
+        assertFalse(flightQuery.matchesDates(today.plusDays(11), today.plusDays(14)))
+        assertFalse(flightQuery.matchesDates(today.plusDays(10), null))
+    }
+
+    @Test
+    fun `con le date flessibili vanno bene le partenze nella finestra per due-sette notti`() {
+        val flexible = flightQuery.copy(flexibleDepartures = today.plusDays(1)..today.plusDays(30))
+
+        assertTrue(flexible.matchesDates(today.plusDays(3), today.plusDays(5)), "Un fine settimana")
+        assertTrue(flexible.matchesDates(today.plusDays(30), today.plusDays(37)), "Una settimana, partendo l'ultimo giorno")
+        assertFalse(flexible.matchesDates(today.plusDays(3), today.plusDays(4)), "Una notte sola")
+        assertFalse(flexible.matchesDates(today.plusDays(3), today.plusDays(11)), "Più di una settimana")
+        assertFalse(flexible.matchesDates(today.plusDays(31), today.plusDays(34)), "Fuori dalla finestra")
+        assertFalse(flexible.matchesDates(today.plusDays(3), null), "Sola andata per un viaggio con ritorno")
+        assertTrue(flexible.copy(returnDate = null).matchesDates(today.plusDays(3), null))
+    }
+
+    @Test
+    fun `le notti del soggiorno contano dai giorni di partenza di andata e ritorno`() {
+        val outbound = TestData.flightOffer("a", "88", departure = LocalDateTime.of(2026, Month.DECEMBER, 11, 21, 10))
+        val inbound = outbound.outbound.copy(
+            originIata = "VIE",
+            destinationIata = "MXP",
+            departureTime = LocalDateTime.of(2026, Month.DECEMBER, 13, 8, 25),
+            arrivalTime = LocalDateTime.of(2026, Month.DECEMBER, 13, 10, 10),
+        )
+
+        assertNull(outbound.stayNights)
+        assertEquals(2, outbound.copy(slices = outbound.slices + inbound).stayNights)
     }
 
     @Test

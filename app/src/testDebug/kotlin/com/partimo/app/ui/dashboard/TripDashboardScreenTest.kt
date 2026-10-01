@@ -253,6 +253,32 @@ class TripDashboardScreenTest {
     }
 
     @Test
+    fun `i prezzi trovati su Aviasales mostrano date, notti e giorno del prezzo e si verificano su Aviasales`() {
+        val opened = mutableListOf<String>()
+        showDashboard(PreviewData.recentFlightPricesState(), DashboardActions(onOpenLink = { opened += it }))
+
+        composeRule.onNodeWithText(text(R.string.flights_links_recent)).assertExists()
+        composeRule.onNodeWithText(text(R.string.section_flights_subtitle_cities, "Milano", "Vienna")).assertExists()
+        composeRule.onNodeWithText(text(R.string.demo_banner_transit)).assertExists()
+        composeRule.onNodeWithText(text(R.string.flight_outbound_day, "ven 11 dic")).assertExists()
+        composeRule.onNodeWithText(text(R.string.flight_inbound_day, "dom 13 dic")).assertExists()
+        composeRule.onNodeWithText("21:10 BGY → 22:40 VIE · 1 h 30 min · " + text(R.string.flight_direct)).assertExists()
+        val nights = composeRule.activity.resources.getQuantityString(R.plurals.flight_stay_nights, 2, 2)
+        composeRule.onNodeWithText(nights + " · " + text(R.string.flight_price_found_on, "30 set")).assertExists()
+        composeRule.onAllNodesWithText(text(R.string.flight_open_booking, "aviasales.com"))[0].performClick()
+
+        assertEquals(listOf("https://www.aviasales.com/search/MIL1112VIE13121"), opened)
+    }
+
+    @Test
+    fun `senza prezzi recenti per la tratta lo dice e restano Google Voli e Skyscanner`() {
+        showDashboard(PreviewData.recentFlightPricesState().copy(flights = UiState.Empty))
+
+        composeRule.onNodeWithText(text(R.string.empty_flights_recent)).assertExists()
+        composeRule.onNodeWithText(text(R.string.link_google_flights)).assertExists()
+    }
+
+    @Test
     fun `senza chiavi gli alloggi sono strutture reali collegate a Booking con le date del viaggio`() {
         val opened = mutableListOf<String>()
         showDashboard(
@@ -444,5 +470,8 @@ class TripDashboardScreenTest {
 
         state.value = state.value.copy(selectedSection = DashboardSection.TRANSIT)
         saveScreenshot("trip_dashboard_transit.png")
+
+        state.value = PreviewData.recentFlightPricesState()
+        saveScreenshot("trip_dashboard_flights.png")
     }
 }

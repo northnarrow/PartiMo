@@ -255,6 +255,8 @@ class TripDashboardViewModel(
             departureDate = trip.departureDate,
             returnDate = trip.returnDate,
             adults = trip.travellers,
+            // Chi raccoglie i prezzi di molte date (Aviasales) propone i voli più convenienti di tutto il periodo.
+            flexibleDepartures = _uiState.value.period.departureWindow(LocalDate.now(clock)),
         )
         val state = searchFlights(query, forceRefresh = forceRefresh).toListUiState()
         _uiState.update { it.copy(flights = state) }
@@ -379,6 +381,7 @@ class TripDashboardViewModel(
             stays = if (offersAvailable) UiState.Loading else UiState.Empty,
             lodgings = if (offersAvailable) UiState.Empty else UiState.Loading,
             stayOffersAvailable = offersAvailable,
+            flightPriceSource = searchFlights.priceSource,
             restaurantRatingsAvailable = findBudgetRestaurants.ratingsAvailable,
             isDemoMode = isDemoMode,
             nowAtDestination = nowAtDestination(period),

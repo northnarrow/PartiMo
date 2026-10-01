@@ -63,6 +63,7 @@ val MapSources = listOf(
 
 val ConnectedServices = listOf(
     SourceEntry("Google Gemini", R.string.about_service_gemini, "https://ai.google.dev/gemini-api/terms"),
+    SourceEntry("Aviasales · Travelpayouts", R.string.about_service_travelpayouts, "https://support.travelpayouts.com/hc/en-us/articles/203956163-Aviasales-Data-API"),
     SourceEntry("ML Kit", R.string.about_service_mlkit, "https://developers.google.com/ml-kit/terms"),
 )
 
@@ -123,6 +124,7 @@ fun AboutScreen(version: String, onBack: () -> Unit, onOpenLink: (String) -> Uni
                     R.string.about_privacy_device,
                     R.string.about_privacy_location,
                     R.string.about_privacy_ai,
+                    R.string.about_privacy_flights,
                     R.string.about_privacy_translator,
                     R.string.about_privacy_sources,
                 ),

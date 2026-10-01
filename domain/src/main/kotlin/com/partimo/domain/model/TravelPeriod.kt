@@ -33,11 +33,26 @@ sealed interface TravelPeriod {
 
     fun returnDate(today: LocalDate): LocalDate = departureDate(today).plusDays(TRIP_LENGTH_DAYS)
 
+    /**
+     * Partenze che vanno bene per il viaggio quando le date sono flessibili (prezzi dei voli su più giorni):
+     * la prossima settimana, oppure tutto il mese, da domani se è quello in corso.
+     */
+    fun departureWindow(today: LocalDate): ClosedRange<LocalDate> {
+        val earliest = today.plusDays(1)
+        return when (this) {
+            NextDays -> earliest..earliest.plusDays(NEXT_DAYS_WINDOW_DAYS - 1)
+            is InMonth -> maxOf(month.atDay(1), earliest)..month.atEndOfMonth()
+        }
+    }
+
     /** `true` quando il mese è ormai passato: per un avviso non ha più senso controllare i prezzi. */
     fun isOver(today: LocalDate): Boolean = this is InMonth && month.isBefore(YearMonth.from(today))
 
     companion object {
         const val TRIP_LENGTH_DAYS = 4L
+
+        /** Giorni di partenza considerati per "prossimi giorni" quando le date sono flessibili. */
+        const val NEXT_DAYS_WINDOW_DAYS = 7L
 
         /** Giorno di partenza proposto nei mesi futuri. */
         const val PREFERRED_DEPARTURE_DAY = 10

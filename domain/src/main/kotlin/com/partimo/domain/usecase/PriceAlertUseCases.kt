@@ -119,6 +119,8 @@ class CheckPriceWatchesUseCase(
                 destinationIata = watch.destination.airportIata,
                 departureDate = departureDate,
                 returnDate = returnDate,
+                // Come nella dashboard: con i prezzi di molte date si segue il volo più conveniente del periodo.
+                flexibleDepartures = watch.period.departureWindow(today),
             )
             searchFlights(query, forceRefresh = true).getOrNull().orEmpty().map { it.offer }
         }

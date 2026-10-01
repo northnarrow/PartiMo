@@ -12,6 +12,7 @@ import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.dining.PriceLevel
 import com.partimo.domain.model.event.EventKind
 import com.partimo.domain.model.event.EventTiming
+import com.partimo.domain.model.flight.FlightPriceSource
 import com.partimo.domain.model.place.DeparturePoint
 import com.partimo.domain.model.poi.PoiCategory
 import com.partimo.domain.model.saved.Favorite
@@ -116,8 +117,11 @@ class TripDashboardViewModelTest {
 
     private val savedTrips = FakeSavedTripRepository()
 
-    private fun createViewModel(initialPeriod: TravelPeriod = december) = TripDashboardViewModel(
-        searchFlights = SearchFlightsUseCase(flights, clock = TestData.FIXED_CLOCK),
+    private fun createViewModel(
+        initialPeriod: TravelPeriod = december,
+        flightRepository: FakeFlightRepository = flights,
+    ) = TripDashboardViewModel(
+        searchFlights = SearchFlightsUseCase(flightRepository, clock = TestData.FIXED_CLOCK),
         searchAccommodations = SearchAccommodationsUseCase(stays, clock = TestData.FIXED_CLOCK),
         findLodgings = FindLodgingsUseCase(lodgings),
         getSeasonalHighlights = GetSeasonalHighlightsUseCase(pois, weather, clock = TestData.FIXED_CLOCK),
@@ -183,7 +187,19 @@ class TripDashboardViewModelTest {
         val flightQuery = flights.queries.single()
         assertEquals("MXP", flightQuery.originIata)
         assertEquals("VIE", flightQuery.destinationIata)
+        assertEquals(LocalDate.of(2026, Month.DECEMBER, 1)..LocalDate.of(2026, Month.DECEMBER, 31), flightQuery.flexibleDepartures, "Tutto dicembre")
+        assertEquals(FlightPriceSource.LIVE_OFFERS, state.flightPriceSource)
         assertEquals(SampleDestinations.VIENNA.arrivalHub, transit.queries.single().origin)
+    }
+
+    @Test
+    fun `con i prezzi trovati su Aviasales la dashboard lo sa anche prima dei risultati`() = runTest {
+        val recent = FakeFlightRepository(priceSource = FlightPriceSource.RECENT_SEARCHES)
+
+        val state = createViewModel(initialPeriod = TravelPeriod.NextDays, flightRepository = recent).uiState.value
+
+        assertEquals(FlightPriceSource.RECENT_SEARCHES, state.flightPriceSource)
+        assertEquals(TestData.TODAY.plusDays(1)..TestData.TODAY.plusDays(7), recent.queries.single().flexibleDepartures, "La prossima settimana")
     }
 
     @Test
@@ -344,6 +360,7 @@ class TripDashboardViewModelTest {
         assertEquals(july, state.period)
         assertEquals(LocalDate.of(2027, Month.JULY, 10), state.trip.departureDate)
         assertEquals(LocalDate.of(2027, Month.JULY, 10), flights.queries.last().departureDate)
+        assertEquals(LocalDate.of(2027, Month.JULY, 31), flights.queries.last().flexibleDepartures?.endInclusive)
         assertEquals(Month.JULY, pois.queries.last().travelMonth)
     }
 

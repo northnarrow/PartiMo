@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -45,10 +48,12 @@ import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.model.ScoredOffer
 import com.partimo.domain.model.TripContext
 import com.partimo.domain.model.flight.FlightOffer
+import com.partimo.domain.model.flight.FlightPriceSource
 import com.partimo.domain.model.flight.FlightSlice
 import com.partimo.domain.model.stay.AccommodationOffer
 import com.partimo.domain.model.stay.Lodging
 import com.partimo.domain.model.stay.LodgingType
+import java.net.URI
 
 /** Nella sezione dedicata si mostrano quasi tutte le offerte; le altre sono solo contate. */
 private const val MAX_VISIBLE_FLIGHTS = 10
@@ -57,7 +62,9 @@ private const val MAX_VISIBLE_LODGINGS = 20
 /**
  * Voli dal punto di partenza scelto dall'utente (va mostrata solo quando la partenza è nota). In alto
  * i collegamenti a Google Voli e Skyscanner con tratta e date già compilate: con le tariffe stimate
- * (senza chiave API) portano ai prezzi reali e alla prenotazione.
+ * (senza chiave API) portano ai prezzi reali e alla prenotazione. Con i prezzi trovati di recente su
+ * Aviasales ([FlightPriceSource.RECENT_SEARCHES]) ogni volo ha le sue date nel periodo scelto e si apre
+ * su Aviasales per verificarne il prezzo.
  */
 @Composable
 fun FlightsSection(
@@ -66,18 +73,29 @@ fun FlightsSection(
     onRetry: () -> Unit,
     onChangeDeparture: () -> Unit,
     modifier: Modifier = Modifier,
+    priceSource: FlightPriceSource = FlightPriceSource.LIVE_OFFERS,
     onOpenLink: (String) -> Unit = {},
 ) {
     val departure = trip.departure
     val links = flightLinks(trip)
-    val estimated = (state as? UiState.Success)?.origin == DataOrigin.DEMO
+    val estimated = priceSource == FlightPriceSource.ESTIMATES || (state as? UiState.Success)?.origin == DataOrigin.DEMO
+    val note = when {
+        estimated -> R.string.flights_links_estimates
+        priceSource == FlightPriceSource.RECENT_SEARCHES -> R.string.flights_links_recent
+        else -> R.string.flights_links_compare
+    }
     DashboardSection(
         title = stringResource(R.string.section_flights),
         subtitle = departure?.let {
-            stringResource(R.string.section_flights_subtitle, it.airport.iata, trip.destination.airportIata)
+            // Aviasales cerca per città: compaiono anche gli altri aeroporti (Bergamo per Milano).
+            if (priceSource == FlightPriceSource.RECENT_SEARCHES) {
+                stringResource(R.string.section_flights_subtitle_cities, it.cityName, trip.destination.name)
+            } else {
+                stringResource(R.string.section_flights_subtitle, it.airport.iata, trip.destination.airportIata)
+            }
         },
         state = state,
-        emptyMessage = stringResource(R.string.empty_flights),
+        emptyMessage = stringResource(if (priceSource == FlightPriceSource.RECENT_SEARCHES) R.string.empty_flights_recent else R.string.empty_flights),
         onRetry = onRetry,
         modifier = modifier,
         headerContent = departure?.let {
@@ -89,7 +107,7 @@ fun FlightsSection(
                     links?.let { flightLinks ->
                         ExternalLinksCard(
                             title = stringResource(R.string.links_title),
-                            lines = listOf(stringResource(if (estimated) R.string.flights_links_estimates else R.string.flights_links_compare)),
+                            lines = listOf(stringResource(note)),
                             links = flightLinks,
                             onOpenLink = onOpenLink,
                         )
@@ -100,7 +118,7 @@ fun FlightsSection(
     ) { offers ->
         Column(modifier = Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             offers.take(MAX_VISIBLE_FLIGHTS).forEachIndexed { index, scored ->
-                FlightCard(scored = scored, isBestValue = index == 0)
+                FlightCard(scored = scored, isBestValue = index == 0, onOpenLink = onOpenLink)
             }
             val hiddenOffers = offers.size - MAX_VISIBLE_FLIGHTS
             if (hiddenOffers > 0) {
@@ -115,12 +133,27 @@ fun FlightsSection(
 }
 
 @Composable
-fun FlightCard(scored: ScoredOffer<FlightOffer>, isBestValue: Boolean, modifier: Modifier = Modifier) {
+fun FlightCard(
+    scored: ScoredOffer<FlightOffer>,
+    isBestValue: Boolean,
+    modifier: Modifier = Modifier,
+    onOpenLink: (String) -> Unit = {},
+) {
     val offer = scored.offer
     OutlinedCard(modifier = modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             if (isBestValue) BestValueBadge()
             Row(verticalAlignment = Alignment.CenterVertically) {
+                offer.carrierLogoUrl?.let { logo ->
+                    AsyncImage(
+                        model = logo,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clip(RoundedCornerShape(4.dp)),
+                    )
+                    Spacer(Modifier.width(8.dp))
+                }
                 Text(
                     text = offer.carrierName,
                     style = MaterialTheme.typography.titleSmall,
@@ -134,7 +167,18 @@ fun FlightCard(scored: ScoredOffer<FlightOffer>, isBestValue: Boolean, modifier:
                     color = MaterialTheme.colorScheme.primary,
                 )
             }
-            offer.slices.forEach { slice -> FlightSliceRow(slice) }
+            offer.slices.forEachIndexed { index, slice -> FlightSliceRow(slice, isReturn = index > 0) }
+            val details = listOfNotNull(
+                offer.stayNights?.let { nights -> pluralStringResource(R.plurals.flight_stay_nights, nights, nights) },
+                offer.priceFoundOn?.let { day -> stringResource(R.string.flight_price_found_on, Formatters.dayMonth(day)) },
+            )
+            if (details.isNotEmpty()) {
+                Text(
+                    text = details.joinToString(" · "),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
             ValueScoreBar(score = scored.valueScore)
             if (offer.refundable == true) {
                 Text(
@@ -143,29 +187,49 @@ fun FlightCard(scored: ScoredOffer<FlightOffer>, isBestValue: Boolean, modifier:
                     color = MaterialTheme.colorScheme.tertiary,
                 )
             }
+            offer.bookingUrl?.let { url ->
+                TextButton(onClick = { onOpenLink(url) }, contentPadding = PaddingValues(horizontal = 0.dp)) {
+                    Text(stringResource(R.string.flight_open_booking, siteName(url)))
+                    // La freccia indica che si apre un'altra pagina: decorativa, i lettori di schermo la ignorano.
+                    Text(text = " ↗", modifier = Modifier.clearAndSetSemantics {})
+                }
+            }
         }
     }
 }
 
+/** Nome del sito da mostrare per un collegamento: "aviasales.com". */
+private fun siteName(url: String): String = runCatching { URI(url).host }.getOrNull()?.removePrefix("www.") ?: url
+
 @Composable
-private fun FlightSliceRow(slice: FlightSlice) {
+private fun FlightSliceRow(slice: FlightSlice, isReturn: Boolean) {
     val stops = if (slice.isDirect) {
         stringResource(R.string.flight_direct)
     } else {
         pluralStringResource(R.plurals.flight_stops, slice.stops, slice.stops)
     }
-    Text(
-        text = stringResource(
-            R.string.flight_leg,
-            Formatters.time(slice.departureTime),
-            slice.originIata,
-            Formatters.time(slice.arrivalTime),
-            slice.destinationIata,
-            Formatters.duration(slice.duration),
-            stops,
-        ),
-        style = MaterialTheme.typography.bodyMedium,
-    )
+    Column {
+        Text(
+            text = stringResource(
+                if (isReturn) R.string.flight_inbound_day else R.string.flight_outbound_day,
+                Formatters.weekdayDayMonth(slice.departureTime.toLocalDate()),
+            ),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Text(
+            text = stringResource(
+                R.string.flight_leg,
+                Formatters.time(slice.departureTime),
+                slice.originIata,
+                Formatters.time(slice.arrivalTime),
+                slice.destinationIata,
+                Formatters.duration(slice.duration),
+                stops,
+            ),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+    }
 }
 
 /** Offerte con prezzo del provider di prenotazione, con il confronto su Booking.com e Airbnb. */

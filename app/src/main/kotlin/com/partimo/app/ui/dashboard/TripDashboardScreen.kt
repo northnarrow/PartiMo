@@ -96,6 +96,7 @@ import com.partimo.app.ui.theme.PartiMoTheme
 import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.TripContext
 import com.partimo.domain.model.deal.PriceChange
+import com.partimo.domain.model.flight.FlightPriceSource
 import com.partimo.domain.model.poi.PointOfInterest
 import com.partimo.domain.model.saved.Favorite
 import java.time.Instant
@@ -313,7 +314,7 @@ fun TripDashboardScreen(
 private fun LazyListScope.sectionContent(section: DashboardSection, state: TripDashboardUiState, actions: DashboardActions) {
     when (section) {
         DashboardSection.FLIGHTS -> {
-            if (state.isDemoMode) item(key = "demo") { DemoBanner() }
+            if (state.isDemoMode) item(key = "demo") { DemoBanner(flightsEstimated = state.flightPriceSource == FlightPriceSource.ESTIMATES) }
             item(key = "flights") {
                 if (state.trip.departure == null) {
                     DeparturePromptCard(onChoose = actions.onChooseDeparture)
@@ -323,6 +324,7 @@ private fun LazyListScope.sectionContent(section: DashboardSection, state: TripD
                         trip = state.trip,
                         onRetry = { actions.onRetry(DashboardSection.FLIGHTS) },
                         onChangeDeparture = actions.onChooseDeparture,
+                        priceSource = state.flightPriceSource,
                         onOpenLink = actions.onOpenLink,
                     )
                 }
@@ -620,8 +622,9 @@ private fun PricesUpdatedNote(updatedAt: Instant) {
     )
 }
 
+/** Con i prezzi reali dei voli restano stimati solo i trasporti: l'avviso parla solo di quelli. */
 @Composable
-private fun DemoBanner() {
+private fun DemoBanner(flightsEstimated: Boolean) {
     Card(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer),
@@ -630,7 +633,7 @@ private fun DemoBanner() {
             Icon(Icons.Default.Info, contentDescription = null, tint = MaterialTheme.colorScheme.onTertiaryContainer)
             Spacer(Modifier.width(12.dp))
             Text(
-                text = stringResource(R.string.demo_banner),
+                text = stringResource(if (flightsEstimated) R.string.demo_banner else R.string.demo_banner_transit),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onTertiaryContainer,
             )

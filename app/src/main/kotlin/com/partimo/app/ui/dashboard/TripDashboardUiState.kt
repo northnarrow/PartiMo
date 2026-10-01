@@ -8,6 +8,7 @@ import com.partimo.domain.model.deal.PriceChange
 import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.event.TripEvents
 import com.partimo.domain.model.flight.FlightOffer
+import com.partimo.domain.model.flight.FlightPriceSource
 import com.partimo.domain.model.poi.SeasonalHighlights
 import com.partimo.domain.model.saved.SavedTrip
 import com.partimo.domain.model.stay.AccommodationOffer
@@ -38,6 +39,8 @@ data class TripDashboardUiState(
     val selectedSection: DashboardSection = DashboardSection.FLIGHTS,
     val photoSpotsOnly: Boolean = false,
     val flights: UiState<List<ScoredOffer<FlightOffer>>> = UiState.Loading,
+    /** Da dove arrivano i prezzi dei voli: le stime e i prezzi trovati di recente si presentano come tali. */
+    val flightPriceSource: FlightPriceSource = FlightPriceSource.LIVE_OFFERS,
     /** Offerte con prezzo, se è configurato un provider di prenotazione (vedi [stayOffersAvailable]). */
     val stays: UiState<List<ScoredOffer<AccommodationOffer>>> = UiState.Loading,
     /** Strutture reali senza prezzo, mostrate con i collegamenti ai siti di prenotazione. */

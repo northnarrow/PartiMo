@@ -6,6 +6,7 @@ import com.partimo.domain.common.map
 import com.partimo.domain.model.ScoredOffer
 import com.partimo.domain.model.flight.FlightFilter
 import com.partimo.domain.model.flight.FlightOffer
+import com.partimo.domain.model.flight.FlightPriceSource
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.flight.FlightSortOption
 import com.partimo.domain.repository.FlightRepository
@@ -22,6 +23,9 @@ class SearchFlightsUseCase(
     private val scorer: ValueForMoneyScorer = ValueForMoneyScorer(),
     private val clock: Clock = Clock.systemDefaultZone(),
 ) {
+
+    /** Da dove arrivano i prezzi (offerte in tempo reale, prezzi trovati di recente o stime). */
+    val priceSource: FlightPriceSource get() = repository.priceSource
 
     suspend operator fun invoke(
         query: FlightSearchQuery,

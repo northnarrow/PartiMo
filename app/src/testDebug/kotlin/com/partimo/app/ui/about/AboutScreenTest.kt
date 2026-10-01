@@ -54,7 +54,7 @@ class AboutScreenTest {
         (DataSources + MapSources + ConnectedServices).forEach { entry ->
             assertTrue(entry.url.startsWith("https://"), entry.name)
         }
-        assertEquals(15, (DataSources + MapSources + ConnectedServices).map { it.url }.distinct().size)
+        assertEquals(16, (DataSources + MapSources + ConnectedServices).map { it.url }.distinct().size)
     }
 
     @Test

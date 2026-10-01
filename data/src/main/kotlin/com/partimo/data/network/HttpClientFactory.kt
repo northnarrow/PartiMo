@@ -30,6 +30,7 @@ object HttpClientFactory {
 
     private const val LOG_TAG = "PartiMoHttp"
     private const val GOOGLE_API_KEY_HEADER = "X-Goog-Api-Key"
+    private const val TRAVELPAYOUTS_TOKEN_HEADER = "X-Access-Token"
 
     /**
      * @param engine motore HTTP (OkHttp in produzione, MockEngine nei test)
@@ -70,7 +71,8 @@ object HttpClientFactory {
                 // Le credenziali non devono mai finire nei log.
                 sanitizeHeader { name ->
                     name.equals(HttpHeaders.Authorization, ignoreCase = true) ||
-                        name.equals(GOOGLE_API_KEY_HEADER, ignoreCase = true)
+                        name.equals(GOOGLE_API_KEY_HEADER, ignoreCase = true) ||
+                        name.equals(TRAVELPAYOUTS_TOKEN_HEADER, ignoreCase = true)
                 }
             }
         }

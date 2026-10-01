@@ -71,6 +71,7 @@
 
     <!-- Banner demo -->
     <string name="demo_banner">Le sezioni con l\'etichetta «Demo» mostrano stime, perché manca la chiave API del servizio: per prezzi e orari reali usa i pulsanti verso Google Voli, Skyscanner e Google Maps. Alloggi, ristoranti, luoghi da vedere e meteo sono sempre dati reali.</string>
+    <string name="demo_banner_transit">I percorsi dei Trasporti, con l\'etichetta «Demo», sono indicativi perché manca la chiave di Google: per linee e orari reali usa il pulsante verso Google Maps. Voli, alloggi, ristoranti, luoghi da vedere e meteo sono dati reali.</string>
 
     <!-- Provenienza dei dati -->
     <string name="origin_cache">Dalla cache</string>
@@ -81,6 +82,7 @@
     <string name="section_highlights">Stagione e spot da non perdere</string>
     <string name="section_flights">Voli · miglior rapporto qualità/prezzo</string>
     <string name="section_flights_subtitle">%1$s → %2$s, andata e ritorno</string>
+    <string name="section_flights_subtitle_cities">%1$s → %2$s, tutti gli aeroporti, andata e ritorno</string>
     <string name="section_stays">Alloggi consigliati</string>
     <string name="section_stays_subtitle">Ordinati per rapporto qualità/prezzo</string>
     <string name="section_transit">Trasporti pubblici in tempo reale</string>
@@ -94,6 +96,7 @@
 
     <!-- Stati vuoti -->
     <string name="empty_flights">Nessun volo disponibile per queste date.</string>
+    <string name="empty_flights_recent">Nessun prezzo trovato di recente per questa tratta nel periodo scelto: Aviasales conosce solo le date cercate da altri viaggiatori. Prova con Google Voli o Skyscanner qui sopra.</string>
     <string name="empty_stays">Nessun alloggio disponibile per queste date.</string>
     <string name="empty_highlights">Nessun luogo adatto al periodo selezionato.</string>
     <string name="empty_highlights_photo">Nessuno spot fotografico per il periodo selezionato.</string>
@@ -127,6 +130,15 @@
         <item quantity="other">%d scali</item>
     </plurals>
     <string name="flight_leg">%1$s %2$s → %3$s %4$s · %5$s · %6$s</string>
+    <string name="flight_outbound_day">Andata · %1$s</string>
+    <string name="flight_inbound_day">Ritorno · %1$s</string>
+    <plurals name="flight_stay_nights">
+        <item quantity="one">%d notte sul posto</item>
+        <item quantity="many">%d notti sul posto</item>
+        <item quantity="other">%d notti sul posto</item>
+    </plurals>
+    <string name="flight_price_found_on">prezzo trovato il %1$s</string>
+    <string name="flight_open_booking">Verifica e prenota su %1$s</string>
     <string name="flight_refundable">Rimborsabile</string>
     <string name="best_value_badge">Miglior rapporto qualità/prezzo</string>
     <string name="value_score">Qualità/prezzo %1$d%%</string>
@@ -160,6 +172,7 @@
     <string name="links_title">🔎 Prezzi reali per le tue date</string>
     <string name="flights_links_estimates">Le tariffe qui sotto sono stime: apri la stessa ricerca per i prezzi aggiornati e per prenotare.</string>
     <string name="flights_links_compare">Confronta la stessa ricerca anche su altri siti.</string>
+    <string name="flights_links_recent">Sotto ci sono i prezzi reali trovati negli ultimi giorni su Aviasales da chi ha cercato questa tratta, su tutte le date del periodo scelto: possono essere cambiati, quindi verificali prima di prenotare. Confronta anche qui:</string>
     <string name="stays_links_text">Tutte le strutture di %1$s, con prezzi e disponibilità aggiornati:</string>
     <string name="transit_links_title">🗺️ Percorso reale con i mezzi</string>
     <string name="transit_links_text">Su Google Maps trovi lo stesso percorso con la navigazione passo passo.</string>
@@ -585,6 +598,7 @@
     <string name="about_privacy_device">Viaggi salvati, preferiti, budget, valigia e punto di partenza restano sul telefono.</string>
     <string name="about_privacy_location">La posizione si legge solo quando tocchi «Dove sono» sulla mappa e non lascia il telefono.</string>
     <string name="about_privacy_ai">Le domande all\'assistente, con città, date ed eventi del viaggio, vanno a Google (Gemini) per la risposta.</string>
+    <string name="about_privacy_flights">Per i prezzi dei voli, città di partenza, meta e mese del viaggio vanno ad Aviasales (Travelpayouts); i loghi delle compagnie arrivano dal suo sito.</string>
     <string name="about_privacy_translator">Il traduttore lavora sul telefono; ML Kit invia a Google statistiche anonime d\'uso.</string>
     <string name="about_privacy_sources">Le ricerche di luoghi, eventi, meteo e cambi vanno ai servizi aperti qui sotto, senza dati personali.</string>
     <string name="about_sources">📚 Fonti dei dati</string>
@@ -605,6 +619,7 @@
     <string name="about_map_openmaptiles">Schema e stile delle mappe · © OpenMapTiles</string>
     <string name="about_map_maplibre">Disegno della mappa sul telefono · BSD 2-Clause</string>
     <string name="about_service_gemini">Assistente con l\'IA (itinerario e domande) · termini di Google</string>
+    <string name="about_service_travelpayouts">Prezzi dei voli trovati di recente, con il tuo token gratuito; codici delle città, fusi orari e compagnie aeree inclusi nell\'app</string>
     <string name="about_service_mlkit">Traduttore sul telefono · termini di Google</string>
     <string name="about_service_links">Collegamenti a Google Voli, Skyscanner, Booking.com, Airbnb, Google Maps, Rome2rio e Tiqets: PartiMo apre le loro pagine, non legge i loro dati</string>
     <string name="about_libraries_text">Kotlin, Jetpack Compose e Material 3, Navigation, Room, DataStore, WorkManager, Glance, Ktor, OkHttp, kotlinx.serialization, Coil, MapLibre, ML Kit · Apache 2.0, MIT, BSD</string>

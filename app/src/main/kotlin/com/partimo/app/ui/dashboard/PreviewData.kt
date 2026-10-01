@@ -36,6 +36,7 @@ import com.partimo.domain.model.event.EventTiming
 import com.partimo.domain.model.event.TripEvent
 import com.partimo.domain.model.event.TripEvents
 import com.partimo.domain.model.flight.FlightOffer
+import com.partimo.domain.model.flight.FlightPriceSource
 import com.partimo.domain.model.flight.FlightSlice
 import com.partimo.domain.model.guide.CountryInfo
 import com.partimo.domain.model.guide.DrivingSide
@@ -146,6 +147,42 @@ internal object PreviewData {
                 slices = listOf(slice("MXP", "VIE", LocalDateTime.of(2026, 12, 10, 10, 40), 245, 1)),
             ),
             valueScore = 0.64,
+        ),
+    )
+
+    /** Prezzi trovati di recente su Aviasales: ogni volo ha le sue date nel mese scelto. */
+    private val recentFlights = listOf(
+        ScoredOffer(
+            FlightOffer(
+                id = "tp-fr",
+                carrierName = "Ryanair",
+                carrierIata = "FR",
+                carrierLogoUrl = "https://pics.avs.io/96/96/FR.png",
+                totalPrice = Money.of(58, "EUR"),
+                slices = listOf(
+                    slice("BGY", "VIE", LocalDateTime.of(2026, 12, 11, 21, 10), 90, 0),
+                    slice("VIE", "BGY", LocalDateTime.of(2026, 12, 13, 8, 25), 90, 0),
+                ),
+                bookingUrl = "https://www.aviasales.com/search/MIL1112VIE13121",
+                priceFoundOn = LocalDate.of(2026, Month.SEPTEMBER, 30),
+            ),
+            valueScore = 0.94,
+        ),
+        ScoredOffer(
+            FlightOffer(
+                id = "tp-os",
+                carrierName = "Austrian Airlines",
+                carrierIata = "OS",
+                carrierLogoUrl = "https://pics.avs.io/96/96/OS.png",
+                totalPrice = Money.of(149, "EUR"),
+                slices = listOf(
+                    slice("MXP", "VIE", LocalDateTime.of(2026, 12, 5, 7, 0), 85, 0),
+                    slice("VIE", "MXP", LocalDateTime.of(2026, 12, 9, 19, 40), 85, 0),
+                ),
+                bookingUrl = "https://www.aviasales.com/search/MIL0512VIE09121",
+                priceFoundOn = LocalDate.of(2026, Month.SEPTEMBER, 29),
+            ),
+            valueScore = 0.71,
         ),
     )
 
@@ -276,6 +313,7 @@ internal object PreviewData {
         periods = TravelPeriod.selectable(TODAY),
         today = TODAY,
         flights = UiState.Success(flights, DataOrigin.DEMO),
+        flightPriceSource = FlightPriceSource.ESTIMATES,
         stays = UiState.Success(stays, DataOrigin.CACHE),
         highlights = UiState.Success(highlights),
         events = UiState.Success(tripEvents),
@@ -339,6 +377,12 @@ internal object PreviewData {
         transit = UiState.Success(transit, DataOrigin.DEMO),
         restaurants = UiState.Success(openDataRestaurants),
         restaurantRatingsAvailable = false,
+    )
+
+    /** Voli con i prezzi trovati di recente su Aviasales (token di Travelpayouts). */
+    fun recentFlightPricesState() = loadedState().copy(
+        flights = UiState.Success(recentFlights, DataOrigin.REMOTE),
+        flightPriceSource = FlightPriceSource.RECENT_SEARCHES,
     )
 
     fun noDepartureState() = loadedState().copy(trip = trip.copy(departure = null), flights = UiState.Empty, alertEnabled = false)
