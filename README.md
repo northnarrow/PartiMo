@@ -172,7 +172,7 @@ nativa della mappa non c'è.
 | Chi parte | `Travellers`, `ObserveTravellersUseCase`, `SaveTravellersUseCase` | Salvato con DataStore (e nel backup) | Adulti e bambini con l'età di ognuno (al massimo 9 persone, come sui siti dei voli; ogni neonato in braccio a un adulto diverso), scelti nella schermata iniziale o dai voli della dashboard. Valgono per tutto: prezzi dei voli per tutti i posti con il prezzo a persona (i neonati viaggiano in braccio), ricerca alloggi con una camera ogni due adulti, Skyscanner con le età dei bambini, Booking con età e camere, Airbnb con bambini e neonati, Aviasales con adulti, bambini (2–11 anni) e neonati, CO₂ dell'auto divisa tra i viaggiatori, budget con la spesa a testa e assistente con l'IA che sa se ci sono bambini. Gli avvisi seguono il prezzo di un posto |
 | Consigliami | `RecommendDestinationsUseCase` | Catalogo curato di ~50 mete + meteo attuale | Mete adatte al mese del viaggio: mercatini, aurora boreale, fioriture, foliage, mare, clima ideale |
 | Voli | `SearchFlightsUseCase`, `ValueForMoneyScorer`, `FlightSearchQuery.matchesDates` | [Aviasales Data API](https://support.travelpayouts.com/hc/en-us/articles/203956163-Aviasales-Data-API) (Travelpayouts, token gratuito) oppure [Duffel](https://duffel.com/docs) (offer requests) | Con Travelpayouts: prezzi reali trovati di recente per tutte le partenze del mese scelto (o dei prossimi sette giorni) con soggiorni da 2 a 7 notti, cercando per città (codici e fusi orari degli aeroporti e nomi delle compagnie inclusi nell'app, dai dati di Travelpayouts), orari locali calcolati con il fuso di ogni aeroporto (anche al cambio dell'ora), giorno in cui è stato trovato il prezzo e pagina del volo su Aviasales. Punteggio qualità/prezzo normalizzato. Sempre presenti i pulsanti **Google Voli** e **Skyscanner** con tratta e date compilate: senza chiavi le tariffe mostrate sono stime e i pulsanti portano ai prezzi reali |
-| Alloggi | `SearchAccommodationsUseCase`, `FindLodgingsUseCase` | Duffel Stays, oppure senza chiave [OpenStreetMap](https://www.openstreetmap.org) ([Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API)) | Con Duffel: offerte con prezzo, media bayesiana sulle recensioni, filtri e ordinamenti. Senza chiave: hotel, B&B, ostelli e appartamenti reali vicino al centro (tipo, stelle, indirizzo, distanza), ognuno con **Vedi prezzi** (Booking.com con nome e date), mappa e sito ufficiale; in alto Booking.com e Airbnb per tutta la città |
+| Alloggi | `SearchAccommodationsUseCase`, `FindLodgingsUseCase` | Duffel Stays, oppure senza chiave [OpenStreetMap](https://www.openstreetmap.org) ([Nominatim](https://nominatim.org), con [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API) di riserva) | Con Duffel: offerte con prezzo, media bayesiana sulle recensioni, filtri e ordinamenti. Senza chiave: hotel, B&B, ostelli e appartamenti reali vicino al centro (tipo, stelle, indirizzo, distanza), ognuno con **Vedi prezzi** (Booking.com con nome e date), mappa e sito ufficiale; in alto Booking.com e Airbnb per tutta la città |
 | Quando e dove conviene | `GetMonthPricesUseCase`, `GetPriceCalendarUseCase`, `FindCheapDestinationsUseCase`, `FareLevel`, `AnywhereQuery` | [Aviasales Data API](https://support.travelpayouts.com/hc/en-us/articles/203956163-Aviasales-Data-API) (`grouped_prices` per mese e per giorno, `prices_for_dates` senza destinazione), nomi delle città in italiano inclusi nell'app | Con il token di Travelpayouts: sui chip dei mesi della dashboard il prezzo più basso a persona di andata e ritorno (2–7 notti), con il mese più conveniente in verde; **calendario dei prezzi** con il prezzo di ogni giorno di partenza colorato per fascia (terzo più economico in verde, più caro in rosso), mese per mese, e un tocco su un giorno porta le date della sua tariffa nella dashboard (con le date scelte valgono le loro notti); **Ovunque** nella schermata iniziale: le mete più economiche dalla città di partenza per il periodo scelto (prossimi giorni, mese o date esatte), una per città, con date, notti, scali e filtro fino a 50, 100 o 200 €; un tocco apre la dashboard della meta sulle date del volo |
 | Aggiorna (last minute) | `TripDashboardViewModel.refresh`, `PriceChange` | – | Ricarica tutto ignorando la cache e riassume la variazione dei prezzi migliori (es. "🔥 Volo sceso a 89 € (−12 €)") |
 | Avvisi sulle offerte | `SetPriceAlertUseCase`, `CheckPriceWatchesUseCase`, `DealDetector` | WorkManager + notifiche | Controllo ogni 6 ore con rete disponibile; notifica se volo o alloggio (ben recensito) costa almeno il 15% in meno del solito; tocco sulla notifica → dashboard del viaggio |
@@ -195,7 +195,7 @@ nativa della mappa non c'è.
 | Promemoria e uso offline | `TripRemindersUseCase`, `PrefetchTripUseCase`, `TripReminders` | WorkManager + notifiche | Promemoria una settimana prima (valido fino a due giorni prima) e il giorno prima della partenza, una volta sola; con il Wi-Fi e la batteria carica i viaggi salvati entro un mese si preparano per l'uso senza rete (dati e foto) |
 | Widget e posizione | `NextTripWidget`, `rememberMyLocation` | Jetpack Glance, LocationManager di Android | Widget «Prossimo viaggio» con conto alla rovescia; sulla mappa «Dove sono» con la distanza dal punto scelto, permesso chiesto solo al tocco |
 | Traduttore | `TranslateTextUseCase`, `LanguagePacksUseCase`, `TranslatorLanguages`, `TranslatePhotoUseCase` | [ML Kit Translation](https://developers.google.com/ml-kit/language/translation) (gratuito, sul telefono) + sintesi vocale di Android + [ML Kit Text Recognition v2](https://developers.google.com/ml-kit/vision/text-recognition/v2/android) per le foto | 58 lingue; lingua del posto proposta dal paese, pacchetti di circa 30 MB scaricati una volta e poi offline, inversione delle lingue, Ascolta, Copia, Mostra in grande, frasario per categorie tradotto sul telefono, scorciatoia a Google Traduttore. **Traduci con la fotocamera**: foto scattata (senza permesso della fotocamera, la scatta l'app del telefono) o scelta dalla galleria, testo riconosciuto con il modello della scrittura del posto (latina, cinese, giapponese, coreana, devanagari; per le altre la scorciatoia a Google Traduttore) e tradotto blocco per blocco, riga per riga nei menù con i prezzi; la traduzione si disegna sopra la foto alla posizione del testo originale, grande quanto ci sta |
-| Ristoranti | `FindBudgetRestaurantsUseCase`, `BudgetDiningCriteria` | Google Places API (New), oppure senza chiave OpenStreetMap (Overpass API) | Con Google: vincolo `price_level` 1–2 e valutazione ≥ 4,3, riapplicato sempre dal dominio. Senza chiave: locali reali vicino al centro (cucina, indirizzo, distanza), prima i più completi e vicini, catene in fondo. Il tocco apre il locale su Google Maps (recensioni, foto, orari) |
+| Ristoranti | `FindBudgetRestaurantsUseCase`, `BudgetDiningCriteria` | Google Places API (New), oppure senza chiave OpenStreetMap (Nominatim, con Overpass API di riserva) | Con Google: vincolo `price_level` 1–2 e valutazione ≥ 4,3, riapplicato sempre dal dominio. Senza chiave: locali reali vicino al centro (cucina, indirizzo, distanza), prima i più completi e vicini, catene in fondo. Il tocco apre il locale su Google Maps (recensioni, foto, orari) |
 
 ### Quando un'offerta è "davvero conveniente"
 Per ogni viaggio seguito PartiMo conserva lo storico dei prezzi migliori: il volo più economico e
@@ -363,8 +363,8 @@ Ogni push su `main` e ogni pull request passano dalla CI di GitHub Actions
 (`.github/workflows/android.yml`): test unitari e APK di debug senza chiavi, scaricabile come
 artefatto. Dependabot propone gli aggiornamenti delle librerie ogni settimana.
 
-626 test unitari:
-- **`:domain` (240):** modelli e validazioni (compresi i dodici mesi di `TravelPeriod`, le date esatte con
+636 test unitari:
+- **`:domain` (241):** modelli e validazioni (compresi i dodici mesi di `TravelPeriod`, le date esatte con
   i giorni vicini, le date flessibili dei voli con le notti del soggiorno e i periodi degli eventi, anche a
   cavallo di Capodanno), servizi di dominio (qualità/prezzo, stagionalità,
   notorietà dei luoghi, scelta degli aeroporti, rilevamento degli affari, estratti brevi di descrizione
@@ -379,7 +379,7 @@ artefatto. Dependabot propone gli aggiornamenti delle librerie ogni settimana.
   di prenotazione (voli Ryanair, easyJet e ITA con andata e ritorno, alloggi, treni; date in italiano e
   in inglese) con i promemoria nel fuso dell'aeroporto e traduzione delle foto (righe dei menù,
   scritture leggibili sul telefono), con fake condivisi tramite `testFixtures`.
-- **`:data` (155):** cache e TTL, mappatura degli errori, client HTTP con risposte JSON simulate
+- **`:data` (163):** cache e TTL, mappatura degli errori, client HTTP con risposte JSON simulate
   (Duffel, Places, Routes, Open-Meteo, Wikipedia, Overpass, Wikidata, Nager.Date), prezzi dei voli con
   risposte **reali** della Data API di Aviasales (Roma–Vienna a ottobre e dicembre, Milano–Londra a
   novembre in `data/src/test/resources/travelpayouts`: ricerca per città, soggiorni da 2 a 7 notti,
@@ -390,16 +390,16 @@ artefatto. Dependabot propone gli aggiornamenti delle librerie ogni settimana.
   Wikivoyage (Vienna, Lisbona), cambi **reali** (166 valute), previsioni e dieci anni di storico
   **reali** di Open-Meteo, informazioni sui paesi (catalogo e dati del sistema), classificazione dei
   luoghi su risposte **reali** di Wikipedia (Roma, Lisbona, Colosseo in `data/src/test/resources/wikipedia`),
-  ristoranti di Vienna e strutture di Matera da risposte **reali** di OpenStreetMap (`data/src/test/resources/osm`),
+  ristoranti di Vienna e strutture di Matera da risposte **reali** di OpenStreetMap, sia di Overpass sia di Nominatim (`data/src/test/resources/osm`),
   eventi di Vienna e Monaco da risposte **reali** di Wikidata e festività 2026 di Austria e Italia,
-  cambio di istanza Overpass se sovraccarica, intestazioni per le chiavi Google con restrizione
+  cambio di istanza Overpass se sovraccarica o lenta (richiesta di riserva dopo 6 s, in tempo virtuale), query una alla volta, una richiesta al secondo a Nominatim, intestazioni per le chiavi Google con restrizione
   Android, dataset aeroporti reale (es. Roma → FCO, Parigi → CDG), catalogo delle mete, repository
   DataStore e formato di salvataggio (anche la valigia, i viaggi salvati, i preferiti, il budget e i
   promemoria già mostrati), lingue dei
   paesi come codici per il traduttore, prezzi dei mesi, dei giorni e «Ovunque» da risposte **reali**
   di Aviasales con i nomi delle città in italiano, formato del backup e delle prenotazioni (i documenti
   restano sul telefono), registro dei promemoria, mercato simulato della demo.
-- **`:app` (231):** ViewModel (dashboard con e senza chiavi, voli su tutto il mese o nelle date scelte con i prezzi di Aviasales, celle Andata e Ritorno con il calendario, eventi del soggiorno, ricerca, scelta della
+- **`:app` (232):** ViewModel (dashboard con e senza chiavi, voli su tutto il mese o nelle date scelte con i prezzi di Aviasales, celle Andata e Ritorno con il calendario, eventi del soggiorno, ricerca, scelta della
   partenza, scheda del luogo, itinerario, domande all'assistente, guida con convertitore di valuta e
   fuso orario con l'ora legale, preferiti e viaggi salvati, mappa con filtri e «solo preferiti»,
   traduttore con pacchetti lingua, inversione e frasario, budget, «Dove sono», prenotazioni con la lettura di testo, PDF e foto e andata e ritorno da salvare
@@ -454,14 +454,28 @@ artefatto. Dependabot propone gli aggiornamenti delle librerie ogni settimana.
   libere con attribuzione: la scheda mostra fonte, autore e licenza, con i collegamenti alle pagine
   originali. I dati di OpenStreetMap sono ODbL: sotto alloggi e ristoranti c'è "Dati © OpenStreetMap
   contributors", che apre la [pagina del copyright](https://www.openstreetmap.org/copyright).
-- **OpenStreetMap (Overpass API):** una sola query per sezione, con gli elementi che hanno un nome
-  attorno al centro (ristoranti entro 1,5 km, strutture entro 2 km, centro delle aree con `out
-  center`). Le istanze pubbliche sono gratuite ma chiedono un uso leggero e uno User-Agent
-  identificabile: le risposte restano in cache (12 ore i ristoranti, 24 ore le strutture) e, se
-  un'istanza risponde 429, 5xx o va in timeout, si prova la successiva; una richiesta rifiutata (4xx)
-  non si ripete altrove. Per un'app pubblicata con molti utenti conviene un'istanza Overpass propria o
-  un backend con cache. OpenStreetMap non ha valutazioni: i locali sono ordinati per completezza
-  della scheda (cucina, orari, sito, voce Wikidata) e vicinanza, con le catene in fondo.
+- **OpenStreetMap (Nominatim e Overpass API):** le istanze pubbliche sono gratuite ma chiedono un uso
+  leggero e uno User-Agent identificabile, e nei momenti di traffico Overpass è lento o rifiuta le query
+  (nelle prove dell'1/10/2026: 504, connessioni interrotte, nessuna risposta in 30 s; i ristoranti di
+  Vienna e Roma fallivano dopo circa 27 s). Per questo:
+  - strutture e ristoranti arrivano prima da **Nominatim**: ricerche per tipo (hotel, ostelli e B&B nel
+    quadrato di 2 km attorno al centro, ristoranti in quello di 1,5 km), meno di un secondo ciascuna e
+    una al secondo come chiede la sua policy. Nelle stesse prove: strutture in 2,4–2,9 s e ristoranti in
+    4,1–4,5 s a Vienna, Roma, Lisbona e Matera. Se Nominatim non risponde o non trova nulla si usa la
+    query completa di Overpass;
+  - le query **Overpass** (ristoranti entro 1,5 km, strutture entro 2 km, centro delle aree con `out
+    center`) passano una alla volta, perché un'istanza accetta pochissime richieste contemporanee dallo
+    stesso indirizzo; se un'istanza non risponde entro 6 secondi parte la stessa query sulla successiva
+    e vince la prima risposta completa; con un errore 429, 5xx, un timeout o una query interrotta si
+    passa subito alla successiva, senza i nuovi tentativi automatici sulla stessa; una richiesta
+    rifiutata (4xx) non si ripete altrove;
+  - le risposte restano in cache (7 giorni le strutture, 2 giorni i ristoranti) e «Aggiorna» non le
+    riscarica: servono per i prezzi, che OpenStreetMap non ha. Scaduto, l'elenco delle strutture si
+    mostra subito mentre si aggiorna.
+
+  Per un'app pubblicata con molti utenti conviene un'istanza propria o un backend con cache.
+  OpenStreetMap non ha valutazioni: i locali sono ordinati per completezza della scheda (cucina, orari,
+  sito, voce Wikidata) e vicinanza, con le catene in fondo.
 - **Collegamenti ai siti di viaggio** (`TravelLinks`, `MapsLinks`): URL pubblici con la ricerca già
   compilata (es. `booking.com/searchresults.it.html?ss=Vienna&checkin=…&checkout=…`), senza chiavi,
   accordi o codici di affiliazione. Dall'app escono solo tratta, città, date e numero di viaggiatori.

@@ -9,6 +9,7 @@ import com.partimo.app.di.AppContainer
 import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.common.toListUiState
 import com.partimo.app.ui.common.toUiState
+import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.common.getOrNull
 import com.partimo.domain.model.Destination
 import com.partimo.domain.model.Money
@@ -362,8 +363,17 @@ class TripDashboardViewModel(
      */
     private suspend fun loadStays(trip: TripContext, forceRefresh: Boolean) {
         if (!_uiState.value.stayOffersAvailable) {
-            val state = findLodgings(trip.destination.center, forceRefresh).toListUiState()
-            _uiState.update { it.copy(lodgings = state) }
+            val center = trip.destination.center
+            // L'elenco salvato compare subito; quello aggiornato lo sostituisce appena arriva.
+            findLodgings.saved(center)?.let { saved ->
+                _uiState.update { state -> if (state.lodgings == UiState.Loading) state.copy(lodgings = UiState.Success(saved, DataOrigin.CACHE)) else state }
+            }
+            // Le strutture di OpenStreetMap non hanno prezzi e cambiano di rado: «Aggiorna» non le riscarica.
+            val state = findLodgings(center, forceRefresh = false).toListUiState()
+            _uiState.update { current ->
+                // Se l'aggiornamento non riesce resta l'elenco salvato già mostrato.
+                current.copy(lodgings = if (state is UiState.Error && current.lodgings is UiState.Success) current.lodgings else state)
+            }
             return
         }
         val query = AccommodationSearchQuery(
@@ -426,7 +436,8 @@ class TripDashboardViewModel(
         val state = findBudgetRestaurants(
             location = trip.destination.center,
             areaName = trip.destination.name,
-            forceRefresh = forceRefresh,
+            // I locali di OpenStreetMap (senza valutazioni) cambiano di rado: «Aggiorna» non li riscarica.
+            forceRefresh = forceRefresh && findBudgetRestaurants.ratingsAvailable,
         ).toListUiState()
         _uiState.update { it.copy(restaurants = state) }
     }

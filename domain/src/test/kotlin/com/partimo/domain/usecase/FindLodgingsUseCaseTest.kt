@@ -61,4 +61,14 @@ class FindLodgingsUseCaseTest {
     fun `le stelle devono essere tra 1 e 5`() {
         assertFailsWith<IllegalArgumentException> { lodging("x", stars = 7) }
     }
+
+    @Test
+    fun `l'elenco salvato si ordina come quello aggiornato e se è vuoto non c'è`() = runTest {
+        repository.saved = listOf(lodging("lontano", location = GeoPoint(48.2200, 16.3738)), lodging("vicino", location = GeoPoint(48.2085, 16.3740)))
+
+        assertEquals(listOf("vicino", "lontano"), FindLodgingsUseCase(repository).saved(center)?.map { it.id })
+
+        repository.saved = emptyList()
+        assertEquals(null, FindLodgingsUseCase(repository).saved(center))
+    }
 }

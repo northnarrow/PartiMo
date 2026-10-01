@@ -325,8 +325,29 @@ class TripDashboardViewModelTest {
         viewModel.refresh()
 
         assertEquals(3, lodgings.queries.size)
+        assertEquals(listOf(false, false, false), lodgings.forceRefreshes, "Le strutture di OpenStreetMap non si riscaricano con «Aggiorna»")
+        assertTrue(restaurants.forceRefreshes.none { it }, "Nemmeno i locali senza valutazioni")
         assertIs<UiState.Success<*>>(viewModel.uiState.value.lodgings)
         assertNull(viewModel.uiState.value.refreshSummary?.stay, "Senza prezzi non c'è variazione da segnalare")
+    }
+
+    @Test
+    fun `le strutture salvate si vedono subito mentre si aggiornano e restano se l'aggiornamento non riesce`() = runTest {
+        stays.providesOffers = false
+        lodgings.saved = listOf(TestData.lodging("salvata", location = SampleDestinations.VIENNA.center))
+        lodgings.result = DataResult.Failure(DataError.NoConnection)
+        lodgings.delayMillis = 5_000
+
+        val viewModel = createViewModel()
+
+        assertEquals(listOf("salvata"), viewModel.uiState.value.lodgings.successData().map { it.id }, "Subito, senza attendere la rete")
+        advanceUntilIdle()
+        assertEquals(listOf("salvata"), viewModel.uiState.value.lodgings.successData().map { it.id }, "Senza rete resta l'elenco salvato")
+
+        lodgings.result = DataResult.Success(listOf(TestData.lodging("nuova", location = SampleDestinations.VIENNA.center)))
+        viewModel.retry(DashboardSection.STAYS)
+        advanceUntilIdle()
+        assertEquals(listOf("nuova"), viewModel.uiState.value.lodgings.successData().map { it.id }, "L'elenco aggiornato sostituisce quello salvato")
     }
 
     @Test

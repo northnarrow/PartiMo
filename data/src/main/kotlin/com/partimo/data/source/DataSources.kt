@@ -86,6 +86,9 @@ interface RestaurantDataSource {
 
 interface LodgingDataSource {
     suspend fun findLodgings(query: LodgingQuery, forceRefresh: Boolean): Fetched<List<Lodging>>
+
+    /** Ultimo elenco salvato sul telefono, anche se scaduto; `null` se non c'è. */
+    suspend fun savedLodgings(query: LodgingQuery): List<Lodging>? = null
 }
 
 interface EventDataSource {

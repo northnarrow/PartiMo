@@ -53,8 +53,8 @@ android {
         applicationId = "com.partimo.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 13
-        versionName = "1.3.0"
+        versionCode = 14
+        versionName = "1.3.1"
 
         buildConfigField("String", "DUFFEL_ACCESS_TOKEN", "\"${secret("DUFFEL_ACCESS_TOKEN")}\"")
         buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${secret("GOOGLE_MAPS_API_KEY")}\"")

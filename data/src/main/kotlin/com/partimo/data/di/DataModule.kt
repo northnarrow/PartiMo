@@ -32,6 +32,7 @@ import com.partimo.data.remote.gemini.GeminiApi
 import com.partimo.data.remote.gemini.GeminiTravelAssistantDataSource
 import com.partimo.data.remote.geocoding.OpenMeteoGeocodingDataSource
 import com.partimo.data.remote.holidays.NagerHolidayDataSource
+import com.partimo.data.remote.osm.NominatimApi
 import com.partimo.data.remote.osm.OsmLodgingDataSource
 import com.partimo.data.remote.osm.OsmRestaurantDataSource
 import com.partimo.data.remote.osm.OverpassApi
@@ -150,6 +151,7 @@ class DataModule(
     private val routesApi by lazy { GoogleRoutesApi(httpClient, config.googleMapsApiKey, androidApp = config.androidApp) }
     private val wikipediaApi by lazy { WikipediaApi(httpClient, config.userAgent) }
     private val overpassApi by lazy { OverpassApi(httpClient, config.userAgent) }
+    private val nominatimApi by lazy { NominatimApi(httpClient, config.userAgent) }
     private val wikidataApi by lazy { WikidataApi(httpClient, config.userAgent) }
     private val wikivoyageApi by lazy { WikivoyageApi(httpClient, config.userAgent) }
     private val geminiApi by lazy { GeminiApi(httpClient, config.geminiApiKey, androidApp = config.androidApp) }
@@ -197,9 +199,9 @@ class DataModule(
         }
     }
 
-    /** Strutture ricettive reali da OpenStreetMap: gratuite e senza chiave, sempre disponibili. */
+    /** Strutture ricettive reali da OpenStreetMap (Nominatim, con Overpass di riserva): gratuite e senza chiave. */
     val lodgingRepository: LodgingRepository by lazy {
-        DefaultLodgingRepository(OsmLodgingDataSource(overpassApi, responseCache, config.languageCode), ioDispatcher)
+        DefaultLodgingRepository(OsmLodgingDataSource(overpassApi, responseCache, config.languageCode, nominatimApi), ioDispatcher)
     }
 
     /**
@@ -222,14 +224,15 @@ class DataModule(
 
     /**
      * Ristoranti: Google Places se la chiave è configurata (valutazioni, fasce di prezzo, foto),
-     * altrimenti i locali reali di OpenStreetMap, gratuiti e senza chiave ma senza valutazioni.
+     * altrimenti i locali reali di OpenStreetMap (Nominatim, con Overpass di riserva), gratuiti e senza chiave ma
+     * senza valutazioni.
      */
     val restaurantRepository: RestaurantRepository by lazy {
         if (config.hasGoogleMapsKey) {
             DefaultRestaurantRepository(GooglePlacesRestaurantDataSource(placesApi, responseCache, config.languageCode), ioDispatcher)
         } else {
             DefaultRestaurantRepository(
-                OsmRestaurantDataSource(overpassApi, responseCache, config.languageCode),
+                OsmRestaurantDataSource(overpassApi, responseCache, config.languageCode, nominatimApi),
                 ioDispatcher,
                 providesRatings = false,
             )

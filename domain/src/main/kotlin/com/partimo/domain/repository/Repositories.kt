@@ -149,6 +149,9 @@ interface RestaurantRepository {
 /** Strutture ricettive reali (senza prezzi) attorno a un punto. */
 interface LodgingRepository {
     suspend fun findLodgings(query: LodgingQuery, forceRefresh: Boolean = false): DataResult<List<Lodging>>
+
+    /** Ultimo elenco salvato sul telefono, anche se scaduto, da mostrare mentre si aggiorna; `null` se non c'è. */
+    suspend fun savedLodgings(query: LodgingQuery): List<Lodging>? = null
 }
 
 /**

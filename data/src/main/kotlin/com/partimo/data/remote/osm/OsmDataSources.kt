@@ -8,34 +8,45 @@ import com.partimo.data.network.NetworkJson
 import com.partimo.data.network.mapNotNullSafely
 import com.partimo.data.source.LodgingDataSource
 import com.partimo.data.source.RestaurantDataSource
+import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.WheelchairAccess
 import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.dining.RestaurantSearchQuery
 import com.partimo.domain.model.stay.Lodging
 import com.partimo.domain.model.stay.LodgingQuery
 import com.partimo.domain.model.stay.LodgingType
+import kotlinx.serialization.builtins.ListSerializer
 import java.net.URLEncoder
+import java.util.Locale
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * Locali reali da OpenStreetMap, senza chiave: nome, cucina, indirizzo e sito. OpenStreetMap non ha
  * valutazioni né fasce di prezzo, quindi i locali sono ordinati per vicinanza al centro e completezza
  * dei dati, con i ristoranti prima dei fast food e le catene in fondo. Ogni locale ha il collegamento
  * a Google Maps, dove si leggono recensioni e prezzi.
+ *
+ * Prima si chiede a Nominatim (i ristoranti più noti della zona, in circa un secondo); se non risponde o non
+ * trova nulla, la query completa a Overpass.
  */
 class OsmRestaurantDataSource internal constructor(
     private val api: OverpassApi,
     private val cache: ResponseCache,
     private val languageCode: String,
+    private val nominatim: NominatimApi? = null,
 ) : RestaurantDataSource {
 
     override suspend fun searchRestaurants(query: RestaurantSearchQuery, forceRefresh: Boolean): Fetched<List<Restaurant>> {
         val radius = query.radiusMeters.coerceIn(MIN_RADIUS_METERS, MAX_RADIUS_METERS)
-        val overpassQl = OverpassQueries.restaurants(query.location, radius, ELEMENT_LIMIT)
+        val center = query.location
         return cache.getOrFetch(
-            key = CacheKey.of("osm-restaurants", overpassQl),
+            key = CacheKey.of("osm-restaurants", String.format(Locale.ROOT, "%.4f,%.4f", center.latitude, center.longitude), radius, languageCode),
             ttl = CachePolicy.RESTAURANTS,
             forceRefresh = forceRefresh,
-            fetch = { api.query(overpassQl) },
+            fetch = {
+                nominatim?.let { quickElements(it, NOMINATIM_PHRASES, center, radius, languageCode) }
+                    ?: api.query(OverpassQueries.restaurants(center, radius, ELEMENT_LIMIT))
+            },
             parse = { body ->
                 parseElements(body)
                     .mapNotNullSafely { element -> element.toRankedRestaurant(query) }
@@ -88,6 +99,9 @@ class OsmRestaurantDataSource internal constructor(
         const val MAX_RADIUS_METERS = 1_500
         const val ELEMENT_LIMIT = 600
         const val MAX_RESULTS = 20
+
+        /** "Special phrase" di Nominatim per i ristoranti (amenity=restaurant). */
+        val NOMINATIM_PHRASES = listOf("restaurant")
         private const val DETAIL_BONUS = 0.3
         private const val NOTABLE_BONUS = 0.5
         private const val CHAIN_PENALTY = 1.0
@@ -99,24 +113,43 @@ class OsmRestaurantDataSource internal constructor(
 /**
  * Strutture ricettive reali da OpenStreetMap, senza chiave: nome, tipo, stelle e indirizzo.
  * Tariffe e disponibilità non ci sono: l'app rimanda a Booking.com o Airbnb con le date del viaggio.
+ *
+ * Prima si chiede a Nominatim (hotel, ostelli e B&B, in meno di un secondo ciascuno); se non risponde o non
+ * trova nulla, la query completa a Overpass. Le strutture cambiano di rado: l'elenco resta valido per giorni e,
+ * scaduto, si mostra subito mentre si aggiorna ([savedLodgings]).
  */
 class OsmLodgingDataSource internal constructor(
-    private val api: OverpassApi,
+    private val overpass: OverpassApi,
     private val cache: ResponseCache,
     private val languageCode: String,
+    private val nominatim: NominatimApi? = null,
 ) : LodgingDataSource {
 
     override suspend fun findLodgings(query: LodgingQuery, forceRefresh: Boolean): Fetched<List<Lodging>> {
-        val radius = query.radiusMeters.coerceIn(MIN_RADIUS_METERS, MAX_RADIUS_METERS)
-        val overpassQl = OverpassQueries.lodgings(query.location, radius, ELEMENT_LIMIT)
+        val radius = radiusOf(query)
         return cache.getOrFetch(
-            key = CacheKey.of("osm-lodgings", overpassQl),
+            key = cacheKey(query.location, radius),
             ttl = CachePolicy.LODGINGS,
             forceRefresh = forceRefresh,
-            fetch = { api.query(overpassQl) },
-            parse = { body -> parseElements(body).mapNotNullSafely { it.toLodging() } },
+            fetch = { fetchLodgings(query.location, radius) },
+            parse = ::parseLodgings,
         )
     }
+
+    override suspend fun savedLodgings(query: LodgingQuery): List<Lodging>? =
+        cache.peek(cacheKey(query.location, radiusOf(query)), ::parseLodgings)
+
+    /** Prima Nominatim; se non risponde o non trova nulla, la query completa di Overpass. */
+    private suspend fun fetchLodgings(center: GeoPoint, radius: Int): String =
+        nominatim?.let { quickElements(it, NOMINATIM_PHRASES, center, radius, languageCode) }
+            ?: overpass.query(OverpassQueries.lodgings(center, radius, ELEMENT_LIMIT))
+
+    private fun parseLodgings(body: String): List<Lodging> = parseElements(body).mapNotNullSafely { it.toLodging() }
+
+    private fun radiusOf(query: LodgingQuery): Int = query.radiusMeters.coerceIn(MIN_RADIUS_METERS, MAX_RADIUS_METERS)
+
+    private fun cacheKey(center: GeoPoint, radius: Int): String =
+        CacheKey.of("osm-lodgings", String.format(Locale.ROOT, "%.4f,%.4f", center.latitude, center.longitude), radius, languageCode)
 
     private fun OsmElement.toLodging(): Lodging? {
         val lodgingType = OsmLabels.lodgingType(tags["tourism"]) ?: return null
@@ -138,7 +171,34 @@ class OsmLodgingDataSource internal constructor(
         const val MIN_RADIUS_METERS = 1_000
         const val MAX_RADIUS_METERS = 3_000
         const val ELEMENT_LIMIT = 600
+
+        /** "Special phrases" di Nominatim per hotel, ostelli e pensioni/B&B (tourism=guest_house). */
+        val NOMINATIM_PHRASES = listOf("hotel", "hostel", "guest house")
     }
+}
+
+/** Il massimo che Nominatim restituisce per ricerca. */
+internal const val NOMINATIM_LIMIT = 40
+
+private val NOMINATIM_RESULTS = ListSerializer(NominatimPlace.serializer())
+
+/**
+ * Luoghi delle ricerche [phrases] di Nominatim attorno a [center], già nel formato di Overpass (così la cache ha un
+ * solo formato e l'interpretazione è la stessa); `null` se una ricerca non riesce o non si trova nulla, per passare
+ * alla query completa di Overpass.
+ */
+private suspend fun quickElements(api: NominatimApi, phrases: List<String>, center: GeoPoint, radius: Int, languageCode: String): String? {
+    val elements = try {
+        phrases
+            .flatMap { phrase -> NetworkJson.decodeFromString(NOMINATIM_RESULTS, api.search(phrase, center, radius, languageCode, NOMINATIM_LIMIT)) }
+            .mapNotNull { it.toOsmElement() }
+            .distinctBy { it.type to it.id }
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        return null
+    }
+    return if (elements.isEmpty()) null else NetworkJson.encodeToString(OverpassResponse.serializer(), OverpassResponse(elements = elements))
 }
 
 /** Traduzione dei valori di OpenStreetMap nei concetti e nei testi (italiani) dell'app. */

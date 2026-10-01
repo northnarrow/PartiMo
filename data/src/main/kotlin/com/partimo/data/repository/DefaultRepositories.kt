@@ -78,8 +78,10 @@ import com.partimo.domain.repository.TripWeatherRepository
 import com.partimo.domain.repository.WeatherRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.YearMonth
+import kotlin.coroutines.cancellation.CancellationException
 
 // Implementazioni dei repository di dominio: eseguono la sorgente dati sul dispatcher di I/O e
 // convertono ogni eccezione in DataError (safeApiCall), così i casi d'uso non gestiscono eccezioni.
@@ -193,6 +195,16 @@ class DefaultLodgingRepository(
 ) : LodgingRepository {
     override suspend fun findLodgings(query: LodgingQuery, forceRefresh: Boolean): DataResult<List<Lodging>> =
         safeApiCall(ioDispatcher) { dataSource.findLodgings(query, forceRefresh) }
+
+    override suspend fun savedLodgings(query: LodgingQuery): List<Lodging>? = withContext(ioDispatcher) {
+        try {
+            dataSource.savedLodgings(query)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            null
+        }
+    }
 }
 
 class DefaultEventRepository(

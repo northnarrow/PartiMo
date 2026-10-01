@@ -17,12 +17,16 @@ class FindLodgingsUseCase(
 ) {
 
     suspend operator fun invoke(center: GeoPoint, forceRefresh: Boolean = false): DataResult<List<Lodging>> =
-        repository.findLodgings(LodgingQuery(center), forceRefresh).map { lodgings ->
-            lodgings
-                .distinctBy { it.id }
-                .sortedWith(compareBy<Lodging> { it.location.distanceTo(center) }.thenByDescending { it.starRating ?: 0 })
-                .take(maxResults)
-        }
+        repository.findLodgings(LodgingQuery(center), forceRefresh).map { lodgings -> arrange(lodgings, center) }
+
+    /** L'ultimo elenco salvato, anche se scaduto, nello stesso ordine: si mostra subito mentre si aggiorna. */
+    suspend fun saved(center: GeoPoint): List<Lodging>? =
+        repository.savedLodgings(LodgingQuery(center))?.let { lodgings -> arrange(lodgings, center) }?.takeIf { it.isNotEmpty() }
+
+    private fun arrange(lodgings: List<Lodging>, center: GeoPoint): List<Lodging> = lodgings
+        .distinctBy { it.id }
+        .sortedWith(compareBy<Lodging> { it.location.distanceTo(center) }.thenByDescending { it.starRating ?: 0 })
+        .take(maxResults)
 
     private companion object {
         const val DEFAULT_MAX_RESULTS = 25

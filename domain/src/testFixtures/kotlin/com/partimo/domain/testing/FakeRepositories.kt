@@ -187,8 +187,12 @@ class FakeRestaurantRepository(
 ) : RestaurantRepository {
     val queries = mutableListOf<RestaurantSearchQuery>()
 
+    /** `forceRefresh` di ogni richiesta, nell'ordine. */
+    val forceRefreshes = mutableListOf<Boolean>()
+
     override suspend fun searchRestaurants(query: RestaurantSearchQuery, forceRefresh: Boolean): DataResult<List<Restaurant>> {
         queries += query
+        forceRefreshes += forceRefresh
         if (delayMillis > 0) delay(delayMillis)
         return result
     }
@@ -225,14 +229,22 @@ class FakeHolidayRepository(
 class FakeLodgingRepository(
     var result: DataResult<List<Lodging>> = DataResult.Success(emptyList()),
     var delayMillis: Long = 0,
+    /** Elenco salvato sul telefono (anche scaduto); `null` = nessuno. */
+    var saved: List<Lodging>? = null,
 ) : LodgingRepository {
     val queries = mutableListOf<LodgingQuery>()
 
+    /** `forceRefresh` di ogni richiesta, nell'ordine. */
+    val forceRefreshes = mutableListOf<Boolean>()
+
     override suspend fun findLodgings(query: LodgingQuery, forceRefresh: Boolean): DataResult<List<Lodging>> {
         queries += query
+        forceRefreshes += forceRefresh
         if (delayMillis > 0) delay(delayMillis)
         return result
     }
+
+    override suspend fun savedLodgings(query: LodgingQuery): List<Lodging>? = saved
 }
 
 class FakeCitySearchRepository(

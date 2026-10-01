@@ -47,6 +47,9 @@ class ResponseCache(
         }
     }
 
+    /** Valore salvato per [key] qualunque sia la sua età, da mostrare mentre arriva quello aggiornato; `null` se non c'è. */
+    suspend fun <T> peek(key: String, parse: (String) -> T): T? = readCached(key, parse)?.value
+
     /** Elimina le entry più vecchie di [maxAge], che non servono più nemmeno come fallback offline. */
     suspend fun purgeOlderThan(maxAge: Duration): Int = dao.deleteOlderThan(clock.millis() - maxAge.toMillis())
 
@@ -85,13 +88,14 @@ internal object CachePolicy {
     val FLIGHT_PRICES: Duration = Duration.ofHours(3)
     val STAYS: Duration = Duration.ofHours(1)
 
-    /** POI e ristoranti cambiano raramente. */
+    /** I luoghi da vedere cambiano raramente. */
     val POIS: Duration = Duration.ofHours(24)
 
     /** Testi e crediti delle voci enciclopediche cambiano pochissimo. */
     val ARTICLES: Duration = Duration.ofDays(7)
-    val RESTAURANTS: Duration = Duration.ofHours(12)
-    val LODGINGS: Duration = Duration.ofHours(24)
+    /** Locali e strutture di OpenStreetMap cambiano di rado, e le istanze pubbliche vanno usate con parsimonia. */
+    val RESTAURANTS: Duration = Duration.ofDays(2)
+    val LODGINGS: Duration = Duration.ofDays(7)
 
     /** Gli eventi ricorrenti e le festività cambiano pochissimo (e il servizio degli eventi limita le richieste). */
     val EVENTS: Duration = Duration.ofDays(7)
