@@ -255,8 +255,9 @@ class TripDashboardViewModel(
             departureDate = trip.departureDate,
             returnDate = trip.returnDate,
             adults = trip.travellers,
-            // Chi raccoglie i prezzi di molte date (Aviasales) propone i voli più convenienti di tutto il periodo.
-            flexibleDepartures = _uiState.value.period.departureWindow(LocalDate.now(clock)),
+            // Chi raccoglie i prezzi di molte date (Aviasales) propone i voli più convenienti del periodo
+            // o, con le date scelte, quelli di quei giorni e poi dei giorni vicini.
+            flexibleDates = _uiState.value.period.flexibleDates(LocalDate.now(clock)),
         )
         val state = searchFlights(query, forceRefresh = forceRefresh).toListUiState()
         _uiState.update { it.copy(flights = state) }
@@ -324,7 +325,7 @@ class TripDashboardViewModel(
 
     /** Ora locale della meta, solo per i viaggi imminenti: per quelli lontani "aperto ora" non serve. */
     private fun nowAtDestination(period: TravelPeriod): LocalDateTime? =
-        if (period == TravelPeriod.NextDays) LocalDateTime.now(clock.withZone(destination.timeZone)) else null
+        if (period.isImminent(LocalDate.now(clock))) LocalDateTime.now(clock.withZone(destination.timeZone)) else null
 
     private suspend fun loadRestaurants(trip: TripContext, forceRefresh: Boolean) {
         _uiState.update { it.copy(nowAtDestination = nowAtDestination(it.period)) }

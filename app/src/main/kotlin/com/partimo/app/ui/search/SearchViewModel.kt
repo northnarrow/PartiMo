@@ -89,6 +89,12 @@ class SearchViewModel(
         }
     }
 
+    /** Date esatte scelte nelle celle «Andata» e «Ritorno»: diventano il periodo del viaggio. */
+    fun onDatesSelected(departure: LocalDate, returning: LocalDate) {
+        if (returning.isBefore(departure)) return
+        onPeriodSelected(TravelPeriod.Dates(departure, returning))
+    }
+
     fun onRecommend() {
         recommendationPage = 0
         loadRecommendations()

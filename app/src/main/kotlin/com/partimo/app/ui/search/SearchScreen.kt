@@ -99,6 +99,8 @@ data class SearchActions(
     val onClearQuery: () -> Unit = {},
     val onRetrySearch: () -> Unit = {},
     val onPeriodSelected: (TravelPeriod) -> Unit = {},
+    /** Date esatte scelte nelle celle «Andata» e «Ritorno». */
+    val onDatesSelected: (LocalDate, LocalDate) -> Unit = { _, _ -> },
     val onChooseDeparture: () -> Unit = {},
     val onCitySelected: (CityPlace) -> Unit = {},
     val onRecommend: () -> Unit = {},
@@ -136,6 +138,7 @@ fun SearchRoute(
             onClearQuery = viewModel::onClearQuery,
             onRetrySearch = viewModel::onRetrySearch,
             onPeriodSelected = viewModel::onPeriodSelected,
+            onDatesSelected = viewModel::onDatesSelected,
             onChooseDeparture = onChooseDeparture,
             onCitySelected = viewModel::onCitySelected,
             onRecommend = viewModel::onRecommend,
@@ -226,6 +229,12 @@ fun SearchScreen(
                             selected = state.period,
                             today = state.today,
                             onSelected = actions.onPeriodSelected,
+                        )
+                        TripDatesRow(
+                            period = state.period,
+                            today = state.today,
+                            onDatesSelected = actions.onDatesSelected,
+                            modifier = Modifier.padding(top = 12.dp),
                         )
                     }
                 }

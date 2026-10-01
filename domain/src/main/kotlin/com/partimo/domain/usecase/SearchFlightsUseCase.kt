@@ -38,9 +38,11 @@ class SearchFlightsUseCase(
         }
         return repository.searchFlights(query, forceRefresh).map { offers ->
             val comparable = offers.inSingleCurrency(query.currencyCode) { it.totalPrice.currencyCode }
-            scorer.scoreFlights(comparable)
+            val sorted = scorer.scoreFlights(comparable)
                 .filter { filter.matches(it.offer) }
                 .sortedWith(comparatorFor(sortBy))
+            // Con le date scelte dall'utente i voli proprio in quei giorni vengono prima di quelli dei giorni vicini.
+            if (query.flexibleDates?.exactDatesFirst == true) sorted.sortedByDescending { query.isOnTripDates(it.offer) } else sorted
         }
     }
 

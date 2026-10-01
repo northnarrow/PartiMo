@@ -24,11 +24,11 @@ data class FlightSearchQuery(
     /** Valuta preferita: il ranking confronta solo prezzi nella stessa valuta. */
     val currencyCode: String = "EUR",
     /**
-     * Date flessibili: oltre alle date indicate vanno bene le partenze in questa finestra, con un soggiorno
-     * di [FLEXIBLE_STAY_NIGHTS] notti. Le usano i provider che raccolgono i prezzi di molte date
-     * (Aviasales); quelli che cercano in tempo reale restano sulle date indicate. `null` = solo quelle.
+     * Date flessibili: oltre alle date indicate vanno bene altre partenze e altri soggiorni. Le usano i
+     * provider che raccolgono i prezzi di molte date (Aviasales); quelli che cercano in tempo reale
+     * restano sulle date indicate. `null` = solo quelle.
      */
-    val flexibleDepartures: ClosedRange<LocalDate>? = null,
+    val flexibleDates: FlexibleDates? = null,
 ) {
     /** Restituisce il primo problema di validazione, oppure `null` se la ricerca è valida. */
     fun validate(today: LocalDate): QueryIssue? = when {
@@ -40,23 +40,36 @@ data class FlightSearchQuery(
         else -> null
     }
 
-    /** `true` se un volo che parte e torna in questi giorni risponde alla ricerca (vedi [flexibleDepartures]). */
+    /** `true` se un volo che parte e torna in questi giorni risponde alla ricerca (vedi [flexibleDates]). */
     fun matchesDates(departure: LocalDate, returning: LocalDate?): Boolean {
-        val window = flexibleDepartures ?: return departure == departureDate && returning == returnDate
-        if (departure !in window) return false
+        if (departure == departureDate && returning == returnDate) return true
+        val flexible = flexibleDates ?: return false
+        if (departure !in flexible.departures) return false
         if (returnDate == null || returning == null) return returnDate == null && returning == null
-        return ChronoUnit.DAYS.between(departure, returning) in FLEXIBLE_STAY_NIGHTS
+        return ChronoUnit.DAYS.between(departure, returning) in flexible.stayNights
     }
+
+    /** `true` se il volo parte e torna proprio nei giorni della ricerca. */
+    fun isOnTripDates(offer: FlightOffer): Boolean =
+        offer.outbound.departureTime.toLocalDate() == departureDate && offer.inbound?.departureTime?.toLocalDate() == returnDate
 
     private fun String.isIataCode(): Boolean = length == 3 && all(Char::isLetter)
 
     companion object {
         const val MAX_PASSENGERS = 9
-
-        /** Soggiorni accettati con le date flessibili: da un fine settimana a una settimana. */
-        val FLEXIBLE_STAY_NIGHTS: LongRange = 2L..7L
     }
 }
+
+/**
+ * Date flessibili di una ricerca voli: partenze in [departures] con un soggiorno di [stayNights] notti
+ * (le regole per ogni tipo di periodo sono in `TravelPeriod.flexibleDates`).
+ */
+data class FlexibleDates(
+    val departures: ClosedRange<LocalDate>,
+    val stayNights: LongRange,
+    /** Date scelte dall'utente: i voli proprio in quei giorni vengono prima degli altri. */
+    val exactDatesFirst: Boolean = false,
+)
 
 /** Tratta (andata o ritorno), eventualmente composta da più segmenti con scalo. */
 data class FlightSlice(

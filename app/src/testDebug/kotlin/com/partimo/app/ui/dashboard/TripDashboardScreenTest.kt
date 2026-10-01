@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
@@ -271,6 +272,18 @@ class TripDashboardScreenTest {
     }
 
     @Test
+    fun `con le date scelte il volo di quei giorni è segnalato e i giorni vicini vengono dopo`() {
+        showDashboard(PreviewData.recentFlightPricesDatesState())
+
+        composeRule.onNodeWithText(text(R.string.flights_links_recent_dates)).assertExists()
+        composeRule.onNodeWithText("📅 11–13 dic").assertExists()
+        composeRule.onAllNodesWithText("📅 " + text(R.string.flight_on_trip_dates)).assertCountEquals(1)
+        composeRule.onNodeWithText(text(R.string.flight_outbound_day, "gio 10 dic")).assertExists()
+        // Il miglior rapporto qualità/prezzo è il volo del giorno prima, anche se viene dopo.
+        composeRule.onAllNodesWithText("⭐ " + text(R.string.best_value_badge)).assertCountEquals(1)
+    }
+
+    @Test
     fun `senza prezzi recenti per la tratta lo dice e restano Google Voli e Skyscanner`() {
         showDashboard(PreviewData.recentFlightPricesState().copy(flights = UiState.Empty))
 
@@ -473,5 +486,11 @@ class TripDashboardScreenTest {
 
         state.value = PreviewData.recentFlightPricesState()
         saveScreenshot("trip_dashboard_flights.png")
+    }
+
+    @Test
+    fun `salva lo screenshot dei voli per le date scelte`() {
+        showDashboard(PreviewData.recentFlightPricesDatesState())
+        saveScreenshot("trip_dashboard_dates.png")
     }
 }

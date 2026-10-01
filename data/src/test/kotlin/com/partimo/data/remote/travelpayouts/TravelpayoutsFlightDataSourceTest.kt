@@ -8,6 +8,8 @@ import com.partimo.data.testing.jsonHeaders
 import com.partimo.data.testing.mockHttpClient
 import com.partimo.domain.common.DataError
 import com.partimo.domain.common.DataOrigin
+import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.flight.FlexibleDates
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.testing.failureError
 import io.ktor.client.engine.mock.respond
@@ -58,7 +60,7 @@ class TravelpayoutsFlightDataSourceTest {
         destinationIata = "VIE",
         departureDate = LocalDate.of(2026, Month.DECEMBER, 10),
         returnDate = LocalDate.of(2026, Month.DECEMBER, 14),
-        flexibleDepartures = LocalDate.of(2026, Month.DECEMBER, 1)..LocalDate.of(2026, Month.DECEMBER, 31),
+        flexibleDates = FlexibleDates(LocalDate.of(2026, Month.DECEMBER, 1)..LocalDate.of(2026, Month.DECEMBER, 31), TravelPeriod.FLEXIBLE_STAY_NIGHTS),
     )
 
     @Test
@@ -102,7 +104,7 @@ class TravelpayoutsFlightDataSourceTest {
             destinationIata = "LHR",
             departureDate = LocalDate.of(2026, Month.NOVEMBER, 10),
             returnDate = LocalDate.of(2026, Month.NOVEMBER, 14),
-            flexibleDepartures = LocalDate.of(2026, Month.NOVEMBER, 1)..LocalDate.of(2026, Month.NOVEMBER, 30),
+            flexibleDates = FlexibleDates(LocalDate.of(2026, Month.NOVEMBER, 1)..LocalDate.of(2026, Month.NOVEMBER, 30), TravelPeriod.FLEXIBLE_STAY_NIGHTS),
         )
 
         val offers = source("prices_mil_lon_2026_11.json").searchOffers(november, forceRefresh = false).data
@@ -131,7 +133,8 @@ class TravelpayoutsFlightDataSourceTest {
 
         val offer = source("prices_rom_vie_2026_10.json").searchOffers(exact, forceRefresh = false).data.single()
 
-        assertEquals("2026-10", requests.single().url.parameters["departure_at"])
+        assertEquals("2026-10-22", requests.single().url.parameters["departure_at"], "Solo il giorno di partenza...")
+        assertEquals("2026-10-27", requests.single().url.parameters["return_at"], "...e quello di ritorno")
         assertEquals("75.00", offer.totalPrice.amount.toPlainString())
         assertEquals(LocalDateTime.of(2026, Month.OCTOBER, 22, 10, 15), offer.outbound.arrivalTime)
         // Il 25 ottobre torna l'ora solare: 12:40 a Vienna più 4 h 15 con uno scalo fa le 16:55 a Roma.
@@ -148,7 +151,7 @@ class TravelpayoutsFlightDataSourceTest {
         val nextDays = december.copy(
             departureDate = LocalDate.of(2026, Month.OCTOBER, 28),
             returnDate = LocalDate.of(2026, Month.NOVEMBER, 1),
-            flexibleDepartures = LocalDate.of(2026, Month.OCTOBER, 28)..LocalDate.of(2026, Month.NOVEMBER, 3),
+            flexibleDates = FlexibleDates(LocalDate.of(2026, Month.OCTOBER, 28)..LocalDate.of(2026, Month.NOVEMBER, 3), TravelPeriod.FLEXIBLE_STAY_NIGHTS),
         )
 
         val offers = source.searchOffers(nextDays, forceRefresh = false).data
@@ -156,6 +159,41 @@ class TravelpayoutsFlightDataSourceTest {
         assertEquals(listOf("2026-10", "2026-11"), requests.map { it.url.parameters["departure_at"] })
         assertEquals(listOf("116.00", "131.00"), offers.map { it.totalPrice.amount.toPlainString() })
         assertTrue(offers.all { it.outbound.originIata == "CIA" })
+    }
+
+    @Test
+    fun `con le date scelte si cercano quei giorni e il mese per le date vicine`() = runTest {
+        val dates = TravelPeriod.Dates(LocalDate.of(2026, Month.DECEMBER, 11), LocalDate.of(2026, Month.DECEMBER, 13))
+        val query = december.copy(departureDate = dates.departure, returnDate = dates.returning, flexibleDates = dates.flexibleDates(LocalDate.of(2026, Month.OCTOBER, 1)))
+        val source = source { request ->
+            val body = if (request.url.parameters["return_at"] != null) EMPTY else fixture("prices_rom_vie_2026_12.json")
+            body to HttpStatusCode.OK
+        }
+
+        val offers = source.searchOffers(query, forceRefresh = false).data
+
+        assertEquals(listOf("2026-12-11" to "2026-12-13", "2026-12" to null), requests.map { it.url.parameters["departure_at"] to it.url.parameters["return_at"] })
+        // Partenze dall'8 al 14 dicembre, da 0 a 4 notti: delle tariffe del mese resta solo quella dell'11-13.
+        assertEquals(listOf("88.00"), offers.map { it.totalPrice.amount.toPlainString() })
+        assertTrue(query.isOnTripDates(offers.single()))
+    }
+
+    @Test
+    fun `le tariffe delle date scelte restano anche con tante tariffe più basse nei giorni vicini`() = runTest {
+        val dates = TravelPeriod.Dates(LocalDate.of(2026, Month.DECEMBER, 11), LocalDate.of(2026, Month.DECEMBER, 13))
+        val query = december.copy(departureDate = dates.departure, returnDate = dates.returning, flexibleDates = dates.flexibleDates(LocalDate.of(2026, Month.OCTOBER, 1)))
+        fun fare(price: Int, departure: String, returning: String, number: Int) =
+            """{"origin_airport":"FCO","destination_airport":"VIE","price":$price,"airline":"FR","flight_number":"$number",""" +
+                """"departure_at":"${departure}T21:10:00+01:00","return_at":"${returning}T08:25:00+01:00","transfers":0,""" +
+                """"return_transfers":0,"duration_to":105,"duration_back":105}"""
+        val nearby = (1..45).map { fare(30 + it, "2026-12-10", "2026-12-12", 1000 + it) }
+        val body = """{"success":true,"currency":"eur","data":[${(nearby + fare(120, "2026-12-11", "2026-12-13", 7178)).joinToString(",")}]}"""
+
+        val offers = source { body to HttpStatusCode.OK }.searchOffers(query, forceRefresh = false).data
+
+        assertEquals(40, offers.size)
+        assertTrue(query.isOnTripDates(offers.first()), "La tariffa delle date scelte viene prima")
+        assertEquals("120.00", offers.first().totalPrice.amount.toPlainString())
     }
 
     @Test

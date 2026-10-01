@@ -1,6 +1,7 @@
 package com.partimo.domain.model
 
 import com.partimo.domain.common.QueryIssue
+import com.partimo.domain.model.flight.FlexibleDates
 import com.partimo.domain.model.flight.FlightSearchQuery
 import com.partimo.domain.model.poi.Season
 import com.partimo.domain.model.stay.AccommodationSearchQuery
@@ -106,7 +107,7 @@ class QueryValidationTest {
 
     @Test
     fun `con le date flessibili vanno bene le partenze nella finestra per due-sette notti`() {
-        val flexible = flightQuery.copy(flexibleDepartures = today.plusDays(1)..today.plusDays(30))
+        val flexible = flightQuery.copy(flexibleDates = FlexibleDates(today.plusDays(1)..today.plusDays(30), TravelPeriod.FLEXIBLE_STAY_NIGHTS))
 
         assertTrue(flexible.matchesDates(today.plusDays(3), today.plusDays(5)), "Un fine settimana")
         assertTrue(flexible.matchesDates(today.plusDays(30), today.plusDays(37)), "Una settimana, partendo l'ultimo giorno")
@@ -115,6 +116,17 @@ class QueryValidationTest {
         assertFalse(flexible.matchesDates(today.plusDays(31), today.plusDays(34)), "Fuori dalla finestra")
         assertFalse(flexible.matchesDates(today.plusDays(3), null), "Sola andata per un viaggio con ritorno")
         assertTrue(flexible.copy(returnDate = null).matchesDates(today.plusDays(3), null))
+        assertTrue(flexible.matchesDates(today.plusDays(10), today.plusDays(14)), "Le date del viaggio vanno sempre bene")
+    }
+
+    @Test
+    fun `un volo è nelle date del viaggio solo se parte e torna proprio in quei giorni`() {
+        val offer = TestData.flightOffer("a", "88", departure = today.plusDays(10).atTime(8, 0))
+        val back = offer.outbound.copy(departureTime = today.plusDays(14).atTime(18, 0), arrivalTime = today.plusDays(14).atTime(19, 30))
+
+        assertTrue(flightQuery.isOnTripDates(offer.copy(slices = offer.slices + back)))
+        assertFalse(flightQuery.isOnTripDates(offer), "Senza ritorno")
+        assertFalse(flightQuery.copy(departureDate = today.plusDays(9)).isOnTripDates(offer.copy(slices = offer.slices + back)))
     }
 
     @Test

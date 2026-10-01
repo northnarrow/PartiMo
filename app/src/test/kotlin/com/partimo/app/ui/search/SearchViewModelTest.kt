@@ -27,6 +27,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
+import java.time.LocalDate
 import java.time.Month
 import java.time.YearMonth
 import java.time.ZoneOffset
@@ -222,6 +223,21 @@ class SearchViewModelTest {
     }
 
     @Test
+    fun `le date di andata e ritorno diventano il periodo del viaggio`() = runTest {
+        val viewModel = createViewModel()
+        val dates = TravelPeriod.Dates(LocalDate.of(2026, Month.DECEMBER, 10), LocalDate.of(2026, Month.DECEMBER, 14))
+
+        viewModel.onDatesSelected(dates.departure, dates.returning)
+        assertEquals(dates, viewModel.uiState.value.period)
+
+        viewModel.onDatesSelected(LocalDate.of(2026, Month.DECEMBER, 20), LocalDate.of(2026, Month.DECEMBER, 18))
+        assertEquals(dates, viewModel.uiState.value.period, "Un ritorno prima dell'andata si ignora")
+
+        viewModel.onPeriodSelected(december)
+        assertEquals(december, viewModel.uiState.value.period, "Un mese sostituisce le date")
+    }
+
+    @Test
     fun `scegliere un consiglio apre la sua città`() = runTest {
         val viewModel = createViewModel()
         viewModel.onRecommend()
@@ -245,6 +261,13 @@ class DashboardDestinationTest {
 
         assertEquals(SampleDestinations.VIENNA, route.toDestination())
         assertEquals(july, route.tripPeriod())
+    }
+
+    @Test
+    fun `la rotta conserva anche le date di andata e ritorno`() {
+        val dates = TravelPeriod.Dates(LocalDate.of(2026, Month.DECEMBER, 10), LocalDate.of(2026, Month.DECEMBER, 14))
+
+        assertEquals(dates, DashboardDestination.from(SampleDestinations.VIENNA, dates).tripPeriod())
     }
 
     @Test

@@ -187,7 +187,7 @@ class TripDashboardViewModelTest {
         val flightQuery = flights.queries.single()
         assertEquals("MXP", flightQuery.originIata)
         assertEquals("VIE", flightQuery.destinationIata)
-        assertEquals(LocalDate.of(2026, Month.DECEMBER, 1)..LocalDate.of(2026, Month.DECEMBER, 31), flightQuery.flexibleDepartures, "Tutto dicembre")
+        assertEquals(LocalDate.of(2026, Month.DECEMBER, 1)..LocalDate.of(2026, Month.DECEMBER, 31), flightQuery.flexibleDates?.departures, "Tutto dicembre")
         assertEquals(FlightPriceSource.LIVE_OFFERS, state.flightPriceSource)
         assertEquals(SampleDestinations.VIENNA.arrivalHub, transit.queries.single().origin)
     }
@@ -199,7 +199,7 @@ class TripDashboardViewModelTest {
         val state = createViewModel(initialPeriod = TravelPeriod.NextDays, flightRepository = recent).uiState.value
 
         assertEquals(FlightPriceSource.RECENT_SEARCHES, state.flightPriceSource)
-        assertEquals(TestData.TODAY.plusDays(1)..TestData.TODAY.plusDays(7), recent.queries.single().flexibleDepartures, "La prossima settimana")
+        assertEquals(TestData.TODAY.plusDays(1)..TestData.TODAY.plusDays(7), recent.queries.single().flexibleDates?.departures, "La prossima settimana")
     }
 
     @Test
@@ -350,6 +350,24 @@ class TripDashboardViewModelTest {
     }
 
     @Test
+    fun `con le date scelte tutta la dashboard usa quei giorni e i voli li mettono per primi`() = runTest {
+        val dates = TravelPeriod.Dates(LocalDate.of(2026, Month.DECEMBER, 11), LocalDate.of(2026, Month.DECEMBER, 13))
+
+        val state = createViewModel(initialPeriod = dates).uiState.value
+
+        assertEquals(dates, state.period)
+        assertEquals(listOf(TravelPeriod.NextDays, dates), state.periods.take(2), "Le date compaiono tra i periodi")
+        assertEquals(dates.departure, state.trip.departureDate)
+        assertEquals(dates.returning, state.trip.returnDate)
+        val query = flights.queries.single()
+        assertEquals(dates.departure, query.departureDate)
+        assertEquals(dates.returning, query.returnDate)
+        assertTrue(query.flexibleDates?.exactDatesFirst == true)
+        assertEquals(LocalDate.of(2026, Month.DECEMBER, 8)..LocalDate.of(2026, Month.DECEMBER, 14), query.flexibleDates?.departures)
+        assertNull(state.nowAtDestination, "Si parte tra più di due mesi")
+    }
+
+    @Test
     fun `cambiando mese i dati vengono ricaricati con le nuove date`() = runTest {
         val viewModel = createViewModel()
         val july = TravelPeriod.InMonth(YearMonth.of(2027, Month.JULY))
@@ -360,7 +378,7 @@ class TripDashboardViewModelTest {
         assertEquals(july, state.period)
         assertEquals(LocalDate.of(2027, Month.JULY, 10), state.trip.departureDate)
         assertEquals(LocalDate.of(2027, Month.JULY, 10), flights.queries.last().departureDate)
-        assertEquals(LocalDate.of(2027, Month.JULY, 31), flights.queries.last().flexibleDepartures?.endInclusive)
+        assertEquals(LocalDate.of(2027, Month.JULY, 31), flights.queries.last().flexibleDates?.departures?.endInclusive)
         assertEquals(Month.JULY, pois.queries.last().travelMonth)
     }
 

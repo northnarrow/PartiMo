@@ -3,7 +3,9 @@
 App Android nativa (Kotlin) per organizzare viaggi in modo intelligente in qualunque città del mondo.
 All'avvio chiede "Dove vuoi andare?": si cerca una città oppure si tocca **Consigliami** per ricevere
 le mete più adatte al periodo scelto. Il **punto di partenza** lo decide l'utente (città e aeroporto)
-e il periodo può essere "Prossimi giorni" o **uno qualunque dei prossimi dodici mesi**.
+e il periodo può essere "Prossimi giorni", **uno qualunque dei prossimi dodici mesi** oppure **date esatte**:
+sotto i mesi ci sono le celle **Andata** e **Ritorno**, che aprono il calendario (fino a un anno avanti,
+al massimo 14 notti). Con le date esatte voli, alloggi, eventi, meteo, budget e itinerario usano quei giorni.
 
 La meta scelta apre una dashboard divisa in sezioni, ognuna con il suo pulsante nella barra in basso:
 **Voli**, **Alloggi**, **Da vedere**, **Trasporti**, **Ristoranti**. Il pulsante **Aggiorna** cerca le
@@ -30,7 +32,9 @@ con i mezzi), che si aprono con tratta e date del viaggio. I siti si aprono nel 
 PartiMo, senza uscire dall'app; le pagine di Google Maps nell'app Maps.
 
 Con il token gratuito di **Travelpayouts** la sezione **Voli** mostra i **prezzi reali** trovati negli
-ultimi giorni su **Aviasales** per **tutto il mese scelto** (o la prossima settimana): compagnia con il
+ultimi giorni su **Aviasales** per **tutto il mese scelto** (o la prossima settimana; con le date esatte
+prima i voli di quei giorni, segnati con «📅 Nelle tue date», poi quelli fino a tre giorni prima o dopo
+con un soggiorno simile, se costano meno): compagnia con il
 logo, date e orari di andata e ritorno, scali, notti sul posto e giorno in cui è stato trovato il prezzo,
 cercando in tutti gli aeroporti della città (Milano comprende Bergamo, Londra anche Stansted). Ogni volo
 si apre su Aviasales per verificare il prezzo e prenotare; la campanella segue il volo più conveniente
@@ -93,7 +97,7 @@ Altri strumenti del viaggio, tutti senza chiavi:
 - Widget **Prossimo viaggio** per la schermata Home, con il conto alla rovescia.
 - **Fonti, licenze e privacy** (ⓘ nella schermata iniziale).
 
-<img src="docs/search_ideas.png" alt="Schermata iniziale con partenza, mesi e consigli" width="240" /> <img src="docs/departure_picker.png" alt="Scelta dell'aeroporto di partenza" width="240" /> <img src="docs/trip_dashboard_flights.png" alt="Dashboard: voli con i prezzi reali trovati su Aviasales nel mese scelto" width="240" /> <img src="docs/trip_dashboard.png" alt="Dashboard: sezione Voli con i collegamenti a Google Voli e Skyscanner" width="240" /> <img src="docs/trip_dashboard_stays.png" alt="Dashboard: alloggi reali da OpenStreetMap con Booking.com e Airbnb" width="240" /> <img src="docs/trip_dashboard_explore.png" alt="Dashboard: sezione Da vedere" width="240" /> <img src="docs/place_detail.png" alt="Scheda di un luogo con descrizione, storia e pulsante Naviga" width="240" /> <img src="docs/trip_dashboard_transit.png" alt="Dashboard: trasporti con il percorso reale su Google Maps" width="240" /> <img src="docs/trip_dashboard_restaurants.png" alt="Dashboard: ristoranti reali da OpenStreetMap" width="240" /> <img src="docs/guide.png" alt="Guida del viaggio: meteo, alba e tramonto, informazioni pratiche ed emergenze" width="240" /> <img src="docs/guide_currency.png" alt="Guida con previsioni giorno per giorno e cambio valuta" width="240" /> <img src="docs/itinerary.png" alt="Itinerario con l'IA giorno per giorno, con giro a piedi e calendario" width="240" /> <img src="docs/itinerary_packing.png" alt="Lista per la valigia dell'itinerario" width="240" /> <img src="docs/chat.png" alt="Chiedi a PartiMo: domande all'assistente sul viaggio" width="240" /> <img src="docs/favorites.png" alt="Preferiti del viaggio con mappa, giro a piedi e condivisione" width="240" /> <img src="docs/translator.png" alt="Traduttore con Ascolta, Copia, Mostra in grande e frasario" width="240" /> <img src="docs/translator_pack.png" alt="Traduttore al primo uso: pacchetto lingua da scaricare" width="240" /> <img src="docs/budget.png" alt="Budget del viaggio con spese in euro e in corone" width="240" /> <img src="docs/about.png" alt="Fonti, licenze e privacy" width="240" />
+<img src="docs/search_ideas.png" alt="Schermata iniziale con partenza, mesi e consigli" width="240" /> <img src="docs/search_dates.png" alt="Celle Andata e Ritorno con le date esatte del viaggio" width="240" /> <img src="docs/trip_dashboard_dates.png" alt="Voli nelle date scelte, poi quelli dei giorni vicini" width="240" /> <img src="docs/departure_picker.png" alt="Scelta dell'aeroporto di partenza" width="240" /> <img src="docs/trip_dashboard_flights.png" alt="Dashboard: voli con i prezzi reali trovati su Aviasales nel mese scelto" width="240" /> <img src="docs/trip_dashboard.png" alt="Dashboard: sezione Voli con i collegamenti a Google Voli e Skyscanner" width="240" /> <img src="docs/trip_dashboard_stays.png" alt="Dashboard: alloggi reali da OpenStreetMap con Booking.com e Airbnb" width="240" /> <img src="docs/trip_dashboard_explore.png" alt="Dashboard: sezione Da vedere" width="240" /> <img src="docs/place_detail.png" alt="Scheda di un luogo con descrizione, storia e pulsante Naviga" width="240" /> <img src="docs/trip_dashboard_transit.png" alt="Dashboard: trasporti con il percorso reale su Google Maps" width="240" /> <img src="docs/trip_dashboard_restaurants.png" alt="Dashboard: ristoranti reali da OpenStreetMap" width="240" /> <img src="docs/guide.png" alt="Guida del viaggio: meteo, alba e tramonto, informazioni pratiche ed emergenze" width="240" /> <img src="docs/guide_currency.png" alt="Guida con previsioni giorno per giorno e cambio valuta" width="240" /> <img src="docs/itinerary.png" alt="Itinerario con l'IA giorno per giorno, con giro a piedi e calendario" width="240" /> <img src="docs/itinerary_packing.png" alt="Lista per la valigia dell'itinerario" width="240" /> <img src="docs/chat.png" alt="Chiedi a PartiMo: domande all'assistente sul viaggio" width="240" /> <img src="docs/favorites.png" alt="Preferiti del viaggio con mappa, giro a piedi e condivisione" width="240" /> <img src="docs/translator.png" alt="Traduttore con Ascolta, Copia, Mostra in grande e frasario" width="240" /> <img src="docs/translator_pack.png" alt="Traduttore al primo uso: pacchetto lingua da scaricare" width="240" /> <img src="docs/budget.png" alt="Budget del viaggio con spese in euro e in corone" width="240" /> <img src="docs/about.png" alt="Fonti, licenze e privacy" width="240" />
 
 Negli screenshot (generati dai test, senza rete, con dati di esempio) le foto sono segnaposto grigi: nell'app si caricano
 le foto reali dei luoghi. La mappa non è tra gli screenshot: i test girano sulla JVM, dove la libreria
@@ -158,7 +162,7 @@ nativa della mappa non c'è.
 |---|---|---|---|
 | Ricerca mete nel mondo | `SearchCitiesUseCase`, `ResolveDestinationUseCase`, `AirportSelector` | [Open-Meteo Geocoding](https://open-meteo.com/en/docs/geocoding-api) (gratuito, senza chiave) + dataset aeroporti [OurAirports](https://ourairports.com/data/) | Ricerca con debounce e nomi in italiano; scelta automatica dell'aeroporto di arrivo (hub internazionale > grande > più vicino) |
 | Punto di partenza | `FindDepartureAirportsUseCase`, `ObserveDepartureUseCase`, `SaveDepartureUseCase` | Geocoding + aeroporti, salvato con DataStore | L'utente cerca la sua città e sceglie l'aeroporto: il consigliato è in cima, ma può preferirne un altro (es. Linate invece di Malpensa). Cambiandolo, i voli si ricaricano da soli |
-| Periodo del viaggio | `TravelPeriod` | – | "Prossimi giorni" + i dodici mesi successivi: ogni mese dell'anno è selezionabile, sia nella ricerca sia nella dashboard |
+| Periodo del viaggio | `TravelPeriod`, `FlexibleDates` | – | "Prossimi giorni" + i dodici mesi successivi: ogni mese dell'anno è selezionabile, sia nella ricerca sia nella dashboard. In più le **date esatte** (`TravelPeriod.Dates`) scelte nelle celle Andata e Ritorno con il calendario di Material 3: valgono per tutta la dashboard, i promemoria e gli avvisi |
 | Consigliami | `RecommendDestinationsUseCase` | Catalogo curato di ~50 mete + meteo attuale | Mete adatte al mese del viaggio: mercatini, aurora boreale, fioriture, foliage, mare, clima ideale |
 | Voli | `SearchFlightsUseCase`, `ValueForMoneyScorer`, `FlightSearchQuery.matchesDates` | [Aviasales Data API](https://support.travelpayouts.com/hc/en-us/articles/203956163-Aviasales-Data-API) (Travelpayouts, token gratuito) oppure [Duffel](https://duffel.com/docs) (offer requests) | Con Travelpayouts: prezzi reali trovati di recente per tutte le partenze del mese scelto (o dei prossimi sette giorni) con soggiorni da 2 a 7 notti, cercando per città (codici e fusi orari degli aeroporti e nomi delle compagnie inclusi nell'app, dai dati di Travelpayouts), orari locali calcolati con il fuso di ogni aeroporto (anche al cambio dell'ora), giorno in cui è stato trovato il prezzo e pagina del volo su Aviasales. Punteggio qualità/prezzo normalizzato. Sempre presenti i pulsanti **Google Voli** e **Skyscanner** con tratta e date compilate: senza chiavi le tariffe mostrate sono stime e i pulsanti portano ai prezzi reali |
 | Alloggi | `SearchAccommodationsUseCase`, `FindLodgingsUseCase` | Duffel Stays, oppure senza chiave [OpenStreetMap](https://www.openstreetmap.org) ([Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API)) | Con Duffel: offerte con prezzo, media bayesiana sulle recensioni, filtri e ordinamenti. Senza chiave: hotel, B&B, ostelli e appartamenti reali vicino al centro (tipo, stelle, indirizzo, distanza), ognuno con **Vedi prezzi** (Booking.com con nome e date), mappa e sito ufficiale; in alto Booking.com e Airbnb per tutta la città |
@@ -333,9 +337,10 @@ Ogni push su `main` e ogni pull request passano dalla CI di GitHub Actions
 (`.github/workflows/android.yml`): test unitari e APK di debug senza chiavi, scaricabile come
 artefatto. Dependabot propone gli aggiornamenti delle librerie ogni settimana.
 
-498 test unitari:
-- **`:domain` (192):** modelli e validazioni (compresi i dodici mesi di `TravelPeriod`, le date flessibili
-  dei voli con le notti del soggiorno e i periodi degli eventi, anche a cavallo di Capodanno), servizi di dominio (qualità/prezzo, stagionalità,
+514 test unitari:
+- **`:domain` (197):** modelli e validazioni (compresi i dodici mesi di `TravelPeriod`, le date esatte con
+  i giorni vicini, le date flessibili dei voli con le notti del soggiorno e i periodi degli eventi, anche a
+  cavallo di Capodanno), servizi di dominio (qualità/prezzo, stagionalità,
   notorietà dei luoghi, scelta degli aeroporti, rilevamento degli affari, estratti brevi di descrizione
   e storia) e tutti i casi d'uso, compresi ristoranti senza valutazioni, strutture ricettive, eventi
   del soggiorno, assistente con l'IA (pulizia dell'itinerario, conversazione), meteo del viaggio
@@ -344,7 +349,7 @@ artefatto. Dependabot propone gli aggiornamenti delle librerie ogni settimana.
   **reali** di Open-Meteo (più Sydney e la notte polare di Tromsø), viaggi salvati e preferiti, lingua
   del traduttore proposta per paese, CO₂ dei mezzi, budget con i cambi, promemoria prima della
   partenza e preparazione offline, con fake condivisi tramite `testFixtures`.
-- **`:data` (132):** cache e TTL, mappatura degli errori, client HTTP con risposte JSON simulate
+- **`:data` (134):** cache e TTL, mappatura degli errori, client HTTP con risposte JSON simulate
   (Duffel, Places, Routes, Open-Meteo, Wikipedia, Overpass, Wikidata, Nager.Date), prezzi dei voli con
   risposte **reali** della Data API di Aviasales (Roma–Vienna a ottobre e dicembre, Milano–Londra a
   novembre in `data/src/test/resources/travelpayouts`: ricerca per città, soggiorni da 2 a 7 notti,
@@ -362,7 +367,7 @@ artefatto. Dependabot propone gli aggiornamenti delle librerie ogni settimana.
   DataStore e formato di salvataggio (anche la valigia, i viaggi salvati, i preferiti, il budget e i
   promemoria già mostrati), lingue dei
   paesi come codici per il traduttore, mercato simulato della demo.
-- **`:app` (174):** ViewModel (dashboard con e senza chiavi, voli su tutto il mese con i prezzi di Aviasales, eventi del soggiorno, ricerca, scelta della
+- **`:app` (183):** ViewModel (dashboard con e senza chiavi, voli su tutto il mese o nelle date scelte con i prezzi di Aviasales, celle Andata e Ritorno con il calendario, eventi del soggiorno, ricerca, scelta della
   partenza, scheda del luogo, itinerario, domande all'assistente, guida con convertitore di valuta e
   fuso orario con l'ora legale, preferiti e viaggi salvati, mappa con filtri e «solo preferiti»,
   traduttore con pacchetti lingua, inversione e frasario, budget, «Dove sono»), notifiche dei
@@ -497,8 +502,11 @@ artefatto. Dependabot propone gli aggiornamenti delle librerie ogni settimana.
   librerie senza offuscare il codice dell'app (JSON, Room, WorkManager, rotte e widget usano i nomi
   delle classi): l'APK universale scende da circa 42 a 23 MB. È firmata con la chiave di debug, quindi
   si installa sopra le versioni di debug.
-- **Promemoria e uso offline:** due lavori di WorkManager, uno al giorno per i promemoria (solo per i
-  viaggi in un mese preciso: «Prossimi giorni» non ha una data fissa) e uno al giorno con il Wi-Fi per
+- **Icona:** il logo di PartiMo come icona adattiva. Il primo piano è il logo a tutto quadrato (WebP per
+  ogni densità, con i bordi estesi oltre l'area visibile), così il launcher applica la sua forma:
+  cerchio, squircle di Samsung o quadrato.
+- **Promemoria e uso offline:** due lavori di WorkManager, uno al giorno per i promemoria (per i viaggi
+  con le date esatte e per quelli in un mese preciso: «Prossimi giorni» non ha una data fissa) e uno al giorno con il Wi-Fi per
   riempire le cache, avviati solo finché ci sono viaggi salvati.
 - **Posizione:** «Dove sono» usa il LocationManager di Android (fornitore «fused» da Android 12),
   quindi funziona anche senza i servizi Google e con la sola posizione approssimativa; il permesso si

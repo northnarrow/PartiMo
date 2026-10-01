@@ -23,22 +23,28 @@ import java.util.Locale
 /** Tag della riga dei periodi, usato dai test UI per lo scroll orizzontale. */
 const val PERIOD_CHIPS_TAG = "period_chips"
 
-/** Etichetta per i chip: "Prossimi giorni", "Dicembre", "Gennaio 2027" (anno solo se diverso da quello corrente). */
+/**
+ * Etichetta per i chip: "Prossimi giorni", "Dicembre", "Gennaio 2027" (anno solo se diverso da quello
+ * corrente), "10–14 dic" per le date scelte.
+ */
 @Composable
 fun TravelPeriod.label(today: LocalDate): String = when (this) {
     TravelPeriod.NextDays -> stringResource(R.string.period_next_days)
     is TravelPeriod.InMonth -> Formatters.monthYear(month, today.year).replaceFirstChar { it.titlecase(Locale.ITALY) }
+    is TravelPeriod.Dates -> Formatters.dateRange(departure, returning)
 }
 
-/** Periodo dentro una frase: "Idee per i prossimi giorni", "Idee per gennaio 2027". */
+/** Periodo dentro una frase: "Idee per i prossimi giorni", "Idee per gennaio 2027", "Idee per le tue date (10–14 dic)". */
 @Composable
 fun TravelPeriod.phrase(today: LocalDate): String = when (this) {
     TravelPeriod.NextDays -> stringResource(R.string.period_phrase_next_days)
     is TravelPeriod.InMonth -> Formatters.monthYear(month, today.year)
+    is TravelPeriod.Dates -> stringResource(R.string.period_phrase_dates, Formatters.dateRange(departure, returning))
 }
 
 fun TravelPeriod.emoji(): String = when (this) {
     TravelPeriod.NextDays -> "🧳"
+    is TravelPeriod.Dates -> "📅"
     is TravelPeriod.InMonth -> when (month.month) {
         Month.JANUARY, Month.FEBRUARY -> "❄️"
         Month.MARCH -> "🌷"

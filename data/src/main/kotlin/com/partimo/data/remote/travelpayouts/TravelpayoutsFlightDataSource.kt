@@ -53,13 +53,22 @@ internal class TravelpayoutsFlightDataSource(
         val destination = cityCode(query.destinationIata)
         val oneWay = query.returnDate == null
         val currency = query.currencyCode.lowercase(Locale.ROOT)
-        val responses = departureMonths(query).map { month -> fetchMonth(origin, destination, month, oneWay, currency, forceRefresh) }
+        val flexible = query.flexibleDates
+        // Le date esatte si chiedono a parte quando contano (fra le tariffe di un mese potrebbero mancare),
+        // i mesi quando vanno bene anche altri giorni.
+        val ranges = buildList {
+            if (flexible == null || flexible.exactDatesFirst) add(query.departureDate.toString() to query.returnDate?.toString())
+            flexible?.let { addAll(departureMonths(it.departures).map { month -> month.toString() to null }) }
+        }
+        val responses = ranges.map { (departureAt, returnAt) -> fetch(origin, destination, departureAt, returnAt, oneWay, currency, forceRefresh) }
         val offers = responses
             .flatMap { it.data.fares }
             .sortedBy { it.price.content.toBigDecimalOrNull() }
             .mapNotNullSafely { fare -> fare.toOffer(query) }
             .filter { offer -> query.matchesDates(offer.outbound.departureTime.toLocalDate(), offer.inbound?.departureTime?.toLocalDate()) }
             .filter { it.maxStops <= query.maxConnections }
+            // Con le date scelte quei giorni restano anche se i giorni vicini hanno tante tariffe più basse.
+            .sortedByDescending { flexible?.exactDatesFirst == true && query.isOnTripDates(it) }
             .distinctBy { it.id }
             .take(MAX_OFFERS)
         return Fetched(offers, combinedOrigin(responses.map { it.origin }))
@@ -68,8 +77,7 @@ internal class TravelpayoutsFlightDataSource(
     private suspend fun cityCode(iata: String): String = codes.airport(iata)?.cityCode ?: iata.uppercase(Locale.ROOT)
 
     /** Mesi delle partenze accettate: uno, o due quando la finestra scavalca la fine del mese. */
-    private fun departureMonths(query: FlightSearchQuery): List<YearMonth> {
-        val window = query.flexibleDepartures ?: (query.departureDate..query.departureDate)
+    private fun departureMonths(window: ClosedRange<LocalDate>): List<YearMonth> {
         val last = YearMonth.from(window.endInclusive)
         return generateSequence(YearMonth.from(window.start)) { it.plusMonths(1) }
             .takeWhile { !it.isAfter(last) }
@@ -77,15 +85,17 @@ internal class TravelpayoutsFlightDataSource(
             .toList()
     }
 
-    private suspend fun fetchMonth(
+    /** Tariffe con partenza in un giorno ("2026-12-10") o in un mese ("2026-12"), con il ritorno se indicato. */
+    private suspend fun fetch(
         origin: String,
         destination: String,
-        month: YearMonth,
+        departureAt: String,
+        returnAt: String?,
         oneWay: Boolean,
         currency: String,
         forceRefresh: Boolean,
     ): Fetched<TravelpayoutsPricesResponse> = cache.getOrFetch(
-        key = CacheKey.of("tp-prices", origin, destination, month, oneWay, currency),
+        key = CacheKey.of("tp-prices", origin, destination, departureAt, returnAt, oneWay, currency),
         ttl = CachePolicy.FLIGHT_PRICES,
         forceRefresh = forceRefresh,
         fetch = {
@@ -93,7 +103,8 @@ internal class TravelpayoutsFlightDataSource(
                 header(TOKEN_HEADER, token)
                 parameter("origin", origin)
                 parameter("destination", destination)
-                parameter("departure_at", month.toString())
+                parameter("departure_at", departureAt)
+                returnAt?.let { parameter("return_at", it) }
                 parameter("one_way", oneWay)
                 parameter("unique", false)
                 parameter("direct", false)

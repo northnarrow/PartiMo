@@ -325,6 +325,7 @@ private fun LazyListScope.sectionContent(section: DashboardSection, state: TripD
                         onRetry = { actions.onRetry(DashboardSection.FLIGHTS) },
                         onChangeDeparture = actions.onChooseDeparture,
                         priceSource = state.flightPriceSource,
+                        exactDates = state.period is TravelPeriod.Dates,
                         onOpenLink = actions.onOpenLink,
                     )
                 }

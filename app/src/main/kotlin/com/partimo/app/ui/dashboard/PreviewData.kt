@@ -385,6 +385,37 @@ internal object PreviewData {
         flightPriceSource = FlightPriceSource.RECENT_SEARCHES,
     )
 
+    /** Date scelte dall'utente (11–13 dicembre): il volo proprio in quei giorni, poi uno dei giorni vicini. */
+    val DATES: TravelPeriod.Dates = TravelPeriod.Dates(LocalDate.of(2026, Month.DECEMBER, 11), LocalDate.of(2026, Month.DECEMBER, 13))
+
+    private val datesFlights = listOf(
+        recentFlights.first(),
+        ScoredOffer(
+            FlightOffer(
+                id = "tp-fr-near",
+                carrierName = "Ryanair",
+                carrierIata = "FR",
+                carrierLogoUrl = "https://pics.avs.io/96/96/FR.png",
+                totalPrice = Money.of(44, "EUR"),
+                slices = listOf(
+                    slice("BGY", "VIE", LocalDateTime.of(2026, 12, 10, 17, 5), 85, 0),
+                    slice("VIE", "BGY", LocalDateTime.of(2026, 12, 13, 6, 5), 90, 0),
+                ),
+                bookingUrl = "https://www.aviasales.com/search/MIL1012VIE13121",
+                priceFoundOn = LocalDate.of(2026, Month.SEPTEMBER, 30),
+            ),
+            valueScore = 0.97,
+        ),
+    )
+
+    /** Voli di Aviasales per le date scelte: prima quelli di quei giorni, poi quelli dei giorni vicini. */
+    fun recentFlightPricesDatesState() = recentFlightPricesState().copy(
+        trip = trip.copy(departureDate = DATES.departure, returnDate = DATES.returning),
+        period = DATES,
+        periods = listOf(TravelPeriod.NextDays, DATES) + TravelPeriod.selectable(TODAY).drop(1),
+        flights = UiState.Success(datesFlights, DataOrigin.REMOTE),
+    )
+
     fun noDepartureState() = loadedState().copy(trip = trip.copy(departure = null), flights = UiState.Empty, alertEnabled = false)
 
     fun mixedStates() = loadedState().copy(
@@ -446,6 +477,9 @@ internal object PreviewData {
     fun searchIdleState() = SearchUiState(today = TODAY, departure = SampleDestinations.MILAN_DEPARTURE)
 
     fun searchResultsState() = SearchUiState(today = TODAY, results = UiState.Success(searchResults))
+
+    /** Schermata iniziale con le date esatte scelte nelle celle «Andata» e «Ritorno». */
+    fun searchDatesState() = searchIdleState().copy(period = DATES)
 
     fun searchIdeasState() = SearchUiState(
         today = TODAY,

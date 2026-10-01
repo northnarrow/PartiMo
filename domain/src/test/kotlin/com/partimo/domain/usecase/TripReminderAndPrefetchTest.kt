@@ -62,6 +62,22 @@ class TripReminderAndPrefetchTest {
     }
 
     @Test
+    fun `con le date scelte il promemoria segue il giorno di partenza vero`() {
+        val lisbon = SavedTrip(
+            TestData.destination().copy(name = "Lisbona", countryCode = "PT"),
+            TravelPeriod.Dates(LocalDate.of(2026, 11, 20), LocalDate.of(2026, 11, 24)),
+            Instant.parse("2026-09-30T08:00:00Z"),
+        )
+
+        val week = TripReminders.due(listOf(lisbon), LocalDate.of(2026, 11, 13), emptySet()).single()
+        assertEquals(ReminderKind.WEEK_BEFORE, week.kind)
+        assertEquals(LocalDate.of(2026, 11, 20), week.departure)
+        assertEquals(ReminderKind.DAY_BEFORE, TripReminders.due(listOf(lisbon), LocalDate.of(2026, 11, 19), emptySet()).single().kind)
+        assertTrue(TripReminders.hasUpcoming(listOf(lisbon), LocalDate.of(2026, 11, 20)))
+        assertFalse(TripReminders.hasUpcoming(listOf(lisbon), LocalDate.of(2026, 11, 21)))
+    }
+
+    @Test
     fun `i viaggi last minute non hanno una data fissa e non ricevono promemoria`() {
         assertTrue(TripReminders.due(listOf(lastMinute), LocalDate.of(2026, 12, 9), emptySet()).isEmpty())
         assertFalse(TripReminders.hasUpcoming(listOf(lastMinute), LocalDate.of(2026, 12, 9)))

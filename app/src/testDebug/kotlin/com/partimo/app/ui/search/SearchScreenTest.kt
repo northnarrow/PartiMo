@@ -4,8 +4,11 @@ import android.app.Application
 import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -28,6 +31,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import java.io.File
+import java.time.LocalDate
 import java.time.Month
 import java.time.YearMonth
 import kotlin.test.Test
@@ -178,6 +182,56 @@ class SearchScreenTest {
 
         assertEquals(listOf("AT:Vienna:2026-12"), opened)
         assertEquals(listOf("PT:Lisbona:2027-03"), removed)
+    }
+
+    @Test
+    fun `sotto i mesi ci sono le celle andata e ritorno che aprono il calendario`() {
+        composeRule.setContent {
+            PartiMoTheme { SearchScreen(PreviewData.searchIdleState(), query = "", actions = SearchActions()) }
+        }
+
+        composeRule.onNodeWithTag(SEARCH_LIST_TAG).performScrollToNode(hasTestTag(RETURN_DATE_TAG))
+        composeRule.onNodeWithTag(DEPARTURE_DATE_TAG).assert(hasText(text(R.string.search_departure_date)) and hasText(text(R.string.search_pick_date)))
+        composeRule.onNodeWithTag(RETURN_DATE_TAG).assert(hasText(text(R.string.search_return_date)) and hasText(text(R.string.search_pick_date)))
+
+        composeRule.onNodeWithTag(RETURN_DATE_TAG).performClick()
+        composeRule.onNodeWithText(text(R.string.search_dates_title)).assertExists()
+        composeRule.onNodeWithText(text(R.string.search_dates_confirm)).assertIsNotEnabled()
+        composeRule.onNodeWithText(text(R.string.search_dates_cancel)).performClick()
+        composeRule.onNodeWithText(text(R.string.search_dates_title)).assertDoesNotExist()
+    }
+
+    @Test
+    fun `con le date scelte le celle le mostrano e il calendario le conferma`() {
+        val chosen = mutableListOf<Pair<LocalDate, LocalDate>>()
+        composeRule.setContent {
+            PartiMoTheme {
+                SearchScreen(PreviewData.searchDatesState(), query = "", actions = SearchActions(onDatesSelected = { from, to -> chosen += from to to }))
+            }
+        }
+
+        composeRule.onNodeWithTag(SEARCH_LIST_TAG).performScrollToNode(hasTestTag(RETURN_DATE_TAG))
+        composeRule.onNodeWithTag(DEPARTURE_DATE_TAG).assert(hasText("ven 11 dic"))
+        composeRule.onNodeWithTag(RETURN_DATE_TAG).assert(hasText("dom 13 dic"))
+        composeRule.onNodeWithTag(DEPARTURE_DATE_TAG).performClick()
+        composeRule.onNodeWithText(text(R.string.search_dates_confirm)).performClick()
+
+        assertEquals(listOf(LocalDate.of(2026, Month.DECEMBER, 11) to LocalDate.of(2026, Month.DECEMBER, 13)), chosen)
+    }
+
+    @Test
+    fun `salva lo screenshot della schermata con le date scelte`() {
+        composeRule.setContent {
+            PartiMoTheme { SearchScreen(PreviewData.searchDatesState(), query = "", actions = SearchActions()) }
+        }
+        composeRule.onNodeWithTag(SEARCH_LIST_TAG).performScrollToNode(hasTestTag(RETURN_DATE_TAG))
+        composeRule.waitForIdle()
+
+        val bitmap = composeRule.activity.window.decorView.rootView.drawToBitmap()
+        val screenshot = File("build/outputs/screenshots/search_dates.png").apply { parentFile?.mkdirs() }
+        screenshot.outputStream().use { stream -> bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream) }
+
+        assertTrue(screenshot.length() > 0, "Screenshot non generato")
     }
 
     @Test

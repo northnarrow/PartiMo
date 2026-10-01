@@ -54,7 +54,7 @@ class CheckPriceWatchesUseCaseTest {
         assertEquals("MXP", query.originIata)
         assertEquals("VIE", query.destinationIata)
         assertEquals(LocalDate.of(2026, Month.DECEMBER, 10), query.departureDate)
-        assertEquals(LocalDate.of(2026, Month.DECEMBER, 1)..LocalDate.of(2026, Month.DECEMBER, 31), query.flexibleDepartures, "Il volo più conveniente del mese")
+        assertEquals(LocalDate.of(2026, Month.DECEMBER, 1)..LocalDate.of(2026, Month.DECEMBER, 31), query.flexibleDates?.departures, "Il volo più conveniente del mese")
         assertEquals(listOf(true), flights.forceRefreshFlags)
         assertEquals(listOf(true), stays.forceRefreshFlags)
 

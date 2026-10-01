@@ -14,10 +14,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -74,14 +76,18 @@ fun FlightsSection(
     onChangeDeparture: () -> Unit,
     modifier: Modifier = Modifier,
     priceSource: FlightPriceSource = FlightPriceSource.LIVE_OFFERS,
+    /** Date di andata e ritorno scelte dall'utente: i voli di Aviasales proprio in quei giorni sono segnalati. */
+    exactDates: Boolean = false,
     onOpenLink: (String) -> Unit = {},
 ) {
     val departure = trip.departure
     val links = flightLinks(trip)
     val estimated = priceSource == FlightPriceSource.ESTIMATES || (state as? UiState.Success)?.origin == DataOrigin.DEMO
+    val recentPrices = priceSource == FlightPriceSource.RECENT_SEARCHES
     val note = when {
         estimated -> R.string.flights_links_estimates
-        priceSource == FlightPriceSource.RECENT_SEARCHES -> R.string.flights_links_recent
+        recentPrices && exactDates -> R.string.flights_links_recent_dates
+        recentPrices -> R.string.flights_links_recent
         else -> R.string.flights_links_compare
     }
     DashboardSection(
@@ -117,8 +123,14 @@ fun FlightsSection(
         },
     ) { offers ->
         Column(modifier = Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            offers.take(MAX_VISIBLE_FLIGHTS).forEachIndexed { index, scored ->
-                FlightCard(scored = scored, isBestValue = index == 0, onOpenLink = onOpenLink)
+            val visible = offers.take(MAX_VISIBLE_FLIGHTS)
+            // Con le date scelte i voli di quei giorni vengono prima: il migliore può essere uno dei giorni vicini.
+            val bestValue = visible.maxByOrNull { it.valueScore }
+            visible.forEach { scored ->
+                val onTripDates = exactDates && recentPrices &&
+                    scored.offer.outbound.departureTime.toLocalDate() == trip.departureDate &&
+                    scored.offer.inbound?.departureTime?.toLocalDate() == trip.returnDate
+                FlightCard(scored = scored, isBestValue = scored === bestValue, onTripDates = onTripDates, onOpenLink = onOpenLink)
             }
             val hiddenOffers = offers.size - MAX_VISIBLE_FLIGHTS
             if (hiddenOffers > 0) {
@@ -137,12 +149,19 @@ fun FlightCard(
     scored: ScoredOffer<FlightOffer>,
     isBestValue: Boolean,
     modifier: Modifier = Modifier,
+    /** `true` se il volo parte e torna proprio nelle date scelte dall'utente (le altre sono date vicine). */
+    onTripDates: Boolean = false,
     onOpenLink: (String) -> Unit = {},
 ) {
     val offer = scored.offer
     OutlinedCard(modifier = modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            if (isBestValue) BestValueBadge()
+            if (isBestValue || onTripDates) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    if (onTripDates) TripDatesBadge()
+                    if (isBestValue) BestValueBadge()
+                }
+            }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 offer.carrierLogoUrl?.let { logo ->
                     AsyncImage(
@@ -195,6 +214,19 @@ fun FlightCard(
                 }
             }
         }
+    }
+}
+
+/** Volo proprio nelle date scelte dall'utente, tra quelli dei giorni vicini. */
+@Composable
+private fun TripDatesBadge() {
+    Surface(shape = CircleShape, color = MaterialTheme.colorScheme.tertiaryContainer) {
+        Text(
+            text = "📅 " + stringResource(R.string.flight_on_trip_dates),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onTertiaryContainer,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+        )
     }
 }
 

@@ -14,6 +14,7 @@
     <!-- Periodo del viaggio -->
     <string name="period_next_days">Prossimi giorni</string>
     <string name="period_phrase_next_days">i prossimi giorni</string>
+    <string name="period_phrase_dates">le tue date (%1$s)</string>
 
     <!-- Pulsanti delle sezioni della dashboard -->
     <string name="nav_flights">Voli</string>
@@ -41,6 +42,7 @@
     <string name="notification_channel_deals_description">Avvisi quando voli e alloggi dei viaggi seguiti costano molto meno del solito.</string>
     <string name="notification_title_month">🔥 %1$s a %2$s: offerta davvero conveniente</string>
     <string name="notification_title_next_days">🔥 %1$s nei prossimi giorni: offerta davvero conveniente</string>
+    <string name="notification_title_dates">🔥 %1$s, %2$s: offerta davvero conveniente</string>
     <string name="notification_channel_reminders">Promemoria dei viaggi</string>
     <string name="notification_channel_reminders_description">Una settimana prima e il giorno prima della partenza dei viaggi salvati.</string>
     <string name="reminder_title_days">🧳 %1$s tra %2$d giorni</string>
@@ -138,6 +140,7 @@
         <item quantity="other">%d notti sul posto</item>
     </plurals>
     <string name="flight_price_found_on">prezzo trovato il %1$s</string>
+    <string name="flight_on_trip_dates">Nelle tue date</string>
     <string name="flight_open_booking">Verifica e prenota su %1$s</string>
     <string name="flight_refundable">Rimborsabile</string>
     <string name="best_value_badge">Miglior rapporto qualità/prezzo</string>
@@ -173,6 +176,7 @@
     <string name="flights_links_estimates">Le tariffe qui sotto sono stime: apri la stessa ricerca per i prezzi aggiornati e per prenotare.</string>
     <string name="flights_links_compare">Confronta la stessa ricerca anche su altri siti.</string>
     <string name="flights_links_recent">Sotto ci sono i prezzi reali trovati negli ultimi giorni su Aviasales da chi ha cercato questa tratta, su tutte le date del periodo scelto: possono essere cambiati, quindi verificali prima di prenotare. Confronta anche qui:</string>
+    <string name="flights_links_recent_dates">Sotto ci sono i prezzi reali trovati negli ultimi giorni su Aviasales: prima i voli nelle tue date, poi quelli dei giorni vicini (fino a 3 giorni prima o dopo). Possono essere cambiati, quindi verificali prima di prenotare. Confronta anche qui:</string>
     <string name="stays_links_text">Tutte le strutture di %1$s, con prezzi e disponibilità aggiornati:</string>
     <string name="transit_links_title">🗺️ Percorso reale con i mezzi</string>
     <string name="transit_links_text">Su Google Maps trovi lo stesso percorso con la navigazione passo passo.</string>
@@ -287,6 +291,14 @@
     <string name="search_placeholder">Cerca una città, es. Lisbona</string>
     <string name="search_clear">Cancella ricerca</string>
     <string name="search_when">Quando vuoi partire?</string>
+    <string name="search_dates_hint">Oppure scegli le date esatte: i voli di quei giorni vengono prima.</string>
+    <string name="search_departure_date">🛫 Andata</string>
+    <string name="search_return_date">🛬 Ritorno</string>
+    <string name="search_pick_date">Scegli la data</string>
+    <string name="search_dates_title">Date di andata e ritorno</string>
+    <string name="search_dates_too_long">Al massimo %1$d notti</string>
+    <string name="search_dates_confirm">Conferma</string>
+    <string name="search_dates_cancel">Annulla</string>
     <string name="search_recommend">Consigliami</string>
     <string name="search_recommend_hint">Non sai ancora dove andare? Ti proponiamo le mete più adatte al periodo scelto.</string>
     <string name="search_results_title">Città trovate</string>
