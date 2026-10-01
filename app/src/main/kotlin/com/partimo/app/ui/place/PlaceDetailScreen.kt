@@ -26,6 +26,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -44,6 +45,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -56,6 +58,7 @@ import com.partimo.app.R
 import com.partimo.app.ui.common.FavoriteButton
 import com.partimo.app.ui.common.SectionError
 import com.partimo.app.ui.common.SectionLoading
+import com.partimo.app.ui.common.TravelLinks
 import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.common.emoji
 import com.partimo.app.ui.common.labelRes
@@ -65,6 +68,7 @@ import com.partimo.app.ui.dashboard.components.poiRatingText
 import com.partimo.app.ui.theme.PartiMoTheme
 import com.partimo.domain.model.poi.HistoryChapter
 import com.partimo.domain.model.poi.ImageCredit
+import com.partimo.domain.model.poi.PoiCategory
 import com.partimo.domain.model.poi.PoiDetails
 import com.partimo.domain.model.poi.PointOfInterest
 import java.util.Locale
@@ -145,6 +149,18 @@ fun PlaceDetailScreen(state: PlaceDetailUiState, actions: PlaceDetailActions, mo
         ) {
             item(key = "photo") { PlacePhoto(imageUrl = state.imageUrl, poi = poi) }
             item(key = "header") { PlaceHeader(poi) }
+            if (poi.category.sellsTickets()) {
+                item(key = "tickets") {
+                    // Tiqets apre i biglietti del luogo se li vende, altrimenti la ricerca.
+                    FilledTonalButton(
+                        onClick = { actions.onOpenLink(TravelLinks.tiqets(poi.name)) },
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                    ) {
+                        Text("🎟️ " + stringResource(R.string.place_tickets))
+                        Text(text = " ↗", modifier = Modifier.clearAndSetSemantics {})
+                    }
+                }
+            }
             item(key = "description") { DescriptionSection(state, onRetry = actions.onRetry) }
             if (details != null) {
                 item(key = "history") { HistorySection(details.history) }
@@ -378,3 +394,7 @@ private fun PlaceDetailLoadingPreview() {
         PlaceDetailScreen(PreviewData.placeDetailState().copy(details = UiState.Loading), PlaceDetailActions())
     }
 }
+
+/** Luoghi che di solito hanno un biglietto d'ingresso (musei, monumenti, attrazioni, chiese visitabili). */
+private fun PoiCategory.sellsTickets(): Boolean =
+    this == PoiCategory.MUSEUM || this == PoiCategory.MONUMENT || this == PoiCategory.ATTRACTION || this == PoiCategory.RELIGIOUS_SITE

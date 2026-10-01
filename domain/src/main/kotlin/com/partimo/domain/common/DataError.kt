@@ -43,4 +43,5 @@ enum class QueryIssue {
     QUERY_TOO_SHORT,
     NO_AIRPORT_NEARBY,
     TEXT_TOO_LONG,
+    INVALID_AMOUNT,
 }

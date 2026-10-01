@@ -502,4 +502,57 @@
     <string name="translator_phrases_hint">Tocca una categoria: le frasi si traducono sul telefono, anche offline.</string>
     <string name="translator_failed">Traduzione non riuscita: %1$s</string>
     <string name="error_query_text_too_long">Testo troppo lungo: traducilo un pezzo alla volta.</string>
+
+    <!-- Come arrivare: treni, pullman e voli a confronto, con le emissioni -->
+    <string name="getting_there_title">Come arrivare da %1$s</string>
+    <string name="getting_there_text">Treni, pullman e voli per %1$s a confronto: orari, durata e prezzi sui siti.</string>
+    <string name="getting_there_google">Treni e bus</string>
+    <string name="getting_there_rome2rio">Rome2rio</string>
+    <string name="footprint_title">🌱 CO₂ a persona, andata e ritorno (stima)</string>
+    <string name="footprint_flight">Aereo</string>
+    <string name="footprint_train">Treno</string>
+    <string name="footprint_coach">Pullman</string>
+    <string name="footprint_car_alone">Auto (da soli)</string>
+    <string name="footprint_car_shared">Auto (in %1$d)</string>
+    <string name="footprint_kg">%1$s kg</string>
+    <string name="footprint_source">Fattori ufficiali del governo britannico (DESNZ 2025), per l\'aereo con gli effetti in quota; percorsi stimati.</string>
+    <string name="tickets_title">🎟️ Biglietti per musei e attrazioni</string>
+    <string name="tickets_text">Biglietti d\'ingresso e salta-fila per le attrazioni di %1$s.</string>
+    <string name="tickets_tiqets">Tiqets</string>
+    <string name="place_tickets">Biglietti</string>
+
+    <!-- Budget del viaggio -->
+    <string name="budget_chip">Budget</string>
+    <string name="budget_title">Budget di %1$s</string>
+    <string name="budget_spent">Speso finora</string>
+    <string name="budget_of_limit">su un budget di %1$s</string>
+    <string name="budget_remaining">Restano %1$s</string>
+    <string name="budget_over">Oltre il budget di %1$s</string>
+    <string name="budget_set_limit">Imposta un budget</string>
+    <string name="budget_edit_limit">Modifica il budget</string>
+    <string name="budget_limit_label">Budget del viaggio (%1$s)</string>
+    <string name="budget_limit_hint">Lascia vuoto per non avere un tetto di spesa.</string>
+    <string name="budget_add">Aggiungi spesa</string>
+    <string name="budget_new_expense">Nuova spesa</string>
+    <string name="budget_amount">Importo</string>
+    <string name="budget_currency">Valuta</string>
+    <string name="budget_category">Categoria</string>
+    <string name="budget_day">Giorno</string>
+    <string name="budget_note">Nota (facoltativa)</string>
+    <string name="budget_save">Salva</string>
+    <string name="budget_cancel">Annulla</string>
+    <string name="budget_delete">Elimina la spesa %1$s</string>
+    <string name="budget_by_category">Per categoria</string>
+    <string name="budget_expenses">Spese</string>
+    <string name="budget_empty">Nessuna spesa: tocca «Aggiungi spesa» per registrare voli, alloggi, pasti e biglietti, anche nella valuta del posto.</string>
+    <string name="budget_converted">≈ %1$s</string>
+    <string name="budget_unconverted">%1$d spese in altre valute non sono nei totali: cambio non disponibile senza rete.</string>
+    <string name="budget_rates_note">Totali in euro con i cambi del giorno di ExchangeRate-API. Le spese restano sul telefono.</string>
+    <string name="budget_category_transport">Trasporti</string>
+    <string name="budget_category_lodging">Alloggio</string>
+    <string name="budget_category_food">Cibo</string>
+    <string name="budget_category_activities">Attività</string>
+    <string name="budget_category_shopping">Acquisti</string>
+    <string name="budget_category_other">Altro</string>
+    <string name="error_query_invalid_amount">Importo non valido.</string>
 </resources>

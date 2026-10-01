@@ -4,8 +4,11 @@ import android.app.Application
 import android.content.Intent
 import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.annotation.StringRes
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -20,6 +23,7 @@ import com.partimo.app.ui.dashboard.PreviewData
 import com.partimo.app.ui.theme.PartiMoTheme
 import com.partimo.domain.common.DataError
 import com.partimo.domain.model.GeoPoint
+import com.partimo.domain.model.poi.PoiCategory
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -68,6 +72,19 @@ class PlaceDetailScreenTest {
 
         assertEquals(1, navigations)
         assertEquals("https://it.wikipedia.org/wiki/Duomo_di_Vienna", openedLink)
+    }
+
+    @Test
+    fun `musei, monumenti e chiese hanno i biglietti su Tiqets, i parchi no`() {
+        var openedLink: String? = null
+        var state by mutableStateOf(PreviewData.placeDetailState())
+        composeRule.setContent { PartiMoTheme { PlaceDetailScreen(state = state, actions = PlaceDetailActions(onOpenLink = { openedLink = it })) } }
+
+        composeRule.onNodeWithText("🎟️ " + text(R.string.place_tickets)).performClick()
+        assertEquals("https://www.tiqets.com/it/search?q=Duomo%20di%20Vienna", openedLink)
+
+        state = state.copy(poi = state.poi.copy(category = PoiCategory.PARK))
+        composeRule.onNodeWithText("🎟️ " + text(R.string.place_tickets)).assertDoesNotExist()
     }
 
     @Test

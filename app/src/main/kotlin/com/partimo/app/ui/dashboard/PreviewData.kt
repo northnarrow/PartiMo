@@ -1,5 +1,7 @@
 package com.partimo.app.ui.dashboard
 
+import com.partimo.app.ui.budget.BudgetUiState
+import com.partimo.app.ui.budget.ExpenseDraft
 import com.partimo.app.ui.chat.ChatUiState
 import com.partimo.app.ui.common.UiState
 import com.partimo.app.ui.departure.DeparturePickerUiState
@@ -23,6 +25,10 @@ import com.partimo.domain.model.ScoredOffer
 import com.partimo.domain.model.TravelPeriod
 import com.partimo.domain.model.TripContext
 import com.partimo.domain.model.WheelchairAccess
+import com.partimo.domain.model.budget.BudgetSummary
+import com.partimo.domain.model.budget.Expense
+import com.partimo.domain.model.budget.ExpenseCategory
+import com.partimo.domain.model.budget.TripBudget
 import com.partimo.domain.model.dining.PriceLevel
 import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.event.EventKind
@@ -705,4 +711,56 @@ internal object PreviewData {
         result = null,
         phraseTranslations = emptyMap(),
     )
+
+    // ---- Budget -----------------------------------------------------------------------------------
+
+    private val prague = SampleDestinations.VIENNA.copy(
+        name = "Praga",
+        countryCode = "CZ",
+        airportIata = "PRG",
+        center = GeoPoint(50.0755, 14.4378),
+        arrivalHub = GeoPoint(50.1008, 14.26),
+        arrivalHubName = "Praga-Ruzyně",
+        timeZone = ZoneId.of("Europe/Prague"),
+    )
+
+    private val pragueExpenses = listOf(
+        Expense("1", BigDecimal("142.50"), "EUR", ExpenseCategory.TRANSPORT, LocalDate.of(2026, Month.DECEMBER, 10), "Volo Milano–Praga"),
+        Expense("2", BigDecimal("356"), "EUR", ExpenseCategory.LODGING, LocalDate.of(2026, Month.DECEMBER, 10), "Hotel in Malá Strana"),
+        Expense("3", BigDecimal("890"), "CZK", ExpenseCategory.FOOD, LocalDate.of(2026, Month.DECEMBER, 11), "Cena al Lokál"),
+        Expense("4", BigDecimal("450"), "CZK", ExpenseCategory.ACTIVITIES, LocalDate.of(2026, Month.DECEMBER, 11), "Castello di Praga"),
+        Expense("5", BigDecimal("120"), "CZK", ExpenseCategory.FOOD, LocalDate.of(2026, Month.DECEMBER, 12), "Trdelník e vin brulé"),
+    )
+
+    /** Budget di un viaggio a Praga con spese in euro e in corone, convertite con un cambio di 24,44. */
+    fun budgetState(): BudgetUiState {
+        val rate = BigDecimal("24.44")
+        val converted = pragueExpenses.associate { expense ->
+            val euros = if (expense.currency == "EUR") expense.amount else expense.amount.divide(rate, 2, java.math.RoundingMode.HALF_UP)
+            expense.id to euros.setScale(2, java.math.RoundingMode.HALF_UP)
+        }
+        val byCategory = pragueExpenses.groupBy { it.category }.mapValues { (_, expenses) -> expenses.sumOf { converted.getValue(it.id) } }
+        val budget = TripBudget("CZ:Praga:2026-12", BigDecimal("800"), pragueExpenses)
+        return BudgetUiState(
+            destination = prague,
+            period = DECEMBER,
+            from = LocalDate.of(2026, Month.DECEMBER, 10),
+            to = LocalDate.of(2026, Month.DECEMBER, 14),
+            localCurrency = "CZK",
+            budget = budget,
+            summary = BudgetSummary(
+                currency = "EUR",
+                total = converted.values.fold(BigDecimal.ZERO.setScale(2), BigDecimal::add),
+                byCategory = byCategory,
+                limit = budget.limit,
+                converted = converted,
+            ),
+        )
+    }
+
+    /** Nuova spesa in corone mentre si è a Praga. */
+    fun budgetDraftState() = budgetState().copy(
+        draft = ExpenseDraft(amountText = "320", currency = "CZK", category = ExpenseCategory.TRANSPORT, date = LocalDate.of(2026, Month.DECEMBER, 12), note = "Biglietti del tram"),
+    )
 }
+

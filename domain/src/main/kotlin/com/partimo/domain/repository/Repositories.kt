@@ -3,6 +3,7 @@ package com.partimo.domain.repository
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
+import com.partimo.domain.model.budget.TripBudget
 import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.dining.RestaurantSearchQuery
@@ -151,6 +152,13 @@ interface TranslatorRepository {
     suspend fun download(from: String, to: String): DataResult<Unit>
 
     suspend fun translate(text: String, from: String, to: String): DataResult<String>
+}
+
+/** Budget e spese dei viaggi, salvati sul telefono (un budget per viaggio, cioè meta e periodo). */
+interface BudgetRepository {
+    fun budget(tripId: String): Flow<TripBudget>
+
+    suspend fun update(tripId: String, transform: (TripBudget) -> TripBudget)
 }
 
 /** Tassi di cambio aggiornati una volta al giorno. */

@@ -134,6 +134,14 @@ class MapsLinksTest {
     }
 
     @Test
+    fun `treni e bus tra due città si cercano su Google Maps per nome`() {
+        assertEquals(
+            "https://www.google.com/maps/dir/?api=1&origin=Milano&destination=Monaco%20di%20Baviera&travelmode=transit",
+            googleMapsTransitUrl("Milano", "Monaco di Baviera"),
+        )
+    }
+
+    @Test
     fun `la ricerca per nome apre la scheda del locale e i link di Maps preferiscono l'app`() {
         assertEquals(
             "https://www.google.com/maps/search/?api=1&query=Figlm%C3%BCller%2C%20Wollzeile%205%2C%20Vienna",

@@ -40,6 +40,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.partimo.app.R
+import com.partimo.app.ui.dashboard.components.OSM_COPYRIGHT_URL
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.saved.FavoriteKind
 import org.maplibre.android.MapLibre
@@ -86,9 +87,6 @@ fun FavoriteKind.pinColor(): Color = when (this) {
 
 /** Bordo dei punti salvati tra i preferiti: lo stesso giallo delle stelle. */
 private val FavoriteStroke = Color(0xFFF2A900)
-
-/** Pagina sui diritti dei dati di OpenStreetMap, aperta dall'attribuzione sulla mappa. */
-const val OSM_COPYRIGHT_URL = "https://www.openstreetmap.org/copyright"
 
 /** Tag dello schema dei punti mostrato quando la mappa vettoriale non è disponibile. */
 const val SCHEMATIC_MAP_TAG = "schematic_map"

@@ -19,6 +19,7 @@ import androidx.core.view.drawToBitmap
 import com.partimo.app.R
 import com.partimo.app.ui.common.PERIOD_CHIPS_TAG
 import com.partimo.app.ui.common.UiState
+import com.partimo.app.ui.dashboard.components.GETTING_THERE_TAG
 import com.partimo.app.ui.theme.PartiMoTheme
 import com.partimo.domain.common.DataError
 import com.partimo.domain.model.Money
@@ -53,7 +54,7 @@ class TripDashboardScreenTest {
     @get:Rule
     val composeRule = createAndroidComposeRule<ComponentActivity>()
 
-    private fun text(@StringRes id: Int): String = composeRule.activity.getString(id)
+    private fun text(@StringRes id: Int, vararg args: Any): String = composeRule.activity.getString(id, *args)
 
     /** Mostra la dashboard con uno stato modificabile: i pulsanti delle sezioni cambiano davvero sezione. */
     private fun showDashboard(
@@ -279,6 +280,33 @@ class TripDashboardScreenTest {
     }
 
     @Test
+    fun `come arrivare confronta treno, pullman, aereo e auto con la CO2 e apre Google Maps e Rome2rio`() {
+        val opened = mutableListOf<String>()
+        val state = showDashboard(
+            PreviewData.openDataState().copy(selectedSection = DashboardSection.TRANSIT),
+            DashboardActions(onOpenLink = { opened += it }),
+        )
+
+        composeRule.onNodeWithText("🧭 " + text(R.string.getting_there_title, "Milano")).assertExists()
+        composeRule.onNodeWithText(text(R.string.footprint_title)).assertExists()
+        composeRule.onNodeWithText("🚆 " + text(R.string.footprint_train)).assertExists()
+        composeRule.onNodeWithText("🚗 " + text(R.string.footprint_car_alone)).assertExists()
+        composeRule.onNodeWithText("🚆 " + text(R.string.getting_there_google)).performClick()
+        composeRule.onNodeWithText(text(R.string.getting_there_rome2rio)).performClick()
+
+        assertEquals(
+            listOf(
+                "https://www.google.com/maps/dir/?api=1&origin=Milano&destination=Vienna&travelmode=transit",
+                "https://www.rome2rio.com/s/Milano/Vienna",
+            ),
+            opened,
+        )
+        // Senza partenza la scheda non c'è: i voli chiedono di sceglierla.
+        state.value = state.value.copy(trip = state.value.trip.copy(departure = null))
+        composeRule.onNodeWithTag(GETTING_THERE_TAG).assertDoesNotExist()
+    }
+
+    @Test
     fun `i trasporti aprono il percorso reale con i mezzi su Google Maps`() {
         var opened: String? = null
         showDashboard(
@@ -286,6 +314,7 @@ class TripDashboardScreenTest {
             DashboardActions(onOpenLink = { opened = it }),
         )
 
+        composeRule.onNodeWithTag(DASHBOARD_LIST_TAG).performScrollToNode(hasText(text(R.string.transit_open_maps)))
         composeRule.onNodeWithText(text(R.string.transit_links_estimates)).assertExists()
         composeRule.onNodeWithText(text(R.string.transit_open_maps)).performClick()
 
@@ -347,22 +376,26 @@ class TripDashboardScreenTest {
     }
 
     @Test
-    fun `mappa, guida e traduttore si aprono sempre, anche senza assistente`() {
+    fun `mappa, guida, traduttore e budget si aprono sempre, anche senza assistente`() {
         var guides = 0
         var maps = 0
         var translators = 0
+        var budgets = 0
         val state = showDashboard(
             PreviewData.loadedState().copy(assistantAvailable = false),
-            DashboardActions(onOpenGuide = { guides++ }, onOpenMap = { maps++ }, onOpenTranslator = { translators++ }),
+            DashboardActions(onOpenGuide = { guides++ }, onOpenMap = { maps++ }, onOpenTranslator = { translators++ }, onOpenBudget = { budgets++ }),
         )
 
         composeRule.onNodeWithText(text(R.string.guide_chip)).performClick()
         composeRule.onNodeWithText(text(R.string.map_chip)).performClick()
         composeRule.onNodeWithTag(TRIP_TOOLS_TAG).performScrollToNode(hasText(text(R.string.translator_chip)))
         composeRule.onNodeWithText(text(R.string.translator_chip)).performClick()
+        composeRule.onNodeWithTag(TRIP_TOOLS_TAG).performScrollToNode(hasText(text(R.string.budget_chip)))
+        composeRule.onNodeWithText(text(R.string.budget_chip)).performClick()
         assertEquals(1, guides)
         assertEquals(1, maps)
         assertEquals(1, translators)
+        assertEquals(1, budgets)
         composeRule.onNodeWithText(text(R.string.assistant_itinerary_chip)).assertDoesNotExist()
         state.value = state.value.copy(assistantAvailable = true)
         composeRule.onNodeWithTag(TRIP_TOOLS_TAG).performScrollToNode(hasText(text(R.string.assistant_itinerary_chip)))

@@ -13,6 +13,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.partimo.app.R
 import com.partimo.app.di.AppContainer
+import com.partimo.app.ui.budget.BudgetRoute
+import com.partimo.app.ui.budget.BudgetViewModel
 import com.partimo.app.ui.chat.ChatRoute
 import com.partimo.app.ui.chat.ChatViewModel
 import com.partimo.app.ui.dashboard.TripDashboardRoute
@@ -223,7 +225,20 @@ fun PartiMoNavHost(
                 onOpenFavorites = { trip -> navController.navigate(FavoritesDestination(trip.toJson())) },
                 onOpenMap = { trip -> navController.navigate(MapDestination(trip.toJson())) },
                 onOpenTranslator = { trip -> navController.navigate(TranslatorDestination(trip.toJson())) },
+                onOpenBudget = { trip -> navController.navigate(BudgetDestination(trip.toJson())) },
             )
+        }
+        composable<BudgetDestination> { backStackEntry ->
+            val trip = TripArgs.fromJson(backStackEntry.toRoute<BudgetDestination>().trip)
+            val period = trip?.travelPeriod()
+            if (trip == null || period == null) {
+                LaunchedEffect(Unit) { navController.popBackStack() }
+                return@composable
+            }
+            val viewModel: BudgetViewModel = viewModel(
+                factory = BudgetViewModel.factory(container, trip.destination(), period, trip.fromDate(), trip.toDate()),
+            )
+            BudgetRoute(viewModel = viewModel, onBack = { navController.popBackStack() })
         }
         composable<TranslatorDestination> { backStackEntry ->
             val trip = TripArgs.fromJson(backStackEntry.toRoute<TranslatorDestination>().trip)

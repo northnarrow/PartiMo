@@ -4,6 +4,9 @@ import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.budget.Expense
+import com.partimo.domain.model.budget.ExpenseCategory
+import com.partimo.domain.model.budget.TripBudget
 import com.partimo.domain.model.deal.PricePoint
 import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.place.Airport
@@ -19,6 +22,7 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import java.math.BigDecimal
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZoneOffset
 
@@ -94,6 +98,23 @@ internal data class SavedTripDto(
     val favorites: List<FavoriteDto> = emptyList(),
 )
 
+@Serializable
+internal data class ExpenseDto(
+    val id: String,
+    val amount: String,
+    val currency: String,
+    val category: String,
+    /** Data ISO (es. "2026-12-11"). */
+    val date: String,
+    val note: String = "",
+)
+
+@Serializable
+internal data class TripBudgetDto(
+    val limit: String? = null,
+    val expenses: List<ExpenseDto> = emptyList(),
+)
+
 /** Codifica e decodifica delle preferenze. Un valore illeggibile viene ignorato, mai propagato come crash. */
 internal object StoredJson {
 
@@ -118,6 +139,19 @@ internal object StoredJson {
 
     fun decodeDeparture(value: String): DeparturePoint? =
         runCatching { json.decodeFromString(DeparturePointDto.serializer(), value).toDomain() }.getOrNull()
+
+    fun encodeBudget(budget: TripBudget): String = json.encodeToString(TripBudgetDto.serializer(), budget.toDto())
+
+    /** Le spese non più interpretabili vengono scartate una a una; il budget resta. */
+    fun decodeBudget(tripId: String, value: String?): TripBudget {
+        if (value.isNullOrBlank()) return TripBudget(tripId)
+        val dto = runCatching { json.decodeFromString(TripBudgetDto.serializer(), value) }.getOrNull() ?: return TripBudget(tripId)
+        return TripBudget(
+            tripId = tripId,
+            limit = dto.limit?.let { runCatching { BigDecimal(it) }.getOrNull() }?.takeIf { it.signum() > 0 },
+            expenses = dto.expenses.mapNotNull { expense -> runCatching { expense.toDomain() }.getOrNull() },
+        )
+    }
 
     fun encodeWatches(watches: List<PriceWatch>): String = json.encodeToString(watchListSerializer, watches.map { it.toDto() })
 
@@ -243,3 +277,24 @@ private fun SavedTripDto.toDomain() = SavedTrip(
     savedAt = Instant.ofEpochMilli(savedAtMillis),
     favorites = favorites.mapNotNull { it.toDomain() },
 )
+
+private fun TripBudget.toDto() = TripBudgetDto(limit = limit?.toPlainString(), expenses = expenses.map { it.toDto() })
+
+private fun Expense.toDto() = ExpenseDto(
+    id = id,
+    amount = amount.toPlainString(),
+    currency = currency,
+    category = category.name,
+    date = date.toString(),
+    note = note,
+)
+
+private fun ExpenseDto.toDomain() = Expense(
+    id = id,
+    amount = BigDecimal(amount),
+    currency = currency,
+    category = ExpenseCategory.entries.firstOrNull { it.name == category } ?: ExpenseCategory.OTHER,
+    date = LocalDate.parse(date),
+    note = note,
+)
+

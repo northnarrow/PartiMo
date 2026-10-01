@@ -38,4 +38,16 @@ class TravelLinksTest {
             "Spazi e accenti codificati anche nel percorso",
         )
     }
+
+    @Test
+    fun `treni e pullman su Rome2rio e biglietti su Tiqets con nomi codificati`() {
+        assertEquals("https://www.rome2rio.com/s/Milano/Vienna", TravelLinks.rome2rio("Milano", "Vienna"))
+        assertEquals(
+            "https://www.rome2rio.com/s/Reggio-Emilia/Monaco-di-Baviera",
+            TravelLinks.rome2rio(" Reggio  Emilia ", "Monaco di Baviera"),
+            "Spazi come trattini nel percorso",
+        )
+        assertEquals("https://www.rome2rio.com/s/Milano/Z%C3%BCrich", TravelLinks.rome2rio("Milano", "Zürich"))
+        assertEquals("https://www.tiqets.com/it/search?q=Kunsthistorisches%20Museum", TravelLinks.tiqets("Kunsthistorisches Museum"))
+    }
 }

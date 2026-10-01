@@ -3,6 +3,7 @@ package com.partimo.data.local
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
+import com.partimo.data.local.preferences.DataStoreBudgetRepository
 import com.partimo.data.local.preferences.DataStoreChecklistRepository
 import com.partimo.data.local.preferences.DataStorePriceWatchRepository
 import com.partimo.data.local.preferences.DataStoreSavedTripRepository
@@ -11,6 +12,9 @@ import com.partimo.data.local.preferences.StoredJson
 import com.partimo.domain.model.GeoPoint
 import com.partimo.domain.model.Money
 import com.partimo.domain.model.TravelPeriod
+import com.partimo.domain.model.budget.Expense
+import com.partimo.domain.model.budget.ExpenseCategory
+import com.partimo.domain.model.budget.TripBudget
 import com.partimo.domain.model.poi.PoiCategory
 import com.partimo.domain.model.poi.WikipediaPage
 import com.partimo.domain.model.saved.Favorite
@@ -23,6 +27,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.test.runTest
+import java.math.BigDecimal
+import java.time.LocalDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -102,6 +108,22 @@ class PreferencesRepositoriesTest {
 class SavedTripRepositoryTest {
 
     @Test
+    fun `il budget di ogni viaggio si salva con il tetto e le spese e sparisce quando è vuoto`() = runTest {
+        val store = InMemoryPreferencesDataStoreForTrips()
+        val repository = DataStoreBudgetRepository(store)
+        val dinner = Expense("1", BigDecimal("250.5"), "CZK", ExpenseCategory.FOOD, LocalDate.of(2026, 12, 11), "Cena")
+        val hotel = Expense("2", BigDecimal("89"), "EUR", ExpenseCategory.LODGING, LocalDate.of(2026, 12, 10))
+
+        repository.update("CZ:Praga:2026-12") { it.copy(limit = BigDecimal("500"), expenses = listOf(dinner, hotel)) }
+
+        assertEquals(TripBudget("CZ:Praga:2026-12", BigDecimal("500"), listOf(dinner, hotel)), repository.budget("CZ:Praga:2026-12").first())
+        assertEquals(TripBudget("AT:Vienna:2026-12"), repository.budget("AT:Vienna:2026-12").first(), "Gli altri viaggi non cambiano")
+
+        repository.update("CZ:Praga:2026-12") { it.copy(limit = null, expenses = emptyList()) }
+        assertTrue(store.data.first().asMap().isEmpty(), "Un budget vuoto non occupa spazio")
+    }
+
+    @Test
     fun `viaggi e preferiti sopravvivono alla codifica`() = runTest {
         val repository = DataStoreSavedTripRepository(InMemoryPreferencesDataStoreForTrips())
         val trip = SavedTrip(
@@ -134,6 +156,20 @@ private class InMemoryPreferencesDataStoreForTrips : DataStore<Preferences> {
 }
 
 class StoredJsonTest {
+
+    @Test
+    fun `le spese illeggibili si scartano una a una`() {
+        val stored = """{"limit":"100","expenses":[{"id":"1","amount":"12.5","currency":"EUR","category":"FOOD","date":"2026-12-11"},""" +
+            """{"id":"2","amount":"-3","currency":"EUR","category":"FOOD","date":"2026-12-11"},""" +
+            """{"id":"3","amount":"7","currency":"EUR","category":"SCONOSCIUTA","date":"2026-12-12"}]}"""
+
+        val budget = StoredJson.decodeBudget("viaggio", stored)
+
+        assertEquals(BigDecimal("100"), budget.limit)
+        assertEquals(listOf("1", "3"), budget.expenses.map { it.id })
+        assertEquals(ExpenseCategory.OTHER, budget.expenses.last().category, "Categoria sconosciuta: «Altro»")
+        assertEquals(TripBudget("viaggio"), StoredJson.decodeBudget("viaggio", "{non è json"))
+    }
 
     @Test
     fun `gli avvisi sopravvivono alla codifica con storico, periodo e fuso orario`() {

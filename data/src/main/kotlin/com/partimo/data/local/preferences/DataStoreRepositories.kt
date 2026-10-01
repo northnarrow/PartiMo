@@ -9,9 +9,11 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStoreFile
+import com.partimo.domain.model.budget.TripBudget
 import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.place.DeparturePoint
 import com.partimo.domain.model.saved.SavedTrip
+import com.partimo.domain.repository.BudgetRepository
 import com.partimo.domain.repository.ChecklistRepository
 import com.partimo.domain.repository.PriceWatchRepository
 import com.partimo.domain.repository.SavedTripRepository
@@ -115,3 +117,24 @@ class DataStoreSavedTripRepository internal constructor(
         }
     }
 }
+
+/** Budget dei viaggi, uno per viaggio (meta e periodo), in JSON versionabile. */
+class DataStoreBudgetRepository internal constructor(
+    private val dataStore: DataStore<Preferences>,
+) : BudgetRepository {
+
+    override fun budget(tripId: String): Flow<TripBudget> = dataStore.safeData()
+        .map { preferences -> StoredJson.decodeBudget(tripId, preferences[keyOf(tripId)]) }
+        .distinctUntilChanged()
+
+    override suspend fun update(tripId: String, transform: (TripBudget) -> TripBudget) {
+        dataStore.edit { preferences ->
+            val key = keyOf(tripId)
+            val updated = transform(StoredJson.decodeBudget(tripId, preferences[key]))
+            if (updated.limit == null && updated.expenses.isEmpty()) preferences.remove(key) else preferences[key] = StoredJson.encodeBudget(updated)
+        }
+    }
+
+    private fun keyOf(tripId: String) = stringPreferencesKey("budget:$tripId")
+}
+

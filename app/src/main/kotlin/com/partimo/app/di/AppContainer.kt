@@ -9,6 +9,7 @@ import com.partimo.data.config.ApiConfig
 import com.partimo.data.di.DataModule
 import com.partimo.domain.usecase.AskTravelAssistantUseCase
 import com.partimo.domain.usecase.CheckPriceWatchesUseCase
+import com.partimo.domain.usecase.EditTripBudgetUseCase
 import com.partimo.domain.usecase.FindBudgetRestaurantsUseCase
 import com.partimo.domain.usecase.FindDepartureAirportsUseCase
 import com.partimo.domain.usecase.FindLodgingsUseCase
@@ -25,6 +26,7 @@ import com.partimo.domain.usecase.ObserveDepartureUseCase
 import com.partimo.domain.usecase.ObservePriceAlertUseCase
 import com.partimo.domain.usecase.ObserveSavedTripUseCase
 import com.partimo.domain.usecase.ObserveSavedTripsUseCase
+import com.partimo.domain.usecase.ObserveTripBudgetUseCase
 import com.partimo.domain.usecase.PackingChecklistUseCase
 import com.partimo.domain.usecase.PlanTransitRouteUseCase
 import com.partimo.domain.usecase.PlanTripUseCase
@@ -36,6 +38,7 @@ import com.partimo.domain.usecase.SearchCitiesUseCase
 import com.partimo.domain.usecase.SearchFlightsUseCase
 import com.partimo.domain.usecase.SetPriceAlertUseCase
 import com.partimo.domain.usecase.SetTripSavedUseCase
+import com.partimo.domain.usecase.SummarizeBudgetUseCase
 import com.partimo.domain.usecase.ToggleFavoriteUseCase
 import com.partimo.domain.usecase.TranslateTextUseCase
 import kotlinx.coroutines.CoroutineScope
@@ -85,6 +88,11 @@ interface AppContainer {
     /** Traduttore sul telefono, anche offline. */
     val translateText: TranslateTextUseCase
     val languagePacks: LanguagePacksUseCase
+
+    /** Budget e spese del viaggio. */
+    val observeTripBudget: ObserveTripBudgetUseCase
+    val editTripBudget: EditTripBudgetUseCase
+    val summarizeBudget: SummarizeBudgetUseCase
 
     /** Viaggi salvati e preferiti. */
     val observeSavedTrips: ObserveSavedTripsUseCase
@@ -192,6 +200,12 @@ class DefaultAppContainer(context: Context) : AppContainer {
     override val translateText: TranslateTextUseCase by lazy { TranslateTextUseCase(dataModule.translatorRepository) }
 
     override val languagePacks: LanguagePacksUseCase by lazy { LanguagePacksUseCase(dataModule.translatorRepository) }
+
+    override val observeTripBudget: ObserveTripBudgetUseCase by lazy { ObserveTripBudgetUseCase(dataModule.budgetRepository) }
+
+    override val editTripBudget: EditTripBudgetUseCase by lazy { EditTripBudgetUseCase(dataModule.budgetRepository) }
+
+    override val summarizeBudget: SummarizeBudgetUseCase by lazy { SummarizeBudgetUseCase(dataModule.exchangeRateRepository) }
 
     override val observeSavedTrips: ObserveSavedTripsUseCase by lazy { ObserveSavedTripsUseCase(dataModule.savedTripRepository, clock) }
 

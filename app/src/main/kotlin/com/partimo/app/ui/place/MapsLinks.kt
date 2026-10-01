@@ -27,6 +27,13 @@ fun googleMapsTransitUrl(origin: GeoPoint, destination: GeoPoint): String =
         "&destination=" + encode(destination.coordinates()) +
         "&travelmode=transit"
 
+/**
+ * Treni e pullman tra due città indicate per nome (es. "Milano" → "Vienna"): Google Maps propone i
+ * collegamenti con orari reali, gli operatori e la durata, senza chiave.
+ */
+fun googleMapsTransitUrl(origin: String, destination: String): String =
+    "$DIRECTIONS_URL&origin=" + encode(origin) + "&destination=" + encode(destination) + "&travelmode=transit"
+
 /** Tappa di un percorso: le coordinate, se note, altrimenti il nome da cercare (es. "Café Central, Vienna"). */
 sealed interface RouteStop {
     data class At(val point: GeoPoint) : RouteStop

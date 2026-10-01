@@ -13,6 +13,8 @@ import com.partimo.domain.model.saved.SavedTrip
 import com.partimo.domain.model.stay.AccommodationOffer
 import com.partimo.domain.model.stay.Lodging
 import com.partimo.domain.model.transit.TransitRoute
+import com.partimo.domain.service.CarbonFootprint
+import com.partimo.domain.service.ModeFootprint
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -71,6 +73,10 @@ data class TripDashboardUiState(
     val refreshSummary: RefreshSummary? = null,
     val message: DashboardMessage? = null,
 ) {
+    /** Emissioni per raggiungere la meta con i diversi mezzi, a persona; vuoto senza partenza o con la meta vicina. */
+    val footprint: List<ModeFootprint>
+        get() = trip.departure?.let { CarbonFootprint.roundTrip(it.airport.location, trip.destination.center, trip.travellers) }.orEmpty()
+
     /** Chiavi dei preferiti del viaggio ([com.partimo.domain.model.saved.Favorite.key]); `null` se i preferiti non sono attivi. */
     val favoriteKeys: Set<String>?
         get() = if (favoritesEnabled) savedTrip?.favorites?.map { it.key }?.toSet().orEmpty() else null

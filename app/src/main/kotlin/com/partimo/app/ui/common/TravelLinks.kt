@@ -50,6 +50,21 @@ object TravelLinks {
         return "https://www.google.com/search?q=" + encode("eventi a $city $days")
     }
 
+    /**
+     * Rome2rio: tutti i modi per andare da [from] a [to] (treno, pullman, aereo, auto, traghetto) con
+     * durata, prezzi indicativi e siti dove prenotare. Le città vanno nel percorso, con i trattini al
+     * posto degli spazi (es. "Reggio-Emilia").
+     */
+    fun rome2rio(from: String, to: String): String = "https://www.rome2rio.com/s/" + pathName(from) + "/" + pathName(to)
+
+    /**
+     * Tiqets: biglietti di musei e attrazioni. Con il nome di un luogo apre i suoi biglietti (es. il
+     * Kunsthistorisches Museum), con una città le sue attrazioni.
+     */
+    fun tiqets(query: String): String = "https://www.tiqets.com/it/search?q=" + encode(query)
+
+    private fun pathName(name: String): String = encode(name.trim().replace(Regex("\\s+"), "-"))
+
     /** Codifica con gli spazi come %20, valida sia nel percorso sia nei parametri. */
     private fun encode(text: String): String = URLEncoder.encode(text, Charsets.UTF_8.name()).replace("+", "%20")
 }

@@ -74,9 +74,14 @@ import com.partimo.app.R
 import com.partimo.app.navigation.TripArgs
 import com.partimo.app.ui.common.Formatters
 import com.partimo.app.ui.common.PeriodChips
+import com.partimo.app.ui.common.TravelLinks
 import com.partimo.app.ui.common.flagEmoji
 import com.partimo.app.ui.common.toFavorite
+import com.partimo.app.ui.dashboard.components.ExternalLink
+import com.partimo.app.ui.dashboard.components.ExternalLinksCard
 import com.partimo.app.ui.dashboard.components.FlightsSection
+import com.partimo.app.ui.dashboard.components.GETTING_THERE_TAG
+import com.partimo.app.ui.dashboard.components.GettingThereCard
 import com.partimo.app.ui.dashboard.components.HighlightsSection
 import com.partimo.app.ui.dashboard.components.LodgingsSection
 import com.partimo.app.ui.dashboard.components.RestaurantsSection
@@ -133,6 +138,8 @@ data class DashboardActions(
     val onOpenMap: () -> Unit = {},
     /** Traduttore con la lingua del posto, anche offline. */
     val onOpenTranslator: () -> Unit = {},
+    /** Budget e spese del viaggio. */
+    val onOpenBudget: () -> Unit = {},
 )
 
 /**
@@ -152,6 +159,7 @@ fun TripDashboardRoute(
     onOpenFavorites: (TripArgs) -> Unit = {},
     onOpenMap: (TripArgs) -> Unit = {},
     onOpenTranslator: (TripArgs) -> Unit = {},
+    onOpenBudget: (TripArgs) -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -194,6 +202,7 @@ fun TripDashboardRoute(
             onOpenFavorites = { onOpenFavorites(TripArgs.from(state.trip, state.period)) },
             onOpenMap = { onOpenMap(TripArgs.from(state.trip, state.period)) },
             onOpenTranslator = { onOpenTranslator(TripArgs.from(state.trip, state.period)) },
+            onOpenBudget = { onOpenBudget(TripArgs.from(state.trip, state.period)) },
         ),
         modifier = modifier,
     )
@@ -269,6 +278,7 @@ fun TripDashboardScreen(
                 onOpenFavorites = actions.onOpenFavorites,
                 onOpenMap = actions.onOpenMap,
                 onOpenTranslator = actions.onOpenTranslator,
+                onOpenBudget = actions.onOpenBudget,
             )
             PullToRefreshBox(
                 isRefreshing = state.isRefreshing,
@@ -354,17 +364,44 @@ private fun LazyListScope.sectionContent(section: DashboardSection, state: TripD
                     onToggleFavorite = { poi -> actions.onToggleFavorite(poi.toFavorite()) },
                 )
             }
+            item(key = "tickets") {
+                val city = state.trip.destination.name
+                ExternalLinksCard(
+                    title = stringResource(R.string.tickets_title),
+                    lines = listOf(stringResource(R.string.tickets_text, city)),
+                    links = listOf(ExternalLink(stringResource(R.string.tickets_tiqets), TravelLinks.tiqets(city))),
+                    onOpenLink = actions.onOpenLink,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                )
+            }
         }
-        DashboardSection.TRANSIT -> item(key = "transit") {
-            val destination = state.trip.destination
-            TransitSection(
-                state = state.transit,
-                hubName = destination.arrivalHubName,
-                timeZone = destination.timeZone,
-                onRetry = { actions.onRetry(DashboardSection.TRANSIT) },
-                mapsUrl = googleMapsTransitUrl(origin = destination.arrivalHub, destination = destination.center),
-                onOpenLink = actions.onOpenLink,
-            )
+        DashboardSection.TRANSIT -> {
+            // Prima come arrivare dalla città di partenza (treni, pullman, voli e CO₂), poi come muoversi in città.
+            state.trip.departure?.let { departure ->
+                if (departure.cityName != state.trip.destination.name) {
+                    item(key = "getting-there") {
+                        GettingThereCard(
+                            fromCity = departure.cityName,
+                            toCity = state.trip.destination.name,
+                            footprint = state.footprint,
+                            travellers = state.trip.travellers,
+                            onOpenLink = actions.onOpenLink,
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp).testTag(GETTING_THERE_TAG),
+                        )
+                    }
+                }
+            }
+            item(key = "transit") {
+                val destination = state.trip.destination
+                TransitSection(
+                    state = state.transit,
+                    hubName = destination.arrivalHubName,
+                    timeZone = destination.timeZone,
+                    onRetry = { actions.onRetry(DashboardSection.TRANSIT) },
+                    mapsUrl = googleMapsTransitUrl(origin = destination.arrivalHub, destination = destination.center),
+                    onOpenLink = actions.onOpenLink,
+                )
+            }
         }
         DashboardSection.RESTAURANTS -> item(key = "restaurants") {
             RestaurantsSection(
@@ -490,8 +527,8 @@ fun DashboardSection.emoji(): String = when (this) {
 const val TRIP_TOOLS_TAG = "trip_tools"
 
 /**
- * Strumenti del viaggio mostrato: i preferiti (se ce ne sono), la mappa, la guida e il traduttore
- * (sempre) e, con la chiave Gemini, l'itinerario e le domande all'assistente con l'IA.
+ * Strumenti del viaggio mostrato: i preferiti (se ce ne sono), la mappa, la guida, il traduttore e il
+ * budget (sempre) e, con la chiave Gemini, l'itinerario e le domande all'assistente con l'IA.
  */
 @Composable
 private fun TripToolChips(
@@ -503,6 +540,7 @@ private fun TripToolChips(
     onOpenFavorites: () -> Unit,
     onOpenMap: () -> Unit,
     onOpenTranslator: () -> Unit,
+    onOpenBudget: () -> Unit,
 ) {
     LazyRow(
         modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp).testTag(TRIP_TOOLS_TAG),
@@ -531,6 +569,9 @@ private fun TripToolChips(
         }
         item(key = "translator") {
             AssistChip(onClick = onOpenTranslator, label = { Text(stringResource(R.string.translator_chip)) }, leadingIcon = { Text("🗣️") })
+        }
+        item(key = "budget") {
+            AssistChip(onClick = onOpenBudget, label = { Text(stringResource(R.string.budget_chip)) }, leadingIcon = { Text("💶") })
         }
     }
 }

@@ -5,6 +5,7 @@ import com.partimo.domain.common.DataOrigin
 import com.partimo.domain.common.DataResult
 import com.partimo.domain.model.Destination
 import com.partimo.domain.model.GeoPoint
+import com.partimo.domain.model.budget.TripBudget
 import com.partimo.domain.model.deal.PriceWatch
 import com.partimo.domain.model.dining.Restaurant
 import com.partimo.domain.model.dining.RestaurantSearchQuery
@@ -38,6 +39,7 @@ import com.partimo.domain.model.weather.DailyObservation
 import com.partimo.domain.model.weather.WeatherSnapshot
 import com.partimo.domain.repository.AccommodationRepository
 import com.partimo.domain.repository.AirportRepository
+import com.partimo.domain.repository.BudgetRepository
 import com.partimo.domain.repository.ChecklistRepository
 import com.partimo.domain.repository.CitySearchRepository
 import com.partimo.domain.repository.CountryInfoRepository
@@ -62,6 +64,7 @@ import com.partimo.domain.repository.WeatherRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import java.time.LocalDate
@@ -401,6 +404,19 @@ class FakeTranslatorRepository(
         translations += Triple(text, from, to)
         translateResult?.let { return it(text, from, to) }
         return if (from in downloaded && to in downloaded) DataResult.Success("[$to] $text", DataOrigin.LOCAL) else DataResult.Failure(DataError.Unknown("Pacchetto mancante"))
+    }
+}
+
+/** Budget dei viaggi in memoria. */
+class FakeBudgetRepository : BudgetRepository {
+    private val state = MutableStateFlow<Map<String, TripBudget>>(emptyMap())
+
+    val budgets: Map<String, TripBudget> get() = state.value
+
+    override fun budget(tripId: String): Flow<TripBudget> = state.map { it[tripId] ?: TripBudget(tripId) }.distinctUntilChanged()
+
+    override suspend fun update(tripId: String, transform: (TripBudget) -> TripBudget) {
+        state.update { budgets -> budgets + (tripId to transform(budgets[tripId] ?: TripBudget(tripId))) }
     }
 }
 
